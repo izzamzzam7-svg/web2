@@ -1,461 +1,539 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-<!-- This site is hosted on Netlify. Anyone can build and deploy a site
-     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=fba80466-61fc-40f7-a016-379ba7a50157
-     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>REYY UNBAN PROJECT</title>
-  <link rel="icon" href="https://files.catbox.moe/gp4ka7.jpg" />
-
-  <!-- Manifest untuk Android WebAPK / Chrome -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#05060a">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="REYY UNBAN V1">
-  <link rel="apple-touch-icon" href="https://files.catbox.moe/ejn7q9.jpeg">
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  <style>
-    :root {
-      --size: 300px; /* ukuran intro */
-      --duration: 5s;
-      --bg:#05060a;
-      --accent:#F4320B;
-      --accent2:#FF00F7;
-      --muted:#EBE8EB;
-      --mono:'Share Tech Mono', monospace;
-      --ui: 'Inter', system-ui, sans-serif;
-    }
-
-    html,body{
-      height:100%;
-      margin:0;
-      background:var(--bg);
-      color:#e6eef6;
-      font-family:var(--ui);
-      -webkit-font-smoothing:antialiased;
-    }
-    *{box-sizing:border-box}
-
-    /* =========================
-       INTRO (full-screen overlay)
-       ========================= */
-    #introOverlay{
-      position:fixed;
-      inset:0;
-      background:#000;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-      transition: opacity .6s ease;
-      pointer-events: auto;
-    }
-
-    /* container from your exact intro */
-    .video-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .video-wrap {
-      width: var(--size);
-      aspect-ratio: 1 / 1;
-      border-radius: 10px;
-      overflow: hidden;
-      background: white;
-      box-shadow: 0 0 10px rgba(255,255,255,0.15);
-      position: relative;
-    }
-
-    video#player {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      border: none;
-      outline: none;
-      pointer-events: none;
-    }
-
-    .loading-area {
-      width: var(--size);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .loading-text { font-weight:600; letter-spacing:0.05em; font-size:0.9rem; color:#fff; font-family:var(--ui); }
-    .loading-bar { width:100%; height:8px; background: rgba(255,255,255,0.15); border-radius:999px; overflow:hidden; }
-    .loading-bar i { display:block; height:100%; width:0%; background: linear-gradient(90deg,#fff,rgba(255,255,255,0.5)); border-radius:999px; animation: fillBar var(--duration) linear forwards; }
-    @keyframes fillBar { from{width:0%} to{width:100%} }
-
-    .dots { display:flex; gap:6px; margin-top:6px; }
-    .dot { width:6px; height:6px; border-radius:50%; background:white; opacity:0.2; animation: blink 1s infinite; }
-    .dot:nth-child(2){ animation-delay:.2s } .dot:nth-child(3){ animation-delay:.4s }
-    @keyframes blink { 0%,80%,100%{opacity:.2; transform:translateY(0)} 40%{opacity:1; transform:translateY(-4px)} }
-
-    .brand-text { margin-top:12px; font-family: "Orbitron", sans-serif; font-weight:900; font-size:1.1rem; letter-spacing:2px; color:#fff; text-shadow:0 0 10px rgb(120,120,120); user-select:none; }
-
-    /* hide intro overlay when finished */
-    #introOverlay.hidden { opacity: 0; pointer-events: none; }
-
-    @media (max-width:400px){ :root{ --size:250px } .brand-text{ font-size:1rem } }
-
-    /* =========================
-       MAIN APP LAYOUT (VXZ UNBAN)
-       ========================= */
-    #app {
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .45s ease .1s, visibility .45s ease .1s;
-      padding: 18px;
-      min-height: 100vh;
-    }
-    #app.visible { opacity: 1; visibility: visible; }
-
-    .topbar { display:flex; align-items:center; background:transparent; padding:8px 12px; }
-    .title-top { font-family: var(--mono); font-size:18px; font-weight:600; color:var(--accent); }
-    .robot-box{ background:radial-gradient(circle at 30% 20%, rgba(124,92,255,0.06), transparent 20%), linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:10px; padding:14px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.02); width:280px; margin-left:auto; margin-right:auto; margin-top:40px; }
-    .robot-face { width:120px; height:120px; border-radius:50%; background:#000; display:flex; align-items:center; justify-content:center; font-size:56px; margin:0 auto; box-shadow:0 0 15px rgba(0,0,0,0.6); }
-    .robot-title-normal { font-size:18px; text-align:center; margin-top:8px; color:#e6eef6; font-weight:600; }
-
-    .form-label{ font-size:12px; font-weight:500; margin:12px 0 6px; display:block; text-align:left; width:280px; margin-left:auto; margin-right:auto; }
-    .input, select, .btn { width:280px; margin:0 auto; padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:#071018; color:#7b8a97; font-size:14px; outline:none; display:block; }
-    .btn{ margin-top:18px; padding:12px 14px; background:linear-gradient(90deg,var(--accent),var(--accent2)); border:0; border-radius:10px; color:#000; font-weight:800; cursor:pointer; font-size:15px }
-    .status{ margin-top:12px; font-size:13px; color:var(--muted); min-height:20px; width:280px; margin-left:auto; margin-right:auto; }
-    .small{ font-size:12px; color:var(--muted); margin-top:6px; width:280px; margin-left:auto; margin-right:auto; text-align:center; }
-    .overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); display:none; z-index:998; }
-    .overlay.active { display:block; }
-
-    /* custom select look */
-    select.input { -webkit-appearance:none; -moz-appearance:none; appearance:none; background: linear-gradient(145deg, #0b1116, #071018); padding-right:36px; }
-    .select-wrapper { position: relative; width:280px; margin:0 auto; }
-    .select-wrapper::after { content: "\25BC"; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:#7b8a97; }
-
-    /* welcome popup - center */
-    #welcomeBox {
-      position: fixed;
-      inset: 0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      backdrop-filter: blur(6px);
-      background: rgba(0,0,0,0.25);
-      z-index: 10000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .35s ease;
-    }
-    #welcomeBox.active { opacity:1; pointer-events:auto; }
-    #welcomeContent {
-      background: rgba(0,0,0,0.6);
-      padding:20px 26px;
-      border-radius:10px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      text-align:center;
-    }
-    .gradientText{
-      font-family: 'Orbitron', sans-serif;
-      font-weight:900;
-      font-size:22px;
-      background: linear-gradient(90deg,#ff0000,#ff4a4a);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      letter-spacing:1px;
-    }
-
-    @media (max-width:420px){
-      .input, select, .btn, .form-label { width:220px; margin-left:auto; margin-right:auto; }
-      .robot-box{ width:220px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>
+   PANEL MURNI | zard
+    </title>
+<meta charset="UTF-8">
+<meta name="Description" content="Ini Hanya Script api yang di rancang oleh zard, Kamu Janggan asal ngambil script ini ya dek makasih:v">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="shortcut icon" type="image/x-icon" href="https://cdn3.vectorstock.com/i/1000x1000/45/22/ng-logo-monogram-emblem-style-with-crown-shape-vector-31864522.jpg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css">
+<link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7579749581890015" crossorigin="anonymous"></script>
 </head>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bungee&family=Viga&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+body {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("https://source.unsplash.com/random/?game,technology")
+    no-repeat center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+body:after {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(1px);
+  z-index: -1;
+}
+.app {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+.app .nav {
+    position: fixed;
+    z-index:99999999;
+    top:0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 40px;
+    font-family: 'Viga', sans-serif;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(0, 0, 0, 0.75);
+    box-shadow: 0 1px 5px rgba(17, 25, 40, 0.75),
+        0 1px 10px rgba(17, 25, 40, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px;
+}
+.nav .logo {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -5px;
+    width: 50px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.nav .fill {
+    position: relative;
+    padding: 5px;
+    margin: 0 5px;
+    color: #fff;
+    font-family: 'Viga', sans-serif;
+}
+.nav .fill i {
+    color: #fff;
+    cursor: pointer;
+}
+.app .copy {
+  width: 100%;
+  position: fixed;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Viga", sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(0, 0, 0, 0.75);
+  box-shadow: 0 1px 5px rgba(17, 25, 40, 0.75),
+        0 1px 10px rgba(17, 25, 40, 0.75);
+  padding: 5px;
+}
+.app .labels {
+  position: relative;
+  width: 400px;
+  text-align: left;
+  font-family: "Viga", sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 19px;
+  margin-top: 20px;
+  padding-left: 10px;
+}
+.app .labels:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-60%);
+  width: 3px;
+  height: 15px;
+  background: #fff;
+  /* border-radius: 50%; */
+  z-index: 99;
+}
+.app .labels:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-100%);
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  z-index: 99;
+}
+.app .bungkus {
+  position: relative;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  backdrop-filter: blur(2px) saturate(200%);
+  -webkit-backdrop-filter: blur(2px) saturate(200%);
+  background-color: rgba(45, 34, 68, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  margin-top: 5px;
+}
+
+.app h1 {
+    font-family: 'Viga', sans-serif;
+    color: rgba( 255, 255, 255, 0.4 );
+    line-height: 25px;
+}
+h1 strong {
+    font-family: 'Bungee', cursive;
+    font-size: 2em;
+}
+.app .desc {
+    margin-top: 10px;
+    font-family: 'Viga', sans-serif;
+    color: rgba( 255, 255, 255, 0.4 );
+    text-align: center;
+}
+
+.bungkus h1 {
+  font-family: "Viga", sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 28px;
+}
+.bungkus label {
+  width: 400px;
+  text-align: left;
+  font-family: "Viga", sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 15px;
+  font-size: 15px;
+}
+.bungkus label:first-child {
+  margin-top: 0;
+}
+.app .check {
+  position: relative;
+  font-family: "Viga", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 16px;
+  padding: 5px 20px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.bungkus .check:focus {
+  outline: none;
+  border: none;
+}
+.bungkus .inner {
+  position: relative;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inner h1 {
+    font-size: 18px;
+}
+.inner.mt-5 {
+  margin-top: 5px;
+}
+.inner .input {
+  position: relative;
+  font-family: "Viga", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 400px;
+  height: 40px;
+  font-size: 15px;
+  padding: 0 5px;
+}
+.bungkus .action {
+  margin-top: 5px;
+  position: relative;
+  width: 100%;
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+}
+.bungkus .action.show {
+  display: flex;
+}
+.action .ip {
+  position: relative;
+  font-family: "Viga", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  height: 23px;
+  font-size: 14px;
+  width: 120px;
+  text-align: center;
+  padding: 5px;
+  margin-right: 10px;
+}
+.action .ip:focus {
+  outline: none;
+  border: none;
+}
+.action .send {
+  position: relative;
+  font-family: "Viga", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  padding: 0 5px;
+  height: 23px;
+  margin: 0 3px;
+  cursor: pointer;
+}
+.action .send:focus {
+  outline: none;
+  border: none;
+}
+.send.green {
+  background: rgba(124, 252, 0, 0.4);
+}
+.send.red {
+  background: rgba(255, 0, 0, 0.4);
+}
+.inner .domains {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 9999;
+  background: #000;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  font-family: "Viga", sans-serif;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.domains select {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.4);;
+  font-family: "Viga", sans-serif;
+}
+.inner .input:focus {
+  outline: none;
+  border: none;
+}
+.app .input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.app .alert {
+  position: relative;
+  font-family: "Viga", sans-serif;
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 14px;
+  padding: 3px 15px 3px 25px;
+  text-align: center;
+  display: none;
+}
+.alert.success {
+  background: rgba(124, 252, 0, 0.4);
+}
+.alert.error,
+.alert.failed,
+.alert.exsist,
+.alert.mistake {
+  background: rgba(255, 0, 0, 0.4);
+}
+.alert.process {
+  background: rgba(0, 0, 255, 0.4);
+}
+.alert i {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-60%);
+}
+.alert.process i {
+  top: 25%;
+}
+.app .conz {
+  position: relative;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.app .details {
+  position: relative;
+  margin-top: 20px;
+  font-family: "Viga", sans-serif;
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 10px;
+  width: 400px;
+  text-align: center;
+  display: none;
+}
+.details h1 {
+  font-size: 20px;
+}
+.details .active {
+  margin-top: 10px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.active .info {
+  position: relative;
+  font-family: "Viga", sans-serif;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 13px;
+  padding: 5px 15px;
+}
+.details table {
+  margin-top: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+.active .click {
+  position: relative;
+  margin-top: 10px;
+  font-family: "Viga", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 14px;
+  padding: 5px 15px;
+}
+.active .click:focus {
+  outline: none;
+  border: none;
+}
+.app .btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: "Viga", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 16px;
+  padding: 5px 20px;
+}
+.app .btn:focus {
+  outline: none;
+  border: none;
+}
+
+.rainbow-text .char { 
+  
+  color: hsl(
+    calc(360deg * var(--char-percent)
+    ), 
+    90%, 
+    65%
+  );
+ 
+}
+
+.rainbow-text.animated .char {
+  animation: rainbow-colors 2s linear infinite;
+  animation-delay: calc(-2s * var(--char-percent));
+}
+/* Unfortunately, browsers try to take the shortest distance between transition/animation properties, so a simple `0turn` to `1turn` doesn't get the proper effect. */
+@keyframes rainbow-colors {
+  0% { color: hsl(197, 97%, 66%, 1); }
+  25% { color: hsl(0, 100%, 100%, 1); }
+  50% { color: hsl(348, 83%, 81%, 1); }
+  75% { color: hsl(.75turn, 90%, 65%); }
+  100% { color: hsl(1turn, 90%, 65%); }
+}
+
+@media (max-width: 550px) {
+  .app .inner,
+  .inner .input,
+  .app .details,
+  .bungkus label,
+  .app .bungkus,
+  .app .labels, 
+  .app .conz {
+    width: 100%;
+  }
+}
+</style>
 <body>
-
-  <!-- ================= INTRO OVERLAY (EXACT INTRO YOU PROVIDED) ================= -->
-  <div id="introOverlay" aria-hidden="false">
-    <div class="video-container">
-      <div class="video-wrap">
-        <video id="player" playsinline preload="metadata">
-          <source src="https://files.catbox.moe/hq0prx.mp4" type="video/mp4">
-        </video>
-      </div>
-
-      <div class="loading-area" id="loading">
-        <div class="loading-text">Loading</div>
-        <div class="loading-bar"><i id="bar"></i></div>
-        <div class="dots">
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-      </div>
-
-      <div class="brand-text">REYY UNBANNED PROJECT</div>
-    </div>
-  </div>
-
-  <!-- ================= WELCOME POPUP (show once) ================= -->
-  <div id="welcomeBox" aria-hidden="true">
-    <div id="welcomeContent">
-      <div class="gradientText">SELAMAT DATANG</div>
-    </div>
-  </div>
-
-  <!-- ================= APP (main REYY UNBAN) ================= -->
-  <div id="app" role="main" aria-hidden="true">
-    <header class="topbar">
-      <div class="title-top">REYY UNBANNED PROJECT</div>
-    </header>
-
-    <div class="overlay" id="overlay" aria-hidden="true"></div>
-
-    <div class="robot-box" aria-hidden="false">
-      <div class="robot-face">
-        <img src="https://files.catbox.moe/gp4ka7.jpg" alt="Logo Robot" style="max-height:100%; max-width:100%; border-radius:50%;">
-      </div>
-      <div class="robot-title-normal">Reyy Unban WhatsApp</div>
-    </div>
-
-    <label class="form-label" for="nomor">Nomor :</label>
-    <input type="tel" id="nomor" class="input" placeholder="+628×××" inputmode="tel" aria-required="true" />
-
-    <label class="form-label" for="alasan">Pilih Opsi Band</label>
-    <div class="select-wrapper">
-      <select id="alasan" class="input" aria-required="true">
-        <option value="">UNBANNED OPTION</option>
-        <option value="permafresh">PERMA FRESH</option>
-        <option value="SPAM">SPAM</option>
-        <option value="PERMA HARD">PERMA HARD</option>
-        <option value="PERMASEMINGGU">PERMA -SEMINGGU</option>
-        <option value="opsi5">PERMA BATU</option>
-      </select>
-    </div>
-
-    <button class="btn" id="sendBtn" aria-label="Kirim Banding">UNBANNED</button>
-    <div class="status" id="statusArea" aria-live="polite"></div>
-    <div class="small">VIP METODE UNBANNED PROJECT</div>
-    <main class="empty" aria-hidden="true"></main>
-  </div>
-
+<div class="app">
+<div class="nav">
+<img class="logo" src="https://i.ibb.co/cTZRRQk/IMG--WA0115.jpg">
+<div class="fill" onclick="window.location.href='https://wa.me/6285793684104';">WhastsApp</div>
+<div class="fill" onclick="window.location.href='https://youtube.com/@KyyNesia27'">YouTube</div>
+</div>
+<h1>YT : ZardAsia</h1>
+<div class="rainbow-text animated" data-splitting style="margin-left:5px;"> Scrip PANEL MURNI </div>
+<center>
+<div>
+<div>
+<div>
+<div class="rainbow-text animated" data-splitting style="margin-left:5px;"> Buy Sc ? Chat di bawah aja !!!</div>
+<div class="check" onclick="window.location='wa.me//6285793684104';">Pencett</div>
+</div>
+</div>
+</div>
+<span class="copy">
+Maded With ❤️ By zard
+<div class="rainbow-text" data-splitting></div>
+<div class="fill" onclick="window.location.href='yosoka113'"> Copyright</div>
+<div class="rainbow-text animated" data-splitting style="margin-left:5px;"> zardAsia</div>
+</span>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  /* ------------------ Intro controls ------------------ */
-  const video = document.getElementById("player");
-  const bar = document.getElementById("bar");
-  const loading = document.getElementById("loading");
-  const introOverlay = document.getElementById("introOverlay");
-  const app = document.getElementById("app");
-  const welcomeBox = document.getElementById("welcomeBox");
-
-  video.addEventListener("loadedmetadata", () => {
-    const dur = video.duration || 5;
-    document.documentElement.style.setProperty("--duration", dur + "s");
-    if (bar) bar.style.animationDuration = dur + "s";
-  });
-
-  function tryPlay() {
-    video.muted = false;
-    video.volume = 1.0;
-    video.play().catch(() => {
-      video.muted = true;
-      video.play().catch(()=>{/* ignore */});
-    });
-  }
-
-  window.addEventListener("load", tryPlay);
-
-  function showAppAfterIntro() {
-    // fade-out intro overlay
-    introOverlay.classList.add("hidden");
-    // reveal app after fade
-    setTimeout(() => {
-      introOverlay.style.display = "none";
-      app.classList.add("visible");
-      app.setAttribute("aria-hidden","false");
-      // show welcome popup once (if not shown before)
-      if (!localStorage.getItem("welcomeShown")) {
-        setTimeout(()=> {
-          welcomeBox.classList.add("active");
-          welcomeBox.setAttribute("aria-hidden","false");
-          localStorage.setItem("welcomeShown","yes");
-          setTimeout(()=> {
-            welcomeBox.classList.remove("active");
-            welcomeBox.setAttribute("aria-hidden","true");
-          }, 3000);
-        }, 200); // small delay so app visible first
-      }
-    }, 620); // match CSS fade timing
-  }
-
-  video.addEventListener("ended", () => {
-    if (loading) loading.classList.add("hidden");
-    // small delay so loading hides nicely then transition
-    setTimeout(showAppAfterIntro, 300);
-  });
-
-  // safety fallback if video can't play/ended event missed
-  setTimeout(()=> {
-    if (!video.ended && introOverlay && introOverlay.style.display !== "none") {
-      try { showAppAfterIntro(); } catch(e){}
-    }
-  }, 9000);
-
-  /* ------------------ App / Mail logic (original, preserved + fixed) ------------------ */
-  const sendBtn = document.getElementById('sendBtn');
-  const statusEl = document.getElementById('statusArea');
-  const nomorInput = document.getElementById('nomor');
-  const alasanSelect = document.getElementById('alasan');
-
-  function enc(v){ return encodeURIComponent(v || ''); }
-  function isAndroid(){ return /Android/i.test(navigator.userAgent); }
-  function setStatus(t){ statusEl.textContent = t; }
-  function normalizeNumber(n){
-    if(!n) return n;
-    const s=n.trim().replace(/\s+/g,'');
-    if(/^[0][0-9]+$/.test(s)) return '62'+s.slice(1);
-    if(/^\+/.test(s)) return s;
-    return s;
-  }
-
-  /* buildTemplate: placeholders for 5 opsi (edit text later) */
-  function buildTemplate(nomor, alasan){
-    const tampilNomor = (nomor.startsWith('+') || nomor.startsWith('62')) ? nomor : ('+'+nomor);
-
-    switch(alasan){
-      case "permafresh":
-        return {
-          to: 'support@support.whatsapp.com',
-          subject: 'Hello whatsapp developer, please help me.',
-          body: `Hello developer, my Whatsapp is Vixzz. I would like to ask for help regarding my account being blocked a few hours ago. I don't know the exact reason, but when I woke up and wanted to chat with my girlfriend, my Whatsapp account was blocked permanently. Here is my blocked Whatsapp number:\n${tampilNomor} I beg you to restore it immediately, thank you.`
-        };
-      case "SPAM":
-        return {
-          to: 'support@support.whatsapp.com',
-          subject: 'tolong saya',
-          body: `Hallo developer whatsapp saya vixzz salah satu pengguna whatsapp dari tahun 2023 dan saya saat ini ingin mengeluhkan atas pemblockiran akun whatsapp saya dengan alasan spam pada tanggal [ tanggal ke band ], ini sangat lah aneh karena saya sudah sering membaca layanan ketentuan aplikasi whatsapp dan sudah mematuhinya juga selama 2/3 tahun terakhir dan saya percaya ini adalah kesalahan sistem whatsapp yang salah mendeteksi kesalahan sehingga mungkin hanya chatan biasa pun bisa di anggap spam dan di blockir. Saya mohon untuk pihak whatsapp fix bug ini karena sangat meresahkan dan buka kan akun whatsapp saya [ ${tampilNomor} ] secepat mungkin karena saya ingin menghubungi keluarga saya yang kini sedang ada di luar kota dan saya menyayangi nya, terima kasih.`
-        };
-      case "PERMA HARD":
-        return {
-          to: 'support@support.whatsapp.com',
-          subject: `please unblock this WhatsApp account [ ${tampilNomor} ] its a system error`,
-          body: `Hi developer, I'm contacting you via WhatsApp to request a review of my WhatsApp account, which has been blocked for no apparent reason. I've already requested a review through the WhatsApp application, but the block hasn't been lifted. I urgently need that WhatsApp account, as I've mentioned in the Gmail subject. Sorry for bothering you, but I need my WhatsApp account back now. Thank you.`
-        };
-      case "PERMASEMINGGU":
-        return {
-          to: 'support@support.whatsapp.com',
-          subject: 'help me plss',
-          body: `Hi WhatsApp Developer, I'm vixzz. My WhatsApp account (+${tampilNomor}) was blocked without reason. I always follow WhatsApp's Terms of Service, use the official app, never spam, and behave respectfully. I believe this is a system error. Please review and restore my account. Thank you for your attention and help.`
-        };
-      case "opsi5":
-        return {
-          to: 'support@support.whatsapp.com',
-          subject: 'hi',
-          body: `Hizmet şartlarınızı ihlal etmedim, hesabı açıklanamaz bir şekilde yasakladınız. Hesap etkinliklerimi inceledikten sonra, WhatsApp a erişebilmem için kısıtlamayı hızla kaldırırsınız. Çünkü hesabım yanlışlıkla yasaklandı 
-
-Şartlarınızı veya politikanızı ihlal ettiğimi kabul ediyorum ve bunun için gerçekten üzgünüm lütfen bir şans verin ve yasağı hesabımdan kaldırın ${tampilNomor} isim Satya Budist gursarai
-
-Görüşleriniz için teşekkürler
-Hindistan lıyım, ülke kodum ${tampilNomor}
-Yasal adım Satya Budist gursarai
-Umarım bu SIM kartın yeni sahibi olduğum için WhatsApp hesap numaramdan kısıtlamalarınızı kaldırırsınız ${tampilNomor}
-
-Ve o kaldırılmalıdır, aksi takdirde WhatsApp ın derecelendirmesini rahatsız etmeyeceksiniz Ki amaiyo chod hoga kardeş ke lado
-`
-        };
-      default:
-        return {
-          to: 'support@support.whatsapp.com',
-          subject: `My WhatsApp number was blocked ${tampilNomor}`,
-          body: `प्रिय व्हाट्सएप सपोर्ट टीम,
-
-मुझे आशा है कि यह संदेश आपको अच्छी तरह से मिल जाएगा ।  मैं अपने व्हाट्सएप अकाउंट पर प्रतिबंध की अपील करने के लिए लिख रहा हूं ।  मैं समझता हूं कि व्हाट्सएप की सेवा की शर्तों के उल्लंघन के कारण मेरे खाते पर प्रतिबंध लगा दिया गया था, और मैं किसी भी अनजाने कार्यों के लिए ईमानदारी से माफी मांगता हूं जिसके कारण यह हो सकता है । 
-
-मैं व्हाट्सएप को एक आवश्यक संचार उपकरण और समुदाय के रूप में महत्व देता हूं, और मैं व्हाट्सएप की नीतियों और दिशानिर्देशों का पालन करने के लिए प्रतिबद्ध हूं ।  मैं कृपया अपने मामले की समीक्षा और अपने खाते पर प्रतिबंध हटाने का अनुरोध करता हूं ताकि मैं जिम्मेदारी से व्हाट्सएप का उपयोग करना जारी रख सकूं । 
-
-कृपया नीचे कुछ जानकारी प्राप्त करें जो आपकी समीक्षा के लिए सहायक हो सकती हैं: - मेरा पंजीकृत फोन नंबर.`
-        };
-    }
-  }
-
-  function buildIntentUrl(t){return `intent://compose?to=${enc(t.to)}&subject=${enc(t.subject)}&body=${enc(t.body)}#Intent;scheme=mailto;package=com.google.android.gm;end`;}
-  function buildMailtoUrl(t){return `mailto:${enc(t.to)}?subject=${enc(t.subject)}&body=${enc(t.body)}`;}
-  function buildGmailWebUrl(t){return `https://mail.google.com/mail/?view=cm&fs=1&to=${enc(t.to)}&su=${enc(t.subject)}&body=${enc(t.body)}`;}
-
-  sendBtn.addEventListener('click',()=>{
-    let nomor=(nomorInput.value||'').trim();
-    let alasan=(alasanSelect.value||'');
-
-    if(!nomor || !alasan){ setStatus("Mohon isi nomor & pilih alasan."); return; }
-
-    nomor = normalizeNumber(nomor);
-    const tpl = buildTemplate(nomor, alasan);
-
-    const intentUrl = buildIntentUrl(tpl);
-    const mailtoUrl = buildMailtoUrl(tpl);
-    const gmailWebUrl = buildGmailWebUrl(tpl);
-
-    sendBtn.disabled = true;
-    sendBtn.setAttribute('aria-busy','true');
-
-    if(isAndroid()){
-      setStatus("Mencoba membuka Gmail app...");
-      try{ window.location.href = intentUrl; } catch(e){}
-
-      let handled=false;
-      const fallback = ()=>{
-        if(handled) return;
-        handled=true;
-        setStatus("GAGAL...");
-        try{ window.location.href = mailtoUrl; } catch(e){
-          try{ window.open(gmailWebUrl,'_blank'); } catch(err){ setStatus("Gagal membuka email."); }
-        }
-        sendBtn.disabled=false;
-        sendBtn.removeAttribute('aria-busy');
-      };
-
-      const onVisChange = ()=>{
-        if(document.hidden){
-          handled=true;
-          setStatus("Compose terbuka.");
-          sendBtn.disabled=false;
-          sendBtn.removeAttribute('aria-busy');
-        }
-      };
-      document.addEventListener('visibilitychange', onVisChange, {once:true});
-      setTimeout(()=>{ if(!handled) fallback(); }, 1200);
-
-    } else {
-      setStatus("Membuka aplikasi email...");
-      try{
-        window.location.href = mailtoUrl;
-        setTimeout(()=>{
-          if(!document.hidden){
-            try{ window.open(gmailWebUrl,"_blank"); } catch(e){}
-          }
-          sendBtn.disabled=false;
-          sendBtn.removeAttribute('aria-busy');
-        },900);
-      }catch(err){
-        try{ window.open(gmailWebUrl,"_blank"); } catch(e){}
-        sendBtn.disabled=false;
-        sendBtn.removeAttribute('aria-busy');
-      }
-    }
-  });
-
-</script>
+        Splitting();
+    </script>
 </body>
 </html>
