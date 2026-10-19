@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NovaX • Informasi</title>
+
+
+
+<style>
+
+@font-face{font-family:'DynaPuff';src:url('./DynaPuff_SemiCondensed-SemiBold.ttf') format('truetype');font-weight:600;font-display:swap}
+@font-face{font-family:'Ready';src:url('./Ready.ttf') format('truetype');font-weight:400;font-display:swap}
+
+@font-face{font-family:'Ready';src:url('./Ready.ttf') format('truetype');font-display:swap}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+:root{
+--bg:#050505;
+--card:#100A0E;
+--border:rgba(217,106,154,.18);
+--border2:rgba(217,106,154,.35);
+--accent:#FF4FA3;
+--accent2:#E89BB9;
+--text:#FFF4F7;
+--text2:#D4AAB8;
+
+--sans:'Ready','Syne',sans-serif;
+--mono:'IBM Plex Mono',monospace;
+--display:'Ready','Playfair Display',serif;
+}
+
+html,body{
+height:100%;
+}
+
+body{
+font-family:var(--sans);
+background:var(--bg);
+color:var(--text);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:22px;
+
+background-image:
+radial-gradient(circle at top,rgba(217,106,154,.09),transparent 60%),
+linear-gradient(rgba(217,106,154,.02) 1px,transparent 1px),
+linear-gradient(90deg,rgba(217,106,154,.02) 1px,transparent 1px);
+
+background-size:auto,42px 42px,42px 42px;
+}
+
+.card{
+
+width:100%;
+max-width:700px;
+
+background:#100A0E;
+
+border:1px solid var(--border);
+
+border-radius:24px;
+
+padding:32px;
+
+box-shadow:
+0 25px 80px rgba(0,0,0,.75),
+0 0 40px rgba(217,106,154,.08);
+
+position:relative;
+
+overflow:hidden;
+}
+
+.card::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:25px;
+right:25px;
+
+height:2px;
+
+background:linear-gradient(90deg,
+transparent,
+var(--accent),
+var(--accent2),
+transparent);
+}
+
+.title{
+
+font-family:var(--display);
+
+font-size:32px;
+
+font-style:italic;
+
+margin-bottom:8px;
+
+color:white;
+}
+
+.subtitle{
+
+font-family:var(--mono);
+
+font-size:11px;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+color:var(--accent2);
+
+margin-bottom:28px;
+}
+
+.notice{
+
+background:rgba(217,106,154,.06);
+
+border:1px solid rgba(217,106,154,.2);
+
+border-radius:16px;
+
+padding:20px;
+
+line-height:1.9;
+
+font-size:15px;
+
+margin-bottom:22px;
+}
+
+.notice strong{
+
+color:var(--accent2);
+}
+
+.list{
+
+display:flex;
+
+flex-direction:column;
+
+gap:14px;
+
+margin-bottom:25px;
+}
+
+.item{
+
+display:flex;
+
+gap:12px;
+
+align-items:flex-start;
+
+line-height:1.8;
+
+font-size:15px;
+}
+
+.dot{
+
+width:9px;
+
+height:9px;
+
+border-radius:50%;
+
+background:var(--accent);
+
+margin-top:9px;
+
+flex-shrink:0;
+
+box-shadow:0 0 10px var(--accent);
+}
+
+.warning{
+
+padding:16px;
+
+border-radius:14px;
+
+background:rgba(255,255,255,.03);
+
+border:1px solid rgba(255,255,255,.06);
+
+font-size:14px;
+
+line-height:1.8;
+
+color:#f0d5e2;
+
+font-family:var(--mono);
+}
+
+button{
+
+margin-top:28px;
+
+width:100%;
+
+height:54px;
+
+border:none;
+
+border-radius:15px;
+
+background:linear-gradient(135deg,#D96A9A,#C95782);
+
+font-family:var(--sans);
+
+font-size:14px;
+
+font-weight:700;
+
+letter-spacing:2px;
+
+color:white;
+
+cursor:pointer;
+
+transition:.25s;
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 0 25px rgba(217,106,154,.25);
+}
+
+.footer{
+
+margin-top:20px;
+
+text-align:center;
+
+font-family:var(--mono);
+
+font-size:10px;
+
+letter-spacing:2px;
+
+color:#9E7181;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="title">
+Informasi Penggunaan
+</div>
+
+<div class="subtitle">
+NOVAX • REMOTE ACCESS TROJAN 
+</div>
+
+<div class="notice">
+<strong>Perhatian</strong><br><br>
+
+Aplikasi ini merupakan <b>Remote Access Trojan (RAT)</b> yang dirancang untuk administrasi dan pengelolaan perangkat dari jarak jauh. Penggunaan aplikasi ini hanya diperbolehkan pada perangkat yang Anda miliki sendiri atau yang telah memberikan izin secara jelas.
+</div>
+
+<div class="list">
+
+<div class="item">
+<div class="dot"></div>
+<div>Gunakan aplikasi hanya untuk tujuan administrasi yang sah.</div>
+</div>
+
+<div class="item">
+<div class="dot"></div>
+<div>Dilarang mengakses perangkat tanpa izin dari pemiliknya.</div>
+</div>
+
+<div class="item">
+<div class="dot"></div>
+<div>Hormati privasi dan keamanan setiap pengguna.</div>
+</div>
+
+<div class="item">
+<div class="dot"></div>
+<div>Segala bentuk penyalahgunaan yang melanggar hukum menjadi tanggung jawab pengguna.</div>
+</div>
+
+<div class="item">
+<div class="dot"></div>
+<div>Pengembang tidak bertanggung jawab atas penggunaan aplikasi yang bertentangan dengan hukum.</div>
+</div>
+
+</div>
+
+<div class="warning">
+Dengan menekan tombol <b>"SAYA MENGERTI"</b>, Anda menyatakan telah membaca, memahami, dan menyetujui seluruh ketentuan penggunaan aplikasi ini.
+</div>
+
+<button onclick="window.location.href='dashboard.html'">
+SAYA MENGERTI
+</button>
+
+<div class="footer">
+© NOVAX • USE RESPONSIBLY
+</div>
+
+</div>
+
+</body>
+</html>
