@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NovaX · Splash</title>
+<style>
+
+/* ===== NOVAX 2026 REMIX — Glassmorphism Blue × Pink ===== */
+:root {
+  --nx-blue: #55B8FF;
+  --nx-blue-2: #7ACCFF;
+  --nx-pink: #FF5FA2;
+  --nx-pink-2: #FF8FC4;
+  --nx-bg: #070B14;
+  --nx-glass: rgba(255,255,255,0.08);
+  --nx-glass-30: rgba(255,255,255,0.12);
+  --nx-border: rgba(85,184,255,0.25);
+  --nx-border-pink: rgba(255,95,162,0.3);
+  --nx-glow: 0 0 40px rgba(85,184,255,0.25), 0 0 80px rgba(255,95,162,0.12);
+  --nx-radius: 24px;
+  --nx-radius-sm: 16px;
+}
+body {
+  background: var(--nx-bg) !important;
+}
+/* Glass panel base — ~30% opacity feel */
+.nx-glass-panel, .main, .page, .dash-banner, .ctrl-device-header, .ctrl-info-bar,
+.dcard, .ctrl-tile, .nx-card, .glass-card, .login-card, .product-card,
+.akun-card, .menu-card, .stat-box, .dev-card {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+  border: 1px solid rgba(85,184,255,0.22) !important;
+  border-radius: var(--nx-radius) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.10), var(--nx-glow) !important;
+}
+.header, .bottom-nav, .nx-topbar, nav.bottom-nav {
+  background: rgba(7,11,20,0.55) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(85,184,255,0.2) !important;
+}
+/* Soft Blue×Pink gradient accents */
+.hdr-logo, .nx-brand, .logo-title, .brand, .about-title em {
+  background: linear-gradient(90deg, var(--nx-blue), var(--nx-pink)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+button.primary, .nx-btn-primary, .btn-login, .btn-primary {
+  background: linear-gradient(135deg, var(--nx-blue), var(--nx-pink)) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 8px 28px rgba(85,184,255,0.35) !important;
+  border-radius: var(--nx-radius-sm) !important;
+}
+/* Entrance animation */
+@keyframes nx-fade-slide {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.page.active, .nx-shell, .main, .glass-card, .about-hero {
+  animation: nx-fade-slide 0.55s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+
+@font-face{font-family:'NovaX';src:url('./NovaX_Font.ttf') format('truetype');font-weight:400 700;font-display:swap}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#55B8FF;--pink:#FF5FA2;--font:'NovaX',sans-serif;--text:#FFF4F7}
+html,body{width:100%;height:100%;overflow:hidden;background:#070B14;font-family:var(--font);color:var(--text)}
+.splash{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#videoBackground{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;opacity:0;transition:opacity 1s ease}
+#videoBackground.ready{opacity:1}
+.bg-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,11,20,.3) 0%,rgba(7,11,20,.5) 40%,rgba(7,11,20,.85) 100%);pointer-events:none}
+.ambient{position:absolute;width:60%;height:60%;top:15%;left:20%;background:radial-gradient(ellipse,rgba(85,184,255,.14) 0%,transparent 70%);z-index:1;pointer-events:none;animation:breathe 6s ease-in-out infinite}
+.ambient-2{position:absolute;width:40%;height:40%;bottom:10%;right:5%;background:radial-gradient(ellipse,rgba(255,95,162,.12) 0%,transparent 70%);z-index:1;pointer-events:none;animation:breathe 8s ease-in-out infinite reverse}
+.content{position:relative;z-index:3;text-align:center;opacity:0;transform:translateY(16px) scale(.96);transition:opacity .9s ease,transform .9s cubic-bezier(.22,1,.36,1)}
+.content.show{opacity:1;transform:none}
+.logo-glow{width:100px;height:100px;margin:0 auto 20px;border-radius:30px;background:linear-gradient(135deg,var(--blue),var(--pink));display:flex;align-items:center;justify-content:center;box-shadow:0 0 56px rgba(85,184,255,.5),0 0 110px rgba(255,95,162,.3);animation:glow 2.5s ease-in-out infinite;position:relative}
+.logo-glow svg{width:48px;height:48px;color:#fff}
+.brand{font-family:'NovaX',sans-serif;font-size:44px;letter-spacing:6px;background:linear-gradient(90deg,var(--blue),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tagline{margin-top:12px;font-size:13px;color:rgba(255,255,255,.5);letter-spacing:2px}
+.progress-area{position:absolute;bottom:88px;left:50%;transform:translateX(-50%);width:min(280px,70vw);z-index:3;opacity:0;transition:opacity .8s ease .3s}
+.progress-area.show{opacity:1}
+.progress-track{height:4px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden}
+.progress-fill{height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,var(--blue),var(--pink));box-shadow:0 0 14px rgba(85,184,255,.5);transition:width .12s linear}
+.progress-meta{display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.5px}
+.skip-btn{position:absolute;top:28px;right:24px;z-index:5;background:rgba(255,255,255,.1);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:8px 18px;color:rgba(255,255,255,.85);font-size:12px;font-weight:500;font-family:var(--font);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .4s,transform .2s}
+.skip-btn.show{opacity:1;pointer-events:auto}
+.skip-btn:active{transform:scale(.96)}
+.footer{position:absolute;bottom:28px;z-index:3;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px;opacity:0;transition:opacity .8s ease .5s}
+.footer.show{opacity:1}
+.error-message{position:absolute;bottom:140px;left:50%;transform:translateX(-50%);font-size:11px;color:rgba(255,95,162,.75);z-index:4;opacity:0;transition:opacity .4s;white-space:nowrap}
+.error-message.show{opacity:1}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.15);opacity:1}}
+@keyframes glow{0%,100%{box-shadow:0 0 56px rgba(85,184,255,.5),0 0 110px rgba(255,95,162,.3)}50%{box-shadow:0 0 72px rgba(85,184,255,.65),0 0 130px rgba(255,95,162,.4)}}
+</style>
+<style id="nx-theme-v3">
+
+/* NOVAX BLUE×PINK THEME v3 */
+:root{--nx-blue:#55B8FF;--nx-pink:#FF5FA2}
+@keyframes nxFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes nxGlowPulse{0%,100%{box-shadow:0 0 12px rgba(85,184,255,.25)}50%{box-shadow:0 0 26px rgba(85,184,255,.45),0 0 18px rgba(255,95,162,.25)}}
+.header,.bottom-nav,nav.bottom-nav{
+  background:rgba(7,11,20,.78)!important;
+  backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;
+  border-color:rgba(85,184,255,.25)!important;
+}
+.hdr-logo{
+  background:linear-gradient(90deg,#55B8FF,#FF5FA2)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+}
+.bottom-nav,nav.bottom-nav{
+  display:flex!important;visibility:visible!important;opacity:1!important;
+  position:fixed!important;bottom:14px!important;left:50%!important;
+  transform:translateX(-50%)!important;z-index:9999!important;
+  width:calc(100% - 32px)!important;max-width:400px!important;
+  border-radius:22px!important;border:1px solid rgba(85,184,255,.3)!important;
+  box-shadow:0 10px 36px rgba(0,0,0,.45)!important;pointer-events:auto!important;
+}
+.page{display:none}
+.page.active{display:block!important;animation:nxFadeUp .4s ease both}
+.empty,.no-dev,#empty-state{
+  opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  gap:10px!important;padding:40px 20px!important;margin:12px 16px!important;
+  background:rgba(12,16,32,.42)!important;border-radius:20px!important;
+  border:1px solid rgba(85,184,255,.25)!important;
+}
+.empty-title,.no-dev-title{color:#f1f5f9!important;opacity:1!important;font-weight:700!important}
+.empty-sub,.no-dev-hint{color:rgba(226,232,240,.65)!important;opacity:1!important}
+.dcard,.dev-card,.ctrl-tile,.login-card,.glass-card,.product-card,.akun-card,.no-dev{
+  background:rgba(12,16,32,.32)!important;
+  backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;
+  border:1px solid rgba(85,184,255,.28)!important;border-radius:18px!important;
+  box-shadow:0 12px 36px rgba(0,0,0,.35),0 0 18px rgba(85,184,255,.1)!important;
+}
+button.primary,.btn-primary,.login-btn,button[type=submit]{
+  background:linear-gradient(135deg,#55B8FF,#FF5FA2)!important;
+  border:none!important;color:#fff!important;border-radius:14px!important;
+  box-shadow:0 6px 18px rgba(85,184,255,.28)!important;
+}
+/* BGM UI */
+.nx-bgm-fab{
+  position:fixed;right:16px;bottom:90px;z-index:9500;
+  width:50px;height:50px;border-radius:16px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,rgba(85,184,255,.5),rgba(255,95,162,.45));
+  color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 18px rgba(85,184,255,.35);
+  backdrop-filter:blur(12px);animation:nxGlowPulse 3s ease-in-out infinite;
+}
+.nx-bgm-fab.paused{opacity:.6;animation:none}
+.nx-bgm-panel{
+  position:fixed;right:16px;bottom:152px;z-index:9501;
+  width:min(300px,calc(100vw - 32px));padding:16px;border-radius:20px;
+  background:rgba(10,14,28,.88);backdrop-filter:blur(20px);
+  border:1px solid rgba(85,184,255,.35);
+  box-shadow:0 16px 48px rgba(0,0,0,.55),0 0 28px rgba(85,184,255,.18);
+  display:none;flex-direction:column;gap:12px;animation:nxFadeUp .28s ease both;
+}
+.nx-bgm-panel.open{display:flex}
+.nx-bgm-head{
+  font-size:11px;font-weight:800;letter-spacing:1.6px;
+  background:linear-gradient(90deg,#55B8FF,#FF5FA2);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.nx-bgm-now{font-size:12px;color:rgba(255,255,255,.55)}
+.nx-bgm-tracks{display:flex;flex-direction:column;gap:8px}
+.nx-bgm-track{
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);
+  border-radius:12px;padding:11px 12px;color:#e2e8f0;font-size:12px;font-weight:600;
+  cursor:pointer;text-align:left;
+}
+.nx-bgm-track.active{
+  border-color:rgba(85,184,255,.5);
+  background:linear-gradient(135deg,rgba(85,184,255,.2),rgba(255,95,162,.14));
+  box-shadow:0 0 14px rgba(85,184,255,.22);
+}
+.nx-bgm-row{display:flex;align-items:center;gap:8px}
+.nx-bgm-row button{
+  width:40px;height:40px;border-radius:12px;border:none;cursor:pointer;color:#fff;font-size:15px;
+  background:linear-gradient(135deg,rgba(85,184,255,.4),rgba(255,95,162,.32));
+}
+.nx-bgm-row input[type=range]{flex:1;accent-color:#55B8FF}
+.nx-bgm-vol-txt{font-size:11px;color:rgba(255,255,255,.45);min-width:34px}
+
+</style>
+
+<style id="nx-fullwhite-safe">
+/* ============================================================
+   NOVAX — Clean White Theme (Voltara-style)
+   CSS ONLY — does not touch JS / account logic
+   Full white, yellow accent, black borders, no blue/pink
+   ============================================================ */
+:root {
+  --nx-blue: #111111 !important;
+  --nx-blue-2: #333333 !important;
+  --nx-pink: #111111 !important;
+  --nx-pink-2: #333333 !important;
+  --nx-bg: #F2F3F5 !important;
+  --bg: #F2F3F5 !important;
+  --bg-soft: #FFFFFF !important;
+  --surface-1: #FFFFFF !important;
+  --surface-2: #FFFFFF !important;
+  --surface-3: #F8F8F8 !important;
+  --border: #1A1A1A !important;
+  --border-hover: #000000 !important;
+  --border-accent: #1A1A1A !important;
+  --text-1: #111111 !important;
+  --text-2: #333333 !important;
+  --text-3: #666666 !important;
+  --accent: #FFD600 !important;
+  --accent-2: #FFE566 !important;
+  --accent-dim: rgba(255,214,0,.18) !important;
+  --accent-glow: transparent !important;
+  --on-accent: #111111 !important;
+  --danger: #FF3B30 !important;
+  --warning: #FFD600 !important;
+  --success: #34C759 !important;
+  --blue: #111111 !important;
+  --cyan: #111111 !important;
+  --pink: #111111 !important;
+  --pink2: #111111 !important;
+  --primary: #FFD600 !important;
+  --b0: #F2F3F5 !important;
+  --b1: #FFFFFF !important;
+  --b2: #FFFFFF !important;
+  --b3: #F8F8F8 !important;
+  --b4: #F0F0F0 !important;
+  --t0: #111111 !important;
+  --t1: #333333 !important;
+  --t2: #555555 !important;
+  --t3: #888888 !important;
+  --g1: #FFFFFF !important;
+  --g2: #FFFFFF !important;
+  --gborder: #1A1A1A !important;
+  --gborder2: #1A1A1A !important;
+  --gborder3: #1A1A1A !important;
+  --glow: transparent !important;
+  --glow2: transparent !important;
+  --green: #34C759 !important;
+  --red: #FF3B30 !important;
+  --amber: #FFD600 !important;
+}
+
+html, body {
+  background: #F2F3F5 !important;
+  color: #111111 !important;
+}
+
+/* Hide dark ambient layers */
+body::before, body::after,
+.nx-ambient, .nx-ambient::after,
+.nx-bg-glow, .bg-glow, .bg-overlay, .nx-bg-overlay {
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+}
+
+/* Cards — white + black border like screenshot */
+.nx-card, .card, .glass, .panel, .modal, .popup,
+.main-card, .stat-box, .dev-card, .tile, .control-tile,
+.dcard, .ctrl-tile, .menu-card, .product-card, .akun-card,
+.login-card, .auth-card, .setting-card, .glass-card,
+.nx-glass-panel, .about-hero, .feature-card, .logo-card,
+.empty, .no-dev, #empty-state, .nx-sheet, .nx-dialog,
+.action-dialog, .nameplate-shell, .dash-banner,
+.ctrl-device-header, .ctrl-info-bar, .nx-dev-card,
+.nx-cc-wrap > div, .user-stat, .quick-action-card {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.07) !important;
+  color: #111111 !important;
+}
+
+.nx-card::before, .nameplate-shell::before, .nameplate-shell::after {
+  display: none !important;
+}
+
+/* Header */
+.header, .nx-topbar, .nav-bar {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  border-bottom: 2px solid #1A1A1A !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  color: #111 !important;
+}
+.header::after { display: none !important; }
+
+/* Bottom nav — pill yellow active like photo */
+.bottom-nav, nav.bottom-nav {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 24px !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1) !important;
+  bottom: 16px !important;
+  width: calc(100% - 28px) !important;
+  max-width: 420px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.bottom-nav .nav-btn,
+nav.bottom-nav .nav-btn,
+.bottom-nav button {
+  color: #555 !important;
+  font-weight: 700 !important;
+  border-radius: 16px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.bottom-nav .nav-btn.active,
+.bottom-nav .nav-btn.is-active,
+nav.bottom-nav .active {
+  background: #FFE566 !important;
+  color: #111111 !important;
+  border: 2px solid #1A1A1A !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+/* Brand text — no gradient blue/pink */
+.hdr-logo, .nx-brand, .logo-title, .brand, .about-title em,
+.brand-name, .main-title, .logo-glitch, .about-title,
+.hdr-logo span {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #111111 !important;
+  color: #111111 !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+/* Buttons — yellow primary */
+button, .btn, .nx-btn, .btn-login, .sec-btn, .action-btn,
+.loader-btn, .btn-signin, .btn-primary, .nx-btn-primary,
+button.primary, .nx-btn-fill, .login-btn, button[type=submit],
+.action-dialog-submit {
+  border-radius: 14px !important;
+  border: 2px solid #1A1A1A !important;
+  font-weight: 800 !important;
+  color: #111 !important;
+}
+
+.nx-btn-primary, button.primary, .btn-primary, .btn-login,
+.nx-btn-fill, .btn-signin, .loader-btn.btn-primary,
+button[type=submit], .action-dialog-submit {
+  background: #FFE566 !important;
+  color: #111111 !important;
+  border: 2px solid #1A1A1A !important;
+  box-shadow: 0 3px 0 #1A1A1A !important;
+}
+
+.nx-btn-primary:active, button.primary:active, .btn-primary:active,
+.btn-signin:active, button[type=submit]:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 #1A1A1A !important;
+}
+
+.nx-btn-secondary, .btn-secondary, .nx-btn-ghost,
+.action-dialog-cancel {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+.nx-btn-danger, .btn-danger {
+  background: #FF3B30 !important;
+  border: 2px solid #1A1A1A !important;
+  color: #fff !important;
+}
+
+/* Inputs */
+input, select, textarea, .nx-input, .field-input,
+.nx-input-wrap, .input-group {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 14px !important;
+  color: #111 !important;
+  box-shadow: none !important;
+}
+input:focus, .nx-input-wrap:focus-within, .input-group:focus-within {
+  border-color: #111 !important;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.1) !important;
+}
+input::placeholder { color: #999 !important; }
+
+/* Device cards */
+.dcard {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 16px !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06) !important;
+}
+.dcard.selected {
+  border-color: #111 !important;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.12) !important;
+}
+.dcard-name, .nx-dev-meta h2 { color: #111 !important; font-weight: 700 !important; }
+.dcard-id, .dcard-android, .nx-dev-meta p { color: #666 !important; }
+
+/* Badges — yellow like "Role anda: MEMBER" */
+.nx-badge, .role-badge, .trial-badge-permanent, .trial-badge-active {
+  border: 1.5px solid #1A1A1A !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  background: #FFE566 !important;
+  color: #111 !important;
+  box-shadow: none !important;
+}
+
+/* Back button */
+.nx-back {
+  background: #FFE566 !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+  color: #111 !important;
+}
+
+/* Social / community buttons */
+.social-btn, .social-link, .social-icon-circle {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+/* Toast / dialog */
+.nx-toast, .toast {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 14px !important;
+  color: #111 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12) !important;
+}
+.nx-overlay, .action-dialog-bg { background: rgba(0,0,0,0.4) !important; }
+.nx-dialog, .action-dialog, .nx-sheet {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 20px !important;
+  color: #111 !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.14) !important;
+}
+
+/* BGM */
+.nx-bgm-fab {
+  background: #FFE566 !important;
+  border: 2px solid #1A1A1A !important;
+  box-shadow: 0 3px 0 #1A1A1A !important;
+  border-radius: 14px !important;
+  color: #111 !important;
+  animation: none !important;
+}
+.nx-bgm-panel {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 16px !important;
+  color: #111 !important;
+}
+.nx-bgm-track {
+  background: #F8F8F8 !important;
+  border: 1.5px solid #1A1A1A !important;
+  color: #111 !important;
+}
+.nx-bgm-track.active { background: #FFE566 !important; }
+.nx-bgm-head {
+  background: none !important;
+  -webkit-text-fill-color: #111 !important;
+  color: #111 !important;
+}
+
+/* Login */
+.logo-circle {
+  background: #FFFFFF !important;
+  border: 2.5px solid #1A1A1A !important;
+  box-shadow: 0 4px 0 #1A1A1A !important;
+  color: #111 !important;
+}
+.logo-circle svg { color: #111 !important; }
+.save-toggle {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 14px !important;
+}
+.save-toggle.on { background: #FFF8D6 !important; }
+.save-switch { border: 2px solid #1A1A1A !important; background: #E0E0E0 !important; }
+.save-toggle.on .save-switch { background: #FFE566 !important; border-color: #1A1A1A !important; }
+
+/* Splash */
+.logo-glow {
+  background: #FFE566 !important;
+  border: 3px solid #1A1A1A !important;
+  box-shadow: 0 6px 0 #1A1A1A !important;
+  animation: none !important;
+}
+.logo-glow svg { color: #111 !important; }
+.skip-btn {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 20px !important;
+  color: #111 !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+/* Force text colors */
+.nx-title, .nx-label, .empty-title, .feature-title,
+.card-title, .dev-name, .akun-name, .dcard-name,
+.profile-row-val, .ctrl-device-name, .about-title,
+.sec-label-text, .user-stat-val, .user-stat-key {
+  color: #111111 !important;
+}
+.nx-title-sub, .empty-sub, .feature-desc, .card-subtitle,
+.dev-role, .akun-user, .profile-row-key, .dcard-id {
+  color: #666666 !important;
+}
+
+* { text-shadow: none !important; }
+
+.progress-fill { background: #FFE566 !important; box-shadow: none !important; }
+.progress-track {
+  background: #E5E5E5 !important;
+  border: 1.5px solid #1A1A1A !important;
+  border-radius: 8px !important;
+}
+
+.dcard-online {
+  background: #34C759 !important;
+  box-shadow: 0 0 6px #34C759 !important;
+}
+
+/* Kill leftover gradient backgrounds on key UI */
+.nx-btn-primary, button.primary, .btn-primary, .btn-login,
+.hdr-logo, .nx-brand {
+  background-image: none !important;
+}
+
+/* Control tiles / up role / community sections */
+.ctrl-tile, .menu-card, .product-card, .akun-card,
+[class*="community"], [class*="up-role"], [class*="upgrade"] {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+}
+
+/* Soft cyan banner style like "VOLTARA NIGHT: Dashboard siap" → light gray/white */
+.dash-banner, .ctrl-device-header, [class*="banner"] {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+}
+
+</style>
+</head>
+<body>
+<div class="splash">
+  <video autoplay muted loop playsinline id="videoBackground" preload="auto" disablePictureInPicture>
+    <source src="splash.mp4" type="video/mp4">
+  </video>
+  <div class="bg-overlay"></div>
+  <div class="ambient"></div>
+  <div class="ambient-2"></div>
+  <button class="skip-btn" id="skipBtn">Lewati</button>
+  <div class="content" id="content">
+    <div class="logo-glow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div class="brand">NOVAX</div>
+    <div class="tagline">✨ Preparing your experience</div>
+  </div>
+  <div class="progress-area" id="progressArea">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-meta">
+      <span id="statusText">Initializing…</span>
+      <span id="pctText">0%</span>
+    </div>
+  </div>
+  <div class="error-message" id="errMsg">⚠️ video tidak ditemukan</div>
+  <div class="footer" id="footer">NovaX · crafted with precision</div>
+</div>
+<script>
+(function(){
+  if (!localStorage.getItem('sync_token')) { window.location.replace('login.html'); return; }
+  var video = document.getElementById('videoBackground');
+  var content = document.getElementById('content');
+  var progressArea = document.getElementById('progressArea');
+  var fill = document.getElementById('progressFill');
+  var pct = document.getElementById('pctText');
+  var status = document.getElementById('statusText');
+  var skipBtn = document.getElementById('skipBtn');
+  var footer = document.getElementById('footer');
+  var errMsg = document.getElementById('errMsg');
+  var done = false, videoReady = false, videoDuration = 10, countdownInterval = null;
+  var stages = [
+    { at: 15, text: 'Loading assets…' },
+    { at: 40, text: 'Connecting…' },
+    { at: 65, text: 'Syncing profile…' },
+    { at: 85, text: 'Almost ready…' },
+    { at: 100, text: 'Welcome' }
+  ];
+  var musik = new Audio('sound.mp3');
+  musik.loop = true; musik.volume = 0.55;
+  function playMusic() {
+    musik.play().catch(function() {
+      document.body.addEventListener('touchstart', function unlock() {
+        musik.play().catch(function(){});
+        document.body.removeEventListener('touchstart', unlock);
+      });
+    });
+  }
+  function stopMusic() { musik.pause(); musik.currentTime = 0; }
+  function goNext() {
+    if (done) return;
+    done = true;
+    if (countdownInterval) clearInterval(countdownInterval);
+    stopMusic();
+    document.body.style.transition = 'opacity .45s ease';
+    document.body.style.opacity = '0';
+    setTimeout(function(){ window.location.href = 'dashboard.html'; }, 480);
+  }
+  function setProgress(p) {
+    fill.style.width = p + '%';
+    pct.textContent = p + '%';
+    for (var i = stages.length - 1; i >= 0; i--) {
+      if (p >= stages[i].at) { status.textContent = stages[i].text; break; }
+    }
+  }
+  function startCountdown(duration) {
+    if (countdownInterval) clearInterval(countdownInterval);
+    var start = performance.now();
+    var total = duration * 1000;
+    function tick(now) {
+      if (done) return;
+      var t = Math.min(1, (now - start) / total);
+      setProgress(Math.round(t * 100));
+      if (t < 1) requestAnimationFrame(tick);
+      else setTimeout(goNext, 300);
+    }
+    requestAnimationFrame(tick);
+  }
+  function revealUI() {
+    content.classList.add('show');
+    progressArea.classList.add('show');
+    skipBtn.classList.add('show');
+    footer.classList.add('show');
+  }
+  function onVideoReady() {
+    if (videoReady) return;
+    videoReady = true;
+    var dur = video.duration;
+    if (!dur || dur < 0.5 || isNaN(dur)) dur = 10;
+    videoDuration = Math.floor(dur);
+    video.play().catch(function(){});
+    video.classList.add('ready');
+    revealUI();
+    startCountdown(videoDuration);
+  }
+  if (video.readyState >= 3) onVideoReady();
+  else {
+    video.addEventListener('canplay', onVideoReady);
+    video.addEventListener('loadeddata', onVideoReady);
+    video.addEventListener('loadedmetadata', onVideoReady);
+    setTimeout(function() {
+      if (!videoReady) {
+        videoReady = true; videoDuration = 10;
+        video.classList.add('ready'); revealUI(); startCountdown(10);
+        errMsg.classList.add('show'); video.play().catch(function(){});
+      }
+    }, 3500);
+  }
+  video.addEventListener('error', function() {
+    errMsg.classList.add('show'); skipBtn.classList.add('show');
+    if (!videoReady) { videoReady = true; videoDuration = 10; revealUI(); startCountdown(10); }
+  });
+  video.addEventListener('ended', goNext);
+  skipBtn.addEventListener('click', function() { if (!done) goNext(); });
+  document.addEventListener('touchstart', function() { if (video.paused && !video.error) video.play().catch(function(){}); }, { once: true });
+  document.addEventListener('click', function() { if (video.paused && !video.error) video.play().catch(function(){}); }, { once: true });
+  window.addEventListener('load', function(){ playMusic(); });
+  video.controls = false;
+  video.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+})();
+</script>
+<script id="nx-bgm-splash">(function(){try{localStorage.setItem("nx_bgm_paused","1");}catch(e){}})();</script>
+</body>
+</html>
