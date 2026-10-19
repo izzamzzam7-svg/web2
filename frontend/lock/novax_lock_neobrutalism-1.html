@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>NovaX Here — Lock Screen</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden}body{background:#020503;color:#00ff3c;font-family:'Orbitron',monospace;display:flex;justify-content:center;align-items:center;user-select:none}
+.matrix{position:fixed;inset:0;overflow:hidden;opacity:.22;background:#010201}.matrix span{position:absolute;top:-20vh;color:#00ff3c;font-size:18px;line-height:1.8;white-space:pre;text-shadow:0 0 8px #00ff3c;animation:fall linear infinite}@keyframes fall{from{transform:translateY(-30vh)}to{transform:translateY(130vh)}}
+.shell{position:relative;width:min(92vw,500px);padding:30px 25px 26px;border:3px solid #00ff3c;background:rgba(0,8,2,.82);box-shadow:0 0 18px rgba(0,255,60,.45),14px 14px 0 rgba(0,255,60,.10),inset 0 0 45px rgba(0,255,60,.04);transform:perspective(900px) rotateX(1deg) rotateZ(-1.5deg)}
+.shell:before,.shell:after{content:"";position:absolute;width:35px;height:35px;border-color:#00ff3c;border-style:solid}.shell:before{left:-3px;top:-3px;border-width:5px 0 0 5px}.shell:after{right:-3px;bottom:-3px;border-width:0 5px 5px 0}
+.header{text-align:center;font-size:13px;letter-spacing:4px;margin-bottom:18px;text-shadow:0 0 12px #00ff3c}.icon-box{width:145px;height:105px;margin:0 auto 22px;border:2px solid #00ff3c;display:flex;justify-content:center;align-items:center;position:relative;box-shadow:0 0 18px rgba(0,255,60,.22);overflow:hidden}.icon-box:before{content:"";position:absolute;width:100%;height:2px;background:#00ff3c;box-shadow:0 0 12px #00ff3c;animation:scan 2.2s linear infinite}@keyframes scan{0%{top:-5px}100%{top:110px}}.skull{font-size:42px;color:#ff174f;filter:drop-shadow(0 0 10px rgba(255,23,79,.7));animation:pulse 1.8s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.08);filter:drop-shadow(0 0 20px rgba(255,23,79,.9))}}
+.title{text-align:center;font-size:25px;font-weight:900;letter-spacing:2px;margin-bottom:22px;text-shadow:0 0 14px #00ff3c}.display{height:135px;border:3px solid #00ff3c;background:#000;position:relative;overflow:hidden;display:flex;justify-content:center;align-items:center;margin-bottom:22px;box-shadow:inset 0 0 30px rgba(0,255,60,.08)}.display-grid{position:absolute;inset:-60%;background:linear-gradient(rgba(0,255,60,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,60,.12) 1px,transparent 1px);background-size:24px 24px;transform:perspective(220px) rotateX(55deg);animation:gridMove 4s linear infinite}@keyframes gridMove{from{transform:perspective(220px) rotateX(55deg) translateY(0)}to{transform:perspective(220px) rotateX(55deg) translateY(48px)}}.display-scan{position:absolute;inset:0;background:linear-gradient(transparent 0%,rgba(0,255,60,.03) 45%,rgba(0,255,60,.13) 50%,rgba(0,255,60,.03) 55%,transparent 100%);animation:screenScan 2.5s linear infinite}@keyframes screenScan{from{transform:translateY(-100%)}to{transform:translateY(100%)}}.display-text{position:relative;z-index:2;font-size:23px;font-weight:900;letter-spacing:3px;animation:glitch 2.7s infinite;text-shadow:2px 0 #ff174f,-2px 0 #00ff3c,0 0 15px #00ff3c}@keyframes glitch{0%,88%,100%{transform:translate(0)}90%{transform:translate(-3px,1px)}92%{transform:translate(3px,-1px)}94%{transform:translate(-1px,0)}}
+.status{font-size:9px;line-height:1.8;margin:0 0 18px 2px;color:#00c92f;text-shadow:0 0 7px rgba(0,255,60,.5)}.status span{display:block}.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.btn{height:62px;border:3px solid #00ff3c;background:#020702;color:#00ff3c;font:900 18px 'Orbitron',monospace;box-shadow:5px 5px 0 rgba(0,255,60,.14);transition:.12s}.btn:active{transform:translate(4px,4px);box-shadow:1px 1px 0 rgba(0,255,60,.14)}.btn.red{color:#ff174f;border-color:#ff174f;box-shadow:5px 5px 0 rgba(255,23,79,.12)}.footer{margin-top:22px;text-align:center;color:#007d1e;font-size:8px;letter-spacing:1px}@media(max-width:380px){.shell{padding:23px 17px}.display{height:115px}.display-text{font-size:18px}.icon-box{width:125px;height:90px}.buttons{gap:7px}.btn{height:55px;font-size:15px}}
+</style>
+</head>
+<body>
+<div class="matrix" id="matrix"></div>
+<main class="shell">
+<div class="header">NovaX SYSTEM</div>
+<div class="icon-box"><div class="skull">☠</div></div>
+<div class="title">NovaX Here</div>
+<div class="display"><div class="display-grid"></div><div class="display-scan"></div><div class="display-text">NovaX Here</div></div>
+<div class="status"><span>&gt; SYSTEM STATUS : ONLINE</span><span>&gt; SECURE CHANNEL : ACTIVE</span><span>&gt; DISPLAY MODE : NOVAX</span><span>&gt; STANDBY FOR BIOMETRIC...</span></div>
+<div class="buttons">
+<button class="btn" onclick="pulse(this)">Your</button><button class="btn" onclick="pulse(this)">phone</button><button class="btn" onclick="pulse(this)">is</button>
+<button class="btn" onclick="pulse(this)">lock</button><button class="btn" onclick="pulse(this)">by</button><button class="btn" onclick="pulse(this)">NovaX</button>
+<button class="btn" onclick="pulse(this)">Apps</button><button class="btn" onclick="pulse(this)">wkwk</button><button class="btn" onclick="pulse(this)">Your</button>
+<button class="btn red" onclick="clearDemo()">DEL</button><button class="btn" onclick="pulse(this)">idiot</button><button class="btn" onclick="pulse(this)">OK</button>
+</div>
+<div class="footer">NOVAX • LOCK DISPLAY • PURE UI MODE</div>
+</main>
+<script>
+const matrix=document.getElementById('matrix'),chars='010101001100101001110010';for(let i=0;i<34;i++){const s=document.createElement('span');s.textContent=Array.from({length:18},()=>chars[Math.floor(Math.random()*chars.length)]).join('\n');s.style.left=Math.random()*100+'%';s.style.animationDuration=7+Math.random()*12+'s';s.style.animationDelay=-Math.random()*12+'s';s.style.opacity=.25+Math.random()*.5;matrix.appendChild(s)}
+function pulse(el){el.animate([{transform:'translate(0,0)'},{transform:'translate(3px,3px)'},{transform:'translate(0,0)'}],{duration:140})}function clearDemo(){const t=document.querySelector('.display-text');t.textContent='NovaX Here';t.style.color='#ff174f';setTimeout(()=>t.style.color='#00ff3c',300)}
+</script>
+</body>
+</html>
