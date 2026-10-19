@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🔒 NovaX Lock Screen</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f5f5f5;
+  --card:#fff;
+  --ink:#111;
+  --yellow:#ffd600;
+  --purple:#a855f7;
+  --muted:#666;
+  --line:#111;
+}
+html,body{width:100%;height:100%}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  overflow:hidden;
+  user-select:none;
+}
+
+/* ===== NEO-BRUTALIST BACKGROUND ===== */
+.bg-layer{
+  position:fixed;inset:0;z-index:0;
+  background:
+    linear-gradient(rgba(17,17,17,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(17,17,17,.045) 1px,transparent 1px),
+    #f5f5f5;
+  background-size:28px 28px;
+}
+.bg-layer:before{
+  content:"";position:absolute;width:240px;height:240px;
+  right:-70px;top:-70px;background:var(--yellow);
+  border:4px solid var(--ink);transform:rotate(12deg);
+  box-shadow:10px 10px 0 var(--ink);
+}
+.bg-layer:after{
+  content:"";position:absolute;width:170px;height:170px;
+  left:-65px;bottom:-55px;background:var(--purple);
+  border:4px solid var(--ink);transform:rotate(-14deg);
+  box-shadow:10px 10px 0 var(--ink);
+}
+.particles{position:absolute;inset:0;overflow:hidden}
+.particle{
+  position:absolute;width:5px;height:5px;background:var(--ink);
+  border:1px solid var(--ink);animation:floatParticle linear infinite;
+}
+@keyframes floatParticle{
+  0%{transform:translateY(110vh);opacity:0}
+  15%,85%{opacity:.35}
+  100%{transform:translateY(-10vh);opacity:0}
+}
+
+/* ===== CARD ===== */
+.lock-container{
+  position:relative;z-index:2;width:100%;max-width:430px;
+  height:100%;margin:auto;padding:18px;display:flex;
+  align-items:center;justify-content:center;
+}
+.lock-card{
+  width:100%;background:var(--card);
+  border:4px solid var(--ink);
+  border-radius:22px;
+  padding:24px 22px 25px;
+  box-shadow:10px 10px 0 var(--ink);
+  position:relative;overflow:hidden;
+}
+.lock-card>*{position:relative;z-index:2}
+
+/* ===== STATUS ===== */
+.status-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:15px;margin-bottom:20px;
+  border-bottom:3px solid var(--ink);
+}
+.status-bar .time{
+  font-family:'Space Mono',monospace;font-size:21px;
+  font-weight:700;letter-spacing:1px;
+}
+.status-icons{display:flex;align-items:center;gap:9px;font-size:13px}
+.battery-wrap{display:flex;align-items:center;gap:5px}
+.battery-bar{
+  width:35px;height:9px;border:2px solid var(--ink);
+  background:#fff;padding:1px;
+}
+.battery-fill{height:100%;width:87%;background:var(--yellow)}
+.battery-label{font-family:'Space Mono',monospace;font-size:8px;font-weight:700}
+
+/* ===== LOCK ICON ===== */
+.lock-icon-wrapper{display:flex;justify-content:center;margin:3px 0 15px}
+.lock-icon{
+  width:88px;height:88px;border:4px solid var(--ink);
+  border-radius:16px;background:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;box-shadow:7px 7px 0 var(--ink);
+  transform:rotate(-3deg);animation:iconPop 3s ease-in-out infinite;
+}
+@keyframes iconPop{
+  0%,100%{transform:rotate(-3deg) translate(0,0)}
+  50%{transform:rotate(2deg) translate(-2px,-2px)}
+}
+
+/* ===== DEVICE ===== */
+.device-info{text-align:center;margin:8px 0}
+.device-info h2{
+  font-size:29px;line-height:1;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.device-info .sub{
+  font-family:'Space Mono',monospace;font-size:9px;
+  font-weight:700;letter-spacing:1.5px;margin-top:8px;
+  text-transform:uppercase;color:#555;
+}
+.device-info .sub span{
+  display:inline-block;background:var(--purple);
+  color:#fff;border:2px solid var(--ink);padding:2px 6px;
+}
+
+/* ===== DIVIDER ===== */
+.divider-line{display:flex;align-items:center;gap:9px;margin:18px 0}
+.divider-line .line{height:3px;flex:1;background:var(--ink)}
+.divider-line .dot{
+  width:10px;height:10px;background:var(--yellow);
+  border:2px solid var(--ink);transform:rotate(45deg);
+  animation:dotPop 1.5s ease-in-out infinite;
+}
+@keyframes dotPop{50%{transform:rotate(45deg) scale(1.25)}}
+
+/* ===== NOTIFICATIONS ===== */
+.notif-list{display:flex;flex-direction:column;gap:11px;margin-bottom:22px}
+.notif-item{
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border:3px solid var(--ink);
+  border-radius:12px;padding:11px 12px;
+  box-shadow:4px 4px 0 var(--ink);
+  opacity:0;transform:translateY(10px);
+  animation:notifSlide .45s ease forwards;
+}
+.notif-item:nth-child(1){animation-delay:.1s}
+.notif-item:nth-child(2){animation-delay:.25s}
+.notif-item:nth-child(3){animation-delay:.4s}
+@keyframes notifSlide{to{opacity:1;transform:translateY(0)}}
+.notif-icon{
+  width:38px;height:38px;flex:0 0 38px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--yellow);border:3px solid var(--ink);
+  border-radius:9px;font-size:17px;
+}
+.notif-content{flex:1;min-width:0}
+.notif-content .app{
+  font-family:'Space Mono',monospace;font-size:8px;
+  font-weight:700;letter-spacing:1px;text-transform:uppercase;
+}
+.notif-content .msg{
+  font-size:13px;font-weight:600;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;margin-top:2px;
+}
+.notif-time{
+  font-family:'Space Mono',monospace;font-size:8px;
+  font-weight:700;flex-shrink:0;background:#eee;padding:3px 5px;
+  border:2px solid var(--ink);
+}
+
+/* ===== SWIPE ===== */
+.swipe-indicator{margin-top:4px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.swipe-bar{
+  width:100%;height:52px;border:3px solid var(--ink);
+  border-radius:12px;background:#eee;position:relative;overflow:hidden;
+  box-shadow:4px 4px 0 var(--ink);
+}
+.swipe-bar .glow{
+  position:absolute;top:0;bottom:0;width:65px;
+  background:var(--yellow);opacity:.55;transform:skewX(-20deg);
+  animation:glowSweep 2.7s ease-in-out infinite;
+}
+@keyframes glowSweep{0%{left:-80px}100%{left:110%}}
+.swipe-bar .thumb-static{
+  position:absolute;left:7px;top:6px;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ink);color:var(--yellow);
+  border:2px solid var(--ink);border-radius:7px;font-size:16px;
+}
+.swipe-text{
+  font-family:'Space Mono',monospace;font-size:8px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+}
+.swipe-text span{background:var(--yellow);padding:2px 5px}
+
+/* ===== FOOTER ===== */
+.footer-actions{
+  display:flex;justify-content:space-between;gap:6px;
+  margin-top:22px;padding-top:16px;border-top:3px solid var(--ink);
+}
+.footer-btn{
+  flex:1;background:#fff;border:3px solid var(--ink);
+  color:var(--ink);font-family:'Space Mono',monospace;
+  font-size:8px;font-weight:700;padding:8px 4px;
+  border-radius:8px;box-shadow:3px 3px 0 var(--ink);
+}
+.footer-btn:active{transform:translate(3px,3px);box-shadow:none}
+.footer-btn.danger{background:#fff}
+.footer-btn.danger:hover{background:#ff6b6b}
+
+/* ===== DECOR ===== */
+.fp-glow{
+  position:absolute;right:-20px;bottom:-35px;width:120px;height:120px;
+  background:var(--purple);border:4px solid var(--ink);
+  transform:rotate(25deg);opacity:.16;z-index:1!important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+  .lock-container{padding:14px}
+  .lock-card{padding:20px 17px 21px;border-width:3px;box-shadow:7px 7px 0 var(--ink)}
+  .device-info h2{font-size:25px}
+  .notif-item{padding:9px 10px}
+  .notif-content .msg{font-size:11px}
+}
+@media(max-width:380px){
+  .lock-card{padding:17px 13px}
+  .lock-icon{width:70px;height:70px;font-size:32px}
+  .device-info h2{font-size:21px}
+  .status-bar .time{font-size:17px}
+  .footer-btn{font-size:7px;padding:7px 2px}
+}
+::selection{background:var(--yellow);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="particles" id="particles"></div>
+</div>
+
+<div class="lock-container">
+  <div class="lock-card">
+
+    <div class="status-bar">
+      <span class="time" id="clockDisplay">00:00</span>
+      <div class="status-icons">
+        <span>📶</span><span>📶</span>
+        <div class="battery-wrap">
+          <span>🔋</span>
+          <div class="battery-bar"><div class="battery-fill"></div></div>
+          <span class="battery-label">87%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lock-icon-wrapper">
+      <div class="lock-icon">🔒</div>
+    </div>
+
+    <div class="device-info">
+      <h2>NovaX Locked</h2>
+      <div class="sub">🔐 <span>Locked</span> • NovaX</div>
+    </div>
+
+    <div class="divider-line">
+      <span class="line"></span><span class="dot"></span><span class="line"></span>
+    </div>
+
+    <div class="notif-list">
+      <div class="notif-item">
+        <div class="notif-icon">💬</div>
+        <div class="notif-content">
+          <div class="app">WhatsApp</div>
+          <div class="msg">NovaX: your phone is locked by NovaX</div>
+        </div>
+        <div class="notif-time">Now</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon">📧</div>
+        <div class="notif-content">
+          <div class="app">Gmail</div>
+          <div class="msg">System Alert: Device aman terkendali</div>
+        </div>
+        <div class="notif-time">5m</div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon">🎵</div>
+        <div class="notif-content">
+          <div class="app">Spotify</div>
+          <div class="msg">NovaX • Lock Screen Edition</div>
+        </div>
+        <div class="notif-time">12m</div>
+      </div>
+    </div>
+
+    <div class="swipe-indicator">
+      <div class="swipe-bar">
+        <div class="glow"></div>
+        <div class="thumb-static">➤</div>
+      </div>
+      <div class="swipe-text">— <span>geser untuk membuka</span> —</div>
+    </div>
+
+    <div class="footer-actions">
+      <button class="footer-btn"><span>🔢</span> Keypad</button>
+      <button class="footer-btn danger"><span>🆘</span> Darurat</button>
+      <button class="footer-btn"><span>📸</span> Kamera</button>
+    </div>
+
+    <div class="fp-glow"></div>
+  </div>
+</div>
+
+<script>
+function createParticles(){
+  const container=document.getElementById('particles');
+  for(let i=0;i<28;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(12+Math.random()*20)+'s';
+    p.style.animationDelay=(Math.random()*18)+'s';
+    p.style.opacity=.08+Math.random()*.22;
+    container.appendChild(p);
+  }
+}
+createParticles();
+
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clockDisplay').textContent=
+    String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+}
+updateClock();
+setInterval(updateClock,5000);
+
+function randomBattery(){
+  const levels=['87','92','78','95','83','89','76','91'];
+  const val=levels[Math.floor(Math.random()*levels.length)];
+  document.querySelector('.battery-fill').style.width=val+'%';
+  document.querySelector('.battery-label').textContent=val+'%';
+}
+setInterval(randomBattery,30000);
+
+document.querySelector('.lock-icon').addEventListener('dblclick',function(){
+  this.style.background='#a855f7';
+  this.style.transform='rotate(3deg) scale(.92)';
+  setTimeout(()=>{this.style.background='var(--yellow)';this.style.transform='';},400);
+
+  const msg=document.createElement('div');
+  msg.style.cssText=`
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+    background:#fff;border:3px solid #111;padding:10px 16px;
+    box-shadow:5px 5px 0 #111;color:#111;
+    font-family:'Space Mono',monospace;font-size:9px;font-weight:700;
+    letter-spacing:1px;z-index:999;white-space:nowrap;
+  `;
+  msg.textContent='🐉 NOVAX LOCK SCREEN • PURE DISPLAY';
+  document.body.appendChild(msg);
+  setTimeout(()=>msg.remove(),2500);
+});
+
+console.log('🐉 NovaX Neo-Brutalist Lock Screen');
+</script>
+</body>
+</html>
