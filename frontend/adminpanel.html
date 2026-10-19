@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Admin Panel — NovaX</title>
+<style>
+
+/* ===== NOVAX 2026 REMIX — Glassmorphism Blue × Pink ===== */
+:root {
+  --nx-blue: #55B8FF;
+  --nx-blue-2: #7ACCFF;
+  --nx-pink: #FF5FA2;
+  --nx-pink-2: #FF8FC4;
+  --nx-bg: #070B14;
+  --nx-glass: rgba(255,255,255,0.08);
+  --nx-glass-30: rgba(255,255,255,0.12);
+  --nx-border: rgba(85,184,255,0.25);
+  --nx-border-pink: rgba(255,95,162,0.3);
+  --nx-glow: 0 0 40px rgba(85,184,255,0.25), 0 0 80px rgba(255,95,162,0.12);
+  --nx-radius: 24px;
+  --nx-radius-sm: 16px;
+}
+body {
+  background: var(--nx-bg) !important;
+}
+/* Glass panel base — ~30% opacity feel */
+.nx-glass-panel, .main, .page, .dash-banner, .ctrl-device-header, .ctrl-info-bar,
+.dcard, .ctrl-tile, .nx-card, .glass-card, .login-card, .product-card,
+.akun-card, .menu-card, .stat-box, .dev-card {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+  border: 1px solid rgba(85,184,255,0.22) !important;
+  border-radius: var(--nx-radius) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.10), var(--nx-glow) !important;
+}
+.header, .bottom-nav, .nx-topbar, nav.bottom-nav {
+  background: rgba(7,11,20,0.55) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(85,184,255,0.2) !important;
+}
+/* Soft Blue×Pink gradient accents */
+.hdr-logo, .nx-brand, .logo-title, .brand, .about-title em {
+  background: linear-gradient(90deg, var(--nx-blue), var(--nx-pink)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+button.primary, .nx-btn-primary, .btn-login, .btn-primary {
+  background: linear-gradient(135deg, var(--nx-blue), var(--nx-pink)) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 8px 28px rgba(85,184,255,0.35) !important;
+  border-radius: var(--nx-radius-sm) !important;
+}
+/* Entrance animation */
+@keyframes nx-fade-slide {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.page.active, .nx-shell, .main, .glass-card, .about-hero {
+  animation: nx-fade-slide 0.55s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+
+/* ===== NovaX Blue × Pink Premium Theme ===== */
+:root{
+  --blue:#55B8FF !important;
+  --blue-2:#7ACCFF !important;
+  --pink:#FF5FA2 !important;
+  --pink-2:#FF8FC4 !important;
+  --accent:#55B8FF !important;
+  --accent-2:#FF5FA2 !important;
+  --accent2:#FF5FA2 !important;
+  --cyan:#55B8FF !important;
+  --pink2:#FF5FA2 !important;
+  --primary:#55B8FF !important;
+}
+body{background:#070B14 !important;}
+.nx-bg-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;pointer-events:none}
+.nx-bg-overlay{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 45% at 15% -5%,rgba(85,184,255,.18) 0%,transparent 55%),
+    radial-gradient(ellipse 55% 40% at 95% 85%,rgba(255,95,162,.14) 0%,transparent 50%),
+    linear-gradient(160deg,rgba(7,11,20,.45),rgba(7,11,20,.65));
+}
+.card,.glass,.panel,.modal,.popup,.nx-card,.main-card,.stat-box,.dev-card,.tile,.control-tile,
+.dcard,.ctrl-tile,.menu-card,.product-card,.akun-card,.login-card,.auth-card,.setting-card{
+  background:rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter:blur(28px) saturate(160%) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  border-radius:22px !important;
+  box-shadow:0 12px 40px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+button,.btn,.nx-btn,.btn-login,.sec-btn,.action-btn,.nav-btn{
+  border-radius:14px !important;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,background .2s,border-color .2s !important;
+}
+button:active,.btn:active,.nx-btn:active{transform:scale(.96) !important}
+.nx-btn-primary,button.primary,.btn-primary,.btn-login,
+.nx-btn-fill{
+  background:linear-gradient(135deg,#55B8FF,#FF5FA2) !important;
+  border:none !important;color:#fff !important;
+  box-shadow:0 8px 28px rgba(85,184,255,.32) !important;
+}
+input,select,textarea,.nx-input,.field-input{
+  border-radius:14px !important;
+  background:rgba(255,255,255,.07) !important;
+  border-color:rgba(255,255,255,.12) !important;
+  color:#fff !important;
+}
+input:focus,select:focus,textarea:focus,.nx-input:focus,.field-input:focus{
+  border-color:#55B8FF !important;
+  box-shadow:0 0 0 3px rgba(85,184,255,.18) !important;
+}
+.header,.bottom-nav,nav.bottom-nav,.nav-bar,.nx-topbar{
+  background:rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(8px) saturate(160%) !important;
+  -webkit-backdrop-filter:blur(8px) saturate(160%) !important;
+  border-color:rgba(255,255,255,.12) !important;
+}
+/* Soft Blue×Pink glows on key accents */
+.hdr-logo,.nx-brand,.logo-title,.brand{
+  background:linear-gradient(90deg,#55B8FF,#FF5FA2) !important;
+  -webkit-background-clip:text !important;background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+
+
+@font-face{font-family:'NovaX';src:url('./NovaX_Font.ttf') format('truetype');font-weight:400 700;font-display:swap}
+
+/* ============================================================
+   NovaX Design System 2026 — shared tokens + component library
+   Liquid Glass · iOS 26 × Nothing OS · Pink
+   ============================================================ */
+
+@font-face{
+  font-family:'NovaX';
+  src:url('./NovaX_Font.ttf') format('truetype');
+  font-display:swap;
+}
+
+:root{
+  /* ---- surfaces ---- */
+  --bg:            #050505;
+  --bg-soft:       #0a0a0a;
+  --surface-1:     rgba(255,255,255,.06);
+  --surface-2:     rgba(255,255,255,.09);
+  --surface-3:     rgba(255,255,255,.12);
+  --border:        rgba(255,255,255,.10);
+  --border-hover:  rgba(255,255,255,.18);
+  --border-accent: rgba(255,79,163,.35);
+
+  /* ---- brand green ---- */
+  --accent:        #FF4FA3;
+  --accent-2:      #FF77C8;
+  --accent-dim:    rgba(255,79,163,.12);
+  --accent-dim-2:  rgba(255,79,163,.20);
+  --accent-glow:   rgba(255,79,163,.45);
+  --on-accent:     #1a0a12;
+
+  /* ---- status ---- */
+  --danger:        #FF453A;
+  --danger-dim:    rgba(251,90,106,.12);
+  --warning:       #FFD60A;
+  --warning-dim:   rgba(255,182,72,.12);
+  --success:       var(--accent);
+
+  /* ---- text ---- */
+  --text-1:        #FFFFFF;
+  --text-2:        rgba(255,255,255,.78);
+  --text-3:        #9E7181;
+
+  /* ---- shape ---- */
+  --r-xs:  10px;
+  --r-sm:  14px;
+  --r-md:  18px;
+  --r-lg:  24px;
+  --r-xl:  32px;
+  --r-full: 999px;
+
+  /* ---- elevation ---- */
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 8px 24px -8px rgba(0,0,0,.55);
+  --shadow-3: 0 24px 60px -16px rgba(0,0,0,.65);
+  --shadow-glow: 0 0 0 1px var(--border-accent), 0 8px 32px -8px var(--accent-glow);
+
+  /* ---- motion ---- */
+  --ease-out:    cubic-bezier(.16,1,.3,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+  --dur-fast: .16s;
+  --dur-med:  .32s;
+  --dur-slow: .55s;
+
+  /* ---- type ---- */
+  --font: 'NovaX',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono: 'NovaX',ui-monospace,monospace;
+
+  /* ---- layout ---- */
+  --edge: 20px;
+  --nav-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+
+body{
+  background:var(--bg);
+  color:var(--text-1);
+  font-family:var(--font);
+  font-size:15px;
+  line-height:1.5;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+/* ambient background — identical across all screens for brand cohesion */
+.nx-ambient{
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(60% 40% at 18% -8%, rgba(255,79,163,.10) 0%, transparent 60%),
+    radial-gradient(50% 40% at 100% 10%, rgba(255,79,163,.05) 0%, transparent 55%),
+    radial-gradient(70% 50% at 50% 120%, rgba(255,79,163,.06) 0%, transparent 60%),
+    var(--bg);
+}
+.nx-ambient::after{
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 0%, black 30%, transparent 100%);
+}
+
+::selection{ background:var(--accent-dim-2); color:var(--text-1); }
+
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:var(--surface-3); border-radius:var(--r-full); }
+::-webkit-scrollbar-thumb:hover{ background:var(--border-hover); }
+
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; }
+
+/* ============ layout shells ============ */
+.nx-shell{
+  width:100%; max-width:440px; margin:0 auto;
+  padding: max(24px, var(--safe-t)) var(--edge) calc(32px + var(--safe-b));
+  min-height:100vh;
+  display:flex; flex-direction:column;
+}
+
+.nx-topbar{
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:28px;
+}
+.nx-back{
+  width:38px; height:38px; flex-shrink:0;
+  border-radius:var(--r-full);
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-2);
+  cursor:pointer;
+  transition:background var(--dur-fast) var(--ease-out), border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+.nx-back:hover{ background:var(--surface-3); color:var(--text-1); border-color:var(--border-hover); }
+.nx-back:active{ transform:scale(.92); }
+
+.nx-title{ font-size:17px; font-weight:700; letter-spacing:-.2px; }
+.nx-title-sub{ font-size:12px; color:var(--text-3); margin-top:1px; }
+
+/* ============ brand lockup ============ */
+.nx-brand{
+  font-size:22px; font-weight:800; letter-spacing:1.5px;
+  color:var(--text-1);
+}
+.nx-brand em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+/* ============ glass card ============ */
+.nx-card{
+  position:relative;
+  background:linear-gradient(180deg, var(--surface-2) 0%, var(--surface-1) 100%);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow-2);
+  padding:22px;
+}
+.nx-card::before{
+  content:'';
+  position:absolute; top:0; left:16px; right:16px; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);
+}
+.nx-card + .nx-card{ margin-top:14px; }
+
+/* ============ buttons ============ */
+.nx-btn{
+  position:relative; overflow:hidden;
+  display:inline-flex; align-items:center; justify-content:center; gap:9px;
+  width:100%; padding:15px 20px;
+  font-family:var(--font); font-size:14.5px; font-weight:700; letter-spacing:-.1px;
+  border-radius:var(--r-sm);
+  border:1px solid transparent;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;
+  transition:transform var(--dur-fast) var(--ease-out), background var(--dur-fast), border-color var(--dur-fast), box-shadow var(--dur-fast), opacity var(--dur-fast);
+  will-change:transform;
+}
+.nx-btn:active{ transform:scale(.965); }
+.nx-btn:disabled{ opacity:.45; pointer-events:none; }
+
+.nx-btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:var(--on-accent);
+  box-shadow:0 4px 20px -4px var(--accent-glow);
+}
+.nx-btn-primary:hover{ filter:brightness(1.08); box-shadow:0 6px 26px -4px var(--accent-glow); }
+
+.nx-btn-secondary{
+  background:var(--surface-2);
+  border-color:var(--border);
+  color:var(--text-1);
+}
+.nx-btn-secondary:hover{ background:var(--surface-3); border-color:var(--border-hover); }
+
+.nx-btn-ghost{
+  background:transparent;
+  color:var(--text-2);
+}
+.nx-btn-ghost:hover{ background:var(--surface-1); color:var(--text-1); }
+
+.nx-btn-danger{
+  background:var(--danger-dim);
+  border-color:rgba(251,90,106,.28);
+  color:var(--danger);
+}
+.nx-btn-danger:hover{ background:rgba(251,90,106,.18); }
+
+.nx-btn-sm{ padding:10px 16px; font-size:13px; width:auto; border-radius:var(--r-xs); }
+
+/* ripple */
+.nx-ripple{ position:absolute; border-radius:50%; background:rgba(255,255,255,.35); transform:scale(0); animation:nx-ripple .6s var(--ease-out); pointer-events:none; }
+@keyframes nx-ripple{ to{ transform:scale(3); opacity:0; } }
+
+/* spinner */
+.nx-spinner{ width:17px; height:17px; border-radius:50%; border:2px solid rgba(255,255,255,.3); border-top-color:currentColor; animation:nx-spin .7s linear infinite; display:none; }
+.nx-btn.is-loading .nx-spinner{ display:inline-block; }
+.nx-btn.is-loading .nx-btn-label{ display:none; }
+@keyframes nx-spin{ to{ transform:rotate(360deg); } }
+
+/* ============ inputs ============ */
+.nx-field{ margin-bottom:16px; }
+.nx-label{
+  display:block; font-size:12.5px; font-weight:600; color:var(--text-2);
+  margin-bottom:7px; letter-spacing:.1px;
+}
+.nx-input-wrap{
+  display:flex; align-items:center; gap:10px;
+  background:var(--surface-1);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:0 14px;
+  transition:border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast), background var(--dur-fast);
+}
+.nx-input-wrap:focus-within{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px var(--accent-dim);
+  background:var(--surface-2);
+}
+.nx-input-wrap svg{ color:var(--text-3); flex-shrink:0; transition:color var(--dur-fast); }
+.nx-input-wrap:focus-within svg{ color:var(--accent); }
+.nx-input-wrap input, .nx-input-wrap select, .nx-input-wrap textarea{
+  width:100%; background:transparent; border:none; outline:none;
+  color:var(--text-1); font-family:var(--font); font-size:14.5px; font-weight:500;
+  padding:14px 0;
+}
+.nx-input-wrap textarea{ resize:none; padding:12px 0; }
+.nx-input-wrap input::placeholder{ color:var(--text-3); }
+.nx-input-icon-btn{ background:none; border:none; color:var(--text-3); cursor:pointer; display:flex; padding:4px; -webkit-tap-highlight-color:transparent; transition:color var(--dur-fast); }
+.nx-input-icon-btn:hover{ color:var(--text-1); }
+.nx-hint{ font-size:11.5px; color:var(--text-3); margin-top:6px; }
+.nx-hint.is-error{ color:var(--danger); }
+
+/* checkbox / toggle */
+.nx-check{
+  width:20px; height:20px; border-radius:6px;
+  border:1.5px solid var(--border-hover);
+  display:flex; align-items:center; justify-content:center;
+  transition:all var(--dur-fast) var(--ease-out); cursor:pointer; flex-shrink:0;
+}
+.nx-check.is-checked{ background:var(--accent); border-color:var(--accent); }
+.nx-check svg{ opacity:0; transform:scale(.5); transition:all var(--dur-fast) var(--ease-spring); }
+.nx-check.is-checked svg{ opacity:1; transform:scale(1); }
+
+.nx-switch{ width:42px; height:25px; border-radius:var(--r-full); background:var(--surface-3); border:1px solid var(--border); position:relative; cursor:pointer; transition:background var(--dur-med) var(--ease-out); flex-shrink:0; }
+.nx-switch::after{ content:''; position:absolute; top:2px; left:2px; width:19px; height:19px; border-radius:50%; background:var(--text-2); transition:all var(--dur-med) var(--ease-spring); }
+.nx-switch.is-on{ background:var(--accent-dim-2); border-color:var(--border-accent); }
+.nx-switch.is-on::after{ transform:translateX(17px); background:var(--accent); box-shadow:0 0 12px var(--accent-glow); }
+
+/* ============ badge ============ */
+.nx-badge{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 10px; border-radius:var(--r-full);
+  font-size:10.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+  background:var(--accent-dim); color:var(--accent-2); border:1px solid var(--border-accent);
+}
+.nx-badge-mono{ font-family:var(--font-mono); text-transform:none; letter-spacing:.5px; }
+.nx-badge-danger{ background:var(--danger-dim); color:var(--danger); border-color:rgba(251,90,106,.3); }
+.nx-badge-warning{ background:var(--warning-dim); color:var(--warning); border-color:rgba(255,182,72,.3); }
+.nx-badge-neutral{ background:var(--surface-3); color:var(--text-2); border-color:var(--border); }
+
+/* ============ avatar ============ */
+.nx-avatar{
+  width:40px; height:40px; border-radius:var(--r-sm);
+  background:var(--accent-dim); border:1px solid var(--border-accent);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--accent-2); font-weight:800; font-size:15px; flex-shrink:0;
+}
+
+/* ============ list row ============ */
+.nx-row{
+  display:flex; align-items:center; gap:13px;
+  padding:14px 4px; cursor:pointer;
+  border-radius:var(--r-sm);
+  transition:background var(--dur-fast) var(--ease-out);
+  -webkit-tap-highlight-color:transparent;
+}
+.nx-row:hover{ background:var(--surface-1); }
+.nx-row:active{ background:var(--surface-2); }
+.nx-row-body{ flex:1; min-width:0; }
+.nx-row-title{ font-size:14.5px; font-weight:600; color:var(--text-1); }
+.nx-row-sub{ font-size:12px; color:var(--text-3); margin-top:2px; }
+.nx-row-chevron{ color:var(--text-3); flex-shrink:0; transition:transform var(--dur-fast); }
+.nx-row:hover .nx-row-chevron{ transform:translateX(2px); }
+
+/* ============ modal / bottom sheet ============ */
+.nx-overlay{
+  position:fixed; inset:0; z-index:900;
+  background:rgba(6,9,8,.72); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  display:flex; align-items:flex-end; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity var(--dur-med) var(--ease-out);
+}
+.nx-overlay.is-open{ opacity:1; pointer-events:auto; }
+.nx-sheet{
+  width:100%; max-width:440px;
+  background:var(--surface-1);
+  border:1px solid var(--border);
+  border-bottom:none;
+  border-radius:28px 28px 0 0;
+  padding:10px 22px calc(26px + var(--safe-b));
+  transform:translateY(100%);
+  transition:transform var(--dur-med) var(--ease-spring);
+  box-shadow:var(--shadow-3);
+  max-height:86vh; overflow-y:auto;
+}
+.nx-overlay.is-open .nx-sheet{ transform:translateY(0); }
+.nx-sheet-handle{ width:36px; height:4px; border-radius:var(--r-full); background:var(--border-hover); margin:6px auto 18px; }
+.nx-sheet-title{ font-size:18px; font-weight:800; margin-bottom:4px; }
+.nx-sheet-sub{ font-size:12.5px; color:var(--text-3); margin-bottom:18px; }
+
+/* centered dialog variant */
+.nx-overlay.nx-center{ align-items:center; }
+.nx-dialog{
+  width:calc(100% - 48px); max-width:360px;
+  background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-lg);
+  padding:26px 22px; box-shadow:var(--shadow-3); text-align:center;
+  transform:scale(.92) translateY(8px); opacity:0;
+  transition:all var(--dur-med) var(--ease-spring);
+}
+.nx-overlay.is-open .nx-dialog{ transform:scale(1) translateY(0); opacity:1; }
+.nx-dialog-icon{
+  width:56px; height:56px; border-radius:50%; margin:0 auto 16px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--accent-dim); color:var(--accent); border:1px solid var(--border-accent);
+  animation:nx-pop .5s var(--ease-spring);
+}
+@keyframes nx-pop{ 0%{ transform:scale(0); } 60%{ transform:scale(1.12); } 100%{ transform:scale(1); } }
+
+/* ============ toast ============ */
+.nx-toast-stack{
+  position:fixed; top:max(16px, var(--safe-t)); left:0; right:0;
+  z-index:1000; display:flex; flex-direction:column; align-items:center; gap:8px;
+  padding:0 20px; pointer-events:none;
+}
+.nx-toast{
+  pointer-events:auto;
+  display:flex; align-items:center; gap:10px;
+  width:100%; max-width:400px;
+  background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:13px 15px;
+  box-shadow:var(--shadow-2);
+  animation:nx-toast-in var(--dur-med) var(--ease-spring);
+}
+.nx-toast.is-leaving{ animation:nx-toast-out var(--dur-fast) var(--ease-out) forwards; }
+@keyframes nx-toast-in{ from{ opacity:0; transform:translateY(-14px) scale(.95); } to{ opacity:1; transform:none; } }
+@keyframes nx-toast-out{ to{ opacity:0; transform:translateY(-10px) scale(.96); } }
+.nx-toast-icon{ width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.nx-toast.is-success .nx-toast-icon{ background:var(--accent-dim); color:var(--accent); }
+.nx-toast.is-error .nx-toast-icon{ background:var(--danger-dim); color:var(--danger); }
+.nx-toast-body{ flex:1; min-width:0; }
+.nx-toast-title{ font-size:13px; font-weight:700; }
+.nx-toast-msg{ font-size:12px; color:var(--text-2); margin-top:1px; }
+
+/* ============ skeleton ============ */
+.nx-skel{
+  background:linear-gradient(100deg, var(--surface-2) 30%, var(--surface-3) 50%, var(--surface-2) 70%);
+  background-size:200% 100%;
+  animation:nx-shimmer 1.4s ease-in-out infinite;
+  border-radius:var(--r-xs);
+}
+@keyframes nx-shimmer{ 0%{ background-position:150% 0; } 100%{ background-position:-50% 0; } }
+
+/* ============ progress ============ */
+.nx-progress{ width:100%; height:6px; border-radius:var(--r-full); background:var(--surface-3); overflow:hidden; }
+.nx-progress-fill{ height:100%; border-radius:var(--r-full); background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width var(--dur-med) var(--ease-out); box-shadow:0 0 10px var(--accent-glow); }
+
+/* ============ divider ============ */
+.nx-divider{ height:1px; background:var(--border); margin:18px 0; }
+.nx-divider-label{ display:flex; align-items:center; gap:12px; font-size:11px; color:var(--text-3); letter-spacing:1px; text-transform:uppercase; margin:20px 0; }
+.nx-divider-label::before, .nx-divider-label::after{ content:''; flex:1; height:1px; background:var(--border); }
+
+/* ============ section label ============ */
+.nx-section-label{ font-size:11px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--text-3); margin:24px 0 10px; padding:0 4px; }
+.nx-section-label:first-child{ margin-top:0; }
+
+/* ============ utility animations ============ */
+@keyframes nx-fade-up{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:none; } }
+@keyframes nx-fade{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes nx-scale-in{ from{ opacity:0; transform:scale(.94); } to{ opacity:1; transform:scale(1); } }
+@keyframes nx-blur-in{ from{ opacity:0; filter:blur(8px); } to{ opacity:1; filter:blur(0); } }
+@keyframes nx-float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
+.nx-anim-in{ animation:nx-fade-up var(--dur-slow) var(--ease-out) both; }
+.nx-anim-in-1{ animation-delay:.05s; } .nx-anim-in-2{ animation-delay:.1s; } .nx-anim-in-3{ animation-delay:.16s; }
+.nx-anim-in-4{ animation-delay:.22s; } .nx-anim-in-5{ animation-delay:.28s; }
+
+/* ============ screen transition (for multi-screen flows) ============ */
+.nx-screen{ display:none; animation:nx-fade-up var(--dur-med) var(--ease-out) both; }
+.nx-screen.is-active{ display:block; }
+
+/* ============ empty state ============ */
+.nx-empty{ text-align:center; padding:56px 20px; color:var(--text-3); }
+.nx-empty svg{ margin-bottom:14px; opacity:.5; }
+.nx-empty-title{ font-size:13.5px; font-weight:600; color:var(--text-2); letter-spacing:.3px; }
+
+/* ============ responsive ============ */
+@media (min-width:520px){
+  .nx-shell{ padding-top:48px; }
+}
+@media (max-width:360px){
+  :root{ --edge:16px; }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+}
+
+/* ---- admin panel specific ---- */
+body{ padding-bottom:calc(var(--nav-h) + 24px); }
+
+/* sidebar drawer */
+.sb-overlay{ position:fixed; inset:0; z-index:500; background:rgba(4,6,5,.7); backdrop-filter:blur(8px); opacity:0; pointer-events:none; transition:opacity var(--dur-med) var(--ease-out); }
+.sb-overlay.is-open{ opacity:1; pointer-events:auto; }
+.sidebar{
+  position:fixed; left:0; top:0; bottom:0; width:278px; z-index:501;
+  background:linear-gradient(180deg, var(--surface-1) 0%, var(--bg) 100%);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column;
+  transform:translateX(-100%);
+  transition:transform var(--dur-med) var(--ease-spring);
+  box-shadow:var(--shadow-3);
+}
+.sidebar.is-open{ transform:translateX(0); }
+.sb-header{ padding:22px 18px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.sb-close{ width:32px; height:32px; border-radius:var(--r-full); border:1px solid var(--border); background:var(--surface-2); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-2); transition:all var(--dur-fast) var(--ease-out); }
+.sb-close:hover{ color:var(--danger); border-color:rgba(251,90,106,.3); }
+.sb-nav{ flex:1; overflow-y:auto; padding:12px 12px 0; }
+.sb-section{ font-family:var(--font-mono); font-size:10px; color:var(--text-3); letter-spacing:2.2px; padding:14px 10px 6px; text-transform:uppercase; }
+.sb-item{
+  display:flex; align-items:center; gap:11px; padding:11px 13px;
+  border-radius:var(--r-sm); cursor:pointer; color:var(--text-2); font-size:13.5px; font-weight:500;
+  transition:all var(--dur-fast) var(--ease-out); margin-bottom:3px; border:1px solid transparent;
+}
+.sb-item:hover{ background:var(--accent-dim); color:var(--accent-2); }
+.sb-item.is-active{ background:var(--accent-dim-2); color:var(--accent-2); border-color:var(--border-accent); }
+.sb-item svg{ flex-shrink:0; opacity:.75; }
+.sb-item:hover svg, .sb-item.is-active svg{ opacity:1; }
+.sb-badge{ margin-left:auto; background:var(--accent-dim); color:var(--accent-2); border-radius:var(--r-full); padding:2px 9px; font-size:10.5px; font-family:var(--font-mono); }
+.sb-footer{ padding:14px 12px; border-top:1px solid var(--border); flex-shrink:0; }
+.sb-user{ display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:var(--r-sm); background:var(--surface-1); border:1px solid var(--border); }
+.sb-avatar{ width:36px; height:36px; border-radius:var(--r-xs); background:var(--accent-dim); border:1px solid var(--border-accent); display:flex; align-items:center; justify-content:center; color:var(--accent-2); font-weight:800; font-size:14px; flex-shrink:0; }
+.sb-uname{ font-size:13px; font-weight:700; color:var(--text-1); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sb-urole{ font-family:var(--font-mono); font-size:9.5px; color:var(--text-3); margin-top:2px; letter-spacing:1.5px; text-transform:uppercase; }
+
+/* header */
+.ap-header{ position:sticky; top:0; z-index:200; padding:14px 16px; display:flex; align-items:center; gap:12px; background:rgba(10,13,12,.85); backdrop-filter:blur(8px); border-bottom:1px solid var(--border); }
+.sb-toggle{ width:40px; height:40px; border-radius:var(--r-sm); border:1px solid var(--border); background:var(--surface-1); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-2); transition:all var(--dur-fast) var(--ease-out); flex-shrink:0; }
+.sb-toggle:hover{ background:var(--surface-2); border-color:var(--border-hover); color:var(--text-1); }
+.ap-logo{ flex:1; text-align:center; font-size:16px; font-weight:800; letter-spacing:2px; }
+.ap-logo em{ font-style:normal; background:linear-gradient(135deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+
+/* pages */
+.ap-main{ max-width:480px; margin:0 auto; padding:18px 16px 0; }
+.page{ display:none; }
+.page.is-active{ display:block; animation:nx-fade-up var(--dur-med) var(--ease-out) both; }
+
+/* form card */
+.form-card{ padding:20px 18px; }
+.form-divider{ height:1px; background:linear-gradient(90deg, var(--border-accent), transparent); margin:2px 0 16px; }
+
+/* pickers */
+.picker-btn{
+  width:100%; padding:0 16px; height:54px; border-radius:var(--r-sm);
+  background:var(--surface-1); border:1.5px solid var(--border);
+  display:flex; align-items:center; gap:12px; cursor:pointer; margin-bottom:16px;
+  transition:all var(--dur-fast) var(--ease-out);
+}
+.picker-btn:hover{ border-color:var(--border-hover); background:var(--surface-2); }
+.picker-dot{ width:10px; height:10px; border-radius:50%; flex-shrink:0; transition:all var(--dur-med); }
+.picker-label{ flex:1; min-width:0; font-size:14.5px; font-weight:700; }
+.picker-sub{ font-family:var(--font-mono); font-size:10px; color:var(--text-3); letter-spacing:.6px; margin-top:2px; }
+.picker-arrow{ color:var(--text-3); flex-shrink:0; transition:transform var(--dur-fast); }
+.picker-btn.is-open .picker-arrow{ transform:rotate(180deg); }
+
+/* sheet list items (role / trial) */
+.pick-item{
+  display:flex; align-items:center; gap:14px;
+  padding:14px 15px; border-radius:var(--r-md);
+  border:1.5px solid var(--border); background:var(--surface-1);
+  cursor:pointer; transition:all var(--dur-fast) var(--ease-out);
+}
+.pick-item:hover{ background:var(--surface-2); border-color:var(--border-hover); }
+.pick-item.is-active{ border-color:var(--border-accent); background:var(--accent-dim); }
+.pick-item-icon{ width:44px; height:44px; border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; flex-shrink:0; background:var(--surface-2); border:1px solid var(--border); }
+.pick-item-body{ flex:1; min-width:0; }
+.pick-item-name{ font-size:15px; font-weight:700; }
+.pick-item-desc{ font-family:var(--font-mono); font-size:10px; color:var(--text-3); letter-spacing:.4px; margin-top:2px; }
+.pick-item-check{
+  width:22px; height:22px; border-radius:6px; flex-shrink:0; margin-left:auto;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity var(--dur-fast); box-shadow:0 0 12px var(--accent-glow);
+}
+.pick-item.is-active .pick-item-check{ opacity:1; }
+
+/* denied */
+.denied-card{ margin:20px 0; text-align:center; display:flex; flex-direction:column; align-items:center; gap:12px; padding:40px 20px; }
+.denied-title{ font-size:17px; font-weight:800; color:var(--danger); }
+.denied-sub{ font-family:var(--font-mono); font-size:10.5px; color:var(--text-3); letter-spacing:1.5px; text-align:center; }
+
+/* stats */
+.stats-row{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.stat-chip{ flex:1; min-width:56px; background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-sm); padding:12px 8px; text-align:center; }
+.stat-val{ font-size:20px; font-weight:800; line-height:1; }
+.stat-key{ font-family:var(--font-mono); font-size:9.5px; color:var(--text-3); letter-spacing:1.5px; margin-top:5px; text-transform:uppercase; }
+
+/* account list */
+.akun-list{ display:flex; flex-direction:column; gap:10px; padding-bottom:16px; }
+.akun-card{
+  background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md);
+  padding:14px; display:flex; align-items:center; gap:12px;
+  animation:nx-fade-up .3s var(--ease-out) both; transition:all var(--dur-fast) var(--ease-out);
+}
+.akun-card:hover{ border-color:var(--border-hover); transform:translateY(-1px); }
+.akun-av{ width:44px; height:44px; border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:800; flex-shrink:0; border:1px solid var(--border); }
+.av-member{ background:var(--accent-dim); color:var(--accent-2); }
+.av-reseller{ background:rgba(77,143,255,.12); color:#7fb3ff; border-color:rgba(77,143,255,.25); }
+.av-vip{ background:rgba(244,114,182,.12); color:#f472b6; border-color:rgba(244,114,182,.25); }
+.av-owner{ background:var(--warning-dim); color:var(--warning); border-color:rgba(255,182,72,.25); }
+.av-developer{ background:rgba(167,139,250,.12); color:#00e5ff; border-color:rgba(167,139,250,.25); }
+.akun-info{ flex:1; min-width:0; }
+.akun-name{ font-size:14.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.akun-user{ font-family:var(--font-mono); font-size:10px; color:var(--text-3); margin-top:2px; }
+.akun-meta{ display:flex; align-items:center; gap:6px; margin-top:7px; flex-wrap:wrap; }
+.role-badge{ display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:var(--r-full); font-family:var(--font-mono); font-size:9.5px; font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+.role-member{ background:var(--accent-dim); color:var(--accent-2); border:1px solid var(--border-accent); }
+.role-reseller{ background:rgba(77,143,255,.1); color:#7fb3ff; border:1px solid rgba(77,143,255,.25); }
+.role-vip{ background:rgba(244,114,182,.1); color:#f472b6; border:1px solid rgba(244,114,182,.25); }
+.role-owner{ background:var(--warning-dim); color:var(--warning); border:1px solid rgba(255,182,72,.25); }
+.role-developer{ background:rgba(167,139,250,.1); color:#00e5ff; border:1px solid rgba(167,139,250,.25); }
+.trial-badge-active{ display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:var(--r-full); font-family:var(--font-mono); font-size:9px; letter-spacing:.6px; background:var(--accent-dim); color:var(--accent-2); border:1px solid var(--border-accent); }
+.trial-badge-permanent{ display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:var(--r-full); font-family:var(--font-mono); font-size:9px; letter-spacing:.6px; background:var(--warning-dim); color:var(--warning); border:1px solid rgba(255,182,72,.25); }
+.del-btn{ width:36px; height:36px; border-radius:var(--r-xs); border:1px solid rgba(251,90,106,.18); background:var(--danger-dim); display:flex; align-items:center; justify-content:center; color:rgba(251,90,106,.6); cursor:pointer; transition:all var(--dur-fast) var(--ease-out); flex-shrink:0; }
+.del-btn:hover{ border-color:rgba(251,90,106,.4); color:var(--danger); }
+
+/* bottom nav */
+.bottom-nav{
+  position:fixed; bottom:calc(14px + var(--safe-b)); left:50%; transform:translateX(-50%); z-index:200;
+  background:var(--surface-1); backdrop-filter:blur(28px); border:1px solid var(--border);
+  border-radius:var(--r-lg); display:flex; align-items:center; padding:6px; gap:2px;
+  box-shadow:var(--shadow-3); width:calc(100% - 32px); max-width:380px;
+}
+.nav-btn{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:9px 5px; cursor:pointer; border:none; background:transparent; color:var(--text-3); font-family:var(--font-mono); font-size:9.5px; letter-spacing:1.2px; text-transform:uppercase; transition:all var(--dur-fast) var(--ease-out); border-radius:var(--r-md); }
+.nav-btn.is-active{ background:var(--accent-dim); color:var(--accent-2); }
+
+/* success dialog / confirm dialog specific */
+.sd-cred{ background:var(--surface-2); border:1px solid var(--border); border-radius:var(--r-sm); padding:10px 14px; margin-bottom:12px; text-align:left; }
+.sd-row{ display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-family:var(--font-mono); font-size:11px; }
+.sd-row + .sd-row{ border-top:1px solid var(--border); }
+.sd-label{ color:var(--text-3); letter-spacing:.6px; }
+.sd-value{ color:var(--accent-2); font-weight:700; letter-spacing:.4px; }
+.sd-img{ width:78%; height:auto; border-radius:var(--r-xs); margin:0 auto 12px; display:block; border:1px solid var(--border); }
+.sd-desc{ font-size:11.5px; color:var(--text-2); line-height:1.55; margin-bottom:14px; }
+
+.confirm-btns{ display:flex; gap:10px; margin-top:20px; }
+.confirm-btns .nx-btn{ margin-top:0; }
+
+
+/* Liquid glass boost */
+body{
+  background:var(--bg)!important;
+}
+body::before{
+  content:''!important;
+  position:fixed!important;inset:0!important;z-index:-2!important;pointer-events:none!important;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%,rgba(255,79,163,.14) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 90% 80%,rgba(255,119,200,.06) 0%,transparent 50%),
+    var(--bg)!important;
+}
+
+
+/* ── Liquid Glass polish layer ── */
+.nx-card,.card,.panel,.sheet,.modal-box,.auth-card,.setting-card{
+  background:rgba(255,255,255,.07)!important;
+  backdrop-filter:blur(8px) saturate(160%)!important;
+  -webkit-backdrop-filter:blur(8px) saturate(160%)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:0 8px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  border-radius:28px!important;
+}
+.nx-btn-primary,button.primary,.btn-primary,.nx-btn-fill{
+  background:linear-gradient(135deg,#FF4FA3,#FF77C8)!important;
+  border:none!important;
+  color:#fff!important;
+  box-shadow:0 6px 24px rgba(255,79,163,.35)!important;
+  border-radius:16px!important;
+  font-weight:700!important;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s!important;
+}
+.nx-btn-primary:active,button.primary:active,.btn-primary:active{
+  transform:scale(.96)!important;
+}
+.nx-input,input[type=text],input[type=password],input[type=email]{
+  background:rgba(255,255,255,.06)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:14px!important;
+  color:#fff!important;
+  backdrop-filter:blur(12px)!important;
+}
+.nx-input:focus,input:focus{
+  border-color:rgba(255,79,163,.5)!important;
+  box-shadow:0 0 0 3px rgba(255,79,163,.15)!important;
+  outline:none!important;
+}
+
+</style>
+<style id="nx-theme-v3">
+
+/* NOVAX BLUE×PINK THEME v3 */
+:root{--nx-blue:#55B8FF;--nx-pink:#FF5FA2}
+@keyframes nxFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes nxGlowPulse{0%,100%{box-shadow:0 0 12px rgba(85,184,255,.25)}50%{box-shadow:0 0 26px rgba(85,184,255,.45),0 0 18px rgba(255,95,162,.25)}}
+.header,.bottom-nav,nav.bottom-nav{
+  background:rgba(7,11,20,.78)!important;
+  backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;
+  border-color:rgba(85,184,255,.25)!important;
+}
+.hdr-logo{
+  background:linear-gradient(90deg,#55B8FF,#FF5FA2)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+}
+.bottom-nav,nav.bottom-nav{
+  display:flex!important;visibility:visible!important;opacity:1!important;
+  position:fixed!important;bottom:14px!important;left:50%!important;
+  transform:translateX(-50%)!important;z-index:9999!important;
+  width:calc(100% - 32px)!important;max-width:400px!important;
+  border-radius:22px!important;border:1px solid rgba(85,184,255,.3)!important;
+  box-shadow:0 10px 36px rgba(0,0,0,.45)!important;pointer-events:auto!important;
+}
+.page{display:none}
+.page.active{display:block!important;animation:nxFadeUp .4s ease both}
+.empty,.no-dev,#empty-state{
+  opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  gap:10px!important;padding:40px 20px!important;margin:12px 16px!important;
+  background:rgba(12,16,32,.42)!important;border-radius:20px!important;
+  border:1px solid rgba(85,184,255,.25)!important;
+}
+.empty-title,.no-dev-title{color:#f1f5f9!important;opacity:1!important;font-weight:700!important}
+.empty-sub,.no-dev-hint{color:rgba(226,232,240,.65)!important;opacity:1!important}
+.dcard,.dev-card,.ctrl-tile,.login-card,.glass-card,.product-card,.akun-card,.no-dev{
+  background:rgba(12,16,32,.32)!important;
+  backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;
+  border:1px solid rgba(85,184,255,.28)!important;border-radius:18px!important;
+  box-shadow:0 12px 36px rgba(0,0,0,.35),0 0 18px rgba(85,184,255,.1)!important;
+}
+button.primary,.btn-primary,.login-btn,button[type=submit]{
+  background:linear-gradient(135deg,#55B8FF,#FF5FA2)!important;
+  border:none!important;color:#fff!important;border-radius:14px!important;
+  box-shadow:0 6px 18px rgba(85,184,255,.28)!important;
+}
+/* BGM UI */
+.nx-bgm-fab{
+  position:fixed;right:16px;bottom:90px;z-index:9500;
+  width:50px;height:50px;border-radius:16px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,rgba(85,184,255,.5),rgba(255,95,162,.45));
+  color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 18px rgba(85,184,255,.35);
+  backdrop-filter:blur(12px);animation:nxGlowPulse 3s ease-in-out infinite;
+}
+.nx-bgm-fab.paused{opacity:.6;animation:none}
+.nx-bgm-panel{
+  position:fixed;right:16px;bottom:152px;z-index:9501;
+  width:min(300px,calc(100vw - 32px));padding:16px;border-radius:20px;
+  background:rgba(10,14,28,.88);backdrop-filter:blur(20px);
+  border:1px solid rgba(85,184,255,.35);
+  box-shadow:0 16px 48px rgba(0,0,0,.55),0 0 28px rgba(85,184,255,.18);
+  display:none;flex-direction:column;gap:12px;animation:nxFadeUp .28s ease both;
+}
+.nx-bgm-panel.open{display:flex}
+.nx-bgm-head{
+  font-size:11px;font-weight:800;letter-spacing:1.6px;
+  background:linear-gradient(90deg,#55B8FF,#FF5FA2);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.nx-bgm-now{font-size:12px;color:rgba(255,255,255,.55)}
+.nx-bgm-tracks{display:flex;flex-direction:column;gap:8px}
+.nx-bgm-track{
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);
+  border-radius:12px;padding:11px 12px;color:#e2e8f0;font-size:12px;font-weight:600;
+  cursor:pointer;text-align:left;
+}
+.nx-bgm-track.active{
+  border-color:rgba(85,184,255,.5);
+  background:linear-gradient(135deg,rgba(85,184,255,.2),rgba(255,95,162,.14));
+  box-shadow:0 0 14px rgba(85,184,255,.22);
+}
+.nx-bgm-row{display:flex;align-items:center;gap:8px}
+.nx-bgm-row button{
+  width:40px;height:40px;border-radius:12px;border:none;cursor:pointer;color:#fff;font-size:15px;
+  background:linear-gradient(135deg,rgba(85,184,255,.4),rgba(255,95,162,.32));
+}
+.nx-bgm-row input[type=range]{flex:1;accent-color:#55B8FF}
+.nx-bgm-vol-txt{font-size:11px;color:rgba(255,255,255,.45);min-width:34px}
+
+</style>
+
+<style id="nx-fullwhite-safe">
+/* ============================================================
+   NOVAX — Clean White Theme (Voltara-style)
+   CSS ONLY — does not touch JS / account logic
+   Full white, yellow accent, black borders, no blue/pink
+   ============================================================ */
+:root {
+  --nx-blue: #111111 !important;
+  --nx-blue-2: #333333 !important;
+  --nx-pink: #111111 !important;
+  --nx-pink-2: #333333 !important;
+  --nx-bg: #F2F3F5 !important;
+  --bg: #F2F3F5 !important;
+  --bg-soft: #FFFFFF !important;
+  --surface-1: #FFFFFF !important;
+  --surface-2: #FFFFFF !important;
+  --surface-3: #F8F8F8 !important;
+  --border: #1A1A1A !important;
+  --border-hover: #000000 !important;
+  --border-accent: #1A1A1A !important;
+  --text-1: #111111 !important;
+  --text-2: #333333 !important;
+  --text-3: #666666 !important;
+  --accent: #FFD600 !important;
+  --accent-2: #FFE566 !important;
+  --accent-dim: rgba(255,214,0,.18) !important;
+  --accent-glow: transparent !important;
+  --on-accent: #111111 !important;
+  --danger: #FF3B30 !important;
+  --warning: #FFD600 !important;
+  --success: #34C759 !important;
+  --blue: #111111 !important;
+  --cyan: #111111 !important;
+  --pink: #111111 !important;
+  --pink2: #111111 !important;
+  --primary: #FFD600 !important;
+  --b0: #F2F3F5 !important;
+  --b1: #FFFFFF !important;
+  --b2: #FFFFFF !important;
+  --b3: #F8F8F8 !important;
+  --b4: #F0F0F0 !important;
+  --t0: #111111 !important;
+  --t1: #333333 !important;
+  --t2: #555555 !important;
+  --t3: #888888 !important;
+  --g1: #FFFFFF !important;
+  --g2: #FFFFFF !important;
+  --gborder: #1A1A1A !important;
+  --gborder2: #1A1A1A !important;
+  --gborder3: #1A1A1A !important;
+  --glow: transparent !important;
+  --glow2: transparent !important;
+  --green: #34C759 !important;
+  --red: #FF3B30 !important;
+  --amber: #FFD600 !important;
+}
+
+html, body {
+  background: #F2F3F5 !important;
+  color: #111111 !important;
+}
+
+/* Hide dark ambient layers */
+body::before, body::after,
+.nx-ambient, .nx-ambient::after,
+.nx-bg-glow, .bg-glow, .bg-overlay, .nx-bg-overlay {
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+}
+
+/* Cards — white + black border like screenshot */
+.nx-card, .card, .glass, .panel, .modal, .popup,
+.main-card, .stat-box, .dev-card, .tile, .control-tile,
+.dcard, .ctrl-tile, .menu-card, .product-card, .akun-card,
+.login-card, .auth-card, .setting-card, .glass-card,
+.nx-glass-panel, .about-hero, .feature-card, .logo-card,
+.empty, .no-dev, #empty-state, .nx-sheet, .nx-dialog,
+.action-dialog, .nameplate-shell, .dash-banner,
+.ctrl-device-header, .ctrl-info-bar, .nx-dev-card,
+.nx-cc-wrap > div, .user-stat, .quick-action-card {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 18px !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.07) !important;
+  color: #111111 !important;
+}
+
+.nx-card::before, .nameplate-shell::before, .nameplate-shell::after {
+  display: none !important;
+}
+
+/* Header */
+.header, .nx-topbar, .nav-bar {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  border-bottom: 2px solid #1A1A1A !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  color: #111 !important;
+}
+.header::after { display: none !important; }
+
+/* Bottom nav — pill yellow active like photo */
+.bottom-nav, nav.bottom-nav {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 24px !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1) !important;
+  bottom: 16px !important;
+  width: calc(100% - 28px) !important;
+  max-width: 420px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.bottom-nav .nav-btn,
+nav.bottom-nav .nav-btn,
+.bottom-nav button {
+  color: #555 !important;
+  font-weight: 700 !important;
+  border-radius: 16px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.bottom-nav .nav-btn.active,
+.bottom-nav .nav-btn.is-active,
+nav.bottom-nav .active {
+  background: #FFE566 !important;
+  color: #111111 !important;
+  border: 2px solid #1A1A1A !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+/* Brand text — no gradient blue/pink */
+.hdr-logo, .nx-brand, .logo-title, .brand, .about-title em,
+.brand-name, .main-title, .logo-glitch, .about-title,
+.hdr-logo span {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #111111 !important;
+  color: #111111 !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+/* Buttons — yellow primary */
+button, .btn, .nx-btn, .btn-login, .sec-btn, .action-btn,
+.loader-btn, .btn-signin, .btn-primary, .nx-btn-primary,
+button.primary, .nx-btn-fill, .login-btn, button[type=submit],
+.action-dialog-submit {
+  border-radius: 14px !important;
+  border: 2px solid #1A1A1A !important;
+  font-weight: 800 !important;
+  color: #111 !important;
+}
+
+.nx-btn-primary, button.primary, .btn-primary, .btn-login,
+.nx-btn-fill, .btn-signin, .loader-btn.btn-primary,
+button[type=submit], .action-dialog-submit {
+  background: #FFE566 !important;
+  color: #111111 !important;
+  border: 2px solid #1A1A1A !important;
+  box-shadow: 0 3px 0 #1A1A1A !important;
+}
+
+.nx-btn-primary:active, button.primary:active, .btn-primary:active,
+.btn-signin:active, button[type=submit]:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 #1A1A1A !important;
+}
+
+.nx-btn-secondary, .btn-secondary, .nx-btn-ghost,
+.action-dialog-cancel {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+.nx-btn-danger, .btn-danger {
+  background: #FF3B30 !important;
+  border: 2px solid #1A1A1A !important;
+  color: #fff !important;
+}
+
+/* Inputs */
+input, select, textarea, .nx-input, .field-input,
+.nx-input-wrap, .input-group {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 14px !important;
+  color: #111 !important;
+  box-shadow: none !important;
+}
+input:focus, .nx-input-wrap:focus-within, .input-group:focus-within {
+  border-color: #111 !important;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.1) !important;
+}
+input::placeholder { color: #999 !important; }
+
+/* Device cards */
+.dcard {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 16px !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06) !important;
+}
+.dcard.selected {
+  border-color: #111 !important;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.12) !important;
+}
+.dcard-name, .nx-dev-meta h2 { color: #111 !important; font-weight: 700 !important; }
+.dcard-id, .dcard-android, .nx-dev-meta p { color: #666 !important; }
+
+/* Badges — yellow like "Role anda: MEMBER" */
+.nx-badge, .role-badge, .trial-badge-permanent, .trial-badge-active {
+  border: 1.5px solid #1A1A1A !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  background: #FFE566 !important;
+  color: #111 !important;
+  box-shadow: none !important;
+}
+
+/* Back button */
+.nx-back {
+  background: #FFE566 !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+  color: #111 !important;
+}
+
+/* Social / community buttons */
+.social-btn, .social-link, .social-icon-circle {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+/* Toast / dialog */
+.nx-toast, .toast {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 14px !important;
+  color: #111 !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12) !important;
+}
+.nx-overlay, .action-dialog-bg { background: rgba(0,0,0,0.4) !important; }
+.nx-dialog, .action-dialog, .nx-sheet {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 20px !important;
+  color: #111 !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.14) !important;
+}
+
+/* BGM */
+.nx-bgm-fab {
+  background: #FFE566 !important;
+  border: 2px solid #1A1A1A !important;
+  box-shadow: 0 3px 0 #1A1A1A !important;
+  border-radius: 14px !important;
+  color: #111 !important;
+  animation: none !important;
+}
+.nx-bgm-panel {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 16px !important;
+  color: #111 !important;
+}
+.nx-bgm-track {
+  background: #F8F8F8 !important;
+  border: 1.5px solid #1A1A1A !important;
+  color: #111 !important;
+}
+.nx-bgm-track.active { background: #FFE566 !important; }
+.nx-bgm-head {
+  background: none !important;
+  -webkit-text-fill-color: #111 !important;
+  color: #111 !important;
+}
+
+/* Login */
+.logo-circle {
+  background: #FFFFFF !important;
+  border: 2.5px solid #1A1A1A !important;
+  box-shadow: 0 4px 0 #1A1A1A !important;
+  color: #111 !important;
+}
+.logo-circle svg { color: #111 !important; }
+.save-toggle {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 14px !important;
+}
+.save-toggle.on { background: #FFF8D6 !important; }
+.save-switch { border: 2px solid #1A1A1A !important; background: #E0E0E0 !important; }
+.save-toggle.on .save-switch { background: #FFE566 !important; border-color: #1A1A1A !important; }
+
+/* Splash */
+.logo-glow {
+  background: #FFE566 !important;
+  border: 3px solid #1A1A1A !important;
+  box-shadow: 0 6px 0 #1A1A1A !important;
+  animation: none !important;
+}
+.logo-glow svg { color: #111 !important; }
+.skip-btn {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  border-radius: 20px !important;
+  color: #111 !important;
+  box-shadow: 0 2px 0 #1A1A1A !important;
+}
+
+/* Force text colors */
+.nx-title, .nx-label, .empty-title, .feature-title,
+.card-title, .dev-name, .akun-name, .dcard-name,
+.profile-row-val, .ctrl-device-name, .about-title,
+.sec-label-text, .user-stat-val, .user-stat-key {
+  color: #111111 !important;
+}
+.nx-title-sub, .empty-sub, .feature-desc, .card-subtitle,
+.dev-role, .akun-user, .profile-row-key, .dcard-id {
+  color: #666666 !important;
+}
+
+* { text-shadow: none !important; }
+
+.progress-fill { background: #FFE566 !important; box-shadow: none !important; }
+.progress-track {
+  background: #E5E5E5 !important;
+  border: 1.5px solid #1A1A1A !important;
+  border-radius: 8px !important;
+}
+
+.dcard-online {
+  background: #34C759 !important;
+  box-shadow: 0 0 6px #34C759 !important;
+}
+
+/* Kill leftover gradient backgrounds on key UI */
+.nx-btn-primary, button.primary, .btn-primary, .btn-login,
+.hdr-logo, .nx-brand {
+  background-image: none !important;
+}
+
+/* Control tiles / up role / community sections */
+.ctrl-tile, .menu-card, .product-card, .akun-card,
+[class*="community"], [class*="up-role"], [class*="upgrade"] {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+}
+
+/* Soft cyan banner style like "VOLTARA NIGHT: Dashboard siap" → light gray/white */
+.dash-banner, .ctrl-device-header, [class*="banner"] {
+  background: #FFFFFF !important;
+  border: 2px solid #1A1A1A !important;
+  color: #111 !important;
+}
+
+</style>
+
+
+<style id="novax-admin-input-visibility-fix">
+/* FINAL INPUT VISIBILITY FIX
+   Keep typed username/password readable even with the glass/white overrides. */
+#create-form .nx-input-wrap{
+  background:#111827 !important;
+  border:1.5px solid rgba(255,255,255,.18) !important;
+  color:#fff !important;
+  opacity:1 !important;
+}
+#create-form .nx-input-wrap:focus-within{
+  background:#0b1220 !important;
+  border-color:#FFE566 !important;
+  box-shadow:0 0 0 3px rgba(255,229,102,.18) !important;
+}
+#create-form .nx-input-wrap input,
+#create-form .nx-input-wrap input[type="text"],
+#create-form .nx-input-wrap input[type="password"]{
+  background:transparent !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  caret-color:#FFE566 !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+  font-weight:600 !important;
+}
+#create-form .nx-input-wrap input::placeholder{
+  color:rgba(255,255,255,.48) !important;
+  -webkit-text-fill-color:rgba(255,255,255,.48) !important;
+}
+#create-form .nx-input-icon-btn{
+  color:#fff !important;
+  opacity:1 !important;
+}
+#create-form .nx-input-wrap input:-webkit-autofill,
+#create-form .nx-input-wrap input:-webkit-autofill:hover,
+#create-form .nx-input-wrap input:-webkit-autofill:focus{
+  -webkit-text-fill-color:#fff !important;
+  caret-color:#FFE566 !important;
+  -webkit-box-shadow:0 0 0 1000px #111827 inset !important;
+  box-shadow:0 0 0 1000px #111827 inset !important;
+}
+</style>
+
+</head>
+<script>
+(function(){
+  const t = localStorage.getItem('sync_token');
+  if (!t) { window.location.replace('/login.html'); throw 0; }
+})();
+
+</script>
+<body>
+<div class="nx-ambient"></div>
+
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sb-header">
+    <span class="nx-brand" style="font-size:17px;flex:1;">No<em>vaX</em></span>
+    <div class="sb-close" onclick="closeSidebar()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-section">Admin Panel</div>
+    <div class="sb-item is-active" id="sbnav-create" onclick="sidebarGo('create')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      Buat Akun
+    </div>
+    <div class="sb-item" id="sbnav-list" onclick="sidebarGo('list')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Daftar Akun
+      <span class="sb-badge" id="sb-count">0</span>
+    </div>
+    <div class="sb-section">Navigasi</div>
+    <div class="sb-item" onclick="window.location.href='dashboard.html'">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+      Dashboard
+    </div>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">?</div>
+      <div style="flex:1;min-width:0">
+        <div class="sb-uname" id="sb-uname">Loading...</div>
+        <div class="sb-urole" id="sb-urole">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ap-header">
+  <div class="sb-toggle" onclick="openSidebar()">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </div>
+  <div class="ap-logo">ADMIN<em>PANEL</em></div>
+  <button class="nx-btn nx-btn-danger nx-btn-sm" onclick="doLogout()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Keluar
+  </button>
+</div>
+
+<!-- Role Sheet -->
+<div class="nx-overlay" id="roleSheetOverlay" onclick="if(event.target===this) closeRoleSheet()">
+  <div class="nx-sheet" id="roleSheet">
+    <div class="nx-sheet-handle"></div>
+    <div class="nx-sheet-title">Pilih Role</div>
+    <div class="nx-sheet-sub">Tentukan akses akun baru</div>
+    <div class="role-sheet-list" id="role-sheet-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+</div>
+
+<!-- Trial Sheet -->
+<div class="nx-overlay" id="trialSheetOverlay" onclick="if(event.target===this) closeTrialSheet()">
+  <div class="nx-sheet" id="trialSheet">
+    <div class="nx-sheet-handle"></div>
+    <div class="nx-sheet-title">Durasi Akses</div>
+    <div class="nx-sheet-sub">Pilih masa berlaku akun</div>
+    <div class="trial-sheet-list" id="trial-sheet-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+</div>
+
+<div class="ap-main">
+
+  <!-- PAGE CREATE -->
+  <div class="page is-active" id="page-create">
+    <div class="nx-section-label">Buat Akun Baru</div>
+
+    <div id="create-denied" style="display:none">
+      <div class="denied-card">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        <div class="denied-title">Akses Ditolak</div>
+        <div class="denied-sub">Role kamu tidak punya izin membuat akun</div>
+      </div>
+    </div>
+
+    <div id="create-form">
+      <div class="nx-card form-card">
+        <label class="nx-label">Username</label>
+        <div class="nx-input-wrap" style="margin-bottom:14px;">
+          <input id="inp-username" type="text" placeholder="Masukkan username..." autocomplete="off" spellcheck="false">
+        </div>
+
+        <label class="nx-label">Password</label>
+        <div class="nx-input-wrap" style="margin-bottom:14px;">
+          <input id="inp-password" type="password" placeholder="Masukkan password...">
+          <button class="nx-input-icon-btn" onclick="togglePw()" tabindex="-1" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <label class="nx-label">Role</label>
+        <div class="picker-btn" id="role-picker-btn" onclick="openRoleSheet()">
+          <div class="picker-dot" id="picker-dot" style="background:var(--text-3)"></div>
+          <div style="flex:1;min-width:0">
+            <div class="picker-label" id="picker-label">Pilih Role...</div>
+            <div class="picker-sub" id="picker-sub">TAP UNTUK MEMILIH</div>
+          </div>
+          <svg class="picker-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <input type="hidden" id="selected-role" value="">
+
+        <div id="trial-picker-block">
+          <label class="nx-label">Durasi Akses</label>
+          <div class="picker-btn" id="trial-picker-btn" onclick="openTrialSheet()">
+            <div class="picker-dot" id="trial-picker-icon"></div>
+            <div style="flex:1;min-width:0">
+              <div class="picker-label" id="trial-picker-label">Pilih Durasi...</div>
+              <div class="picker-sub" id="trial-picker-sub">TAP UNTUK MEMILIH</div>
+            </div>
+            <svg class="picker-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <input type="hidden" id="selected-trial" value="">
+        </div>
+
+        <button class="nx-btn nx-btn-primary" id="btn-create" onclick="createAkun()" type="button">
+          <span class="nx-btn-label" id="btn-create-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Buat Akun
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE LIST -->
+  <div class="page" id="page-list">
+    <div class="nx-section-label">Daftar Akun</div>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="nx-input-wrap" style="margin-bottom:14px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search-input" type="text" placeholder="Cari username..." oninput="filterAkun()">
+    </div>
+    <div class="akun-list" id="akun-list">
+      <div class="nx-empty"><div class="nx-empty-title">Memuat...</div></div>
+    </div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-btn is-active" id="nav-create" onclick="goPage('create')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+    Buat
+  </button>
+  <button class="nav-btn" id="nav-list" onclick="goPage('list')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Akun
+  </button>
+</nav>
+
+<div class="nx-toast-stack" id="toast-wrap"></div>
+
+<!-- Success dialog -->
+<div class="nx-overlay" id="successDialogOverlay" onclick="if(event.target===this) closeSuccessDialog()">
+  <div class="nx-sheet" id="successDialog">
+    <div class="nx-sheet-handle"></div>
+    <div style="text-align:center;">
+      <div class="nx-dialog-icon" style="margin-bottom:12px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="nx-sheet-title">Pembuatan Akun Sukses!</div>
+      <div class="nx-sheet-sub">Tagihan storan Rp 5.000</div>
+    </div>
+    <div class="sd-cred">
+      <div class="sd-row"><span class="sd-label">Username</span><span class="sd-value" id="sd-username">-</span></div>
+      <div class="sd-row"><span class="sd-label">Password</span><span class="sd-value" id="sd-password">-</span></div>
+    </div>
+    <img class="sd-img" src="https://files.catbox.moe/r4avok.jpg" alt="bukti">
+    <div class="sd-desc">Informasi: Akun Anda telah berhasil dibuat. Untuk menjaga keaktifan akun, mohon segera melakukan pembayaran sebesar Rp 5.000 dan mengirimkan bukti transaksi kepada admin. Akun yang tidak dikonfirmasi dalam 1x24 jam akan dihapus secara otomatis.</div>
+    <a class="nx-btn nx-btn-primary" href="https://t.me/XBhigh" target="_blank" rel="noopener" style="margin-bottom:8px;">
+      <svg width="17" height="17" viewBox="0 0 240 240" fill="none"><path d="M186.9 64.6 162.3 184c-1.9 8.4-6.8 10.4-13.8 6.5l-38.1-28.1-18.4 17.7c-2 2-3.7 3.7-7.6 3.7l2.7-38.6L155 81.1c3.4-3 -.7-4.7-5.2-1.7l-86 54.2-37-11.6c-8-2.5-8.2-8 1.7-11.9l144.7-55.8c6.7-2.4 12.5 1.6 13.7 11.3Z" fill="var(--on-accent)"/></svg>
+      Kirim Bukti Storan
+    </a>
+    <button class="nx-btn nx-btn-ghost" type="button" onclick="closeSuccessDialog()">Tutup</button>
+  </div>
+</div>
+
+<script>
+const TOKEN = localStorage.getItem('sync_token');
+let MY_ROLE = '';
+let MY_USER = '';
+let MY_USERNAME_KEY = '';
+let akunData = [];
+let MY_QUOTA = {};
+let isCreating = false;
+
+const ROLE_ORDER = ['developer', 'owner', 'reseller', 'member'];
+
+const CAN_CREATE = {
+  developer: ['developer', 'owner', 'reseller', 'member'],
+  owner: ['reseller', 'member'],
+  reseller: ['member'],
+  member: []
+};
+
+const ROLE_META = {
+  member: { label: 'Member', desc: 'Akses dasar perangkat', dot: 'var(--accent)', icon: 'ri-member', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' },
+  reseller: { label: 'Reseller', desc: 'Buat & kelola akun member', dot: '#7fb3ff', icon: 'ri-reseller', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+  vip: { label: 'VIP', desc: 'Akses premium eksklusif', dot: '#f472b6', icon: 'ri-vip', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' },
+  owner: { label: 'Owner', desc: 'Kelola reseller & VIP', dot: 'var(--warning)', icon: 'ri-owner', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+  developer: { label: 'Developer', desc: 'Akses penuh sistem', dot: '#00e5ff', icon: 'ri-developer', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>' }
+};
+
+const TRIAL_ALL = [
+  { value: '3m', label: '3 Menit', desc: 'Testing — expired 3 menit', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4"/><path d="M12 14v-4"/><circle cx="12" cy="14" r="8"/></svg>', type: 'trial' },
+  { value: '5m', label: '5 Menit', desc: 'Testing — expired 5 menit', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4"/><path d="M12 14v-4"/><circle cx="12" cy="14" r="8"/></svg>', type: 'trial' },
+  { value: '10m', label: '10 Menit', desc: 'Testing — expired 10 menit', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4"/><path d="M12 14v-4"/><circle cx="12" cy="14" r="8"/></svg>', type: 'trial' },
+  { value: '3d', label: '3 Hari', desc: 'Akses selama 3 hari', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', type: 'trial' },
+  { value: '7d', label: '1 Minggu', desc: 'Akses selama 7 hari', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', type: 'trial' },
+  { value: '30d', label: '1 Bulan', desc: 'Akses selama 30 hari', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>', type: 'trial' },
+  { value: 'permanent', label: 'Permanent', desc: 'Akses tidak terbatas', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12c-2-2.5-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.5 6-4z"/><path d="M12 12c2 2.5 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.5-6 4z"/></svg>', type: 'permanent' }
+];
+
+/* ===== init ===== */
+async function init() {
+  try {
+    const r = await fetch('/api/me', { headers: { 'x-auth-token': TOKEN } });
+    if (r.status === 401) { doLogout(); return; }
+    const me = await r.json();
+    MY_ROLE = me.role || 'member';
+    MY_USER = me.displayName || me.username || '?';
+    MY_USERNAME_KEY = me.username || '';
+
+    document.getElementById('sb-uname').textContent = MY_USER;
+    document.getElementById('sb-urole').textContent = MY_ROLE.toUpperCase();
+    document.getElementById('sb-avatar').textContent = MY_USER[0]?.toUpperCase() || '?';
+
+    const qr = await fetch('/api/admin/quota', { headers: { 'x-auth-token': TOKEN } });
+    MY_QUOTA = await qr.json();
+
+    renderRoleSheet();
+    renderTrialSheet();
+    loadAkunList();
+  } catch (e) {
+    toast('Gagal memuat data', 'error');
+  }
+}
+
+/* ===== role sheet ===== */
+function renderRoleSheet() {
+  const canCreate = CAN_CREATE[MY_ROLE] || [];
+  const form = document.getElementById('create-form');
+  const denied = document.getElementById('create-denied');
+
+  if (!canCreate.length) {
+    form.style.display = 'none';
+    denied.style.display = 'block';
+    return;
+  }
+
+  const list = document.getElementById('role-sheet-list');
+  list.innerHTML = canCreate.map(r => {
+    const m = ROLE_META[r];
+    return `<div class="pick-item" id="ri-${r}" onclick="selectRole('${r}')">
+      <div class="pick-item-icon" style="color:${m.dot}">${m.svg}</div>
+      <div class="pick-item-body">
+        <div class="pick-item-name">${m.label}</div>
+        <div class="pick-item-desc">${m.desc}</div>
+      </div>
+      <div class="pick-item-check">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--on-accent)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>`;
+  }).join('');
+
+  selectRole(canCreate[canCreate.length - 1]);
+}
+
+function openRoleSheet() {
+  document.getElementById('roleSheetOverlay').classList.add('is-open');
+  document.getElementById('role-picker-btn').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeRoleSheet() {
+  document.getElementById('roleSheetOverlay').classList.remove('is-open');
+  document.getElementById('role-picker-btn').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+function selectRole(role) {
+  document.querySelectorAll('#role-sheet-list .pick-item').forEach(el => el.classList.remove('is-active'));
+  const item = document.getElementById('ri-' + role);
+  if (item) item.classList.add('is-active');
+
+  document.getElementById('selected-role').value = role;
+
+  const m = ROLE_META[role];
+  if (m) {
+    document.getElementById('picker-dot').style.background = m.dot;
+    document.getElementById('picker-dot').style.boxShadow = `0 0 8px ${m.dot}`;
+    document.getElementById('picker-label').textContent = m.label;
+
+    if (!MY_QUOTA.unlimited && MY_QUOTA.quota && MY_QUOTA.quota[role]) {
+      const q = MY_QUOTA.quota[role];
+      document.getElementById('picker-sub').textContent = `${q.used}/${q.limit} AKUN TERPAKAI`;
+    } else if (MY_QUOTA.unlimited) {
+      document.getElementById('picker-sub').textContent = 'UNLIMITED';
+    } else {
+      document.getElementById('picker-sub').textContent = m.desc;
+    }
+  }
+
+  renderTrialSheet(role);
+  setTimeout(() => closeRoleSheet(), 200);
+}
+
+/* ===== trial sheet ===== */
+function getTrialOptions(targetRole) {
+  if (targetRole && targetRole !== 'member') return [TRIAL_ALL.find(t => t.value === 'permanent')];
+  if (MY_ROLE === 'developer') return TRIAL_ALL;
+  if (MY_ROLE === 'owner') return TRIAL_ALL.filter(t => ['3d', '7d', '30d', 'permanent'].includes(t.value));
+  if (MY_ROLE === 'reseller') return [TRIAL_ALL.find(t => t.value === 'permanent')];
+  return [];
+}
+
+function renderTrialSheet(targetRole) {
+  const canUseTrial = ['developer', 'owner', 'reseller'].includes(MY_ROLE);
+  const trialBlock = document.getElementById('trial-picker-block');
+  if (trialBlock) trialBlock.style.display = canUseTrial ? 'block' : 'none';
+  if (!canUseTrial) return;
+
+  const opts = getTrialOptions(targetRole);
+  const list = document.getElementById('trial-sheet-list');
+  list.innerHTML = opts.map(t => `
+    <div class="pick-item" id="ti-${t.value}" onclick="selectTrial('${t.value}')">
+      <div class="pick-item-icon" style="color:${t.type === 'permanent' ? 'var(--warning)' : 'var(--accent)'}">${t.icon}</div>
+      <div class="pick-item-body">
+        <div class="pick-item-name">${t.label}</div>
+        <div class="pick-item-desc">${t.desc}</div>
+      </div>
+      <div class="pick-item-check">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--on-accent)" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>`).join('');
+
+  const defaultVal = targetRole !== 'member' ? 'permanent' : (MY_ROLE === 'owner' ? '3d' : 'permanent');
+  selectTrial(defaultVal);
+}
+
+function openTrialSheet() {
+  document.getElementById('trialSheetOverlay').classList.add('is-open');
+  document.getElementById('trial-picker-btn').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeTrialSheet() {
+  document.getElementById('trialSheetOverlay').classList.remove('is-open');
+  document.getElementById('trial-picker-btn').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+function selectTrial(value) {
+  const currentRole = document.getElementById('selected-role').value;
+  document.querySelectorAll('#trial-sheet-list .pick-item').forEach(el => el.classList.remove('is-active'));
+  const item = document.getElementById('ti-' + value);
+  const opt = getTrialOptions(currentRole).find(t => t.value === value);
+  if (item && opt) {
+    item.classList.add('is-active');
+    document.getElementById('selected-trial').value = value;
+    document.getElementById('trial-picker-label').textContent = opt.label;
+    document.getElementById('trial-picker-sub').textContent = opt.desc;
+    const icon = document.getElementById('trial-picker-icon');
+    icon.style.background = opt.type === 'permanent' ? 'var(--warning)' : 'var(--accent)';
+    icon.style.boxShadow = opt.type === 'permanent' ? '0 0 8px var(--warning)' : '0 0 8px var(--accent)';
+  }
+  setTimeout(() => closeTrialSheet(), 200);
+}
+
+/* ===== create account ===== */
+async function createAkun() {
+  if (isCreating) return;
+  const username = document.getElementById('inp-username').value.trim();
+  const password = document.getElementById('inp-password').value.trim();
+  const role = document.getElementById('selected-role').value;
+  const trialDuration = document.getElementById('selected-trial').value;
+  const btn = document.getElementById('btn-create');
+  const btnLabel = document.getElementById('btn-create-label');
+
+  if (!username) return toast('Username tidak boleh kosong', 'error');
+  if (!password) return toast('Password tidak boleh kosong', 'error');
+  if (!role) return toast('Pilih role terlebih dahulu', 'error');
+  if (!trialDuration) return toast('Pilih durasi akses terlebih dahulu', 'error');
+
+  isCreating = true;
+  btn.disabled = true;
+  btnLabel.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:nx-spin .7s linear infinite;vertical-align:-2px;margin-right:5px;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Memproses...`;
+
+  try {
+    const r = await fetch('/api/admin/create-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-auth-token': TOKEN },
+      body: JSON.stringify({ username, password, role, trialDuration })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || 'Gagal membuat akun');
+
+    openSuccessDialog(username, password);
+    document.getElementById('inp-username').value = '';
+    document.getElementById('inp-password').value = '';
+
+    fetch('/api/admin/quota', { headers: { 'x-auth-token': TOKEN } })
+      .then(r => r.json())
+      .then(qd => { MY_QUOTA = qd; selectRole(document.getElementById('selected-role').value); });
+
+    loadAkunList();
+  } catch (e) {
+    toast(e.message, 'error');
+  } finally {
+    isCreating = false;
+    btn.disabled = false;
+    btnLabel.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:5px;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Buat Akun`;
+  }
+}
+
+/* ===== account list rendering (shared by loadAkunList + filterAkun) ===== */
+function trialBadgeHTML(acc) {
+  const iconPermanent = `<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 12c-2-2.5-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.5 6-4z"/><path d="M12 12c2 2.5 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.5-6 4z"/></svg>`;
+  const iconClock = `<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+  const iconWarn = `<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+
+  if (!acc.trialExpiry) return `<span class="trial-badge-permanent">${iconPermanent} PERMANENT</span>`;
+  const diff = new Date(acc.trialExpiry) - new Date();
+  if (diff <= 0) return `<span class="trial-badge-active" style="color:var(--danger);border-color:rgba(251,90,106,.25);background:var(--danger-dim)">${iconWarn} EXPIRED</span>`;
+  const sisaMenit = Math.ceil(diff / (1000 * 60));
+  const sisaHari = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  const label = sisaMenit < 60 ? `SISA ${sisaMenit} MENIT` : `SISA ${sisaHari} HARI`;
+  return `<span class="trial-badge-active">${iconClock} ${label}</span>`;
+}
+
+function akunCardHTML(acc) {
+  const initial = (acc.displayName || '?')[0].toUpperCase();
+  const m = ROLE_META[acc.role] || ROLE_META.member;
+  const canDel = canDelete(MY_ROLE, acc.role, acc.username);
+  const tgl = acc.createdAt ? new Date(acc.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: '2-digit' }) : '—';
+
+  return `<div class="akun-card">
+    <div class="akun-av av-${acc.role || 'member'}">${initial}</div>
+    <div class="akun-info">
+      <div class="akun-name">${esc(acc.displayName || acc.username)}</div>
+      <div class="akun-user">Dibuat oleh: ${esc(acc.createdBy || '—')}</div>
+      <div class="akun-meta">
+        <span class="role-badge role-${acc.role || 'member'}">${m.label}</span>
+        <span style="font-family:var(--font-mono);font-size:9.5px;color:var(--text-3)">${tgl}</span>
+        ${trialBadgeHTML(acc)}
+      </div>
+    </div>
+    ${canDel ? `<div class="del-btn" onclick="confirmDelete('${esc(acc.username)}','${esc(acc.displayName || acc.username)}')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </div>` : ''}
+  </div>`;
+}
+
+function renderAkunList(list, emptyMsg) {
+  const el = document.getElementById('akun-list');
+  el.innerHTML = list.length
+    ? list.map(akunCardHTML).join('')
+    : `<div class="nx-empty"><div class="nx-empty-title">${emptyMsg}</div></div>`;
+}
+
+function filterAkun() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+  const hasil = q
+    ? akunData.filter(a => (a.username || '').toLowerCase().includes(q) || (a.displayName || '').toLowerCase().includes(q))
+    : akunData;
+  renderAkunList(hasil, 'Tidak ditemukan');
+}
+
+async function loadAkunList() {
+  const r = await fetch('/api/admin/accounts', { headers: { 'x-auth-token': TOKEN } });
+  if (r.status === 401) { doLogout(); return; }
+  const allList = await r.json();
+
+  const list = MY_ROLE === 'developer'
+    ? allList
+    : allList.filter(acc => acc.createdBy === MY_USERNAME_KEY || acc.username === MY_USERNAME_KEY);
+
+  document.getElementById('sb-count').textContent = list.length;
+
+  const stats = { member: 0, reseller: 0, owner: 0, developer: 0 };
+  list.forEach(a => { if (stats[a.role] !== undefined) stats[a.role]++; });
+
+  const roleColors = { member: 'var(--accent)', reseller: '#7fb3ff', owner: 'var(--warning)', developer: '#00e5ff' };
+  document.getElementById('stats-row').innerHTML = Object.entries(stats)
+    .filter(([, count]) => count > 0)
+    .map(([role, count]) => `
+    <div class="stat-chip">
+      <div class="stat-val" style="color:${roleColors[role] || 'var(--text-2)'}">${count}</div>
+      <div class="stat-key">${role}</div>
+    </div>`).join('');
+
+  akunData = list;
+  if (document.getElementById('search-input')?.value) return filterAkun();
+
+  renderAkunList(list, 'Belum ada akun');
+}
+
+function canDelete(myRole, targetRole, targetUser) {
+  if (targetUser === MY_USERNAME_KEY) return false;
+  const myIdx = ROLE_ORDER.indexOf(myRole);
+  const targetIdx = ROLE_ORDER.indexOf(targetRole);
+  return myIdx !== -1 && targetIdx !== -1 && myIdx < targetIdx;
+}
+
+/* ===== delete confirm dialog (built dynamically) ===== */
+function confirmDelete(username, displayName) {
+  const old = document.getElementById('confirm-overlay');
+  if (old) old.remove();
+
+  const ov = document.createElement('div');
+  ov.id = 'confirm-overlay';
+  ov.className = 'nx-overlay nx-center is-open';
+  ov.innerHTML = `<div class="nx-dialog">
+    <div class="nx-dialog-icon" style="background:var(--danger-dim);color:var(--danger);border-color:rgba(251,90,106,.3)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </div>
+    <div style="font-size:16.5px;font-weight:800;margin-bottom:6px;">Hapus Akun</div>
+    <div style="font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:4px;">Yakin hapus akun <strong style="color:var(--text-1)">"${esc(displayName)}"</strong>?<br>Semua sesi aktif akan dihentikan.</div>
+    <div class="confirm-btns">
+      <button class="nx-btn nx-btn-secondary" onclick="document.getElementById('confirm-overlay').remove()">Batal</button>
+      <button class="nx-btn nx-btn-danger" onclick="deleteAkun('${esc(username)}','${esc(displayName)}')">Hapus</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+}
+
+async function deleteAkun(username, displayName) {
+  document.getElementById('confirm-overlay')?.remove();
+  const r = await fetch(`/api/admin/accounts/${encodeURIComponent(username)}`, { method: 'DELETE', headers: { 'x-auth-token': TOKEN } });
+  const data = await r.json();
+  if (!r.ok) return toast(data.error || 'Gagal hapus akun', 'error');
+  toast(`Akun "${displayName}" dihapus`, 'info');
+  loadAkunList();
+}
+
+/* ===== success dialog ===== */
+function openSuccessDialog(username, password) {
+  document.getElementById('sd-username').textContent = username;
+  document.getElementById('sd-password').textContent = password;
+  document.getElementById('successDialogOverlay').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSuccessDialog() {
+  document.getElementById('successDialogOverlay').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+/* ===== misc ui ===== */
+function togglePw() {
+  const inp = document.getElementById('inp-password');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function goPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('is-active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
+  document.getElementById('page-' + page).classList.add('is-active');
+  document.getElementById('nav-' + page).classList.add('is-active');
+  if (page === 'list') loadAkunList();
+  closeSidebar();
+}
+
+function sidebarGo(page) {
+  document.querySelectorAll('.sb-item').forEach(el => el.classList.remove('is-active'));
+  document.getElementById('sbnav-' + page)?.classList.add('is-active');
+  goPage(page);
+}
+
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('is-open');
+  document.getElementById('sbOverlay').classList.add('is-open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('is-open');
+  document.getElementById('sbOverlay').classList.remove('is-open');
+}
+
+function doLogout() {
+  fetch('/api/logout', { method: 'POST', headers: { 'x-auth-token': TOKEN } }).finally(() => {
+    localStorage.removeItem('sync_token');localStorage.removeItem('sync_user');localStorage.removeItem('sync_remember');localStorage.removeItem('sync_remember');
+    window.location.replace('/login.html');
+  });
+}
+
+function toast(msg, type = 'info') {
+  const stack = document.getElementById('toast-wrap');
+  const isSuccess = type === 'success';
+  const isError = type === 'error';
+  const t = document.createElement('div');
+  t.className = 'nx-toast ' + (isSuccess ? 'is-success' : isError ? 'is-error' : '');
+  const dotColor = isSuccess ? 'var(--accent)' : isError ? 'var(--danger)' : 'var(--text-2)';
+  t.innerHTML = `
+    <div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:${dotColor};box-shadow:0 0 7px ${dotColor}"></div>
+    <div class="nx-toast-msg" style="color:var(--text-1)">${esc(msg)}</div>
+  `;
+  stack.appendChild(t);
+  setTimeout(() => {
+    t.classList.add('is-leaving');
+    setTimeout(() => t.remove(), 200);
+  }, 2800);
+}
+
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+init();
+
+</script>
+<script id="nx-bgm-main">
+
+(function(){
+if(window.__nxBgm)return;
+var TRACKS=[
+{id:'track1',name:'NovaX Theme A',url:'https://files.catbox.moe/7ns7pa.m4a'},
+{id:'track2',name:'NovaX Theme B',url:'https://files.catbox.moe/dcs4ls.m4a'}
+];
+var path=(location.pathname||'').toLowerCase();
+var isSplash=path.indexOf('splash')!==-1;
+var isIklan=path.indexOf('iklan')!==-1;
+function getTrack(id){
+for(var i=0;i<TRACKS.length;i++)if(TRACKS[i].id===id)return TRACKS[i];
+return TRACKS[0];
+}
+var audio=document.createElement('audio');
+audio.id='nx-bgm-audio';audio.preload='auto';audio.style.display='none';
+document.body.appendChild(audio);
+var trackId=localStorage.getItem('nx_bgm_track')||'track1';
+var vol=parseFloat(localStorage.getItem('nx_bgm_vol')||'0.45');
+if(isNaN(vol))vol=0.45;
+var paused=localStorage.getItem('nx_bgm_paused')==='1';
+var loopOn=localStorage.getItem('nx_bgm_loop')!=='0';
+var tpos=parseFloat(localStorage.getItem('nx_bgm_time')||'0');
+audio.loop=loopOn;audio.volume=vol;
+function saveTime(){try{if(!isNaN(audio.currentTime))localStorage.setItem('nx_bgm_time',String(audio.currentTime));}catch(e){}}
+function load(id,resume){
+var t=getTrack(id);trackId=t.id;localStorage.setItem('nx_bgm_track',t.id);
+var file=t.url.split('/').pop();
+if(!audio.src||audio.src.indexOf(file)===-1)audio.src=t.url;
+audio.loop=loopOn;audio.volume=vol;
+if(resume&&tpos>0.5){
+var once=function(){audio.removeEventListener('loadedmetadata',once);try{audio.currentTime=tpos;}catch(e){}};
+audio.addEventListener('loadedmetadata',once);
+}
+ui();
+}
+function play(){paused=false;localStorage.setItem('nx_bgm_paused','0');var p=audio.play();if(p&&p.catch)p.catch(function(){});ui();}
+function pause(){paused=true;localStorage.setItem('nx_bgm_paused','1');audio.pause();saveTime();ui();}
+function toggle(){if(audio.paused)play();else pause();}
+function selectTrack(id){saveTime();tpos=0;localStorage.setItem('nx_bgm_time','0');load(id,false);play();}
+function setVol(v){vol=Math.max(0,Math.min(1,v));audio.volume=vol;localStorage.setItem('nx_bgm_vol',String(vol));ui();}
+function setLoop(on){loopOn=!!on;audio.loop=loopOn;localStorage.setItem('nx_bgm_loop',loopOn?'1':'0');ui();}
+function ui(){
+var now=document.getElementById('nx-bgm-now');
+if(now)now.textContent=getTrack(trackId).name+(audio.paused?' · paused':' · playing');
+var list=document.querySelectorAll('.nx-bgm-track');
+for(var i=0;i<list.length;i++)list[i].classList.toggle('active',list[i].getAttribute('data-id')===trackId);
+var pb=document.getElementById('nx-bgm-playbtn');if(pb)pb.textContent=audio.paused?'\u25B6':'\u23F8';
+var lb=document.getElementById('nx-bgm-loopbtn');if(lb)lb.style.opacity=loopOn?'1':'.4';
+var vr=document.getElementById('nx-bgm-range');if(vr)vr.value=String(vol);
+var vt=document.getElementById('nx-bgm-volt');if(vt)vt.textContent=Math.round(vol*100)+'%';
+var fab=document.getElementById('nx-bgm-fab');if(fab)fab.classList.toggle('paused',audio.paused);
+}
+window.__nxBgm={play:play,pause:pause,toggle:toggle,selectTrack:selectTrack,setVol:setVol,setLoop:setLoop,ui:ui};
+
+if(isSplash){
+try{audio.pause();}catch(e){}
+localStorage.setItem('nx_bgm_paused','1');
+paused=true;
+return;
+}
+
+load(trackId,true);
+if(isIklan){paused=false;localStorage.setItem('nx_bgm_paused','0');}
+if(!paused)setTimeout(function(){play();},300);
+setInterval(saveTime,3000);
+window.addEventListener('beforeunload',saveTime);
+function unlock(){if(!paused&&audio.paused)play();document.removeEventListener('touchstart',unlock);document.removeEventListener('click',unlock);}
+document.addEventListener('touchstart',unlock,{passive:true});
+document.addEventListener('click',unlock);
+
+function mountUI(){
+if(document.getElementById('nx-bgm-fab'))return;
+var panel=document.createElement('div');
+panel.className='nx-bgm-panel';panel.id='nx-bgm-panel';
+panel.innerHTML='<div class="nx-bgm-head">BACKGROUND MUSIC</div><div class="nx-bgm-now" id="nx-bgm-now">-</div><div class="nx-bgm-tracks"><button type="button" class="nx-bgm-track" data-id="track1">\uD83C\uDFB5 NovaX Theme A</button><button type="button" class="nx-bgm-track" data-id="track2">\uD83C\uDFB5 NovaX Theme B</button></div><div class="nx-bgm-row"><button type="button" id="nx-bgm-playbtn">\u25B6</button><button type="button" id="nx-bgm-loopbtn">\uD83D\uDD01</button><span class="nx-bgm-vol-txt" id="nx-bgm-volt">45%</span><input id="nx-bgm-range" type="range" min="0" max="1" step="0.01" value="0.45"/></div>';
+document.body.appendChild(panel);
+var fab=document.createElement('button');
+fab.type='button';fab.id='nx-bgm-fab';fab.className='nx-bgm-fab';fab.textContent='\u266A';
+document.body.appendChild(fab);
+fab.onclick=function(e){e.preventDefault();e.stopPropagation();panel.classList.toggle('open');};
+panel.querySelectorAll('.nx-bgm-track').forEach(function(btn){btn.onclick=function(){__nxBgm.selectTrack(btn.getAttribute('data-id'));};});
+document.getElementById('nx-bgm-playbtn').onclick=function(){__nxBgm.toggle();};
+document.getElementById('nx-bgm-loopbtn').onclick=function(){__nxBgm.setLoop(localStorage.getItem('nx_bgm_loop')==='0');};
+document.getElementById('nx-bgm-range').oninput=function(ev){__nxBgm.setVol(parseFloat(ev.target.value));};
+document.addEventListener('click',function(ev){if(!panel.contains(ev.target)&&ev.target!==fab)panel.classList.remove('open');});
+ui();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountUI);
+else mountUI();
+})();
+
+</script>
+</body>
+</html>
