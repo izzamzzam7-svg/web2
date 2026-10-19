@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NovaX — Welcome</title>
+<style>
+@font-face{font-family:'MADE Evolve Sans EVO';src:url('/MADEEvolveSansEVO.ttf') format('truetype');font-weight:400 700;font-display:swap}
+@font-face{font-family:'NovaX';src:url('/NovaX.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Outfit';src:url('/Outfit.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Rajdhani';src:url('/Rajdhani.ttf') format('truetype');font-display:swap}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{
+  width:100%;height:100%;
+  overflow:hidden;position:fixed;inset:0;
+  background:#070B14;
+  font-family:'MADE Evolve Sans EVO','Outfit','NovaX',sans-serif;
+  color:#e2e8f0;-webkit-font-smoothing:antialiased;
+}
+
+/* ===== INTRO VIDEO LAYER ===== */
+#introLayer{
+  position:fixed;inset:0;z-index:100;
+  background:#070B14;
+  opacity:0;
+  transition:opacity .55s ease;
+  display:flex;align-items:center;justify-content:center;
+}
+#introLayer.show{opacity:1}
+#introLayer.hide{opacity:0;pointer-events:none}
+#introVideo{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center center;
+  background:#070B14;
+}
+.skip-btn{
+  position:fixed;top:max(14px,env(safe-area-inset-top));right:16px;z-index:110;
+  padding:10px 18px;border:none;border-radius:999px;cursor:pointer;
+  font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.08em;
+  color:#fff;text-transform:uppercase;
+  background:rgba(12,16,32,.45);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  border:1px solid rgba(85,184,255,.4);
+  box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 16px rgba(85,184,255,.2);
+  opacity:0;transform:translateY(-8px);
+  transition:opacity .4s ease,transform .4s ease,background .2s;
+}
+.skip-btn.show{opacity:1;transform:translateY(0)}
+.skip-btn:active{background:rgba(85,184,255,.25);transform:scale(.96)}
+
+/* ===== IKLAN LAYER ===== */
+#iklanLayer{
+  position:fixed;inset:0;z-index:10;
+  opacity:0;transform:scale(1.03);
+  transition:opacity .55s ease,transform .55s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+  overflow:hidden;
+}
+#iklanLayer.show{
+  opacity:1;transform:scale(1);
+  pointer-events:auto;
+}
+.bg-video{
+  position:fixed;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:0;pointer-events:none;
+}
+.bg-glow{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.bg-glow::before,.bg-glow::after{content:'';position:absolute;border-radius:50%;filter:blur(100px)}
+.bg-glow::before{top:8%;left:8%;width:55vw;height:55vw;max-width:400px;max-height:400px;background:rgba(85,184,255,.28)}
+.bg-glow::after{bottom:8%;right:8%;width:50vw;height:50vw;max-width:360px;max-height:360px;background:rgba(255,95,162,.2)}
+.bg-overlay{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(7,11,20,.35),rgba(7,11,20,.72));
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.section{
+  position:relative;z-index:2;
+  height:100%;width:100%;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.app-container{
+  width:100%;max-width:440px;
+  padding:24px 18px max(28px,env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+}
+.logo-card{
+  width:100%;
+  background:linear-gradient(160deg,rgba(18,28,48,.9),rgba(10,14,28,.95));
+  border:1px solid rgba(85,184,255,.3);
+  border-radius:20px;padding:26px 20px 18px;
+  display:flex;flex-direction:column;align-items:center;
+  box-shadow:0 16px 48px rgba(0,0,0,.4),0 0 28px rgba(85,184,255,.12);
+  animation:fadeUp .55s ease both;
+}
+.logo-svg{width:64px;height:64px;margin-bottom:12px;color:#55B8FF}
+.logo-glitch{
+  font-family:'NovaX','MADE Evolve Sans EVO',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  background:linear-gradient(90deg,#55B8FF,#FF5FA2);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.title-section{text-align:center;animation:fadeUp .55s ease .08s both}
+.main-title{
+  font-family:'MADE Evolve Sans EVO','NovaX',sans-serif;
+  font-size:clamp(26px,7vw,36px);font-weight:800;letter-spacing:5px;line-height:1.15;
+  background:linear-gradient(90deg,#55B8FF,#FF5FA2);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:10px;
+}
+.title-underline{
+  width:56px;height:1px;margin:0 auto 10px;
+  background:linear-gradient(90deg,transparent,#55B8FF,#FF5FA2,transparent);opacity:.7;
+}
+.subtitle{font-size:10px;letter-spacing:4px;color:rgba(85,184,255,.65);text-transform:uppercase}
+.feature-card{
+  width:100%;
+  background:rgba(12,16,32,.4);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(85,184,255,.25);
+  border-radius:16px;padding:20px 16px;text-align:center;
+  box-shadow:0 12px 36px rgba(0,0,0,.35);
+  animation:fadeUp .55s ease .14s both;
+}
+.icon-shield-wrap{
+  width:44px;height:44px;margin:0 auto 12px;border-radius:12px;
+  border:1px solid rgba(85,184,255,.3);background:rgba(85,184,255,.1);
+  display:flex;align-items:center;justify-content:center;color:#55B8FF;
+}
+.feature-title{font-size:13px;font-weight:800;letter-spacing:2px;color:#fff;margin-bottom:6px}
+.feature-desc{font-size:11px;color:rgba(255,255,255,.45);line-height:1.65}
+.loader-btn{
+  width:100%;padding:15px;border-radius:13px;cursor:pointer;
+  font-family:inherit;font-size:12px;font-weight:800;letter-spacing:2px;
+  text-transform:uppercase;border:none;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .15s;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#55B8FF,#FF5FA2);color:#fff;
+  box-shadow:0 8px 28px rgba(85,184,255,.3);
+  animation:fadeUp .55s ease .2s both;
+}
+.btn-primary:active{transform:scale(.97)}
+.btn-secondary{
+  background:transparent;border:1px solid rgba(85,184,255,.25);color:rgba(255,255,255,.5);
+  animation:fadeUp .55s ease .26s both;
+}
+.contact-card{width:100%;text-align:center;padding:4px;animation:fadeUp .55s ease .3s both}
+.contact-title{font-size:9px;letter-spacing:4px;color:rgba(255,255,255,.35);margin-bottom:12px;text-transform:uppercase}
+.social-links{display:flex;justify-content:center;gap:28px}
+.social-link{text-decoration:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:8px}
+.social-icon-circle{
+  width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(85,184,255,.1);border:1px solid rgba(85,184,255,.3);color:#55B8FF;
+  font-size:11px;font-weight:800;
+}
+.social-text{font-size:9px;color:rgba(255,255,255,.4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- INTRO VIDEO -->
+<div id="introLayer">
+  <video id="introVideo" src="intro.mp4" playsinline preload="auto"></video>
+  <button type="button" class="skip-btn" id="skipIntroBtn">Lewati</button>
+</div>
+
+<!-- IKLAN CONTENT -->
+<div id="iklanLayer">
+  <video class="bg-video" src="bg.mp4" autoplay muted loop playsinline></video>
+  <div class="bg-glow"></div>
+  <div class="bg-overlay"></div>
+  <div class="section">
+    <div class="app-container">
+      <div class="logo-card">
+        <svg class="logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+        <div class="logo-glitch">NOVAX</div>
+      </div>
+      <div class="title-section">
+        <div class="main-title">Selamat Datang</div>
+        <div class="title-underline"></div>
+        <div class="subtitle">Premium Remote Control</div>
+      </div>
+      <div class="feature-card">
+        <div class="icon-shield-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="feature-title">SECURE ACCESS</div>
+        <div class="feature-desc">Masuk ke panel kontrol NovaX. Device management aman dengan enkripsi end-to-end.</div>
+      </div>
+      <button type="button" class="loader-btn btn-primary" id="continueBtn">CONTINUE</button>
+      <button type="button" class="loader-btn btn-secondary" id="skipBtn">LEWATI</button>
+      <div class="contact-card">
+        <div class="contact-title">Community</div>
+        <div class="social-links">
+          <a class="social-link" href="https://t.me/" target="_blank" rel="noopener">
+            <div class="social-icon-circle">TG</div>
+            <span class="social-text">Telegram</span>
+          </a>
+          <a class="social-link" href="https://wa.me/" target="_blank" rel="noopener">
+            <div class="social-icon-circle">WA</div>
+            <span class="social-text">WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var introLayer = document.getElementById('introLayer');
+  var iklanLayer = document.getElementById('iklanLayer');
+  var video = document.getElementById('introVideo');
+  var skipBtn = document.getElementById('skipIntroBtn');
+  var done = false;
+  var transitioning = false;
+
+  function goIklan(){
+    if (done || transitioning) return;
+    transitioning = true;
+    done = true;
+    try { video.pause(); } catch(e){}
+    skipBtn.classList.remove('show');
+    introLayer.classList.remove('show');
+    introLayer.classList.add('hide');
+    // Show iklan during fade so no black gap
+    iklanLayer.classList.add('show');
+    setTimeout(function(){
+      introLayer.style.display = 'none';
+      try { video.removeAttribute('src'); video.load(); } catch(e){}
+      transitioning = false;
+    }, 560);
+  }
+
+  function startIntro(){
+    introLayer.classList.add('show');
+    setTimeout(function(){ skipBtn.classList.add('show'); }, 400);
+    video.muted = false; // try with sound; fallback muted if blocked
+    var p = video.play();
+    if (p && p.catch) {
+      p.catch(function(){
+        video.muted = true;
+        video.play().catch(function(){ goIklan(); });
+      });
+    }
+  }
+
+  video.addEventListener('ended', goIklan);
+  video.addEventListener('error', function(){ goIklan(); });
+  skipBtn.addEventListener('click', function(e){ e.preventDefault(); goIklan(); });
+
+  // Start after brief tick so fade-in works
+  requestAnimationFrame(function(){ requestAnimationFrame(startIntro); });
+
+  // Iklan continue → login
+  function goLogin(){
+    try{ localStorage.setItem('nx_seen_iklan','1'); }catch(e){}
+    window.location.href = 'login.html';
+  }
+  document.getElementById('continueBtn').onclick = goLogin;
+  document.getElementById('skipBtn').onclick = goLogin;
+})();
+</script>
+</body>
+</html>
