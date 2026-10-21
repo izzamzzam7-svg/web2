@@ -1,22 +1,21 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Anak • FamilyGuard</title>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Orang Tua • FamilyGuard</title>
 <style>
-:root{--bg:#0b1020;--card:#141d33;--muted:#9eacc8;--text:#f4f7ff;--a:#7c5cff;--b:#20d6b5;--line:#263451}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#203c56,transparent 42%),var(--bg);color:var(--text);font:15px system-ui,Arial}.wrap{max-width:760px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{font-size:23px;font-weight:800}.brand span{color:var(--b)}.pill{border:1px solid #33506b;border-radius:99px;padding:7px 12px;color:#a9f6e8;font-size:12px}.hero{margin:25px 0 16px;padding:25px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(130deg,#202b50,#171b35)}h1{font-size:clamp(27px,6vw,38px);margin:10px 0}.muted{color:var(--muted)}.card{background:rgba(20,29,51,.95);border:1px solid var(--line);border-radius:20px;padding:20px;margin:14px 0}.field{display:grid;gap:7px;margin:12px 0}label{font-size:13px;color:#c7d2eb}input{width:100%;border:1px solid #344363;background:#0c1428;color:white;border-radius:12px;padding:13px;font:inherit;outline:none}button{border:0;border-radius:12px;padding:13px 16px;background:var(--a);color:white;font-weight:750;cursor:pointer;width:100%}.stat{font-size:36px;font-weight:850}.message{padding:14px;border-radius:14px;background:#0d2630;border:1px solid #235b58;color:#b9fff0;white-space:pre-wrap}.msg{color:#8ef2d9;white-space:pre-wrap;margin-top:10px}.note{font-size:12px;line-height:1.55;color:var(--muted)}.hidden{display:none!important}.warning{background:#3a1c2b;border-color:#7a354b;color:#ffd8e1}
+:root{--bg:#0b1020;--card:#141d33;--muted:#9eacc8;--text:#f4f7ff;--a:#7c5cff;--b:#20d6b5;--line:#263451}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#1e2c57,transparent 42%),var(--bg);color:var(--text);font:15px system-ui,Arial}.wrap{max-width:1050px;margin:auto;padding:24px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{font-size:23px;font-weight:800}.brand span{color:var(--b)}.pill{border:1px solid #33506b;border-radius:99px;padding:7px 12px;color:#a9f6e8;font-size:12px}.hero{margin:24px 0;padding:26px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(125deg,#202b50,#171b35);display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}.hero h1{font-size:clamp(26px,5vw,40px);margin:8px 0}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}.card{background:rgba(20,29,51,.94);border:1px solid var(--line);border-radius:20px;padding:20px}.card h2{font-size:17px;margin:0 0 16px}.field{display:grid;gap:7px;margin:12px 0}label{color:#c7d2eb;font-size:13px}input,select,textarea{width:100%;border:1px solid #344363;background:#0c1428;color:white;border-radius:12px;padding:12px;font:inherit;outline:none}input:focus,textarea:focus{border-color:var(--a)}button{border:0;border-radius:12px;padding:12px 16px;background:var(--a);color:white;font-weight:750;cursor:pointer}button.secondary{background:#263451}button.good{background:#087f70}button.danger{background:#a83750}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1}.stat{font-size:28px;font-weight:800}.status{display:inline-flex;align-items:center;gap:7px}.dot{width:8px;height:8px;background:#25d6a5;border-radius:50%}.note{font-size:12px;line-height:1.5;color:var(--muted)}.msg{min-height:20px;color:#8ef2d9;margin-top:10px;white-space:pre-wrap}.hidden{display:none!important}footer{padding:22px 0;color:var(--muted);font-size:12px}
 </style></head><body><main class="wrap">
-<header class="top"><div class="brand">◈ Family<span>Guard</span></div><div class="pill">APLIKASI ANAK</div></header>
-<section class="hero"><div class="pill">KELUARGA TERHUBUNG</div><h1>Hai! 👋<br>Jaga waktu digitalmu.</h1><div class="muted">Lihat aturan keluarga dan pesan dari orang tua dengan jelas.</div></section>
-<section class="card" id="connectCard"><h2>Hubungkan ke orang tua</h2><p class="muted">Masukkan kode yang diberikan orang tua.</p><div class="field"><label>Kode keluarga</label><input id="pairCode" maxlength="8" placeholder="Contoh: KELUARGA7" autocomplete="off"></div><button id="connect">Hubungkan</button><div id="connectMsg" class="msg"></div></section>
-<div id="app" class="hidden">
-<section class="card"><div class="muted">Batas harian yang disepakati</div><div class="stat"><span id="limit">120</span> menit</div><p class="muted">Waktu istirahat mulai pukul <b id="bedtime">21:00</b></p><div class="note">Penghitung di bawah mencatat waktu saat halaman ini terbuka. Browser tidak dapat menghitung pemakaian semua aplikasi di HP.</div></section>
-<section class="card"><h2>Pesan dari orang tua</h2><div id="message" class="message">Belum ada pesan.</div></section>
-<section class="card"><h2>Status aturan</h2><div id="state" class="message">Menunggu aturan…</div><p class="muted">Waktu halaman terbuka hari ini: <b id="used">0 menit</b></p><div class="note">Jika orang tua meminta jeda, ikuti kesepakatan keluarga dan berhenti menggunakan perangkat sejenak. Ini bukan pengunci sistem Android.</div></section>
-</div>
-<footer class="note">FamilyGuard Demo · Data status dibagikan kepada orang tua melalui kode keluarga. Jangan masukkan kode yang bukan milik keluargamu.</footer>
-</main>
+<header class="top"><div class="brand">◈ Family<span>Guard</span></div><div class="pill">PANEL ORANG TUA · DEMO</div></header>
+<section class="hero"><div><div class="pill">PENGAWASAN KELUARGA</div><h1>Atur waktu digital,<br>lebih tenang bersama.</h1><div class="muted">Kelola batas penggunaan dan kirim pengingat ke perangkat anak.</div></div><div><div class="muted">Kode perangkat anak</div><div id="codeDisplay" class="stat">Belum dibuat</div></div></section>
+<div class="grid">
+<section class="card"><h2>① Hubungkan perangkat</h2><p class="muted">Buat kode keluarga, lalu masukkan kode yang sama pada aplikasi Anak.</p><div class="field"><label>Kode pasangan (4–8 huruf/angka)</label><input id="pairCode" maxlength="8" placeholder="contoh: KELUARGA7" autocomplete="off"></div><button id="connect">Hubungkan / buka panel</button><div id="connectMsg" class="msg"></div><p class="note">Gunakan kode yang tidak mudah ditebak. Jangan bagikan kode kepada orang lain.</p></section>
+<section class="card"><h2>② Status perangkat</h2><div class="status"><span class="dot"></span><span id="online">Belum terhubung</span></div><p class="muted">Terakhir aktif: <b id="lastSeen">—</b></p><p class="muted">Status penggunaan: <b id="deviceState">—</b></p><div class="note">Status hanya tersedia saat aplikasi Anak terbuka dan tersambung internet.</div></section>
+<section class="card"><h2>③ Batas waktu harian</h2><div class="field"><label>Durasi maksimum (menit)</label><input id="limit" type="number" min="1" max="1440" value="120"></div><div class="field"><label>Waktu istirahat mulai (format 24 jam)</label><input id="bedtime" type="time" value="21:00"></div><button id="saveRules" class="good">Simpan aturan</button><div id="rulesMsg" class="msg"></div></section>
+<section class="card"><h2>④ Perintah orang tua</h2><div class="field"><label>Pesan/pengingat untuk anak</label><textarea id="message" rows="3" maxlength="180" placeholder="Contoh: Waktunya istirahat dan makan malam."></textarea></div><div class="row"><button id="sendMsg">Kirim pesan</button><button id="pause" class="danger">Minta jeda</button><button id="resume" class="secondary">Lanjutkan</button></div><div id="commandMsg" class="msg"></div><p class="note">Tombol jeda mengubah status di aplikasi ini, bukan mengunci HP atau aplikasi lain.</p></section>
+</div><footer>FamilyGuard Demo · Dibuat untuk komunikasi orang tua–anak yang transparan. Tidak merekam lokasi, kamera, mikrofon, atau isi aplikasi.</footer></main>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script>
-/* Gunakan project Firebase yang SAMA dengan aplikasi Orang Tua.
-   Untuk penggunaan nyata, aktifkan autentikasi dan aturan database yang aman. */
+/* 1) Buat project Firebase, aktifkan Realtime Database, lalu tempel config di bawah.
+   2) Atur Firebase Authentication + Database Rules sebelum digunakan sungguhan.
+   Jangan gunakan rules publik untuk data keluarga. */
 const firebaseConfig = {
   apiKey: "GANTI_API_KEY",
   authDomain: "GANTI_PROJECT.firebaseapp.com",
@@ -24,14 +23,29 @@ const firebaseConfig = {
   projectId: "GANTI_PROJECT",
   appId: "GANTI_APP_ID"
 };
-const $=id=>document.getElementById(id);let db=null,ref=null,seconds=0,dayKey=new Date().toDateString();
+let db=null, ref=null, code='';
+const $=id=>document.getElementById(id);
 function validCode(v){return /^[A-Z0-9]{4,8}$/.test(v)}
 function say(id,s){$(id).textContent=s}
 function initFirebase(){if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);db=firebase.database()}
-$('connect').onclick=async()=>{const code=$('pairCode').value.trim().toUpperCase();if(!validCode(code)){say('connectMsg','Kode harus 4–8 karakter huruf/angka.');return}
-try{initFirebase();ref=db.ref('familyPairs/'+code);const snap=await ref.get();if(!snap.exists()){say('connectMsg','Kode belum terdaftar. Minta orang tua membuat kode terlebih dahulu.');return}
-$('app').classList.remove('hidden');$('connectCard').classList.add('hidden');say('connectMsg','Terhubung');ref.child('rules').on('value',s=>{const r=s.val()||{};$('limit').textContent=r.dailyLimit||120;$('bedtime').textContent=r.bedtime||'21:00';$('message').textContent=r.message||'Belum ada pesan dari orang tua.';const paused=!!r.paused;const now=new Date(),[h,m]=(r.bedtime||'21:00').split(':').map(Number),afterBed=now.getHours()>h||(now.getHours()===h&&now.getMinutes()>=m);$('state').textContent=paused?'Orang tua meminta waktu jeda. Yuk istirahat dulu.':afterBed?'Sudah masuk jadwal istirahat malam.': 'Semua baik — gunakan perangkat sesuai batas keluarga.';$('state').className='message'+((paused||afterBed)?' warning':'');});
-const dev=ref.child('device');await dev.update({online:true,lastSeen:Date.now(),state:'Aplikasi Anak aktif'});const ping=()=>dev.update({online:document.visibilityState==='visible',lastSeen:Date.now(),state:document.visibilityState==='visible'?'Aplikasi Anak aktif':'Aplikasi di latar belakang'}).catch(()=>{});document.addEventListener('visibilitychange',ping);window.addEventListener('beforeunload',()=>dev.update({online:false,lastSeen:Date.now(),state:'Aplikasi ditutup'}));setInterval(ping,30000);
-}catch(e){say('connectMsg','Gagal tersambung. Periksa config Firebase dan aturan database.\\n'+e.message)}};
-setInterval(()=>{if(!$('app').classList.contains('hidden')){seconds++;$('used').textContent=Math.floor(seconds/60)+' menit '+(seconds%60)+' detik'}},1000);
+$('connect').onclick=async()=>{
+ code=$('pairCode').value.trim().toUpperCase();
+ if(!validCode(code)){say('connectMsg','Kode harus 4–8 karakter huruf/angka.');return}
+ try{initFirebase();ref=db.ref('familyPairs/'+code);const snap=await ref.get();
+ if(!snap.exists()) await ref.set({createdAt:Date.now(),rules:{dailyLimit:120,bedtime:'21:00',paused:false,message:''},device:{online:false,lastSeen:0,state:'Menunggu aplikasi anak'}});
+ $('codeDisplay').textContent=code;say('connectMsg','Panel tersambung ke kode '+code+'.');listen();
+ }catch(e){say('connectMsg','Gagal tersambung. Periksa config Firebase dan aturan database.\\n'+e.message)}
+};
+function listen(){ref.on('value',snap=>{const d=snap.val()||{},dev=d.device||{},r=d.rules||{};
+ say('online',dev.online?'Aplikasi anak online':'Aplikasi anak offline / belum membuka aplikasi');
+ say('lastSeen',dev.lastSeen?new Date(dev.lastSeen).toLocaleString('id-ID'):'—');
+ say('deviceState',dev.state||'—');
+ if(document.activeElement!==$('limit'))$('limit').value=r.dailyLimit||120;
+ if(document.activeElement!==$('bedtime'))$('bedtime').value=r.bedtime||'21:00';
+ if(document.activeElement!==$('message'))$('message').value=r.message||'';
+})}
+$('saveRules').onclick=async()=>{if(!ref)return say('rulesMsg','Hubungkan kode dulu.');const n=Number($('limit').value);if(!Number.isInteger(n)||n<1||n>1440)return say('rulesMsg','Masukkan durasi 1–1440 menit.');try{await ref.child('rules').update({dailyLimit:n,bedtime:$('bedtime').value});say('rulesMsg','Aturan berhasil dikirim ke aplikasi Anak.')}catch(e){say('rulesMsg','Gagal: '+e.message)}};
+$('sendMsg').onclick=async()=>{if(!ref)return say('commandMsg','Hubungkan kode dulu.');try{await ref.child('rules/message').set($('message').value.trim());say('commandMsg','Pesan dikirim.')}catch(e){say('commandMsg','Gagal: '+e.message)}};
+$('pause').onclick=async()=>{if(!ref)return say('commandMsg','Hubungkan kode dulu.');try{await ref.child('rules').update({paused:true});say('commandMsg','Permintaan jeda dikirim.')}catch(e){say('commandMsg','Gagal: '+e.message)}};
+$('resume').onclick=async()=>{if(!ref)return say('commandMsg','Hubungkan kode dulu.');try{await ref.child('rules').update({paused:false});say('commandMsg','Perintah lanjut dikirim.')}catch(e){say('commandMsg','Gagal: '+e.message)}};
 </script></body></html>
