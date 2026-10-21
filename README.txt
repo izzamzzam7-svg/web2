@@ -1,29 +1,20 @@
-TANZZURA / XGOOD — paket web siap dipasang
+TANZZURA XGOOD WEB
 
-ISI:
+Isi ZIP:
 - index.html
-- assets/welcome.png (gambar welcome yang kamu kirim)
-- assets/background.png (background ungu yang kamu kirim)
-- assets/xgood-header.png (gambar header XGOOD yang kamu kirim)
+- assets/background.png
+- assets/welcome.png
+- assets/xgood-header.png
 
-CARA PAKAI:
+Cara pakai:
 1. Ekstrak ZIP.
-2. Buka index.html di browser untuk melihat panel.
-3. Untuk hosting, unggah index.html dan folder assets bersama-sama ke root hosting.
-4. Untuk membuat APK, gunakan pembungkus WebView yang memuat index.html lokal, atau gunakan pembuat APK berbasis web yang menerima ZIP/HTML.
+2. Buka index.html di browser, atau upload semua isi folder ke hosting.
+3. Halaman langsung menampilkan Welcome tanpa meminta key.
+4. Tekan MASUK KE MENU untuk membuka menu.
 
-FITUR YANG BENAR-BENAR DIIMPLEMENTASIKAN:
-- Gerbang key lokal TANZZURA-PERMANEN-22 dan alur welcome.
-- Menu 6 kartu dengan drag-and-drop pada browser yang mendukungnya.
-- Jam realtime; indikator baterai hanya jika browser/perangkat menyediakan Battery API.
-- Validasi dasar format nomor.
-- Tautan bantuan WhatsApp resmi.
-- Animasi proses pada persiapan formulir.
-
-BATASAN PENTING:
-- Gerbang key ini hanya pemeriksaan lokal di HTML, bukan lisensi aman di server; siapa pun yang memeriksa source dapat melihat key.
-- Tidak ada pengiriman spam report massal, tidak ada pembukaan blokir otomatis, dan tidak ada akses ke status akun WhatsApp dari nomor saja. UI menyatakan status sebenarnya agar tidak memberi hasil palsu.
-- Proses waktu hanya animasi persiapan lokal; pengajuan baru terjadi jika pengguna melanjutkan ke situs resmi.
-- Baterai live mungkin tidak tersedia di beberapa browser, terutama browser Android modern.
-
-Tidak membutuhkan library eksternal atau koneksi CDN.
+Catatan fungsi:
+- Jam diperbarui secara realtime.
+- Indikator baterai muncul jika browser mendukung Battery API.
+- Kotak menu bisa disusun ulang dengan drag-and-drop.
+- Cek nomor hanya memvalidasi format; status akun WhatsApp tidak dapat dipastikan hanya dari nomor.
+- Laporan dan peninjauan akun dilanjutkan melalui kanal bantuan resmi; halaman ini tidak mengirim laporan massal atau membuka blokir secara otomatis.
