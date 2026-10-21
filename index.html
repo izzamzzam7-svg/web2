@@ -1,2466 +1,422 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#05070d" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>E-SEAMONEY — BY XENA</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM Premium -marz </title>
+    <style>
+        /* ==================================================
+           TEMA NEUBRUTALISM 3D COMIC
+           ================================================== */
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@700;900&display=swap');
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+        :root {
+            --bg-page: #e8f0fe;
+            --panel-bg: #ffffff;
+            --primary: #ff4757;
+            --secondary: #1e90ff;
+            --success: #2ed573;
+            --dark: #2f3542;
+            --border: 4px solid #1e2128;
+            --shadow: 8px 8px 0px #1e2128;
+            --font-head: 'Bangers', cursive;
+            --font-body: 'Nunito', sans-serif;
+        }
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-@property --angle{syntax:'<angle>';initial-value:0deg;inherits:false}
-:root{
-  --bg:#05070d; --text:#eaf1fa; --muted:#78859c; --muted-2:#5a657a;
-  --glass:rgba(255,255,255,.045); --glass-hi:rgba(255,255,255,.085);
-  --stroke:rgba(255,255,255,.09); --stroke-hi:rgba(255,255,255,.18);
-  --green:#00e08a; --green-b:#00ffa3; --green-d:#00a86b;
-  --red:#ff3d63; --gold:#ffd166; --blue:#5aa9ff; --purple:#a78bfa; --cyan:#22d3ee; --orange:#ff9f43;
-  --r-lg:24px; --r-md:16px; --r-sm:12px;
-  --shadow:0 10px 34px rgba(0,0,0,.45);
-  --ease:cubic-bezier(.22,1,.36,1);
-  --sheet-bg:#0a0f18;
-}
-html,body{height:100%}
-body{
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  color:var(--text);
-  background:radial-gradient(1100px 760px at 8% -12%, #0b1c30 0%, transparent 58%),radial-gradient(950px 700px at 102% -6%, #141d33 0%, transparent 52%),radial-gradient(900px 900px at 50% 118%, #071812 0%, transparent 62%),var(--bg);
-  background-attachment:fixed; min-height:100vh; overflow-x:hidden;
-  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; position:relative;
-}
-.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 65% at 50% 40%, #000 25%, transparent 78%);-webkit-mask-image:radial-gradient(ellipse 80% 65% at 50% 40%, #000 25%, transparent 78%)}
-.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;will-change:transform}
-.b1{width:420px;height:420px;background:#00e08a;top:-140px;left:-120px;opacity:.16;animation:drift1 18s ease-in-out infinite}
-.b2{width:380px;height:380px;background:#4d9fff;top:20%;right:-160px;opacity:.14;animation:drift2 22s ease-in-out infinite}
-.b3{width:460px;height:460px;background:#00ffa3;bottom:-220px;left:30%;opacity:.10;animation:drift3 26s ease-in-out infinite}
-@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,80px) scale(1.15)}}
-@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-70px,60px) scale(1.2)}}
-@keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-70px) scale(1.1)}}
-body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='340' height='230'><text x='50%25' y='50%25' font-family='Arial,sans-serif' font-size='32' font-weight='900' fill='rgba(255,255,255,0.022)' text-anchor='middle' transform='rotate(-28 170 115)' letter-spacing='3'>HI</text></svg>");background-repeat:repeat}
-.ic{width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* LOGIN */
-.login-screen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(900px 700px at 50% 30%, #0a1a14 0%, transparent 60%),radial-gradient(700px 500px at 50% 100%, #071320 0%, transparent 55%),var(--bg);transition:opacity .6s var(--ease), transform .6s var(--ease), visibility .6s}
-.login-screen.hidden{opacity:0;transform:scale(1.03);visibility:hidden;pointer-events:none}
-.login-card{width:100%;max-width:340px;text-align:center;position:relative}
-.login-logo{width:76px;height:76px;border-radius:22px;margin:0 auto 22px;display:grid;place-items:center;background:linear-gradient(140deg,#00ffa3,#00c97a 45%,#008f5c);box-shadow:0 0 0 1px rgba(0,255,163,.35),0 12px 40px rgba(0,224,138,.45),inset 0 1px 0 rgba(255,255,255,.55);position:relative;overflow:hidden;animation:logoPulse 2.6s ease-in-out infinite}
-.login-logo::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.65) 48%,transparent 62%);transform:translateX(-130%);animation:shine 3.2s ease-in-out infinite}
-@keyframes logoPulse{0%,100%{box-shadow:0 0 0 1px rgba(0,255,163,.35),0 12px 40px rgba(0,224,138,.45),inset 0 1px 0 rgba(255,255,255,.55)}50%{box-shadow:0 0 0 1px rgba(0,255,163,.6),0 16px 55px rgba(0,224,138,.7),inset 0 1px 0 rgba(255,255,255,.65)}}
-@keyframes shine{0%,55%{transform:translateX(-130%)}85%,100%{transform:translateX(130%)}}
-.login-logo svg{width:38px;height:38px;color:#00170d;position:relative;z-index:1}
-.login-title{font-size:1.5rem;font-weight:900;letter-spacing:-.6px;background:linear-gradient(180deg,#fff,#b9c7d8);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:6px}
-.login-sub{font-size:.62rem;font-weight:800;letter-spacing:3.5px;color:var(--muted-2);margin-bottom:34px}
-.login-spinner{width:48px;height:48px;margin:0 auto 20px;border-radius:50%;border:2.5px solid rgba(0,224,138,.15);border-top-color:var(--green);border-right-color:rgba(0,224,138,.6);animation:spin 1s linear infinite;position:relative}
-.login-spinner::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(0,224,138,.15);animation:spin 2s linear infinite reverse}
-@keyframes spin{to{transform:rotate(360deg)}}
-.login-status{font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:.5px;min-height:1.2em;margin-bottom:18px}
-.login-status .dots{display:inline-block;width:14px;text-align:left}
-.login-status .dots span{animation:dotBlink 1.4s infinite}
-.login-status .dots span:nth-child(2){animation-delay:.2s}
-.login-status .dots span:nth-child(3){animation-delay:.4s}
-@keyframes dotBlink{0%,20%{opacity:0}50%{opacity:1}100%{opacity:0}}
-.login-progress{width:100%;height:3px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
-.login-progress-bar{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#00d982,#00ffa3,#7dffcc);box-shadow:0 0 14px rgba(0,255,163,.8);transition:width .55s var(--ease)}
+        body {
+            background-color: var(--bg-page);
+            background-image: radial-gradient(#1e2128 1.5px, transparent 1.5px);
+            background-size: 25px 25px;
+            font-family: var(--font-body);
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-/* WARN BAR */
-.warn-bar{position:sticky;top:0;z-index:60;padding:9px 16px;font-size:.64rem;font-weight:800;letter-spacing:1.4px;text-align:center;color:#fff;background:linear-gradient(90deg,#ff3d63,#c40030,#ff3d63);background-size:220% 100%;animation:barShift 4s linear infinite;box-shadow:0 4px 26px rgba(255,61,99,.45);text-shadow:0 1px 3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;gap:8px}
-.warn-bar .ic{width:13px;height:13px}
-@keyframes barShift{to{background-position:220% 0}}
+        .main-container {
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+        }
 
-/* APP */
-.app{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:18px 16px calc(96px + env(safe-area-inset-bottom))}
-.glass{position:relative;background:linear-gradient(158deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.022) 55%, rgba(255,255,255,.035) 100%);border:1px solid var(--stroke);border-radius:var(--r-lg);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.09)}
+        .comic-card {
+            background: var(--panel-bg);
+            border: var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px 25px;
+            position: relative;
+            margin-bottom: 20px;
+            animation: popIn 0.3s ease-out;
+        }
 
-/* HEADER */
-.header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px;animation:fadeUp .6s var(--ease) both}
-.logo{display:flex;align-items:center;gap:11px;min-width:0}
-.logo-mark{width:42px;height:42px;border-radius:14px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(140deg,#00ffa3,#00c97a 45%,#008f5c);box-shadow:0 0 0 1px rgba(0,255,163,.35),0 8px 26px rgba(0,224,138,.42),inset 0 1px 0 rgba(255,255,255,.55);position:relative;overflow:hidden}
-.logo-mark::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.65) 48%,transparent 62%);transform:translateX(-130%);animation:shine 4.5s ease-in-out infinite}
-.logo-mark svg{width:22px;height:22px;color:#00170d;position:relative;z-index:1}
-.logo-text{display:flex;flex-direction:column;line-height:1.12;min-width:0}
-.logo-text strong{font-size:1.02rem;font-weight:800;letter-spacing:-.2px;background:linear-gradient(180deg,#fff,#b9c7d8);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo-text small{color:var(--muted-2);font-size:.56rem;letter-spacing:3.4px;font-weight:700;margin-top:2px}
-.header-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.viewer-pill{display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;font-size:.6rem;font-weight:800;letter-spacing:.5px;color:var(--green-b);background:rgba(0,224,138,.11);border:1px solid rgba(0,224,138,.32);font-variant-numeric:tabular-nums}
-.viewer-pill .ic{width:11px;height:11px}
-.viewer-pill .dot{width:5px;height:5px;border-radius:50%;background:var(--green-b);box-shadow:0 0 8px var(--green-b);animation:pulseDot 1.4s infinite}
-.icon-btn{width:34px;height:34px;border-radius:11px;border:1px solid var(--stroke);background:rgba(255,255,255,.045);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:all .25s var(--ease);flex-shrink:0}
-.icon-btn:hover{color:var(--text);border-color:var(--stroke-hi);background:rgba(255,255,255,.08)}
-.icon-btn .ic{width:16px;height:16px}
-.status-pill{display:flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;font-size:.6rem;font-weight:800;letter-spacing:1.2px;color:var(--muted);background:rgba(255,255,255,.045);border:1px solid var(--stroke);transition:all .4s var(--ease);flex-shrink:0}
-.status-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--muted-2);transition:all .4s}
-.status-pill.online{color:var(--green-b);background:rgba(0,224,138,.11);border-color:rgba(0,224,138,.42);box-shadow:0 0 22px rgba(0,224,138,.3), inset 0 0 14px rgba(0,224,138,.09)}
-.status-pill.online .dot{background:var(--green-b);box-shadow:0 0 10px var(--green-b);animation:pulseDot 1.3s ease-in-out infinite}
-@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.45);opacity:.55}}
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-/* TABS */
-.tab-view{display:none;animation:fadeUp .45s var(--ease) both}
-.tab-view.active{display:block}
-.tab-scroller{overflow:hidden;touch-action:pan-y}
+        .app-title {
+            font-family: var(--font-head);
+            font-size: 3.5rem;
+            text-align: center;
+            color: var(--primary);
+            text-shadow: 3px 3px 0px var(--dark);
+            letter-spacing: 2px;
+            transform: rotate(-2deg);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
 
-/* BALANCE CARD */
-.balance-card{padding:22px 20px 18px;margin-bottom:12px;overflow:hidden;background:radial-gradient(120% 130% at 85% -20%, rgba(0,255,163,.16) 0%, transparent 52%),radial-gradient(110% 120% at 0% 110%, rgba(0,168,107,.13) 0%, transparent 58%),linear-gradient(158deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.018) 55%, rgba(255,255,255,.04) 100%);border:1px solid rgba(0,224,138,.20);border-radius:var(--r-lg);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);box-shadow:0 14px 44px rgba(0,0,0,.5),0 0 46px rgba(0,224,138,.09),inset 0 1px 0 rgba(255,255,255,.10);transition:border-color .5s var(--ease), box-shadow .5s var(--ease)}
-.balance-card.running{border-color:rgba(0,255,163,.42);box-shadow:0 14px 44px rgba(0,0,0,.5),0 0 60px rgba(0,255,163,.20),inset 0 1px 0 rgba(255,255,255,.14)}
-.balance-card::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.4px;background:conic-gradient(from var(--angle),transparent 0%,transparent 62%,rgba(0,255,163,.95) 76%,rgba(120,255,210,.95) 82%,transparent 94%);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);mask-composite:exclude;opacity:0;transition:opacity .5s var(--ease);pointer-events:none}
-.balance-card.running::after{opacity:1;animation:spinAngle 3.4s linear infinite}
-@keyframes spinAngle{to{--angle:360deg}}
-.scan{position:absolute;left:-10%;right:-10%;height:140px;background:linear-gradient(180deg,transparent,rgba(0,255,163,.10),transparent);opacity:0;pointer-events:none;z-index:0}
-.balance-card.running .scan{opacity:1;animation:scanMove 3s linear infinite}
-@keyframes scanMove{0%{top:-140px}100%{top:100%}}
-.balance-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:relative;z-index:1}
-.balance-left{min-width:0;flex:1}
-.balance-label{display:flex;align-items:center;gap:8px;font-size:.6rem;font-weight:800;letter-spacing:2.4px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.live-badge{display:none;align-items:center;gap:4px;padding:2px 7px;border-radius:999px;font-size:.5rem;letter-spacing:1.2px;font-weight:900;color:#001a0e;background:linear-gradient(135deg,#00ffa3,#00d982);box-shadow:0 0 16px rgba(0,255,163,.55);animation:livePulse 1.6s ease-in-out infinite}
-@keyframes livePulse{0%,100%{box-shadow:0 0 12px rgba(0,255,163,.45)}50%{box-shadow:0 0 24px rgba(0,255,163,.85)}}
-.balance-card.running .live-badge{display:inline-flex}
-.balance-amount{display:flex;align-items:baseline;gap:5px;font-size:2.35rem;font-weight:900;letter-spacing:-1.5px;line-height:1.06;font-variant-numeric:tabular-nums;color:#fff;transition:color .4s var(--ease);word-break:break-all}
-.balance-card.running .balance-amount{color:var(--green-b);text-shadow:0 0 28px rgba(0,255,163,.45),0 0 60px rgba(0,255,163,.18)}
-.rp{font-size:1rem;font-weight:700;color:var(--muted-2);letter-spacing:0;transition:color .4s var(--ease)}
-.balance-card.running .rp{color:rgba(0,255,163,.65)}
-.daily-ring{width:74px;height:74px;flex-shrink:0;position:relative}
-.daily-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.daily-ring .ring-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:6}
-.daily-ring .ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s var(--ease);filter:drop-shadow(0 0 8px rgba(0,255,163,.7))}
-.daily-ring .ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
-.daily-ring .ring-pct{font-size:.78rem;font-weight:900;color:var(--green-b);line-height:1}
-.daily-ring .ring-lbl{font-size:.42rem;font-weight:800;letter-spacing:1px;color:var(--muted-2);margin-top:2px;text-transform:uppercase}
-.level-strip{position:relative;z-index:1;margin-top:16px;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07)}
-.level-badge{padding:3px 8px;border-radius:8px;font-size:.56rem;font-weight:900;letter-spacing:1.2px;background:linear-gradient(135deg,#ffd166,#f0a500);color:#2a1a00;flex-shrink:0}
-.level-bar-wrap{flex:1;min-width:0}
-.level-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.level-bar-name{font-size:.58rem;font-weight:800;letter-spacing:.5px;color:#fff}
-.level-bar-xp{font-size:.52rem;font-weight:700;color:var(--muted-2);font-variant-numeric:tabular-nums}
-.level-bar{height:4px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
-.level-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#ffd166,#ff9f43);box-shadow:0 0 10px rgba(255,209,102,.6);transition:width .8s var(--ease)}
-.balance-sub{position:relative;z-index:1;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.bsub-item{display:flex;flex-direction:column;gap:3px}
-.bsub-label{font-size:.52rem;font-weight:800;letter-spacing:1.3px;color:var(--muted-2);text-transform:uppercase}
-.bsub-value{font-size:.82rem;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.2px}
-.bsub-value.green{color:var(--green-b)}
-.bsub-value.gold{color:var(--gold)}
-.bsub-value.blue{color:var(--blue)}
-.spark-wrap{position:relative;z-index:1;margin-top:14px;height:56px;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.15)}
-#balanceChart{width:100%;height:100%;display:block}
+        .sub-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 1rem;
+            background: var(--dark);
+            color: white;
+            padding: 5px 15px;
+            display: inline-block;
+            border-radius: 8px;
+            margin: 0 auto 25px auto;
+            transform: rotate(1deg);
+        }
 
-/* CARDS / SECTIONS */
-.card{padding:20px;margin-bottom:12px;animation:fadeUp .6s .06s var(--ease) both}
-.section{padding:16px;margin-bottom:12px;animation:fadeUp .6s .12s var(--ease) both}
-.card-title{display:flex;align-items:center;gap:10px;font-size:.86rem;font-weight:800;letter-spacing:-.1px;margin-bottom:7px}
-.card-title .ico{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:rgba(90,169,255,.14);border:1px solid rgba(90,169,255,.26);color:var(--blue);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
-.card-title .ico .ic{width:14px;height:14px}
-.card-desc{font-size:.72rem;line-height:1.65;color:var(--muted);margin-bottom:16px}
-.card-desc b{color:var(--red);font-weight:700}
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-.section-head h3{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px;min-width:0}
-.section-head h3 .ic{width:13px;height:13px;flex-shrink:0}
-.count-pill{font-size:.58rem;font-weight:800;letter-spacing:1.1px;padding:2px 9px;border-radius:999px;color:var(--blue);background:rgba(90,169,255,.12);border:1px solid rgba(90,169,255,.28);font-variant-numeric:tabular-nums;flex-shrink:0}
+        .watermark {
+            position: absolute;
+            top: -15px;
+            right: 10px;
+            background: var(--dark);
+            color: white;
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            padding: 2px 12px;
+            border: 3px solid white;
+            border-radius: 8px;
+            box-shadow: 3px 3px 0px var(--primary);
+            transform: rotate(5deg);
+        }
 
-/* INPUTS */
-.input-group{display:flex;align-items:center;background:rgba(0,0,0,.28);border:1px solid var(--stroke);border-radius:14px;overflow:hidden;transition:border-color .3s var(--ease), box-shadow .3s var(--ease), background .3s}
-.input-group:focus-within{border-color:rgba(0,224,138,.6);background:rgba(0,224,138,.05);box-shadow:0 0 0 3.5px rgba(0,224,138,.14),0 0 24px rgba(0,224,138,.14)}
-.input-prefix{padding:0 2px 0 15px;color:var(--muted);font-size:.9rem;font-weight:700;font-family:'JetBrains Mono',monospace}
-.input-group input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:15px 15px 15px 6px;font-family:'JetBrains Mono',monospace;font-size:.92rem;letter-spacing:1.2px;font-variant-numeric:tabular-nums;min-width:0}
-.input-group input::placeholder{color:#39435a;letter-spacing:1px}
-.input-group input:disabled{opacity:.55}
+        .input-group { margin-bottom: 20px; }
+        label {
+            display: block;
+            font-weight: 900;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: var(--border);
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: inset 4px 4px 0px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+        input:focus { box-shadow: inset 4px 4px 0px var(--secondary); }
 
-/* BUTTONS */
-.btn{position:relative;width:100%;padding:15px 20px;border-radius:14px;border:none;font-family:inherit;font-size:.8rem;font-weight:800;letter-spacing:1.9px;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:9px;transition:transform .22s var(--ease), box-shadow .3s var(--ease), background .3s, opacity .3s;margin-top:12px;isolation:isolate}
-.btn:active:not(:disabled){transform:scale(.975)}
-.btn .ic{width:15px;height:15px}
-.btn-primary{color:#00170d;background:linear-gradient(135deg,#00ffa3 0%,#00d982 45%,#00b872 100%);box-shadow:0 6px 24px rgba(0,224,138,.38),inset 0 1px 0 rgba(255,255,255,.5)}
-.btn-primary:hover:not(:disabled){box-shadow:0 10px 36px rgba(0,224,138,.58),inset 0 1px 0 rgba(255,255,255,.6);transform:translateY(-1.5px)}
-.btn-primary:disabled{opacity:.55;cursor:not-allowed;filter:grayscale(.25)}
-.btn-ghost{color:var(--text);background:linear-gradient(158deg, rgba(255,255,255,.075), rgba(255,255,255,.025));border:1px solid var(--stroke);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 8px 26px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08)}
-.btn-ghost:hover{border-color:var(--stroke-hi);background:linear-gradient(158deg, rgba(255,255,255,.11), rgba(255,255,255,.04))}
-.btn-danger{color:#ff7d97;background:rgba(255,61,99,.12);border:1px solid rgba(255,61,99,.45)}
-.btn-danger:hover{background:rgba(255,61,99,.2)}
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: var(--border);
+            border-radius: 10px;
+            font-family: var(--font-head);
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            color: white;
+            text-shadow: 2px 2px 0px var(--dark);
+            background-color: var(--primary);
+            box-shadow: 5px 5px 0px var(--dark);
+            cursor: pointer;
+            transition: all 0.1s;
+            margin-bottom: 15px;
+        }
+        .btn:active {
+            transform: translate(5px, 5px);
+            box-shadow: 0px 0px 0px var(--dark);
+        }
+        .btn-blue { background-color: var(--secondary); }
+        .btn-green { background-color: var(--success); }
+        .btn-grey { background-color: #a4b0be; text-shadow: 2px 2px 0px #2f3542; }
 
-/* PROGRESS */
-.progress-wrap{height:5px;margin-top:12px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;display:none}
-.progress-wrap.show{display:block;animation:fadeIn .3s var(--ease)}
-.progress-bar{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#00d982,#00ffa3,#7dffcc);box-shadow:0 0 16px rgba(0,255,163,.85);transition:width .5s var(--ease);position:relative}
-.progress-bar::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:barShine 1.1s linear infinite}
-@keyframes barShine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.pairing-status{display:none;margin-top:10px;text-align:center;font-size:.68rem;font-weight:700;letter-spacing:1.3px;color:var(--blue)}
-.pairing-status.show{display:block;animation:fadeIn .3s var(--ease)}
-.pairing-status::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--blue);margin-right:7px;vertical-align:middle;box-shadow:0 0 10px var(--blue);animation:pulseDot 1s infinite}
+        .notif {
+            display: none;
+            border: var(--border);
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            box-shadow: 4px 4px 0px var(--dark);
+            text-align: center;
+        }
+        .notif-success { background: #d4edda; color: #155724; }
+        .notif-error { background: #f8d7da; color: #721c24; }
 
-/* CONNECTED PANEL */
-.connected-card{display:none;padding:18px;margin-bottom:12px}
-.connected-card.show{display:block;animation:fadeUp .5s var(--ease) both}
-.conn-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.065);font-size:.76rem}
-.conn-row:last-of-type{border-bottom:none;padding-bottom:2px}
-.conn-row .lbl{font-size:.56rem;font-weight:800;letter-spacing:1.6px;color:var(--muted-2);text-transform:uppercase;flex-shrink:0}
-.conn-row .val{color:#fff;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:.76rem;letter-spacing:.4px;font-variant-numeric:tabular-nums;text-align:right}
-.conn-row .val.code{color:var(--gold);letter-spacing:4px;padding:3px 10px;border-radius:9px;background:rgba(255,209,102,.10);border:1px solid rgba(255,209,102,.32);box-shadow:0 0 18px rgba(255,209,102,.14),inset 0 1px 0 rgba(255,255,255,.08);text-shadow:0 0 14px rgba(255,209,102,.55)}
-.conn-row .val.state-online{color:var(--green-b);text-shadow:0 0 14px rgba(0,255,163,.6)}
-.conn-row .val.state-offline{color:var(--muted)}
-.toggle-online{width:100%;margin-top:14px;padding:14px;border-radius:14px;border:1px solid transparent;font-family:inherit;font-size:.78rem;font-weight:800;letter-spacing:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .3s var(--ease);position:relative;overflow:hidden}
-.toggle-online:active{transform:scale(.975)}
-.toggle-online .ic{width:13px;height:13px}
-.toggle-online.is-offline{color:#00170d;background:linear-gradient(135deg,#00ffa3,#00d982 50%,#00b872);box-shadow:0 6px 26px rgba(0,224,138,.42),inset 0 1px 0 rgba(255,255,255,.5)}
-.toggle-online.is-offline:hover{transform:translateY(-1.5px);box-shadow:0 10px 38px rgba(0,224,138,.62),inset 0 1px 0 rgba(255,255,255,.6)}
-.toggle-online.is-online{color:#ff7d97;background:rgba(255,61,99,.12);border-color:rgba(255,61,99,.45);box-shadow:0 0 26px rgba(255,61,99,.18),inset 0 1px 0 rgba(255,255,255,.06)}
-.toggle-online.is-online:hover{background:rgba(255,61,99,.2);box-shadow:0 0 34px rgba(255,61,99,.32)}
+        .loading {
+            display: none;
+            text-align: center;
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-top: 15px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-/* TX LIST */
-.tx-list{display:flex;flex-direction:column;gap:6px;max-height:520px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
-.tx-list::-webkit-scrollbar{width:3px}
-.tx-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:999px}
-.tx-empty{text-align:center;padding:32px 18px;color:var(--muted-2);font-size:.72rem;line-height:1.8}
-.tx-empty .tx-empty-ic{width:48px;height:48px;margin:0 auto 10px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.04);border:1px solid var(--stroke);color:var(--muted-2);opacity:.5}
-.tx-empty .tx-empty-ic .ic{width:22px;height:22px}
-.tx-item{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:12px;background:linear-gradient(158deg, rgba(255,255,255,.06), rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.065);border-left:3px solid var(--green);animation:slideIn .42s var(--ease) both;cursor:pointer;transition:background .25s var(--ease), transform .2s}
-.tx-item:hover{background:linear-gradient(158deg, rgba(255,255,255,.09), rgba(255,255,255,.03))}
-.tx-item:active{transform:scale(.985)}
-.tx-item.out{border-left-color:var(--red);background:linear-gradient(158deg, rgba(255,61,99,.09), rgba(255,61,99,.02))}
-@keyframes slideIn{from{opacity:0;transform:translateX(-14px) scale(.97)}to{opacity:1;transform:translateX(0) scale(1)}}
-.tx-flag{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:900;letter-spacing:.3px;flex-shrink:0}
-.tx-body{flex:1;min-width:0}
-.tx-phone{font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:700;color:#fff;letter-spacing:.3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tx-meta{font-size:.54rem;color:var(--muted-2);letter-spacing:.5px;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:4px}
-.tx-meta .tx-dot{width:2px;height:2px;border-radius:50%;background:var(--muted-2)}
-.tx-amount{font-size:.8rem;font-weight:800;color:var(--green-b);white-space:nowrap;font-variant-numeric:tabular-nums;text-shadow:0 0 16px rgba(0,255,163,.28)}
-.tx-item.out .tx-amount{color:#ff7d97;text-shadow:none}
+        /* Header Khusus Dashboard */
+        .dash-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed #b2bec3;
+        }
+        .dash-header h2 {
+            font-family: var(--font-head);
+            font-size: 2rem;
+            color: var(--secondary);
+            letter-spacing: 1px;
+        }
+        .dash-header p {
+            font-weight: 900;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
 
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
-.stat-card{padding:13px 14px;border-radius:var(--r-md);background:linear-gradient(158deg, rgba(255,255,255,.065), rgba(255,255,255,.02));border:1px solid var(--stroke);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);position:relative;overflow:hidden;transition:transform .25s var(--ease), border-color .3s;animation:fadeUp .5s var(--ease) both}
-.stat-card:hover{transform:translateY(-2px);border-color:var(--stroke-hi)}
-.stat-card .stat-ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;margin-bottom:9px;background:rgba(0,224,138,.14);border:1px solid rgba(0,224,138,.28);color:var(--green-b)}
-.stat-card.blue .stat-ic{background:rgba(90,169,255,.14);border-color:rgba(90,169,255,.28);color:var(--blue)}
-.stat-card.gold .stat-ic{background:rgba(255,209,102,.14);border-color:rgba(255,209,102,.28);color:var(--gold)}
-.stat-card.purple .stat-ic{background:rgba(167,139,250,.14);border-color:rgba(167,139,250,.28);color:var(--purple)}
-.stat-ic .ic{width:14px;height:14px}
-.stat-label{font-size:.54rem;font-weight:800;letter-spacing:1.3px;color:var(--muted-2);text-transform:uppercase;margin-bottom:3px}
-.stat-value{font-size:1.1rem;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.4px;line-height:1.15}
-.stat-sub{font-size:.54rem;color:var(--muted);margin-top:2px;font-weight:600;letter-spacing:.2px}
-.stat-sub.up{color:var(--green-b)}
-.stat-sub.down{color:#ff7d97}
-
-/* FEED */
-.feed{display:flex;flex-direction:column;gap:7px;max-height:380px;overflow-y:auto;padding-right:3px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
-.feed::-webkit-scrollbar{width:3px}
-.feed::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:999px}
-.feed-item{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);animation:slideIn .4s var(--ease) both}
-.feed-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex-shrink:0;background:rgba(90,169,255,.14);border:1px solid rgba(90,169,255,.28);color:var(--blue)}
-.feed-ic .ic{width:12px;height:12px}
-.feed-item.click .feed-ic{background:rgba(255,209,102,.14);border-color:rgba(255,209,102,.28);color:var(--gold)}
-.feed-item.conv .feed-ic{background:rgba(0,224,138,.14);border-color:rgba(0,224,138,.28);color:var(--green-b)}
-.feed-body{flex:1;min-width:0}
-.feed-title{font-size:.68rem;font-weight:700;color:#fff;margin-bottom:2px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.feed-country{font-family:'JetBrains Mono',monospace;font-size:.54rem;font-weight:800;padding:1px 6px;border-radius:5px;letter-spacing:.4px}
-.feed-time{font-size:.52rem;color:var(--muted-2);letter-spacing:.5px;font-family:'JetBrains Mono',monospace}
-.feed-amount{font-size:.68rem;font-weight:800;color:var(--green-b);font-variant-numeric:tabular-nums;white-space:nowrap}
-.feed-amount.neutral{color:var(--muted)}
-
-/* BAR CHART */
-.bar-chart{display:flex;flex-direction:column;gap:9px}
-.bar-row{display:flex;align-items:center;gap:9px;font-size:.66rem}
-.bar-label{width:34px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:.6rem;color:var(--muted);letter-spacing:.4px}
-.bar-track{flex:1;height:6px;border-radius:999px;background:rgba(255,255,255,.05);overflow:hidden}
-.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#00d982,#00ffa3);box-shadow:0 0 12px rgba(0,255,163,.5);width:0;transition:width .9s var(--ease)}
-.bar-value{width:32px;flex-shrink:0;text-align:right;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:.6rem;color:var(--green-b);font-variant-numeric:tabular-nums}
-
-/* SPARK */
-.spark{display:flex;align-items:flex-end;justify-content:space-between;gap:5px;height:96px;padding:0 2px;margin-top:4px}
-.spark-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
-.spark-bar{width:100%;max-width:24px;border-radius:5px 5px 3px 3px;background:linear-gradient(180deg,#00ffa3,#00a86b);box-shadow:0 0 12px rgba(0,255,163,.35),inset 0 1px 0 rgba(255,255,255,.3);min-height:4px;transition:height .8s var(--ease);position:relative}
-.spark-bar.today{background:linear-gradient(180deg,#7dffcc,#00ffa3);box-shadow:0 0 20px rgba(0,255,163,.7),inset 0 1px 0 rgba(255,255,255,.5)}
-.spark-lbl{font-size:.5rem;font-weight:800;color:var(--muted-2);letter-spacing:.3px;text-transform:uppercase}
-
-/* FUNNEL */
-.funnel{display:flex;flex-direction:column;gap:7px}
-.funnel-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden}
-.funnel-row .funnel-fill{position:absolute;inset:0;width:0;background:linear-gradient(90deg, rgba(0,224,138,.16), rgba(0,224,138,.04));transition:width 1s var(--ease);pointer-events:none}
-.funnel-lbl{font-size:.66rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px;position:relative}
-.funnel-lbl .ic{width:12px;height:12px;color:var(--green-b)}
-.funnel-val{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:900;color:var(--green-b);font-variant-numeric:tabular-nums;position:relative}
-
-/* FILTERS */
-.filter-bar{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-.filter-bar::-webkit-scrollbar{display:none}
-.filter-chip{padding:6px 12px;border-radius:999px;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:800;letter-spacing:.5px;color:var(--muted);background:rgba(255,255,255,.045);border:1px solid var(--stroke);cursor:pointer;transition:all .25s var(--ease)}
-.filter-chip:hover{color:var(--text);border-color:var(--stroke-hi)}
-.filter-chip.active{color:#00170d;background:linear-gradient(135deg,#00ffa3,#00d982);border-color:transparent;box-shadow:0 4px 16px rgba(0,224,138,.4)}
-.search-box{position:relative;margin-bottom:10px}
-.search-box .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted-2);pointer-events:none}
-.search-box input{width:100%;padding:11px 12px 11px 36px;background:rgba(0,0,0,.28);border:1px solid var(--stroke);border-radius:12px;color:#fff;font-family:inherit;font-size:.74rem;outline:none;transition:all .25s var(--ease)}
-.search-box input:focus{border-color:rgba(0,224,138,.5);background:rgba(0,224,138,.05);box-shadow:0 0 0 3px rgba(0,224,138,.12)}
-.search-box input::placeholder{color:#39435a}
-
-/* WITHDRAW HERO */
-.withdraw-hero{padding:22px 20px 18px;margin-bottom:12px;overflow:hidden;background:radial-gradient(120% 130% at 20% -20%, rgba(90,169,255,.18) 0%, transparent 52%),radial-gradient(110% 120% at 100% 110%, rgba(167,139,250,.13) 0%, transparent 58%),linear-gradient(158deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.018) 55%, rgba(255,255,255,.04) 100%);border:1px solid rgba(90,169,255,.20);border-radius:var(--r-lg);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);box-shadow:0 14px 44px rgba(0,0,0,.5),0 0 46px rgba(90,169,255,.09),inset 0 1px 0 rgba(255,255,255,.10);animation:fadeUp .6s .04s var(--ease) both}
-.hero-illustration{width:100%;max-width:260px;margin:0 auto 14px;display:block}
-.hero-illustration .coin{animation:coinFloat 3s ease-in-out infinite}
-.hero-illustration .coin:nth-child(2){animation-delay:.4s}
-.hero-illustration .coin:nth-child(3){animation-delay:.8s}
-.hero-illustration .coin:nth-child(4){animation-delay:1.2s}
-@keyframes coinFloat{0%,100%{transform:translateY(0) rotate(0deg);opacity:.9}50%{transform:translateY(-10px) rotate(180deg);opacity:1}}
-.hero-illustration .flow{stroke-dasharray:4 6;animation:flowDash 1.5s linear infinite}
-@keyframes flowDash{to{stroke-dashoffset:-20}}
-.withdraw-balance{text-align:center;position:relative;z-index:1;margin-bottom:6px}
-.withdraw-balance-label{font-size:.58rem;font-weight:800;letter-spacing:2.2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.withdraw-balance-value{font-size:2rem;font-weight:900;letter-spacing:-1.2px;color:var(--blue);font-variant-numeric:tabular-nums;text-shadow:0 0 24px rgba(90,169,255,.45);word-break:break-all}
-.withdraw-balance-sub{font-size:.62rem;color:var(--muted-2);margin-top:4px;font-weight:600}
-
-/* WALLET GRID */
-.wallet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.wallet-opt{padding:12px 6px 10px;border-radius:14px;background:rgba(255,255,255,.035);border:1.5px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all .25s var(--ease);position:relative;overflow:hidden}
-.wallet-opt:hover{background:rgba(255,255,255,.06);border-color:var(--stroke-hi);transform:translateY(-2px)}
-.wallet-opt.selected{border-color:var(--blue);background:rgba(90,169,255,.10);box-shadow:0 0 24px rgba(90,169,255,.28), inset 0 1px 0 rgba(255,255,255,.1)}
-.wallet-opt.selected::after{content:"";position:absolute;top:6px;right:6px;width:14px;height:14px;border-radius:50%;background:var(--blue);box-shadow:0 0 10px var(--blue);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");background-size:8px 8px;background-position:center;background-repeat:no-repeat}
-.wallet-logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:1rem;font-weight:900;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.2);position:relative}
-.wallet-name{font-size:.6rem;font-weight:800;color:var(--text);letter-spacing:.2px}
-.wallet-opt.selected .wallet-name{color:var(--blue)}
-.amount-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
-.preset-chip{padding:8px 4px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:800;color:var(--muted);background:rgba(255,255,255,.045);border:1px solid var(--stroke);cursor:pointer;transition:all .2s var(--ease);letter-spacing:.2px}
-.preset-chip:hover{color:var(--text);border-color:var(--stroke-hi)}
-.preset-chip.active{color:#00170d;background:linear-gradient(135deg,#00ffa3,#00d982);border-color:transparent}
-.fee-breakdown{padding:12px 14px;border-radius:12px;margin-top:12px;background:rgba(0,0,0,.22);border:1px dashed rgba(255,255,255,.1)}
-.fee-row{display:flex;justify-content:space-between;align-items:center;font-size:.7rem;padding:5px 0}
-.fee-row .fl{color:var(--muted);font-weight:600}
-.fee-row .fv{color:#fff;font-weight:800;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
-.fee-row.total{border-top:1px solid rgba(255,255,255,.07);margin-top:5px;padding-top:9px}
-.fee-row.total .fl{color:var(--text);font-weight:800}
-.fee-row.total .fv{color:var(--green-b);font-size:.92rem;text-shadow:0 0 16px rgba(0,255,163,.35)}
-
-/* WITHDRAW HISTORY */
-.withdraw-history-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);border-left:3px solid var(--green);animation:slideIn .42s var(--ease) both}
-.withdraw-history-item.pending{border-left-color:var(--gold)}
-.withdraw-history-item.failed{border-left-color:var(--red);background:rgba(255,61,99,.06)}
-.wd-logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:.9rem;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.2)}
-.wd-body{flex:1;min-width:0}
-.wd-title{font-size:.72rem;font-weight:800;color:#fff;margin-bottom:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.wd-status-badge{font-size:.48rem;font-weight:900;letter-spacing:1px;padding:1px 6px;border-radius:5px;background:rgba(0,224,138,.15);color:var(--green-b);border:1px solid rgba(0,224,138,.3)}
-.wd-status-badge.pending{background:rgba(255,209,102,.15);color:var(--gold);border-color:rgba(255,209,102,.3);animation:pendingPulse 1.6s ease-in-out infinite}
-.wd-status-badge.failed{background:rgba(255,61,99,.15);color:#ff7d97;border-color:rgba(255,61,99,.3)}
-@keyframes pendingPulse{0%,100%{opacity:1}50%{opacity:.5}}
-.wd-meta{font-size:.54rem;color:var(--muted-2);font-family:'JetBrains Mono',monospace;letter-spacing:.4px}
-.wd-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
-.wd-amount{font-size:.78rem;font-weight:900;color:#ff7d97;font-variant-numeric:tabular-nums;white-space:nowrap}
-.wd-receipt-btn{padding:3px 8px;border-radius:6px;font-family:inherit;font-size:.5rem;font-weight:800;letter-spacing:.6px;background:rgba(90,169,255,.15);color:var(--blue);border:1px solid rgba(90,169,255,.3);cursor:pointer;transition:all .2s}
-.wd-receipt-btn:hover{background:rgba(90,169,255,.25);box-shadow:0 0 12px rgba(90,169,255,.3)}
-
-/* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:center;background:linear-gradient(180deg, transparent 0%, rgba(5,7,13,.82) 40%, var(--bg) 100%);pointer-events:none}
-.bottom-nav .inner{width:100%;max-width:480px;display:flex;gap:3px;padding:6px;border-radius:20px;background:linear-gradient(158deg, rgba(255,255,255,.075), rgba(255,255,255,.025));border:1px solid var(--stroke);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);box-shadow:0 10px 40px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08);pointer-events:auto}
-.nav-btn{flex:1;padding:9px 4px 7px;border:none;background:transparent;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:inherit;color:var(--muted-2);transition:all .3s var(--ease);position:relative;min-width:0}
-.nav-btn .ic{width:18px;height:18px;transition:all .3s var(--ease)}
-.nav-btn span{font-size:.5rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;transition:color .3s var(--ease);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.nav-btn.active{color:var(--green-b);background:rgba(0,224,138,.08)}
-.nav-btn.active .ic{filter:drop-shadow(0 0 8px rgba(0,255,163,.7))}
-.nav-btn:not(.active):hover{color:var(--muted)}
-
-/* TICKER */
-.ticker-area{position:fixed;bottom:calc(92px + env(safe-area-inset-bottom));left:0;right:0;z-index:35;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;max-width:480px;margin:0 auto}
-.ticker{padding:7px 16px;border-radius:999px;font-size:.78rem;font-weight:900;letter-spacing:.3px;font-variant-numeric:tabular-nums;color:#00170d;background:linear-gradient(135deg,#00ffa3,#00d982);border:1px solid rgba(0,255,163,.65);box-shadow:0 0 30px rgba(0,255,163,.62),0 6px 20px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.55);animation:tickerFloat 1.5s var(--ease) forwards}
-@keyframes tickerFloat{0%{opacity:0;transform:translateY(24px) scale(.72)}18%{opacity:1;transform:translateY(0) scale(1.04)}30%{transform:translateY(-3px) scale(1)}78%{opacity:1;transform:translateY(-18px) scale(1)}100%{opacity:0;transform:translateY(-42px) scale(.86)}}
-
-/* TOASTS */
-.toast-wrap{position:fixed;top:calc(56px + env(safe-area-inset-top));left:0;right:0;z-index:70;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 16px}
-.toast{max-width:440px;width:100%;display:flex;align-items:center;gap:10px;padding:11px 15px;border-radius:14px;font-size:.72rem;font-weight:700;letter-spacing:.2px;color:var(--text);background:linear-gradient(158deg, rgba(255,255,255,.11), rgba(255,255,255,.04));border:1px solid var(--stroke-hi);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);box-shadow:0 12px 40px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12);animation:toastIn .45s var(--ease) both}
-.toast.leaving{animation:toastOut .35s var(--ease) forwards}
-.toast .t-ic{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;flex-shrink:0;background:rgba(0,224,138,.16);border:1px solid rgba(0,224,138,.32);color:var(--green-b)}
-.toast .t-ic .ic{width:11px;height:11px}
-.toast.warn .t-ic{background:rgba(255,61,99,.16);border-color:rgba(255,61,99,.32);color:#ff7d97}
-.toast.info .t-ic{background:rgba(90,169,255,.16);border-color:rgba(90,169,255,.32);color:var(--blue)}
-@keyframes toastIn{from{opacity:0;transform:translateY(-16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes toastOut{to{opacity:0;transform:translateY(-14px) scale(.96)}}
-
-/* FAKE NOTIF */
-.notif-popup{position:fixed;top:calc(60px + env(safe-area-inset-top));left:16px;right:16px;z-index:68;max-width:400px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:linear-gradient(158deg, rgba(255,255,255,.13), rgba(255,255,255,.05));border:1px solid var(--stroke-hi);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);box-shadow:0 12px 40px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.14);animation:notifIn .5s var(--ease) both;pointer-events:none}
-@keyframes notifIn{from{opacity:0;transform:translateY(-30px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
-.notif-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:.82rem;font-weight:900;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.2)}
-.notif-body{flex:1;min-width:0}
-.notif-title{font-size:.72rem;font-weight:800;color:#fff;margin-bottom:2px}
-.notif-sub{font-size:.62rem;color:var(--muted);letter-spacing:.2px}
-
-/* MODALS */
-.modal-backdrop{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:all .3s var(--ease);display:flex;align-items:flex-end;justify-content:center}
-.modal-backdrop.show{opacity:1;visibility:visible}
-.modal-sheet{width:100%;max-width:480px;background:linear-gradient(180deg, #101623, #0a0f18);border:1px solid var(--stroke);border-bottom:none;border-radius:24px 24px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .4s var(--ease);max-height:88vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
-.modal-sheet::-webkit-scrollbar{width:4px}
-.modal-sheet::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:999px}
-.modal-backdrop.show .modal-sheet{transform:translateY(0)}
-.modal-handle{width:42px;height:4px;border-radius:999px;background:rgba(255,255,255,.2);margin:0 auto 16px}
-.modal-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;font-size:.92rem;font-weight:800;letter-spacing:-.1px}
-.modal-close{width:30px;height:30px;border-radius:9px;border:1px solid var(--stroke);background:rgba(255,255,255,.045);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:all .25s var(--ease)}
-.modal-close:hover{color:var(--text);border-color:var(--stroke-hi);background:rgba(255,255,255,.08)}
-.modal-close .ic{width:14px;height:14px}
-.detail-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed rgba(255,255,255,.06);font-size:.76rem}
-.detail-row:last-child{border-bottom:none}
-.detail-row .dl{color:var(--muted);font-weight:600;font-size:.7rem;letter-spacing:.3px;flex-shrink:0}
-.detail-row .dv{color:#fff;font-weight:800;text-align:right;font-family:'JetBrains Mono',monospace;font-size:.76rem;word-break:break-all;letter-spacing:.2px}
-.detail-row .dv.green{color:var(--green-b);text-shadow:0 0 14px rgba(0,255,163,.35)}
-.detail-row .dv.blue{color:var(--blue)}
-.modal-copy-btn{width:100%;margin-top:14px;padding:12px;border-radius:12px;font-family:inherit;font-size:.74rem;font-weight:800;letter-spacing:1.4px;color:var(--blue);background:rgba(90,169,255,.12);border:1px solid rgba(90,169,255,.32);cursor:pointer;transition:all .25s var(--ease);display:flex;align-items:center;justify-content:center;gap:7px}
-.modal-copy-btn:hover{background:rgba(90,169,255,.2);box-shadow:0 0 24px rgba(90,169,255,.28)}
-.modal-copy-btn .ic{width:13px;height:13px}
-
-/* ============================================================
-   RECEIPT — DARK GLASS ELEGANT (NO LOGO)
-   ============================================================ */
-.receipt-backdrop{
-  position:fixed;inset:0;z-index:95;
-  background:rgba(3,5,10,.82);
-  backdrop-filter:blur(20px) saturate(140%);
-  -webkit-backdrop-filter:blur(20px) saturate(140%);
-  opacity:0;visibility:hidden;
-  transition:opacity .4s var(--ease), visibility .4s;
-  display:flex;align-items:center;justify-content:center;
-  padding:20px 16px calc(20px + env(safe-area-inset-bottom));
-  overflow-y:auto;
-}
-.receipt-backdrop.show{opacity:1;visibility:visible}
-
-.receipt-sheet{
-  width:100%;max-width:400px;
-  background:
-    radial-gradient(140% 130% at 50% -10%, rgba(0,255,163,.10) 0%, transparent 55%),
-    radial-gradient(120% 120% at 100% 110%, rgba(90,169,255,.08) 0%, transparent 60%),
-    linear-gradient(165deg, rgba(20,26,38,.98) 0%, rgba(13,18,28,.98) 55%, rgba(17,23,34,.98) 100%);
-  border:1px solid rgba(0,255,163,.22);
-  border-radius:26px;
-  padding:0;
-  position:relative;
-  overflow:hidden;
-  box-shadow:
-    0 32px 80px rgba(0,0,0,.7),
-    0 0 50px rgba(0,224,138,.12),
-    inset 0 1px 0 rgba(255,255,255,.14),
-    inset 0 -1px 0 rgba(255,255,255,.05);
-  transform:translateY(30px) scale(.94);
-  transition:transform .55s var(--ease);
-}
-.receipt-backdrop.show .receipt-sheet{
-  transform:translateY(0) scale(1);
-  animation:receiptPop .7s var(--ease);
-}
-@keyframes receiptPop{
-  0%{transform:translateY(30px) scale(.94)}
-  60%{transform:translateY(-4px) scale(1.01)}
-  100%{transform:translateY(0) scale(1)}
-}
-.receipt-sheet::before{
-  content:"";position:absolute;top:0;left:15%;right:15%;height:1.5px;
-  background:linear-gradient(90deg, transparent, var(--green-b), transparent);
-  box-shadow:0 0 14px rgba(0,255,163,.8);opacity:.9;z-index:3;
-}
-
-.receipt-topbar{
-  position:relative;z-index:2;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 14px 0;
-}
-.rc-close,.rc-icon-btn{
-  width:36px;height:36px;border-radius:12px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.09);
-  color:var(--muted);
-  display:grid;place-items:center;cursor:pointer;
-  transition:all .25s var(--ease);
-}
-.rc-close:hover,.rc-icon-btn:hover{
-  color:var(--text);background:rgba(255,255,255,.10);
-  border-color:rgba(255,255,255,.18);
-}
-.rc-close .ic{width:17px;height:17px}
-.rc-icon-btn .ic{width:15px;height:15px}
-.rc-top-actions{display:flex;gap:6px}
-
-.rc-brandline{
-  position:relative;z-index:2;
-  display:flex;align-items:center;justify-content:center;gap:7px;
-  padding:10px 20px 0;
-  font-size:.54rem;font-weight:900;letter-spacing:3.5px;
-  color:var(--muted-2);text-transform:uppercase;
-}
-.rc-brandline .ic{width:11px;height:11px;color:var(--green-b)}
-
-/* Hero without logo */
-.rc-hero{
-  position:relative;z-index:2;
-  text-align:center;
-  padding:16px 20px 18px;
-}
-.rc-hero-glow{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:180px;height:120px;
-  background:radial-gradient(ellipse, rgba(0,255,163,.18), transparent 70%);
-  filter:blur(20px);pointer-events:none;z-index:-1;
-}
-.rc-hero-glow.fail{background:radial-gradient(ellipse, rgba(255,61,99,.18), transparent 70%)}
-.rc-hero-glow.pending{background:radial-gradient(ellipse, rgba(255,209,102,.18), transparent 70%)}
-
-.rc-status-icon{
-  width:46px;height:46px;border-radius:50%;
-  margin:0 auto 12px;
-  display:grid;place-items:center;
-  position:relative;
-  border:2px solid;
-}
-.rc-status-icon .ic{width:22px;height:22px}
-.rc-status-icon.success{
-  color:var(--green-b);
-  border-color:rgba(0,255,163,.5);
-  background:radial-gradient(circle, rgba(0,255,163,.15), transparent 70%);
-  box-shadow:0 0 24px rgba(0,255,163,.35), inset 0 0 16px rgba(0,255,163,.1);
-}
-.rc-status-icon.fail{
-  color:#ff7d97;
-  border-color:rgba(255,61,99,.5);
-  background:radial-gradient(circle, rgba(255,61,99,.15), transparent 70%);
-  box-shadow:0 0 24px rgba(255,61,99,.35), inset 0 0 16px rgba(255,61,99,.1);
-}
-.rc-status-icon.pending{
-  color:var(--gold);
-  border-color:rgba(255,209,102,.5);
-  background:radial-gradient(circle, rgba(255,209,102,.15), transparent 70%);
-  box-shadow:0 0 24px rgba(255,209,102,.35), inset 0 0 16px rgba(255,209,102,.1);
-  animation:heroIconPulse 1.8s ease-in-out infinite;
-}
-.rc-status-icon.pending .ic{animation:spin 1.5s linear infinite}
-@keyframes heroIconPulse{
-  0%,100%{box-shadow:0 0 20px rgba(255,209,102,.3), inset 0 0 16px rgba(255,209,102,.1)}
-  50%{box-shadow:0 0 34px rgba(255,209,102,.55), inset 0 0 16px rgba(255,209,102,.18)}
-}
-
-.rc-amount{
-  font-size:2.15rem;font-weight:900;color:#fff;
-  letter-spacing:-1.2px;line-height:1.05;
-  margin-bottom:8px;
-  font-variant-numeric:tabular-nums;
-  transition:color .3s;
-  word-break:break-all;
-  position:relative;
-}
-.rc-amount.flash{animation:rcAmtFlash .8s ease}
-@keyframes rcAmtFlash{
-  0%{transform:scale(1);color:#fff}
-  35%{transform:scale(1.07);color:#00ffa3}
-  100%{transform:scale(1);color:#fff}
-}
-.rc-amount-rp{
-  font-size:.78rem;font-weight:800;color:var(--muted-2);
-  letter-spacing:0;margin-right:5px;vertical-align:middle;
-}
-
-.rc-subtitle{
-  font-size:.7rem;color:var(--muted);
-  margin-top:8px;font-weight:600;line-height:1.5;
-  padding:0 8px;
-}
-.rc-subtitle b{color:var(--text);font-weight:800}
-
-/* Perforation divider */
-.rc-perf{
-  position:relative;z-index:2;
-  height:1px;margin:6px 22px;
-  background-image:repeating-linear-gradient(90deg, transparent 0 6px, rgba(255,255,255,.12) 6px 12px);
-}
-.rc-perf::before,.rc-perf::after{
-  content:"";position:absolute;top:-6px;
-  width:12px;height:12px;border-radius:50%;
-  background:#0d121c;
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:inset 0 0 0 1px rgba(0,0,0,.3);
-}
-.rc-perf::before{left:-28px}
-.rc-perf::after{right:-28px}
-
-.rc-body{
-  position:relative;z-index:2;
-  padding:16px 20px 10px;
-}
-.rc-row{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  gap:12px;padding:8px 0;
-  font-size:.72rem;
-  border-bottom:1px dashed rgba(255,255,255,.05);
-}
-.rc-row:last-child{border-bottom:none}
-.rc-l{
-  color:var(--muted-2);font-weight:700;font-size:.56rem;
-  letter-spacing:1.2px;text-transform:uppercase;
-  flex-shrink:0;padding-top:2px;
-}
-.rc-v{
-  color:#fff;font-weight:700;text-align:right;
-  font-family:'JetBrains Mono',monospace;
-  font-size:.72rem;word-break:break-all;
-  display:flex;align-items:center;gap:6px;
-  justify-content:flex-end;min-width:0;
-}
-.rc-v.sans{font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.2px}
-.rc-v.green{color:var(--green-b);text-shadow:0 0 14px rgba(0,255,163,.35)}
-.rc-v.gold{color:var(--gold)}
-.rc-v.red{color:#ff7d97}
-.rc-v .copy-btn{
-  width:18px;height:18px;border:none;background:transparent;
-  color:var(--muted-2);cursor:pointer;padding:0;
-  display:grid;place-items:center;flex-shrink:0;transition:color .2s;
-}
-.rc-v .copy-btn:hover{color:var(--green-b)}
-.rc-v .copy-btn .ic{width:11px;height:11px}
-
-.rc-totals{
-  position:relative;z-index:2;
-  padding:10px 20px 6px;
-  margin:0 4px;
-  background:rgba(0,0,0,.22);
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.05);
-  margin-top:6px;
-}
-.rc-total-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:7px 0;font-size:.72rem;gap:10px;
-}
-.rc-total-row .tl{color:var(--muted);font-weight:600}
-.rc-total-row .tv{
-  color:#fff;font-weight:800;font-family:'JetBrains Mono',monospace;
-  font-variant-numeric:tabular-nums;font-size:.74rem;
-}
-.rc-total-row.big{
-  border-top:1px solid rgba(255,255,255,.08);
-  margin-top:4px;padding-top:10px;padding-bottom:8px;
-}
-.rc-total-row.big .tl{
-  color:#fff;font-weight:800;font-size:.66rem;
-  letter-spacing:1.2px;text-transform:uppercase;
-}
-.rc-total-row.big .tv{
-  color:var(--green-b);font-size:.94rem;font-weight:900;
-  text-shadow:0 0 16px rgba(0,255,163,.4);
-}
-.rc-total-row.big.failed .tv{
-  color:#ff7d97;text-decoration:line-through;text-shadow:none;
-}
-
-.rc-qr-section{
-  position:relative;z-index:2;
-  display:flex;align-items:center;gap:12px;
-  padding:14px 20px 16px;
-}
-.rc-qr{
-  width:64px;height:64px;flex-shrink:0;
-  background:#fff;border-radius:10px;
-  padding:5px;display:grid;place-items:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.4), inset 0 0 0 1px rgba(0,0,0,.05);
-}
-.rc-qr svg{width:100%;height:100%;display:block}
-.rc-qr-text{flex:1;min-width:0}
-.rc-qr-title{font-size:.68rem;font-weight:800;color:#fff;margin-bottom:2px;letter-spacing:.2px}
-.rc-qr-sub{font-size:.56rem;color:var(--muted-2);line-height:1.5;letter-spacing:.2px}
-
-.rc-footer{
-  position:relative;z-index:2;
-  text-align:center;
-  padding:6px 20px 16px;
-  font-size:.55rem;color:var(--muted-2);
-  letter-spacing:.3px;line-height:1.6;
-}
-.rc-footer strong{
-  display:block;color:var(--green-b);
-  font-size:.56rem;font-weight:900;
-  letter-spacing:2.5px;margin-bottom:3px;
-  text-shadow:0 0 12px rgba(0,255,163,.4);
-}
-
-.rc-actions{
-  position:relative;z-index:2;
-  display:flex;gap:6px;
-  padding:4px 14px 16px;
-}
-.rc-action-btn{
-  flex:1;padding:10px 4px;border-radius:12px;
-  font-family:inherit;font-size:.56rem;font-weight:800;
-  letter-spacing:.6px;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  line-height:1.2;transition:all .25s var(--ease);
-  border:1px solid;min-width:0;
-}
-.rc-action-btn .ic{width:15px;height:15px}
-.rc-action-btn.primary{
-  color:#00170d;
-  background:linear-gradient(135deg,#00ffa3,#00d982 50%,#00b872);
-  border-color:transparent;
-  box-shadow:0 6px 20px rgba(0,224,138,.42), inset 0 1px 0 rgba(255,255,255,.4);
-}
-.rc-action-btn.primary:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(0,224,138,.58)}
-.rc-action-btn.ghost{
-  color:var(--text);
-  background:rgba(255,255,255,.06);
-  border-color:rgba(255,255,255,.10);
-}
-.rc-action-btn.ghost:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18)}
-.rc-action-btn:active{transform:scale(.97)}
-.rc-action-btn:disabled{opacity:.5;cursor:wait}
-
-.wallet-mini{
-  display:inline-grid;place-items:center;
-  width:18px;height:18px;border-radius:5px;
-  font-size:.56rem;font-weight:900;color:#fff;flex-shrink:0;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
-  font-family:'Inter',sans-serif;letter-spacing:0;
-}
-
-/* SETTINGS */
-.setting-group{margin-bottom:18px}
-.setting-group-title{font-size:.58rem;font-weight:800;letter-spacing:1.8px;color:var(--muted-2);text-transform:uppercase;margin-bottom:9px}
-.setting-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);margin-bottom:7px}
-.setting-item-left{display:flex;align-items:center;gap:10px;min-width:0}
-.setting-item-left .s-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(90,169,255,.14);border:1px solid rgba(90,169,255,.26);color:var(--blue);flex-shrink:0}
-.setting-item-left .s-ic .ic{width:14px;height:14px}
-.setting-item-left .s-lbl{font-size:.76rem;font-weight:700;color:var(--text)}
-.setting-item-left .s-desc{font-size:.58rem;color:var(--muted-2);margin-top:1px}
-.toggle-switch{position:relative;width:44px;height:26px;border-radius:999px;background:rgba(255,255,255,.1);cursor:pointer;flex-shrink:0;transition:background .3s var(--ease);border:none}
-.toggle-switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .3s var(--ease);box-shadow:0 2px 6px rgba(0,0,0,.3)}
-.toggle-switch.on{background:linear-gradient(135deg,#00ffa3,#00d982);box-shadow:0 0 16px rgba(0,224,138,.5)}
-.toggle-switch.on::after{transform:translateX(18px)}
-.rate-slider-wrap{padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);margin-bottom:7px}
-.rate-slider-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
-.rate-slider-top .s-lbl{font-size:.74rem;font-weight:700}
-.rate-slider-top .s-val{font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:800;color:var(--green-b);font-variant-numeric:tabular-nums}
-input[type="range"]{width:100%;height:4px;border-radius:999px;background:rgba(255,255,255,.1);-webkit-appearance:none;appearance:none;outline:none;cursor:pointer}
-input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#00ffa3,#00d982);box-shadow:0 0 12px rgba(0,224,138,.6),0 2px 6px rgba(0,0,0,.3);cursor:pointer}
-input[type="range"]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:none;background:linear-gradient(135deg,#00ffa3,#00d982);box-shadow:0 0 12px rgba(0,224,138,.6),0 2px 6px rgba(0,0,0,.3);cursor:pointer}
-.achievements-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.ach-badge{padding:10px 4px;border-radius:10px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;opacity:.35;transition:all .3s var(--ease)}
-.ach-badge.unlocked{opacity:1;background:rgba(0,224,138,.08);border-color:rgba(0,224,138,.28);box-shadow:0 0 14px rgba(0,224,138,.15)}
-.ach-badge .ach-ic{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;background:rgba(255,255,255,.05);color:var(--muted-2)}
-.ach-badge.unlocked .ach-ic{background:rgba(0,224,138,.18);color:var(--green-b)}
-.ach-badge .ach-ic .ic{width:12px;height:12px}
-.ach-badge .ach-nm{font-size:.44rem;font-weight:800;text-align:center;letter-spacing:.2px;color:var(--muted-2);line-height:1.2}
-.ach-badge.unlocked .ach-nm{color:var(--green-b)}
-
-#confettiCanvas{position:fixed;inset:0;z-index:90;pointer-events:none;display:none}
-#confettiCanvas.active{display:block}
-
-.processing-overlay{position:fixed;inset:0;z-index:85;background:rgba(3,5,10,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;padding:24px}
-.processing-overlay.show{display:flex;animation:fadeIn .3s var(--ease)}
-.processing-card{max-width:320px;width:100%;text-align:center;padding:28px 24px;border-radius:22px;background:linear-gradient(158deg, rgba(255,255,255,.08), rgba(255,255,255,.02));border:1px solid var(--stroke-hi);box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1);animation:fadeUp .4s var(--ease)}
-.processing-spinner{width:56px;height:56px;margin:0 auto 16px;border-radius:50%;border:3px solid rgba(0,224,138,.15);border-top-color:var(--green);border-right-color:rgba(0,224,138,.5);animation:spin 1s linear infinite}
-.processing-title{font-size:.94rem;font-weight:800;margin-bottom:6px}
-.processing-status{font-size:.7rem;color:var(--muted);letter-spacing:.3px;min-height:1.2em;margin-bottom:14px}
-.processing-bar{height:4px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;margin-bottom:14px}
-.processing-bar-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#00d982,#00ffa3);box-shadow:0 0 14px rgba(0,255,163,.8);transition:width .5s var(--ease)}
-
-.disclaimer{margin-top:14px;padding:14px;border-radius:var(--r-md);font-size:.6rem;line-height:1.75;text-align:center;letter-spacing:.2px;color:rgba(255,150,170,.82);background:rgba(255,61,99,.055);border:1px dashed rgba(255,61,99,.32);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:fadeUp .6s .2s var(--ease) both}
-.disclaimer strong{color:var(--red);font-weight:800}
-.disclaimer .head{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.62rem;letter-spacing:1.4px;margin-bottom:5px;color:var(--red);font-weight:900}
-.disclaimer .head .ic{width:11px;height:11px}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-@media (max-width:380px){
-  .balance-amount{font-size:2.05rem}
-  .app{padding-left:13px;padding-right:13px}
-  .card,.section,.connected-card,.withdraw-hero{padding:16px}
-  .stats-grid{gap:7px}
-  .stat-value{font-size:1rem}
-  .wallet-grid{gap:6px}
-  .daily-ring{width:64px;height:64px}
-  .daily-ring .ring-pct{font-size:.68rem}
-  .viewer-pill{font-size:.54rem;padding:5px 8px}
-  .rc-amount{font-size:1.75rem}
-  .rc-action-btn{font-size:.5rem;padding:8px 3px}
-  .rc-action-btn .ic{width:13px;height:13px}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
-}
-</style>
+        .step-container { display: none; }
+        .step-active { display: block; }
+        .divider { border-top: 3px dashed #b2bec3; margin: 25px 0; }
+    </style>
 </head>
 <body>
 
-<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
-
-<div class="login-screen" id="loginScreen">
-  <div class="login-card">
-    <div class="login-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20"/><circle cx="16.5" cy="15" r="1.5" fill="currentColor" stroke="none"/>
-      </svg>
-    </div>
-    <div class="login-title">E-SEAMONEY</div>
-    <div class="login-sub">SECURE ACCESS</div>
-    <div class="login-spinner"></div>
-    <div class="login-status" id="loginStatus">Memverifikasi perangkat<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
-    <div class="login-progress"><div class="login-progress-bar" id="loginProgress"></div></div>
-  </div>
-</div>
-
-<div class="app" id="mainApp" style="opacity:0;pointer-events:none;transition:opacity .5s">
-
-  <div class="warn-bar" style="margin:-18px -16px 16px">
-    <svg class="ic" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    APLIKASI ILEGAL — TANGGUNG RESIKO SENDIRI
-  </div>
-
-  <header class="header">
-    <div class="logo">
-      <div class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20"/><circle cx="16.5" cy="15" r="1.5" fill="currentColor" stroke="none"/>
-        </svg>
-      </div>
-      <div class="logo-text"><strong>E-SEAMONEY</strong><small>REAL</small></div>
-    </div>
-    <div class="header-actions">
-      <div class="viewer-pill">
-        <span class="dot"></span>
-        <svg class="ic" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span id="viewerCount">1.248</span>
-      </div>
-      <button class="icon-btn" id="btnSettings" aria-label="Settings">
-        <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      </button>
-      <div class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">OFFLINE</span></div>
-    </div>
-  </header>
-
-  <div class="tab-scroller" id="tabScroller">
-    <section class="tab-view active" id="view-dashboard">
-      <div class="balance-card" id="balanceCard">
-        <div class="scan"></div>
-        <div class="balance-top">
-          <div class="balance-left">
-            <div class="balance-label"><span>Saldo REAL</span><span class="live-badge">LIVE</span></div>
-            <div class="balance-amount"><span class="rp">Rp</span><span id="balanceNum">0</span></div>
-          </div>
-          <div class="daily-ring">
-            <svg viewBox="0 0 74 74">
-              <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ffa3"/><stop offset="100%" stop-color="#5aa9ff"/></linearGradient></defs>
-              <circle class="ring-bg" cx="37" cy="37" r="30"/>
-              <circle class="ring-fg" id="dailyRing" cx="37" cy="37" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
-            </svg>
-            <div class="ring-text"><span class="ring-pct" id="ringPct">0%</span><span class="ring-lbl">Target</span></div>
-          </div>
+    <div class="main-container">
+        <!-- Header Global -->
+        <div class="app-title">AM PREMIUM</div>
+        <div style="text-align: center;">
+            <div class="sub-title">ACCESS PORTAL</div>
         </div>
-        <div class="level-strip">
-          <span class="level-badge" id="levelBadge">LV 1</span>
-          <div class="level-bar-wrap">
-            <div class="level-bar-top"><span class="level-bar-name" id="levelName">Bronze</span><span class="level-bar-xp" id="levelXp">0/10 XP</span></div>
-            <div class="level-bar"><div class="level-bar-fill" id="levelBarFill" style="width:0%"></div></div>
-          </div>
+
+        <!-- ================= 1. HALAMAN LOGIN ================= -->
+        <div id="page-login" class="comic-card" style="display: block;">
+            <div class="watermark">By Marz</div>
+            <div id="notif-login" class="notif notif-error"></div>
+            
+            <div style="text-align: center; font-size: 3rem; margin-bottom: 10px;">🔒</div>
+            <h3 style="text-align: center; margin-bottom: 20px; font-weight: 900;">Masukkan Access Key</h3>
+            
+            <div class="input-group">
+                <input type="password" id="access-key" placeholder="Ketik Key Disini...">
+            </div>
+            <button class="btn btn-blue" onclick="login()">MASUK</button>
         </div>
-        <div class="balance-sub">
-          <div class="bsub-item"><span class="bsub-label">Hari Ini</span><span class="bsub-value green" id="todayText">Rp 0</span></div>
-          <div class="bsub-item"><span class="bsub-label">Transaksi</span><span class="bsub-value gold" id="countText">0x</span></div>
-          <div class="bsub-item"><span class="bsub-label">Views</span><span class="bsub-value blue" id="viewsText">0</span></div>
+
+        <!-- ================= 2. HALAMAN DASHBOARD ================= -->
+        <div id="page-dashboard" class="comic-card" style="display: none;">
+            <div class="watermark">By Marz</div>
+            
+            <!-- Header Dashboard (Tanpa Free Member) -->
+            <div class="dash-header">
+                <h2>MAIN MENU</h2>
+                <p>Silakan pilih layanan di bawah ini</p>
+            </div>
+
+            <div id="notif-dash" class="notif notif-error"></div>
+
+            <button class="btn" onclick="startFlow()">📨 SEND LINK</button>
+            <button class="btn btn-grey" onclick="showGuide()">ℹ️ PANDUAN</button>
         </div>
-        <div class="spark-wrap"><canvas id="balanceChart"></canvas></div>
-      </div>
 
-      <div class="card glass" id="pairCard">
-        <div class="card-title"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span>Hubungkan WhatsApp</div>
-        <p class="card-desc">Masukkan nomor WhatsApp untuk memulai pairing. <b>Tidak ada koneksi nyata.</b></p>
-        <div class="input-group"><span class="input-prefix">+62</span><input type="tel" id="phoneInput" placeholder="812 3456 7890" maxlength="16" inputmode="numeric" autocomplete="off" spellcheck="false"/></div>
-        <button class="btn btn-primary" id="btnPair"><svg class="ic" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>PAIRING SEKARANG</button>
-        <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
-        <div class="pairing-status" id="pairingStatus">Menghubungkan...</div>
-      </div>
+        <!-- ================= 3. HALAMAN PROSES (BERTAHAP) ================= -->
+        <div id="page-flow" class="comic-card" style="display: none;">
+            <div class="watermark">By Marz</div>
+            <div id="notif-flow" class="notif notif-error"></div>
 
-      <div class="connected-card glass" id="connectedCard">
-        <div class="conn-row"><span class="lbl">Nomor</span><span class="val" id="connNumber">+62 —</span></div>
-        <div class="conn-row"><span class="lbl">Pairing Code</span><span class="val code" id="connCode">----</span></div>
-        <div class="conn-row"><span class="lbl">Status</span><span class="val state-offline" id="connStatus">OFFLINE</span></div>
-        <div class="conn-row"><span class="lbl">Rate</span><span class="val" id="rateDisplay" style="color:var(--green-b);text-shadow:0 0 14px rgba(0,255,163,.45)">+Rp 2.000 / detik</span></div>
-        <button class="toggle-online is-offline" id="btnToggle">
-          <svg class="ic" viewBox="0 0 24 24" id="toggleIconSvg"><polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none"/></svg>
-          <span id="toggleText">MULAI ONLINE</span>
-        </button>
-      </div>
+            <!-- STEP 1 -->
+            <div id="step-1" class="step-container step-active">
+                <h3 style="margin-bottom: 15px; font-weight: 900;">1. Kirim Magic Link</h3>
+                <div class="input-group">
+                    <input type="email" id="email-input" placeholder="Masukkan Email Aktif...">
+                </div>
+                <button class="btn" onclick="processStep1()">KIRIM LINK</button>
+                <button class="btn btn-grey" style="font-size: 1.2rem; padding: 10px;" onclick="switchPage('page-dashboard')">BATAL</button>
+            </div>
 
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/></svg>Aktivitas Terakhir</h3><span class="count-pill" id="dashTxCount">0</span></div>
-        <div class="tx-list" id="dashTxList" style="max-height:230px"><div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/></svg></div>Belum ada transaksi.<br>Mulai online untuk memulai.</div></div>
-      </div>
-    </section>
+            <!-- STEP 2 -->
+            <div id="step-2" class="step-container">
+                <div class="divider"></div>
+                <h3 style="margin-bottom: 15px; font-weight: 900; color: var(--success);">2. Verifikasi Link</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 15px; font-weight: 700;">Cek kotak masuk email kamu, lalu paste link-nya di sini.</p>
+                <div class="input-group">
+                    <input type="text" id="link-input" placeholder="Paste Magic Link...">
+                </div>
+                <button class="btn btn-green" onclick="processStep2()">VERIFIKASI</button>
+            </div>
 
-    <section class="tab-view" id="view-transaksi">
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-ic"><svg class="ic" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="stat-label">Total Transaksi</div><div class="stat-value" id="statTxCount">0</div><div class="stat-sub" id="statTxSub">0 dari 0 negara</div></div>
-        <div class="stat-card blue"><div class="stat-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div><div class="stat-label">Negara</div><div class="stat-value" id="statCountryCount">0</div><div class="stat-sub">negara berbeda</div></div>
-      </div>
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/></svg>Riwayat Transaksi</h3><span class="count-pill" id="txListCount">0</span></div>
-        <div class="search-box"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="txSearch" placeholder="Cari nomor atau negara..." /></div>
-        <div class="filter-bar" id="filterBar">
-          <button class="filter-chip active" data-filter="all">SEMUA</button>
-          <button class="filter-chip" data-filter="62">+62</button>
-          <button class="filter-chip" data-filter="55">+55</button>
-          <button class="filter-chip" data-filter="1">+1</button>
-          <button class="filter-chip" data-filter="44">+44</button>
-          <button class="filter-chip" data-filter="91">+91</button>
-          <button class="filter-chip" data-filter="86">+86</button>
-          <button class="filter-chip" data-filter="81">+81</button>
-          <button class="filter-chip" data-filter="82">+82</button>
-          <button class="filter-chip" data-filter="61">+61</button>
-          <button class="filter-chip" data-filter="49">+49</button>
-          <button class="filter-chip" data-filter="33">+33</button>
+            <!-- STEP 3 -->
+            <div id="step-3" class="step-container">
+                <div class="divider"></div>
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
+                    <h3 style="color: var(--success); font-family: var(--font-head); font-size: 2.5rem; letter-spacing: 1px;">SUKSES!</h3>
+                    <p style="font-weight: 900; margin-bottom: 20px;">Akun premium kamu sudah aktif.</p>
+                    <button class="btn btn-blue" onclick="switchPage('page-dashboard')">KEMBALI KE MENU</button>
+                </div>
+            </div>
+
+            <div id="loading-flow" class="loading">MEMPROSES...</div>
         </div>
-        <div class="tx-list" id="txList" style="max-height:520px"><div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/></svg></div>Belum ada transaksi.<br>Data akan muncul saat online.</div></div>
-        <button class="btn btn-ghost" id="btnExport" style="margin-top:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>EXPORT CSV</button>
-      </div>
-    </section>
 
-    <section class="tab-view" id="view-marketing">
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="stat-label">Total Views</div><div class="stat-value" id="mktViews">0</div><div class="stat-sub up" id="mktViewsSub">+0 hari ini</div></div>
-        <div class="stat-card gold"><div class="stat-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="stat-label">Klik</div><div class="stat-value" id="mktClicks">0</div><div class="stat-sub up" id="mktClicksSub">+0 hari ini</div></div>
-        <div class="stat-card purple"><div class="stat-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l18-8v18l-18-8z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg></div><div class="stat-label">Konversi</div><div class="stat-value" id="mktConv">0</div><div class="stat-sub up" id="mktConvSub">+0 hari ini</div></div>
-        <div class="stat-card blue"><div class="stat-ic"><svg class="ic" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="stat-label">CTR</div><div class="stat-value" id="mktCtr">0%</div><div class="stat-sub">click-through rate</div></div>
-      </div>
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Riwayat Pemasaran</h3><span class="count-pill" id="feedCount">0</span></div>
-        <div class="feed" id="feed"><div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l18-8v18l-18-8z"/></svg></div>Belum ada aktivitas pemasaran.</div></div>
-      </div>
-    </section>
-
-    <section class="tab-view" id="view-analitik">
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Views 7 Hari Terakhir</h3></div>
-        <div class="spark" id="sparkChart"></div>
-      </div>
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>Top Negara</h3><span class="count-pill" id="topCountryCount">0</span></div>
-        <div class="bar-chart" id="topCountries"><div class="tx-empty" style="padding:20px 10px"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>Data negara akan muncul setelah transaksi.</div></div>
-      </div>
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>Conversion Funnel</h3></div>
-        <div class="funnel">
-          <div class="funnel-row"><span class="funnel-lbl"><svg class="ic" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Views</span><span class="funnel-val" id="funnelViews">0</span><div class="funnel-fill" style="width:100%"></div></div>
-          <div class="funnel-row"><span class="funnel-lbl"><svg class="ic" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Klik</span><span class="funnel-val" id="funnelClicks">0</span><div class="funnel-fill" id="funnelClicksFill" style="width:0%"></div></div>
-          <div class="funnel-row"><span class="funnel-lbl"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l18-8v18l-18-8z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg>Konversi</span><span class="funnel-val" id="funnelConv">0</span><div class="funnel-fill" id="funnelConvFill" style="width:0%"></div></div>
+        <!-- ================= 4. HALAMAN PANDUAN ================= -->
+        <div id="page-guide" class="comic-card" style="display: none;">
+            <div class="watermark">By Marz</div>
+            <h3 style="margin-bottom: 15px; font-weight: 900;">📖 Panduan Penggunaan</h3>
+            <ol style="margin-left: 20px; font-weight: 700; line-height: 1.8; margin-bottom: 20px;">
+                <li>Klik menu <b>Send Link</b>.</li>
+                <li>Masukkan email aktif kamu, lalu klik Kirim.</li>
+                <li>Cek email, lalu copy link yang dikirim.</li>
+                <li>Kembali ke web, paste link di kolom verifikasi.</li>
+                <li>Klik Verifikasi, dan akun premium otomatis aktif!</li>
+            </ol>
+            <button class="btn btn-grey" onclick="switchPage('page-dashboard')">KEMBALI</button>
         </div>
-      </div>
-    </section>
 
-    <section class="tab-view" id="view-tarik">
-      <div class="withdraw-hero">
-        <svg class="hero-illustration" viewBox="0 0 300 180">
-          <defs>
-            <linearGradient id="walletG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5aa9ff"/><stop offset="100%" stop-color="#0066cc"/></linearGradient>
-            <linearGradient id="coinG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffd166"/><stop offset="100%" stop-color="#f0a500"/></linearGradient>
-            <radialGradient id="glowG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#5aa9ff" stop-opacity="0.25"/><stop offset="100%" stop-color="#5aa9ff" stop-opacity="0"/></radialGradient>
-          </defs>
-          <ellipse cx="150" cy="100" rx="110" ry="70" fill="url(#glowG)"/>
-          <g>
-            <rect x="95" y="35" width="110" height="68" rx="14" fill="url(#walletG)" stroke="rgba(255,255,255,.4)" stroke-width="1.2"/>
-            <rect x="95" y="35" width="110" height="26" rx="14" fill="rgba(0,0,0,.18)"/>
-            <circle cx="195" cy="70" r="9" fill="#001a0e"/>
-            <circle cx="195" cy="70" r="4.5" fill="#ffd166"/>
-            <rect x="105" y="48" width="30" height="4" rx="2" fill="rgba(255,255,255,.4)"/>
-          </g>
-          <path class="flow" d="M130 108 Q130 130 90 145" stroke="#5aa9ff" stroke-width="1.5" fill="none" opacity=".8"/>
-          <path class="flow" d="M150 108 L150 145" stroke="#5aa9ff" stroke-width="1.5" fill="none" opacity=".8"/>
-          <path class="flow" d="M170 108 Q170 130 210 145" stroke="#5aa9ff" stroke-width="1.5" fill="none" opacity=".8"/>
-          <g><circle cx="90" cy="155" r="14" fill="#118EEA" stroke="rgba(255,255,255,.3)" stroke-width="1"/><text x="90" y="160" font-family="Inter,sans-serif" font-size="11" font-weight="900" fill="#fff" text-anchor="middle">D</text></g>
-          <g><circle cx="150" cy="155" r="14" fill="#4C3494" stroke="rgba(255,255,255,.3)" stroke-width="1"/><text x="150" y="160" font-family="Inter,sans-serif" font-size="11" font-weight="900" fill="#fff" text-anchor="middle">O</text></g>
-          <g><circle cx="210" cy="155" r="14" fill="#00AA13" stroke="rgba(255,255,255,.3)" stroke-width="1"/><text x="210" y="160" font-family="Inter,sans-serif" font-size="11" font-weight="900" fill="#fff" text-anchor="middle">G</text></g>
-          <circle class="coin" cx="70" cy="60" r="7" fill="url(#coinG)" opacity=".85"/>
-          <circle class="coin" cx="230" cy="55" r="6" fill="url(#coinG)" opacity=".8"/>
-          <circle class="coin" cx="60" cy="110" r="5" fill="url(#coinG)" opacity=".75"/>
-          <circle class="coin" cx="240" cy="105" r="5.5" fill="url(#coinG)" opacity=".75"/>
-          <circle cx="120" cy="28" r="1.5" fill="#fff" opacity=".7"/>
-          <circle cx="185" cy="25" r="1" fill="#fff" opacity=".5"/>
-        </svg>
-        <div class="withdraw-balance">
-          <div class="withdraw-balance-label">Saldo Tersedia</div>
-          <div class="withdraw-balance-value" id="withdrawBalance">Rp 0</div>
-          <div class="withdraw-balance-sub" id="withdrawBalanceSub">Minimal tarik Rp 10.000 · Biaya Rp 2.500</div>
-        </div>
-      </div>
-
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg>Pilih E-Wallet</h3></div>
-        <div class="wallet-grid" id="walletGrid"></div>
-        <div style="margin-top:12px">
-          <div class="bsub-label" style="margin-bottom:6px">Jumlah Penarikan</div>
-          <div class="input-group"><span class="input-prefix">Rp</span><input type="tel" id="withdrawAmount" placeholder="0" inputmode="numeric" autocomplete="off" maxlength="15"/></div>
-          <div class="amount-presets" id="amountPresets">
-            <button class="preset-chip" data-amt="10000">10rb</button>
-            <button class="preset-chip" data-amt="25000">25rb</button>
-            <button class="preset-chip" data-amt="50000">50rb</button>
-            <button class="preset-chip" data-amt="100000">100rb</button>
-            <button class="preset-chip" data-amt="250000">250rb</button>
-            <button class="preset-chip" data-amt="500000">500rb</button>
-            <button class="preset-chip" data-amt="1000000">1jt</button>
-            <button class="preset-chip" data-amt="max">MAX</button>
-          </div>
-        </div>
-        <div style="margin-top:12px">
-          <div class="bsub-label" style="margin-bottom:6px">Nomor E-Wallet</div>
-          <div class="input-group"><span class="input-prefix">+62</span><input type="tel" id="withdrawPhone" placeholder="812 3456 7890" maxlength="16" inputmode="numeric" autocomplete="off" spellcheck="false"/></div>
-        </div>
-        <div class="fee-breakdown">
-          <div class="fee-row"><span class="fl">Jumlah penarikan</span><span class="fv" id="feeAmount">Rp 0</span></div>
-          <div class="fee-row"><span class="fl">Biaya admin</span><span class="fv" id="feeFee">Rp 0</span></div>
-          <div class="fee-row total"><span class="fl">Total dipotong</span><span class="fv" id="feeTotal">Rp 0</span></div>
-        </div>
-        <button class="btn btn-primary" id="btnWithdraw" style="background:linear-gradient(135deg,#5aa9ff,#0066cc);color:#fff;box-shadow:0 6px 24px rgba(90,169,255,.45),inset 0 1px 0 rgba(255,255,255,.3)">
-          <svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          TARIK DANA SEKARANG
-        </button>
-      </div>
-
-      <div class="section glass">
-        <div class="section-head"><h3><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Riwayat Penarikan</h3><span class="count-pill" id="withdrawHistoryCount">0</span></div>
-        <div class="tx-list" id="withdrawHistory" style="max-height:400px"><div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>Belum ada penarikan.</div></div>
-      </div>
-    </section>
-  </div>
-
-  <div class="disclaimer">
-    <span class="head"><svg class="ic" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>PERHATIAN</span>
-    Halaman ini adalah <strong>ILEGAL / MOCKUP UI</strong>.<br>
-    Semua saldo, angka, dan transaksi <strong>HARAM!</strong><br>
-    Dibuat murni sebagai web ilegal.
-  </div>
-</div>
-
-<div class="ticker-area" id="tickerArea"></div>
-<div class="toast-wrap" id="toastWrap"></div>
-<canvas id="confettiCanvas"></canvas>
-
-<div class="processing-overlay" id="processingOverlay">
-  <div class="processing-card">
-    <div class="processing-spinner"></div>
-    <div class="processing-title" id="procTitle">Memproses Penarikan</div>
-    <div class="processing-status" id="procStatus">Menginisialisasi...</div>
-    <div class="processing-bar"><div class="processing-bar-fill" id="procBar"></div></div>
-  </div>
-</div>
-
-<!-- RECEIPT MODAL -->
-<div class="receipt-backdrop" id="receiptBackdrop">
-  <div class="receipt-sheet" id="receiptSheet"></div>
-</div>
-
-<!-- TX DETAIL MODAL -->
-<div class="modal-backdrop" id="modalBackdrop">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title"><span>Detail Transaksi</span><button class="modal-close" id="btnModalClose"><svg class="ic" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<!-- SETTINGS MODAL -->
-<div class="modal-backdrop" id="settingsBackdrop">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title"><span>Pengaturan</span><button class="modal-close" id="btnSettingsClose"><svg class="ic" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div class="setting-group">
-      <div class="setting-group-title">Preferensi</div>
-      <div class="setting-item"><div class="setting-item-left"><div class="s-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg></div><div><div class="s-lbl">Suara</div><div class="s-desc">Efek suara transaksi</div></div></div><button class="toggle-switch on" id="toggleSound"></button></div>
-      <div class="setting-item"><div class="setting-item-left"><div class="s-ic"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div><div class="s-lbl">Haptic</div><div class="s-desc">Getaran saat transaksi</div></div></div><button class="toggle-switch on" id="toggleHaptic"></button></div>
-    </div>
-    <div class="setting-group">
-      <div class="setting-group-title">Rate Penghasilan</div>
-      <div class="rate-slider-wrap"><div class="rate-slider-top"><span class="s-lbl">Rp per detik</span><span class="s-val" id="rateValue">Rp 2.000</span></div><input type="range" id="rateSlider" min="500" max="10000" step="500" value="2000"/></div>
-      <div class="rate-slider-wrap"><div class="rate-slider-top"><span class="s-lbl">Target harian</span><span class="s-val" id="targetValue">Rp 1.000.000</span></div><input type="range" id="targetSlider" min="100000" max="5000000" step="100000" value="1000000"/></div>
-    </div>
-    <div class="setting-group">
-      <div class="setting-group-title">Pencapaian</div>
-      <div class="achievements-grid" id="achievementsGrid"></div>
-    </div>
-    <div class="setting-group">
-      <div class="setting-group-title">Data</div>
-      <button class="btn btn-ghost" id="btnExportJSON" style="margin-top:0"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>EXPORT JSON</button>
-      <button class="btn btn-danger" id="btnReset" style="margin-top:8px"><svg class="ic" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>HOLD 2 DETIK UNTUK RESET</button>
-    </div>
-    <div style="text-align:center;font-size:.56rem;color:var(--muted-2);letter-spacing:1px;padding:10px 0">E-SEAMONEY v2.6 · BY XENA</div>
-  </div>
-</div>
-
-<nav class="bottom-nav" id="bottomNav" style="opacity:0;pointer-events:none;transition:opacity .4s">
-  <div class="inner">
-    <button class="nav-btn active" data-tab="dashboard"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Home</span></button>
-    <button class="nav-btn" data-tab="transaksi"><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="14" x2="16" y2="14"/></svg><span>Transaksi</span></button>
-    <button class="nav-btn" data-tab="marketing"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l18-8v18l-18-8z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg><span>Marketing</span></button>
-    <button class="nav-btn" data-tab="analitik"><svg class="ic" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analitik</span></button>
-    <button class="nav-btn" data-tab="tarik"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Tarik</span></button>
-  </div>
-</nav>
-
-<script>
-/* ============================================================
-   DATA
-   ============================================================ */
-const COUNTRIES = [
-  { code:'62',iso:'ID',name:'Indonesia',digits:10,color:'#ff3d63' },
-  { code:'55',iso:'BR',name:'Brasil',digits:10,color:'#00a86b' },
-  { code:'1',iso:'US',name:'Amerika Serikat',digits:10,color:'#5aa9ff' },
-  { code:'44',iso:'GB',name:'Inggris',digits:10,color:'#4d6fff' },
-  { code:'91',iso:'IN',name:'India',digits:10,color:'#ff9f43' },
-  { code:'86',iso:'CN',name:'Tiongkok',digits:10,color:'#ff3d63' },
-  { code:'81',iso:'JP',name:'Jepang',digits:10,color:'#ff5c8a' },
-  { code:'82',iso:'KR',name:'Korea Selatan',digits:10,color:'#5aa9ff' },
-  { code:'61',iso:'AU',name:'Australia',digits:9,color:'#22d3ee' },
-  { code:'49',iso:'DE',name:'Jerman',digits:10,color:'#a78bfa' },
-  { code:'33',iso:'FR',name:'Prancis',digits:9,color:'#5aa9ff' },
-  { code:'39',iso:'IT',name:'Italia',digits:10,color:'#00e08a' },
-  { code:'34',iso:'ES',name:'Spanyol',digits:9,color:'#ffd166' },
-  { code:'7',iso:'RU',name:'Rusia',digits:10,color:'#ff7d97' },
-  { code:'52',iso:'MX',name:'Meksiko',digits:10,color:'#00a86b' },
-  { code:'27',iso:'ZA',name:'Afrika Selatan',digits:9,color:'#ffd166' },
-  { code:'20',iso:'EG',name:'Mesir',digits:10,color:'#ff9f43' },
-  { code:'60',iso:'MY',name:'Malaysia',digits:9,color:'#5aa9ff' },
-  { code:'65',iso:'SG',name:'Singapura',digits:8,color:'#ff3d63' },
-  { code:'66',iso:'TH',name:'Thailand',digits:9,color:'#a78bfa' },
-  { code:'84',iso:'VN',name:'Vietnam',digits:9,color:'#ff3d63' },
-  { code:'63',iso:'PH',name:'Filipina',digits:10,color:'#5aa9ff' },
-  { code:'92',iso:'PK',name:'Pakistan',digits:10,color:'#00a86b' },
-  { code:'880',iso:'BD',name:'Bangladesh',digits:10,color:'#00a86b' },
-  { code:'234',iso:'NG',name:'Nigeria',digits:10,color:'#00e08a' },
-  { code:'90',iso:'TR',name:'Turki',digits:10,color:'#ff3d63' },
-];
-const WALLETS = [
-  { id:'dana',name:'DANA',color:'#118EEA',letter:'D' },
-  { id:'ovo',name:'OVO',color:'#4C3494',letter:'O' },
-  { id:'gopay',name:'GoPay',color:'#00AA13',letter:'G' },
-  { id:'shopeepay',name:'ShopeePay',color:'#EE4D2D',letter:'S' },
-  { id:'linkaja',name:'LinkAja',color:'#E31E24',letter:'L' },
-  { id:'jenius',name:'Jenius',color:'#0075C9',letter:'J' },
-];
-const LEVELS = [
-  {lvl:1,xp:0,name:'Bronze',color:'#cd7f32'},{lvl:2,xp:10,name:'Silver',color:'#c0c0c0'},
-  {lvl:3,xp:25,name:'Gold',color:'#ffd166'},{lvl:4,xp:50,name:'Platinum',color:'#e5e4e2'},
-  {lvl:5,xp:100,name:'Diamond',color:'#b9f2ff'},{lvl:6,xp:250,name:'Master',color:'#a78bfa'},
-  {lvl:7,xp:500,name:'Grandmaster',color:'#ff7d97'},{lvl:8,xp:1000,name:'Legend',color:'#00ffa3'},
-];
-const ACHIEVEMENTS = [
-  {id:'first_tx',name:'Pertama',icon:'star',check:s=>s.count>=1},
-  {id:'tx_10',name:'Pemula',icon:'check',check:s=>s.count>=10},
-  {id:'tx_100',name:'Rutin',icon:'list',check:s=>s.count>=100},
-  {id:'tx_1000',name:'Veteran',icon:'trophy',check:s=>s.count>=1000},
-  {id:'earn_100k',name:'100rb',icon:'money',check:s=>s.balance>=100000},
-  {id:'earn_1jt',name:'Jutawan',icon:'gem',check:s=>s.balance>=1000000},
-  {id:'cty_5',name:'Explore',icon:'globe',check:s=>Object.keys(s.countryStats).length>=5},
-  {id:'cty_10',name:'Global',icon:'globe2',check:s=>Object.keys(s.countryStats).length>=10},
-];
-const ACH_ICONS = {
-  star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-  check:'<polyline points="20 6 9 17 4 12"/>',
-  list:'<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
-  trophy:'<path d="M6 9H4.5a2.5 2.5 0 010-5H6M18 9h1.5a2.5 2.5 0 000-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0012 0V2z"/>',
-  money:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>',
-  gem:'<polygon points="6 3 18 3 22 9 12 22 2 9 6 3"/><line x1="2" y1="9" x2="22" y2="9"/><line x1="12" y1="3" x2="12" y2="9"/>',
-  globe:'<circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>',
-  globe2:'<circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>',
-};
-
-const STORAGE_KEY = 'moneyflow_v2';
-const DEFAULT_STATE = {
-  paired:false,online:false,balance:0,today:0,count:0,xp:0,level:1,
-  phone:'',code:'',transactions:[],countryStats:{},
-  marketing:{views:0,clicks:0,conversions:0,todayViews:0,todayClicks:0,todayConv:0,activity:[],viewHistory:[0,0,0,0,0,0,0]},
-  withdrawals:[],balanceHistory:[],streak:0,lastOnlineDate:null,
-  dailyTarget:1000000,settings:{sound:true,haptic:true,rate:2000},
-  achievements:[],viewerCount:1248,
-};
-
-let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-let earningTimer = null, marketingTimer = null, notifTimer = null;
-let isBusy = false, selectedWallet = null;
-let filterMode = 'all', searchQuery = '';
-let displayedBalance = 0, tweenRaf = null;
-let holdResetTimer = null;
-let currentReceiptId = null;
-let currentTabIndex = 0;
-const MAX_TX = 60, MAX_FEED = 40;
-const MONTHS_ID = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-
-const $ = id => document.getElementById(id);
-const fmtRp = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
-const fmtNum = n => Math.round(n).toLocaleString('id-ID');
-const pad = (n,len=2) => String(n).padStart(len,'0');
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-const rand = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
-const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-const timeStr = () => { const d = new Date(); return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds()); };
-const dateStr = () => { const d = new Date(); return d.toISOString().slice(0,10); };
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-
-function formatDateTimeID(iso){
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS_ID[d.getMonth()]} ${d.getFullYear()} · ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} WIB`;
-}
-function genRefId(){
-  const d = new Date();
-  const ymd = String(d.getFullYear()).slice(2) + pad(d.getMonth()+1) + pad(d.getDate());
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let r = '';
-  for (let i=0;i<6;i++) r += chars[Math.floor(Math.random()*chars.length)];
-  return 'MF-' + ymd + '-' + r;
-}
-/* Random transaction ID - crypto-secure */
-function genTxId(){
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let rnd = '';
-  if (window.crypto?.getRandomValues) {
-    const arr = new Uint8Array(12);
-    crypto.getRandomValues(arr);
-    for (let i=0;i<12;i++) rnd += chars[arr[i] % chars.length];
-  } else {
-    for (let i=0;i<12;i++) rnd += chars[Math.floor(Math.random()*chars.length)];
-  }
-  return 'TRX-' + rnd.slice(0,4) + '-' + rnd.slice(4,8) + '-' + rnd.slice(8,12);
-}
-
-function save(){ try { const s = {...state}; localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch(e){} }
-function load(){ try { const r = localStorage.getItem(STORAGE_KEY); if (!r) return; const s = JSON.parse(r); state = {...DEFAULT_STATE, ...s}; state.settings = {...DEFAULT_STATE.settings, ...(s.settings||{})}; state.marketing = {...DEFAULT_STATE.marketing, ...(s.marketing||{})}; } catch(e){} }
-
-/* Sound */
-let audioCtx = null;
-function playSound(type='coin'){
-  if (!state.settings.sound) return;
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    if (type==='coin'){
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.frequency.setValueAtTime(880, audioCtx.currentTime);
-      o.frequency.setValueAtTime(1320, audioCtx.currentTime + 0.05);
-      g.gain.setValueAtTime(0.06, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
-      o.start(); o.stop(audioCtx.currentTime + 0.18);
-    } else if (type==='success' || type==='levelup'){
-      [523,659,784,1047].forEach((freq,i)=>{
-        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.frequency.value = freq;
-        const t = audioCtx.currentTime + i*0.09;
-        g.gain.setValueAtTime(0.055, t);
-        g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-        o.start(t); o.stop(t + 0.22);
-      });
-    } else if (type==='error'){
-      [400,300,200].forEach((freq,i)=>{
-        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.frequency.value = freq; o.type = 'sawtooth';
-        const t = audioCtx.currentTime + i*0.1;
-        g.gain.setValueAtTime(0.05, t);
-        g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-        o.start(t); o.stop(t + 0.2);
-      });
-    }
-  } catch(e){}
-}
-function haptic(ms=25){ if (state.settings.haptic && navigator.vibrate) navigator.vibrate(ms); }
-
-function toast(msg, type='ok'){
-  const el = document.createElement('div');
-  el.className = 'toast' + (type==='warn'?' warn':'') + (type==='info'?' info':'');
-  const ic = type==='warn' ? '<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>' : type==='info' ? '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>' : '<polyline points="20 6 9 17 4 12"/>';
-  el.innerHTML = `<span class="t-ic"><svg class="ic" viewBox="0 0 24 24">${ic}</svg></span><span>${msg}</span>`;
-  $('toastWrap').appendChild(el);
-  setTimeout(()=>{ el.classList.add('leaving'); setTimeout(()=>el.remove(), 380); }, 2600);
-}
-
-function spawnConfetti(count=70){
-  const canvas = $('confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = window.innerWidth * dpr; canvas.height = window.innerHeight * dpr;
-  canvas.style.width = window.innerWidth + 'px'; canvas.style.height = window.innerHeight + 'px';
-  ctx.scale(dpr, dpr);
-  canvas.classList.add('active');
-  const W = window.innerWidth, H = window.innerHeight;
-  const colors = ['#00ffa3','#00d982','#ffd166','#5aa9ff','#a78bfa','#ff3d63','#22d3ee'];
-  const parts = [];
-  for (let i=0;i<count;i++){
-    parts.push({ x:Math.random()*W, y:-20-Math.random()*120, vx:(Math.random()-0.5)*6, vy:Math.random()*3+2, size:Math.random()*7+4, color:colors[Math.floor(Math.random()*colors.length)], rot:Math.random()*360, rotS:(Math.random()-0.5)*14, life:1 });
-  }
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    let alive = false;
-    parts.forEach(p=>{
-      p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.vx *= 0.99;
-      p.rot += p.rotS; p.life -= 0.006;
-      if (p.y < H+40 && p.life > 0){
-        alive = true;
-        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
-        ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0,p.life);
-        ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
-        ctx.restore();
-      }
-    });
-    if (alive) requestAnimationFrame(frame);
-    else { ctx.clearRect(0,0,W,H); canvas.classList.remove('active'); }
-  }
-  frame();
-}
-
-function tweenBalance(target){
-  const start = displayedBalance, t0 = performance.now(), dur = 480;
-  if (tweenRaf) cancelAnimationFrame(tweenRaf);
-  const step = now => {
-    const p = Math.min(1,(now-t0)/dur);
-    const e = 1 - Math.pow(1-p,3);
-    displayedBalance = start + (target-start)*e;
-    $('balanceNum').textContent = fmtNum(displayedBalance);
-    if (p<1) tweenRaf = requestAnimationFrame(step);
-    else displayedBalance = target;
-  };
-  tweenRaf = requestAnimationFrame(step);
-}
-
-function drawBalanceChart(){
-  const canvas = $('balanceChart');
-  if (!canvas) return;
-  const dpr = window.devicePixelRatio || 1;
-  const rect = canvas.getBoundingClientRect();
-  if (rect.width === 0) return;
-  canvas.width = rect.width * dpr; canvas.height = rect.height * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr, dpr);
-  const w = rect.width, h = rect.height;
-  const data = state.balanceHistory.slice(-50);
-  if (data.length < 2){ ctx.clearRect(0,0,w,h); return; }
-  const vals = data.map(d=>d.v);
-  const max = Math.max(...vals), min = Math.min(...vals);
-  const range = max - min || 1;
-  const padX = 4, padY = 6;
-  const pts = data.map((d,i) => ({ x: padX + (i/(data.length-1))*(w-padX*2), y: h - padY - ((d.v-min)/range)*(h-padY*2) }));
-  ctx.clearRect(0,0,w,h);
-  const grad = ctx.createLinearGradient(0,0,0,h);
-  grad.addColorStop(0,'rgba(0,255,163,.35)'); grad.addColorStop(1,'rgba(0,255,163,0)');
-  ctx.beginPath(); ctx.moveTo(pts[0].x, h);
-  pts.forEach(p=>ctx.lineTo(p.x,p.y));
-  ctx.lineTo(pts[pts.length-1].x, h); ctx.closePath();
-  ctx.fillStyle = grad; ctx.fill();
-  ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
-  for (let i=1;i<pts.length;i++){
-    const prev = pts[i-1], curr = pts[i];
-    const cx = (prev.x+curr.x)/2;
-    ctx.quadraticCurveTo(prev.x, prev.y, cx, (prev.y+curr.y)/2);
-    ctx.quadraticCurveTo(cx, (prev.y+curr.y)/2, curr.x, curr.y);
-  }
-  ctx.strokeStyle = '#00ffa3'; ctx.lineWidth = 2.2;
-  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-  ctx.shadowColor = '#00ffa3'; ctx.shadowBlur = 10; ctx.stroke();
-  ctx.shadowBlur = 0;
-  const last = pts[pts.length-1];
-  ctx.beginPath(); ctx.arc(last.x,last.y,3.5,0,Math.PI*2);
-  ctx.fillStyle = '#00ffa3'; ctx.shadowColor='#00ffa3'; ctx.shadowBlur=14; ctx.fill();
-  ctx.shadowBlur = 0;
-}
-
-async function runLogin(){
-  const s = $('loginStatus'), b = $('loginProgress');
-  const dots = '<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
-  const steps = ['Memverifikasi perangkat','Menghubungkan ke server','Memuat data akun','Menyiapkan dashboard'];
-  for (let i=0;i<steps.length;i++){
-    s.innerHTML = steps[i] + dots;
-    b.style.width = ((i+1)/steps.length*100)+'%';
-    await sleep(560);
-  }
-  s.innerHTML = 'Berhasil' + dots;
-  await sleep(220);
-  $('loginScreen').classList.add('hidden');
-  $('mainApp').style.opacity = '1'; $('mainApp').style.pointerEvents = 'auto';
-  $('bottomNav').style.opacity = '1'; $('bottomNav').style.pointerEvents = 'auto';
-}
-
-const ICON_PLAY = '<polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none"/>';
-const ICON_STOP = '<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/>';
-
-function updateUI(){
-  const pill = $('statusPill');
-  if (state.online){
-    pill.classList.add('online'); $('statusText').textContent = 'ONLINE';
-    $('balanceCard').classList.add('running');
-    $('connStatus').textContent = 'ONLINE'; $('connStatus').className = 'val state-online';
-    $('btnToggle').className = 'toggle-online is-online';
-    $('toggleIconSvg').innerHTML = ICON_STOP;
-    $('toggleText').textContent = 'HENTIKAN (OFFLINE)';
-  } else {
-    pill.classList.remove('online'); $('statusText').textContent = 'OFFLINE';
-    $('balanceCard').classList.remove('running');
-    $('connStatus').textContent = 'OFFLINE'; $('connStatus').className = 'val state-offline';
-    $('btnToggle').className = 'toggle-online is-offline';
-    $('toggleIconSvg').innerHTML = ICON_PLAY;
-    $('toggleText').textContent = 'MULAI ONLINE';
-  }
-  updateLevel(); updateDailyRing(); updateRateDisplay();
-}
-
-function updateLevel(){
-  let lvl = LEVELS[0], next = LEVELS[1];
-  for (let i=0;i<LEVELS.length;i++){ if (state.xp >= LEVELS[i].xp){ lvl = LEVELS[i]; next = LEVELS[i+1] || null; } }
-  state.level = lvl.lvl;
-  $('levelBadge').textContent = 'LV ' + lvl.lvl;
-  $('levelBadge').style.background = `linear-gradient(135deg, ${lvl.color}, ${lvl.color}cc)`;
-  $('levelBadge').style.color = lvl.lvl >= 5 ? '#001a0e' : '#1a1000';
-  $('levelName').textContent = lvl.name;
-  if (next){
-    const range = next.xp - lvl.xp, prog = state.xp - lvl.xp;
-    const pct = Math.min(100, (prog/range)*100);
-    $('levelXp').textContent = prog + '/' + range + ' XP';
-    $('levelBarFill').style.width = pct + '%';
-  } else {
-    $('levelXp').textContent = state.xp + ' XP · MAX';
-    $('levelBarFill').style.width = '100%';
-  }
-}
-function updateDailyRing(){
-  const pct = Math.min(100, (state.today / state.dailyTarget) * 100);
-  const circ = 188.5;
-  $('dailyRing').style.strokeDashoffset = circ * (1 - pct/100);
-  $('ringPct').textContent = Math.round(pct) + '%';
-}
-function updateRateDisplay(){ $('rateDisplay').textContent = '+Rp ' + fmtNum(state.settings.rate) + ' / detik'; }
-
-function startEarning(){
-  if (earningTimer) return;
-  const today = dateStr();
-  if (state.lastOnlineDate !== today){
-    const d = new Date(); d.setDate(d.getDate()-1);
-    const yest = d.toISOString().slice(0,10);
-    if (state.lastOnlineDate === yest) state.streak += 1;
-    else state.streak = 1;
-    state.lastOnlineDate = today; save();
-  }
-  earningTimer = setInterval(() => {
-    state.balance += state.settings.rate;
-    state.today += state.settings.rate;
-    state.count += 1;
-    state.xp += 1;
-    state.balanceHistory.push({ t: Date.now(), v: state.balance });
-    if (state.balanceHistory.length > 80) state.balanceHistory.shift();
-    tweenBalance(state.balance);
-    $('todayText').textContent = fmtRp(state.today);
-    $('countText').textContent = state.count + 'x';
-    $('withdrawBalance').textContent = fmtRp(state.balance);
-    drawBalanceChart(); updateDailyRing(); updateLevel(); checkAchievements();
-    addTransaction();
-    spawnTicker('+ ' + fmtRp(state.settings.rate));
-    playSound('coin'); haptic(15); save();
-  }, 1000);
-}
-function stopEarning(){ if (earningTimer){ clearInterval(earningTimer); earningTimer = null; } }
-
-function startMarketing(){
-  if (marketingTimer) return;
-  marketingTimer = setInterval(() => {
-    const v = rand(1,4);
-    state.marketing.views += v; state.marketing.todayViews += v;
-    state.marketing.viewHistory[6] += v;
-    $('viewsText').textContent = fmtNum(state.marketing.views);
-    if (Math.random() < 0.85){ const c = pickCountry(); pushActivity('view', c, v + ' view'); }
-    if (Math.random() < 0.15){ const c = pickCountry(); state.marketing.clicks += 1; state.marketing.todayClicks += 1; pushActivity('click', c, 'klik'); }
-    if (Math.random() < 0.04){ const c = pickCountry(); state.marketing.conversions += 1; state.marketing.todayConv += 1; pushActivity('conv', c, 'konversi'); }
-    renderMarketing();
-  }, 1800);
-  if (notifTimer) clearInterval(notifTimer);
-  notifTimer = setInterval(showFakeNotif, rand(14000, 28000));
-}
-function stopMarketing(){
-  if (marketingTimer){ clearInterval(marketingTimer); marketingTimer = null; }
-  if (notifTimer){ clearInterval(notifTimer); notifTimer = null; }
-}
-
-const FAKE_NAMES = ['Rina','Andi','Budi','Sari','Dewi','Joko','Ani','Rudi','Maya','Tono','Lina','Bayu','Fitri','Agus','Citra','Eko','Indah','Putri'];
-const FAKE_CITIES = ['Bandung','Surabaya','Jakarta','Medan','Semarang','Yogyakarta','Makassar','Palembang','Denpasar','Malang','Bekasi','Tangerang'];
-const NOTIF_COLORS = ['#00e08a','#5aa9ff','#a78bfa','#ffd166','#ff9f43','#22d3ee','#ff3d63'];
-function showFakeNotif(){
-  if (!state.online) return;
-  const name = pick(FAKE_NAMES), city = pick(FAKE_CITIES);
-  const mins = rand(1,12), color = pick(NOTIF_COLORS);
-  const el = document.createElement('div');
-  el.className = 'notif-popup';
-  el.innerHTML = `<div class="notif-avatar" style="background:${color}">${name[0]}</div><div class="notif-body"><div class="notif-title">${name} dari ${city}</div><div class="notif-sub">baru saja pairing · ${mins} menit lalu</div></div>`;
-  document.body.appendChild(el);
-  setTimeout(()=>{ el.style.transition='opacity .4s, transform .4s'; el.style.opacity='0'; el.style.transform='translateY(-20px)'; setTimeout(()=>el.remove(), 420); }, 4200);
-}
-
-function genPhone(c){
-  let d = '';
-  for (let i=0;i<c.digits;i++) d += Math.floor(Math.random()*10);
-  return '+' + c.code + ' ' + [d.slice(0,3), d.slice(3,6), d.slice(6)].filter(Boolean).join(' ');
-}
-function pickCountry(){ return pick(COUNTRIES); }
-
-function addTransaction(){
-  const c = pickCountry();
-  const tx = { id: uid(), phone: genPhone(c), country: c, amount: state.settings.rate, time: timeStr(), type:'in', date: dateStr() };
-  state.transactions.unshift(tx);
-  if (state.transactions.length > MAX_TX) state.transactions.pop();
-  state.countryStats[c.iso] = (state.countryStats[c.iso]||0) + 1;
-  renderTransaction(tx); renderStats(); renderAnalitik();
-}
-
-function txFlagStyle(c){ return `background:${c.color}22;border:1px solid ${c.color}55;color:${c.color}`; }
-function txItemHtml(tx){
-  return `<div class="tx-flag" style="${txFlagStyle(tx.country)}">${tx.country.iso}</div><div class="tx-body"><div class="tx-phone">${tx.phone}</div><div class="tx-meta"><span>${tx.time}</span><span class="tx-dot"></span><span>${tx.country.name}</span></div></div><div class="tx-amount">+${fmtRp(tx.amount)}</div>`;
-}
-function renderTransaction(tx){
-  const dashList = $('dashTxList');
-  if (dashList.querySelector('.tx-empty')) dashList.innerHTML = '';
-  if (shouldShowTx(tx)){
-    const el1 = document.createElement('div');
-    el1.className = 'tx-item'; el1.innerHTML = txItemHtml(tx);
-    el1.addEventListener('click', () => showTxDetail(tx));
-    dashList.prepend(el1);
-    while (dashList.children.length > 5) dashList.lastElementChild.remove();
-  }
-  const fullList = $('txList');
-  if (fullList.querySelector('.tx-empty')) fullList.innerHTML = '';
-  if (shouldShowTx(tx)){
-    const el2 = document.createElement('div');
-    el2.className = 'tx-item'; el2.innerHTML = txItemHtml(tx);
-    el2.addEventListener('click', () => showTxDetail(tx));
-    fullList.prepend(el2);
-    while (fullList.children.length > MAX_TX) fullList.lastElementChild.remove();
-  }
-  $('dashTxCount').textContent = state.transactions.length;
-  $('txListCount').textContent = state.transactions.length;
-}
-function shouldShowTx(tx){
-  if (filterMode !== 'all' && tx.country.code !== filterMode) return false;
-  if (searchQuery){
-    const q = searchQuery.toLowerCase();
-    if (!tx.phone.toLowerCase().includes(q) && !(tx.country.name + ' ' + tx.country.iso + ' ' + tx.country.code).toLowerCase().includes(q)) return false;
-  }
-  return true;
-}
-function renderAllTx(){
-  const fullList = $('txList');
-  fullList.innerHTML = '';
-  const filtered = state.transactions.filter(shouldShowTx);
-  if (filtered.length === 0){
-    fullList.innerHTML = `<div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/></svg></div>${state.transactions.length===0?'Belum ada transaksi.':'Tidak ada hasil untuk filter ini.'}</div>`;
-    return;
-  }
-  filtered.slice(0, MAX_TX).forEach(tx => {
-    const el = document.createElement('div');
-    el.className = 'tx-item'; el.innerHTML = txItemHtml(tx);
-    el.addEventListener('click', () => showTxDetail(tx));
-    fullList.appendChild(el);
-  });
-}
-function renderStats(){
-  $('statTxCount').textContent = fmtNum(state.count);
-  $('statCountryCount').textContent = Object.keys(state.countryStats).length;
-  $('statTxSub').textContent = state.count + ' dari ' + Object.keys(state.countryStats).length + ' negara';
-}
-
-function showTxDetail(tx){
-  const c = tx.country;
-  $('modalContent').innerHTML = `
-    <div class="detail-row"><span class="dl">ID</span><span class="dv">${tx.id}</span></div>
-    <div class="detail-row"><span class="dl">Nomor</span><span class="dv">${tx.phone}</span></div>
-    <div class="detail-row"><span class="dl">Negara</span><span class="dv" style="color:${c.color}">${c.name} (+${c.code})</span></div>
-    <div class="detail-row"><span class="dl">ISO</span><span class="dv">${c.iso}</span></div>
-    <div class="detail-row"><span class="dl">Jumlah</span><span class="dv green">+${fmtRp(tx.amount)}</span></div>
-    <div class="detail-row"><span class="dl">Waktu</span><span class="dv">${tx.time}</span></div>
-    <div class="detail-row"><span class="dl">Tanggal</span><span class="dv">${tx.date || dateStr()}</span></div>
-    <div class="detail-row"><span class="dl">Tipe</span><span class="dv" style="color:var(--green-b)">MASUK</span></div>
-    <button class="modal-copy-btn" id="btnCopyTx"><svg class="ic" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>SALIN DETAIL</button>
-  `;
-  $('modalBackdrop').classList.add('show');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => {
-    const btn = $('btnCopyTx');
-    if (btn) btn.addEventListener('click', () => {
-      const text = `E-SEAMONEY Transaction\nID: ${tx.id}\nNomor: ${tx.phone}\nNegara: ${c.name}\nJumlah: ${fmtRp(tx.amount)}\nWaktu: ${tx.time}`;
-      copyText(text).then(()=>toast('Detail disalin.')).catch(()=>toast('Gagal menyalin.','warn'));
-      haptic(30);
-    });
-  }, 50);
-}
-
-function pushActivity(type, country, label){
-  const item = { type, country, label, time: timeStr() };
-  state.marketing.activity.unshift(item);
-  if (state.marketing.activity.length > MAX_FEED) state.marketing.activity.pop();
-  renderFeed(item);
-}
-function feedHtml(item){
-  let icon = '';
-  if (item.type==='view') icon = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-  if (item.type==='click') icon = '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>';
-  if (item.type==='conv') icon = '<path d="M3 11l18-8v18l-18-8z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/>';
-  const c = item.country;
-  return `<div class="feed-ic"><svg class="ic" viewBox="0 0 24 24">${icon}</svg></div><div class="feed-body"><div class="feed-title">${item.type==='view'?'View':item.type==='click'?'Klik':'Konversi'} <span class="feed-country" style="color:${c.color};background:${c.color}22;border:1px solid ${c.color}55">${c.iso}</span></div><div class="feed-time">${item.time} · +${c.code}</div></div><div class="feed-amount ${item.type==='view'?'neutral':''}">${item.label}</div>`;
-}
-function renderFeed(item){
-  const feed = $('feed');
-  if (feed.querySelector('.tx-empty')) feed.innerHTML = '';
-  const el = document.createElement('div');
-  el.className = 'feed-item ' + item.type;
-  el.innerHTML = feedHtml(item);
-  feed.prepend(el);
-  while (feed.children.length > MAX_FEED) feed.lastElementChild.remove();
-  $('feedCount').textContent = state.marketing.activity.length;
-}
-function renderMarketing(){
-  const m = state.marketing;
-  $('mktViews').textContent = fmtNum(m.views);
-  $('mktClicks').textContent = fmtNum(m.clicks);
-  $('mktConv').textContent = fmtNum(m.conversions);
-  const ctr = m.views > 0 ? (m.clicks / m.views * 100) : 0;
-  $('mktCtr').textContent = ctr.toFixed(2) + '%';
-  $('mktViewsSub').textContent  = '+' + fmtNum(m.todayViews) + ' hari ini';
-  $('mktClicksSub').textContent = '+' + fmtNum(m.todayClicks) + ' hari ini';
-  $('mktConvSub').textContent   = '+' + fmtNum(m.todayConv) + ' hari ini';
-  $('funnelViews').textContent = fmtNum(m.views);
-  $('funnelClicks').textContent = fmtNum(m.clicks);
-  $('funnelConv').textContent = fmtNum(m.conversions);
-  const clickPct = m.views > 0 ? Math.max(2, Math.min(100, m.clicks/m.views*100)) : 0;
-  const convPct  = m.views > 0 ? Math.max(2, Math.min(100, m.conversions/m.views*100)) : 0;
-  $('funnelClicksFill').style.width = clickPct + '%';
-  $('funnelConvFill').style.width   = convPct + '%';
-  $('viewsText').textContent = fmtNum(m.views);
-  renderSpark();
-}
-function renderSpark(){
-  const data = state.marketing.viewHistory;
-  const max = Math.max(1, ...data);
-  const days = ['-6','-5','-4','-3','-2','-1','K'];
-  $('sparkChart').innerHTML = data.map((v,i) => {
-    const h = Math.max(4, (v/max)*100);
-    const today = i === data.length-1 ? 'today' : '';
-    return `<div class="spark-col"><div class="spark-bar ${today}" style="height:${h}%"></div><div class="spark-lbl">${days[i]}</div></div>`;
-  }).join('');
-}
-function renderAnalitik(){
-  const entries = Object.entries(state.countryStats).map(([iso, count]) => {
-    const c = COUNTRIES.find(x => x.iso === iso);
-    return { iso, count, code: c ? c.code : '', color: c ? c.color : '#5aa9ff' };
-  }).sort((a,b) => b.count - a.count).slice(0, 8);
-  $('topCountryCount').textContent = Object.keys(state.countryStats).length;
-  if (entries.length === 0){
-    $('topCountries').innerHTML = `<div class="tx-empty" style="padding:20px 10px"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>Data negara akan muncul setelah transaksi.</div>`;
-    return;
-  }
-  const max = entries[0].count;
-  $('topCountries').innerHTML = entries.map(e => {
-    const pct = (e.count/max)*100;
-    return `<div class="bar-row"><div class="bar-label" style="color:${e.color}">+${e.code}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${e.color}aa,${e.color})"></div></div><div class="bar-value" style="color:${e.color}">${e.count}</div></div>`;
-  }).join('');
-}
-function spawnTicker(text){
-  const el = document.createElement('div');
-  el.className = 'ticker'; el.textContent = text;
-  $('tickerArea').appendChild(el);
-  while ($('tickerArea').children.length > 5) $('tickerArea').firstElementChild.remove();
-  setTimeout(() => el.remove(), 1600);
-}
-function checkAchievements(){
-  ACHIEVEMENTS.forEach(a => {
-    if (!state.achievements.includes(a.id) && a.check(state)){
-      state.achievements.push(a.id);
-      toast('Pencapaian: ' + a.name + '!', 'info');
-      spawnConfetti(40); playSound('levelup'); haptic(50);
-      renderAchievements(); save();
-    }
-  });
-}
-function renderAchievements(){
-  const grid = $('achievementsGrid');
-  if (!grid) return;
-  grid.innerHTML = ACHIEVEMENTS.map(a => {
-    const unlocked = state.achievements.includes(a.id);
-    const icon = ACH_ICONS[a.icon] || ACH_ICONS.star;
-    return `<div class="ach-badge ${unlocked?'unlocked':''}"><div class="ach-ic"><svg class="ic" viewBox="0 0 24 24">${icon}</svg></div><div class="ach-nm">${a.name}</div></div>`;
-  }).join('');
-}
-
-/* ============================================================
-   WITHDRAWAL
-   ============================================================ */
-function getAvailableBalance(){
-  const pendingTotal = state.withdrawals.filter(w => w.status === 'pending').reduce((s,w)=>s+w.total, 0);
-  return state.balance - pendingTotal;
-}
-
-function initWalletGrid(){
-  const grid = $('walletGrid');
-  grid.innerHTML = WALLETS.map(w => `
-    <div class="wallet-opt" data-wallet="${w.id}">
-      <div class="wallet-logo" style="background:${w.color}">${w.letter}</div>
-      <div class="wallet-name">${w.name}</div>
-    </div>
-  `).join('');
-  grid.querySelectorAll('.wallet-opt').forEach(el => {
-    el.addEventListener('click', () => {
-      grid.querySelectorAll('.wallet-opt').forEach(x=>x.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedWallet = WALLETS.find(w => w.id === el.dataset.wallet);
-      haptic(20);
-      updateFeeBreakdown();
-    });
-  });
-}
-
-function updateFeeBreakdown(){
-  const amt = parseInt(($('withdrawAmount').value||'0').replace(/\D/g,'')) || 0;
-  const fee = amt > 0 ? 2500 : 0;
-  const total = amt + fee;
-  $('feeAmount').textContent = fmtRp(amt);
-  $('feeFee').textContent = fmtRp(fee);
-  $('feeTotal').textContent = fmtRp(total);
-}
-
-function renderWithdrawHistory(){
-  const list = $('withdrawHistory');
-  if (!list) return;
-  $('withdrawHistoryCount').textContent = state.withdrawals.length;
-  if (state.withdrawals.length === 0){
-    list.innerHTML = `<div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>Belum ada penarikan.</div>`;
-    return;
-  }
-  list.innerHTML = state.withdrawals.map(w => {
-    const wallet = WALLETS.find(x => x.id === w.walletId) || WALLETS[0];
-    const cls = w.status === 'pending' ? 'pending' : w.status === 'failed' ? 'failed' : '';
-    const statusLabel = w.status === 'pending' ? 'PENDING' : w.status === 'failed' ? 'GAGAL' : 'SUKSES';
-    return `<div class="withdraw-history-item ${cls}">
-      <div class="wd-logo" style="background:${wallet.color}">${wallet.letter}</div>
-      <div class="wd-body">
-        <div class="wd-title">${wallet.name} <span class="wd-status-badge ${cls}">${statusLabel}</span></div>
-        <div class="wd-meta">${w.time} · ${w.phone}</div>
-      </div>
-      <div class="wd-right">
-        <div class="wd-amount">-${fmtRp(w.amount)}</div>
-        <button class="wd-receipt-btn" data-receipt="${w.id}">BUKTI</button>
-      </div>
-    </div>`;
-  }).join('');
-  list.querySelectorAll('.wd-receipt-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => { e.stopPropagation(); showReceipt(btn.dataset.receipt); });
-  });
-}
-
-async function processWithdrawal(){
-  const amt = parseInt(($('withdrawAmount').value||'0').replace(/\D/g,'')) || 0;
-  const phone = ($('withdrawPhone').value||'').replace(/\D/g,'');
-  const fee = 2500;
-  const total = amt + fee;
-
-  if (!selectedWallet){ toast('Pilih e-wallet dulu.','warn'); haptic(60); return; }
-  if (amt < 10000){ toast('Minimal penarikan Rp 10.000.','warn'); haptic(60); return; }
-  if (total > getAvailableBalance()){ toast('Saldo tidak cukup.','warn'); haptic(60); return; }
-  if (phone.length < 8){ toast('Nomor e-wallet tidak valid.','warn'); haptic(60); return; }
-
-  const w = {
-    id: uid(),
-    refId: genRefId(),
-    txId: genTxId(),
-    walletId: selectedWallet.id,
-    amount: amt,
-    fee,
-    total,
-    phone: '+62 ' + phone,
-    timestamp: new Date().toISOString(),
-    time: timeStr(),
-    date: dateStr(),
-    status: 'pending',
-    resolveAt: Date.now() + rand(5000, 8000),
-  };
-  state.withdrawals.unshift(w);
-  if (state.withdrawals.length > 40) state.withdrawals.pop();
-  save();
-  renderWithdrawHistory();
-
-  const walletSnapshot = selectedWallet;
-  $('withdrawAmount').value = '';
-  $('withdrawPhone').value = '';
-  selectedWallet = null;
-  document.querySelectorAll('.wallet-opt').forEach(x=>x.classList.remove('selected'));
-  document.querySelectorAll('.preset-chip').forEach(x=>x.classList.remove('active'));
-  updateFeeBreakdown();
-
-  const overlay = $('processingOverlay');
-  overlay.classList.add('show');
-  $('procBar').style.width = '0%';
-  const steps = ['Memverifikasi saldo...', 'Menghubungi ' + walletSnapshot.name + '...', 'Mengirim permintaan...', 'Menunggu konfirmasi...'];
-  for (let i=0;i<steps.length;i++){
-    $('procStatus').textContent = steps[i];
-    $('procBar').style.width = ((i+1)/steps.length*100)+'%';
-    await sleep(550);
-  }
-  overlay.classList.remove('show');
-
-  showReceipt(w.id);
-
-  const delay = Math.max(500, w.resolveAt - Date.now());
-  setTimeout(() => resolveWithdrawal(w.id), delay);
-}
-
-function resolveWithdrawal(id){
-  const w = state.withdrawals.find(x => x.id === id);
-  if (!w || w.status !== 'pending') return;
-  const success = Math.random() < 0.85;
-  if (success){
-    if (w.total > state.balance){
-      w.status = 'failed';
-      w.failReason = 'Saldo tidak mencukupi saat pemrosesan';
-    } else {
-      state.balance -= w.total;
-      displayedBalance = state.balance;
-      $('balanceNum').textContent = fmtNum(state.balance);
-      $('withdrawBalance').textContent = fmtRp(state.balance);
-      state.balanceHistory.push({ t: Date.now(), v: state.balance });
-      drawBalanceChart();
-      w.status = 'success';
-    }
-  } else {
-    w.status = 'failed';
-    w.failReason = pick(['Koneksi ke wallet timeout', 'Verifikasi nomor ditolak', 'Layanan wallet sedang maintenance', 'Nomor tujuan tidak terdaftar']);
-  }
-  save();
-  renderWithdrawHistory();
-  if (currentReceiptId === id){
-    updateReceiptStatus(w);
-  } else {
-    if (w.status === 'success'){ toast('Penarikan ' + fmtRp(w.amount) + ' berhasil!', 'ok'); playSound('success'); }
-    else { toast('Penarikan gagal: ' + w.failReason, 'warn'); playSound('error'); }
-  }
-}
-
-/* ============================================================
-   RECEIPT (DARK GLASS)
-   ============================================================ */
-function ensureReceiptFields(w){
-  if (!w.txId) w.txId = genTxId();
-  if (!w.receiverName) w.receiverName = pick(['Budi Santoso','Siti Rahayu','Ahmad Wijaya','Dewi Lestari','Rizky Pratama','Andi Kusuma','Maya Setiawan','Eko Hidayat']);
-  return w;
-}
-function copyText(text){
-  if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
-  return new Promise((resolve,reject)=>{
-    try{
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-      document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); document.body.removeChild(ta);
-      resolve();
-    }catch(e){ reject(e); }
-  });
-}
-
-function buildReceiptHtml(w){
-  ensureReceiptFields(w);
-  const wallet = WALLETS.find(x => x.id === w.walletId) || WALLETS[0];
-  const isPending = w.status === 'pending';
-  const isSuccess = w.status === 'success';
-  const isFailed  = w.status === 'failed';
-
-  const statusIcon = isPending
-    ? '<svg class="ic" viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-6.22-8.56"/></svg>'
-    : isSuccess
-      ? '<svg class="ic" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'
-      : '<svg class="ic" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-  const statusClass = isPending ? 'pending' : isSuccess ? 'success' : 'fail';
-
-  const subtitle = isPending
-    ? `Sedang diproses ke <b>${wallet.name}</b>`
-    : isSuccess
-      ? `Berhasil dikirim ke <b>${wallet.name}</b>`
-      : `Gagal dikirim ke <b>${wallet.name}</b>`;
-
-  const totalDisplay = isFailed ? fmtRp(0) : fmtRp(w.total);
-  const copyIcon = `<svg class="ic" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>`;
-
-  return `
-    <div class="receipt-topbar">
-      <button class="rc-close" id="btnCloseReceipt" aria-label="Tutup">
-        <svg class="ic" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <div class="rc-top-actions">
-        <button class="rc-icon-btn" id="btnShareReceipt" aria-label="Bagikan">
-          <svg class="ic" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        </button>
-        <button class="rc-icon-btn" id="btnHelpReceipt" aria-label="Bantuan">
-          <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </button>
-      </div>
     </div>
 
-    <div class="rc-brandline">
-      <svg class="ic" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg>
-      E-SEAMONEY · BUKTI TRANSFER
-    </div>
+    <!-- ==================================================
+         JAVASCRIPT LOGIC
+         ================================================== -->
+    <script>
+        const API_URL = "https://anita-studio.netlify.app/.netlify/functions/amprem";
+        const VALID_KEY = "MARZ-VIP"; 
+        let userEmail = "";
 
-    <div class="rc-hero">
-      <div class="rc-hero-glow ${isFailed?'fail':isPending?'pending':''}"></div>
-      <div class="rc-status-icon ${statusClass}" data-html2canvas-ignore>${statusIcon}</div>
-      <div class="rc-amount" id="rcAmount"><span class="rc-amount-rp">Rp</span>${fmtNum(w.amount)}</div>
-      <div class="rc-subtitle">${subtitle}</div>
-    </div>
-
-    <div class="rc-perf"></div>
-
-    <div class="rc-body">
-      <div class="rc-row">
-        <span class="rc-l">Metode</span>
-        <span class="rc-v sans"><span class="wallet-mini" style="background:${wallet.color}">${wallet.letter}</span>${wallet.name}</span>
-      </div>
-      <div class="rc-row">
-        <span class="rc-l">Penerima</span>
-        <span class="rc-v sans">${w.receiverName}</span>
-      </div>
-      <div class="rc-row">
-        <span class="rc-l">Nomor</span>
-        <span class="rc-v">${w.phone}</span>
-      </div>
-      <div class="rc-row">
-        <span class="rc-l">ID Transaksi</span>
-        <span class="rc-v">${w.txId}<button class="copy-btn" data-copy="${w.txId}" aria-label="Salin">${copyIcon}</button></span>
-      </div>
-      <div class="rc-row">
-        <span class="rc-l">Waktu</span>
-        <span class="rc-v">${formatDateTimeID(w.timestamp)}</span>
-      </div>
-      ${isFailed && w.failReason ? `
-      <div class="rc-row">
-        <span class="rc-l">Alasan</span>
-        <span class="rc-v red sans" style="font-size:.66rem">${w.failReason}</span>
-      </div>` : ''}
-    </div>
-
-    <div class="rc-totals">
-      <div class="rc-total-row">
-        <span class="tl">Jumlah transfer</span>
-        <span class="tv">${fmtRp(w.amount)}</span>
-      </div>
-      <div class="rc-total-row">
-        <span class="tl">Biaya admin</span>
-        <span class="tv">${fmtRp(w.fee)}</span>
-      </div>
-      <div class="rc-total-row big ${isFailed?'failed':''}">
-        <span class="tl">Total</span>
-        <span class="tv">${totalDisplay}</span>
-      </div>
-    </div>
-
-    <div class="rc-qr-section">
-      <div class="rc-qr">${generateQR(w.txId)}</div>
-      <div class="rc-qr-text">
-        <div class="rc-qr-title">Scan untuk verifikasi</div>
-        <div class="rc-qr-sub">Bukti sah dan terverifikasi oleh sistem E-SEAMONEY</div>
-      </div>
-    </div>
-
-    <div class="rc-footer">
-      <strong>E-SEAMONEY DIGITAL</strong>
-      Bukti ini diterbitkan otomatis oleh sistem<br>
-      PT. Mockup Teknologi · Jakarta, Indonesia
-    </div>
-
-    <div class="rc-actions" data-html2canvas-ignore>
-      <button class="rc-action-btn primary" id="btnActionDownload">
-        <svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span>UNDUH</span>
-      </button>
-      <button class="rc-action-btn ghost" id="btnActionCopy">
-        <svg class="ic" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        <span>SALIN</span>
-      </button>
-      <button class="rc-action-btn ghost" id="btnActionShare">
-        <svg class="ic" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-        <span>BAGIKAN</span>
-      </button>
-      <button class="rc-action-btn ghost" id="btnActionClose">
-        <svg class="ic" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        <span>TUTUP</span>
-      </button>
-    </div>
-  `;
-}
-
-function bindReceiptEvents(id){
-  ['btnCloseReceipt','btnActionClose'].forEach(bid => {
-    const el = $(bid); if (el) el.addEventListener('click', closeReceipt);
-  });
-  document.querySelectorAll('#receiptSheet .copy-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      copyText(btn.dataset.copy).then(()=>toast('Disalin.')).catch(()=>toast('Gagal menyalin.','warn'));
-      haptic(20);
-    });
-  });
-  const dlBtn = $('btnActionDownload');
-  if (dlBtn) dlBtn.addEventListener('click', () => downloadReceiptImage(id));
-  const cBtn = $('btnActionCopy');
-  if (cBtn) cBtn.addEventListener('click', () => copyReceiptText(id));
-  const shareFn = () => shareReceipt(id);
-  const sBtn = $('btnActionShare'); if (sBtn) sBtn.addEventListener('click', shareFn);
-  const sTop = $('btnShareReceipt'); if (sTop) sTop.addEventListener('click', shareFn);
-  const helpBtn = $('btnHelpReceipt');
-  if (helpBtn) helpBtn.addEventListener('click', () => toast('Hubungi CS E-SEAMONEY untuk bantuan.','info'));
-}
-
-function renderReceipt(id){
-  const w = state.withdrawals.find(x => x.id === id);
-  if (!w) return;
-  const sheet = $('receiptSheet');
-  if (!sheet) return;
-  sheet.innerHTML = buildReceiptHtml(w);
-  bindReceiptEvents(id);
-  save();
-}
-
-function showReceipt(id){
-  const w = state.withdrawals.find(x => x.id === id);
-  if (!w) return;
-  currentReceiptId = id;
-  renderReceipt(id);
-  $('receiptBackdrop').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-
-function updateReceiptStatus(w){
-  if (!w) return;
-  const amountEl = $('rcAmount');
-  if (amountEl && w.status === 'success'){
-    amountEl.classList.add('flash');
-    setTimeout(()=>amountEl.classList.remove('flash'), 800);
-  }
-  renderReceipt(w.id);
-  if (w.status === 'success'){
-    playSound('success'); spawnConfetti(80); haptic([30,50,30,50,30]);
-    toast('Penarikan ' + fmtRp(w.amount) + ' berhasil!', 'ok');
-  } else if (w.status === 'failed'){
-    playSound('error'); haptic([60,40,60]);
-    toast('Penarikan gagal: ' + w.failReason, 'warn');
-  }
-}
-
-function closeReceipt(){
-  $('receiptBackdrop').classList.remove('show');
-  document.body.style.overflow = '';
-  currentReceiptId = null;
-}
-
-/* Download receipt as image */
-async function downloadReceiptImage(id){
-  const w = state.withdrawals.find(x => x.id === id);
-  if (!w) return;
-  if (!window.html2canvas){
-    toast('Fitur unduh belum siap. Coba sebentar lagi.','warn');
-    return;
-  }
-  const sheet = $('receiptSheet');
-  if (!sheet) return;
-  const btn = $('btnActionDownload');
-  if (btn){ btn.disabled = true; }
-  toast('Menyiapkan gambar...', 'info');
-  haptic(20);
-  try{
-    const canvas = await html2canvas(sheet, {
-      backgroundColor: '#05070d',
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      windowWidth: sheet.scrollWidth,
-      windowHeight: sheet.scrollHeight
-    });
-    canvas.toBlob((blob) => {
-      if (!blob){ toast('Gagal membuat gambar.','warn'); if(btn) btn.disabled=false; return; }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `bukti-transfer-${w.txId || w.id}.png`;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
-      toast('Gambar berhasil diunduh!', 'ok');
-      haptic([20,40,20]);
-      if (btn) btn.disabled = false;
-    }, 'image/png');
-  }catch(e){
-    console.error(e);
-    toast('Gagal mengunduh gambar.','warn');
-    if (btn) btn.disabled = false;
-  }
-}
-
-function copyReceiptText(id){
-  const w = state.withdrawals.find(x => x.id === id);
-  if (!w) return;
-  ensureReceiptFields(w);
-  const wallet = WALLETS.find(x => x.id === w.walletId) || WALLETS[0];
-  const status = w.status === 'pending' ? 'MENUNGGU' : w.status === 'success' ? 'BERHASIL' : 'GAGAL';
-  const total = w.status === 'failed' ? 'Rp 0' : fmtRp(w.total);
-  const text = `━━━ BUKTI TRANSFER E-SEAMONEY ━━━
-Status   : ${status}
-Jumlah   : ${fmtRp(w.amount)}
-Biaya    : ${fmtRp(w.fee)}
-Total    : ${total}
-━━━━━━━━━━━━━━━━━━━━
-ID       : ${w.txId}
-Waktu    : ${formatDateTimeID(w.timestamp)}
-Metode   : ${wallet.name}
-Penerima : ${w.receiverName}
-Nomor    : ${w.phone}
-━━━━━━━━━━━━━━━━━━━━
-PT. Mockup Teknologi · Jakarta`;
-  copyText(text).then(()=>toast('Bukti disalin ke clipboard.')).catch(()=>toast('Gagal menyalin.','warn'));
-  haptic(30);
-}
-
-async function shareReceipt(id){
-  const w = state.withdrawals.find(x => x.id === id);
-  if (!w) return;
-  ensureReceiptFields(w);
-  const wallet = WALLETS.find(x => x.id === w.walletId) || WALLETS[0];
-  const status = w.status === 'pending' ? 'MENUNGGU' : w.status === 'success' ? 'BERHASIL' : 'GAGAL';
-
-  /* Try share image first */
-  if (window.html2canvas && navigator.canShare){
-    try{
-      const sheet = $('receiptSheet');
-      const canvas = await html2canvas(sheet, { backgroundColor:'#05070d', scale:2, useCORS:true, logging:false });
-      const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-      if (blob){
-        const file = new File([blob], `bukti-${w.txId}.png`, { type:'image/png' });
-        if (navigator.canShare({ files:[file] })){
-          await navigator.share({ files:[file], title:'Bukti Transfer E-SEAMONEY', text:`Transfer ${fmtRp(w.amount)} ke ${w.receiverName}` });
-          return;
+        // Fungsi Navigasi Halaman
+        function switchPage(pageId) {
+            document.querySelectorAll('.comic-card').forEach(el => el.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+            hideAllNotif();
         }
-      }
-    }catch(e){ /* fallback to text */ }
-  }
 
-  const text = `BUKTI TRANSFER E-SEAMONEY\nStatus: ${status}\nJumlah: ${fmtRp(w.amount)}\nMetode: ${wallet.name}\nPenerima: ${w.receiverName} (${w.phone})\nID: ${w.txId}`;
-  if (navigator.share){
-    try { await navigator.share({ title:'Bukti Transfer E-SEAMONEY', text }); return; } catch(e){}
-  }
-  copyText(text).then(()=>toast('Bukti disalin.')).catch(()=>toast('Gagal membagikan.','warn'));
-}
+        // Fungsi Notifikasi
+        function showNotif(elementId, msg, type) {
+            const el = document.getElementById(elementId);
+            el.innerText = msg;
+            el.className = `notif notif-${type}`;
+            el.style.display = 'block';
+        }
+        function hideAllNotif() {
+            document.querySelectorAll('.notif').forEach(el => el.style.display = 'none');
+        }
 
-/* QR generator */
-function generateQR(seed){
-  const size = 25;
-  let hash = 0;
-  for (let i=0;i<seed.length;i++) hash = ((hash<<5) - hash + seed.charCodeAt(i)) | 0;
-  let cells = '';
-  for (let y=0;y<size;y++){
-    for (let x=0;x<size;x++){
-      const inTL = x<7 && y<7;
-      const inTR = x>=size-7 && y<7;
-      const inBL = x<7 && y>=size-7;
-      let on = false;
-      if (inTL || inTR || inBL){
-        const fx = inTL ? x : inTR ? x-(size-7) : x;
-        const fy = inTL ? y : inTR ? y : y-(size-7);
-        if (fx===0||fx===6||fy===0||fy===6) on = true;
-        else if (fx>=2&&fx<=4&&fy>=2&&fy<=4) on = true;
-      } else {
-        const v = ((x*31 + y*17 + hash + x*y*7) >>> 0) % 3;
-        on = v === 0;
-      }
-      if (on) cells += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
-    }
-  }
-  return `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="background:#fff"><g fill="#1a1f2e">${cells}</g></svg>`;
-}
+        // Loading
+        function setLoading(id, isLoading) {
+            document.getElementById(id).style.display = isLoading ? 'block' : 'none';
+        }
 
-/* ============================================================
-   SETTINGS
-   ============================================================ */
-function openSettings(){ renderAchievements(); $('settingsBackdrop').classList.add('show'); document.body.style.overflow = 'hidden'; }
-function closeSettings(){ $('settingsBackdrop').classList.remove('show'); document.body.style.overflow = ''; }
+        // Login
+        function login() {
+            const key = document.getElementById('access-key').value;
+            if (key === VALID_KEY) {
+                switchPage('page-dashboard');
+            } else {
+                showNotif('notif-login', "Access Key Salah! Silakan coba lagi.", "error");
+            }
+        }
 
-function initSettings(){
-  $('toggleSound').classList.toggle('on', state.settings.sound);
-  $('toggleSound').addEventListener('click', () => { state.settings.sound = !state.settings.sound; $('toggleSound').classList.toggle('on', state.settings.sound); haptic(30); save(); if (state.settings.sound) playSound('coin'); });
-  $('toggleHaptic').classList.toggle('on', state.settings.haptic);
-  $('toggleHaptic').addEventListener('click', () => { state.settings.haptic = !state.settings.haptic; $('toggleHaptic').classList.toggle('on', state.settings.haptic); haptic(30); save(); });
-  $('rateSlider').value = state.settings.rate;
-  $('rateValue').textContent = fmtRp(state.settings.rate);
-  $('rateSlider').addEventListener('input', e => { state.settings.rate = parseInt(e.target.value); $('rateValue').textContent = fmtRp(state.settings.rate); updateRateDisplay(); save(); });
-  $('targetSlider').value = state.dailyTarget;
-  $('targetValue').textContent = fmtRp(state.dailyTarget);
-  $('targetSlider').addEventListener('input', e => { state.dailyTarget = parseInt(e.target.value); $('targetValue').textContent = fmtRp(state.dailyTarget); updateDailyRing(); save(); });
-  $('btnExportJSON').addEventListener('click', () => {
-    const data = {...state};
-    downloadFile('moneyflow-backup.json', JSON.stringify(data, null, 2), 'application/json');
-    toast('Backup JSON diunduh.');
-  });
-  const resetBtn = $('btnReset');
-  const startHold = (e) => {
-    e.preventDefault();
-    resetBtn.textContent = 'TAHAN... 2 DETIK';
-    resetBtn.style.background = 'rgba(255,61,99,.3)';
-    holdResetTimer = setTimeout(() => { doReset(); resetBtn.textContent = 'HOLD 2 DETIK UNTUK RESET'; resetBtn.style.background = ''; }, 2000);
-  };
-  const cancelHold = () => { if (holdResetTimer){ clearTimeout(holdResetTimer); holdResetTimer = null; } resetBtn.textContent = 'HOLD 2 DETIK UNTUK RESET'; resetBtn.style.background = ''; };
-  resetBtn.addEventListener('mousedown', startHold);
-  resetBtn.addEventListener('touchstart', startHold, {passive:false});
-  resetBtn.addEventListener('mouseup', cancelHold);
-  resetBtn.addEventListener('mouseleave', cancelHold);
-  resetBtn.addEventListener('touchend', cancelHold);
-  resetBtn.addEventListener('touchcancel', cancelHold);
-}
+        // Mulai Alur
+        function startFlow() {
+            document.getElementById('step-1').classList.add('step-active');
+            document.getElementById('step-2').classList.remove('step-active');
+            document.getElementById('step-3').classList.remove('step-active');
+            document.getElementById('email-input').value = "";
+            document.getElementById('email-input').disabled = false;
+            document.getElementById('link-input').value = "";
+            switchPage('page-flow');
+        }
 
-function doReset(){
-  stopEarning(); stopMarketing();
-  state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-  displayedBalance = 0;
-  if (tweenRaf) cancelAnimationFrame(tweenRaf);
-  save();
-  $('balanceNum').textContent = '0';
-  $('todayText').textContent = 'Rp 0';
-  $('countText').textContent = '0x';
-  $('viewsText').textContent = '0';
-  $('withdrawBalance').textContent = 'Rp 0';
-  $('phoneInput').value = ''; $('phoneInput').disabled = false;
-  $('pairCard').style.display = ''; $('pairCard').style.opacity = ''; $('pairCard').style.transform = '';
-  $('connectedCard').classList.remove('show');
-  $('txList').innerHTML = `<div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/></svg></div>Belum ada transaksi.</div>`;
-  $('dashTxList').innerHTML = `<div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z"/></svg></div>Belum ada transaksi.</div>`;
-  $('feed').innerHTML = `<div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l18-8v18l-18-8z"/></svg></div>Belum ada aktivitas pemasaran.</div>`;
-  $('withdrawHistory').innerHTML = `<div class="tx-empty"><div class="tx-empty-ic"><svg class="ic" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>Belum ada penarikan.</div>`;
-  $('tickerArea').innerHTML = '';
-  renderStats(); renderMarketing(); renderAnalitik(); renderWithdrawHistory(); renderAchievements(); updateUI();
-  closeSettings();
-  toast('Semua data direset.','warn');
-}
+        // Buka Panduan
+        function showGuide() { switchPage('page-guide'); }
 
-function downloadFile(filename, content, type='text/plain'){
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click();
-  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
-}
+        // API Call
+        async function callApi(action, data) {
+            try {
+                const res = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action, ...data })
+                });
+                return await res.json();
+            } catch (e) {
+                return { success: false, message: "Koneksi ke server gagal." };
+            }
+        }
 
-function exportCSV(){
-  if (state.transactions.length === 0){ toast('Belum ada transaksi.','warn'); return; }
-  let csv = 'ID,Waktu,Tanggal,Nomor,Negara,ISO,Kode,Jumlah\n';
-  state.transactions.forEach(t => { csv += [t.id, t.time, t.date||'', t.phone, t.country.name, t.country.iso, '+' + t.country.code, t.amount].join(',') + '\n'; });
-  downloadFile('moneyflow-transactions.csv', csv, 'text/csv');
-  toast('CSV diunduh. Total ' + state.transactions.length + ' transaksi.');
-}
+        // STEP 1: Kirim Link
+        async function processStep1() {
+            const email = document.getElementById('email-input').value;
+            if (!email || !email.includes("@")) {
+                return showNotif('notif-flow', "Format email tidak valid!", "error");
+            }
 
-function formatPhoneInput(el){
-  let v = el.value.replace(/\D/g,'');
-  if (v.startsWith('0')) v = v.slice(1);
-  if (v.startsWith('62')) v = v.slice(2);
-  if (v.length > 13) v = v.slice(0,13);
-  let f = v;
-  if (v.length > 3) f = v.slice(0,3) + ' ' + v.slice(3);
-  if (v.length > 7) f = v.slice(0,3) + ' ' + v.slice(3,7) + ' ' + v.slice(7);
-  el.value = f;
-}
+            hideAllNotif();
+            setLoading('loading-flow', true);
 
-async function doPairing(){
-  if (isBusy) return;
-  const raw = $('phoneInput').value.replace(/\D/g,'');
-  if (raw.length < 8){
-    $('phoneInput').focus();
-    const g = $('phoneInput').parentElement;
-    g.style.borderColor = 'var(--red)'; g.style.boxShadow = '0 0 0 3.5px rgba(255,61,99,.16)';
-    setTimeout(() => { g.style.borderColor=''; g.style.boxShadow=''; }, 900);
-    toast('Nomor tidak valid. Minimal 8 digit.','warn'); haptic(60); return;
-  }
-  isBusy = true;
-  state.phone = '+62 ' + raw;
-  $('btnPair').disabled = true; $('phoneInput').disabled = true;
-  $('btnPair').innerHTML = 'MENGHUBUNGKAN...';
-  $('progressWrap').classList.add('show'); $('pairingStatus').classList.add('show');
-  const steps = ['Memverifikasi nomor...','Menghubungkan ke server...','Membuat pairing code...','Finalisasi...'];
-  for (let i=0;i<steps.length;i++){ $('pairingStatus').textContent = steps[i]; $('progressBar').style.width = ((i+1)/steps.length*100)+'%'; await sleep(600); }
-  state.code = pad(Math.floor(Math.random()*10000),4);
-  state.paired = true;
-  $('pairCard').style.transition = 'opacity .3s, transform .3s';
-  $('pairCard').style.opacity = '0'; $('pairCard').style.transform = 'translateY(-8px)';
-  await sleep(300);
-  $('pairCard').style.display = 'none';
-  $('connNumber').textContent = state.phone; $('connCode').textContent = state.code;
-  $('connectedCard').classList.add('show');
-  $('progressBar').style.width = '0%'; $('progressWrap').classList.remove('show'); $('pairingStatus').classList.remove('show');
-  $('btnPair').disabled = false; $('phoneInput').disabled = false;
-  $('btnPair').innerHTML = 'PAIRING SEKARANG';
-  isBusy = false; save();
-  toast('Pairing berhasil. Kode: ' + state.code); haptic([30,50,30]);
-}
+            const res = await callApi("send-magiclink", { email });
 
-function initViewerCounter(){
-  $('viewerCount').textContent = fmtNum(state.viewerCount);
-  setInterval(() => {
-    if (!state.online) return;
-    state.viewerCount = Math.max(500, state.viewerCount + rand(-4, 8));
-    $('viewerCount').textContent = fmtNum(state.viewerCount);
-  }, 3200);
-}
+            setLoading('loading-flow', false);
 
-const TAB_ORDER = ['dashboard','transaksi','marketing','analitik','tarik'];
-function switchTab(tab){
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-  const target = document.getElementById('view-' + tab);
-  if (target) target.classList.add('active');
-  window.scrollTo({ top:0, behavior:'smooth' });
-  if (tab === 'analitik') renderAnalitik();
-  if (tab === 'marketing') renderMarketing();
-  if (tab === 'tarik'){ renderWithdrawHistory(); updateFeeBreakdown(); }
-  if (tab === 'transaksi') renderAllTx();
-  currentTabIndex = TAB_ORDER.indexOf(tab);
-}
+            if (res.success) {
+                userEmail = email;
+                showNotif('notif-flow', "Link terkirim! Cek email kamu.", "success");
+                document.getElementById('email-input').disabled = true;
+                document.getElementById('step-1').classList.remove('step-active'); // Sembunyikan step 1
+                document.getElementById('step-2').classList.add('step-active');    // Munculkan step 2
+            } else {
+                showNotif('notif-flow', res.message || "Gagal mengirim link.", "error");
+            }
+        }
 
-function initSwipe(){
-  const el = document.getElementById('tabScroller');
-  let sx = 0, sy = 0, tracking = false;
-  el.addEventListener('touchstart', e => { if (e.touches.length !== 1) return; sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true; }, {passive:true});
-  el.addEventListener('touchend', e => {
-    if (!tracking) return;
-    tracking = false;
-    const dx = e.changedTouches[0].clientX - sx;
-    const dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx)) return;
-    if (dx < 0 && currentTabIndex < TAB_ORDER.length - 1) switchTab(TAB_ORDER[currentTabIndex + 1]);
-    else if (dx > 0 && currentTabIndex > 0) switchTab(TAB_ORDER[currentTabIndex - 1]);
-  }, {passive:true});
-}
+        // STEP 2: Verifikasi & Aktifkan
+        async function processStep2() {
+            const link = document.getElementById('link-input').value;
+            if (!link) return showNotif('notif-flow', "Masukkan link dari email!", "error");
 
-/* ============================================================
-   INIT
-   ============================================================ */
-function init(){
-  load();
-  const now = Date.now();
-  state.withdrawals.forEach(w => {
-    if (w.status === 'pending' && w.resolveAt < now){
-      const success = Math.random() < 0.85;
-      if (success && w.total <= state.balance){
-        state.balance -= w.total;
-        w.status = 'success';
-      } else {
-        w.status = 'failed';
-        w.failReason = 'Timeout — silakan coba lagi';
-      }
-    } else if (w.status === 'pending' && w.resolveAt > now){
-      const delay = w.resolveAt - now;
-      setTimeout(() => resolveWithdrawal(w.id), delay);
-    }
-  });
-  save();
+            hideAllNotif();
+            setLoading('loading-flow', true);
 
-  $('balanceNum').textContent = fmtNum(state.balance);
-  displayedBalance = state.balance;
-  $('todayText').textContent = fmtRp(state.today);
-  $('countText').textContent = state.count + 'x';
-  $('viewsText').textContent = fmtNum(state.marketing.views);
-  $('withdrawBalance').textContent = fmtRp(state.balance);
-  $('connNumber').textContent = state.phone || '+62 —';
-  $('connCode').textContent = state.code || '----';
-  if (state.paired){ $('pairCard').style.display = 'none'; $('connectedCard').classList.add('show'); }
+            // 1. Verifikasi
+            const resVerify = await callApi("verify-account", { email: userEmail, rawLink: link });
+            
+            if (!resVerify.success) {
+                setLoading('loading-flow', false);
+                return showNotif('notif-flow', resVerify.message || "Verifikasi gagal.", "error");
+            }
 
-  updateUI();
-  updateFeeBreakdown();
-  renderStats();
-  renderMarketing();
-  renderAnalitik();
-  renderWithdrawHistory();
-  renderAchievements();
-  initWalletGrid();
-  initSettings();
-  initViewerCounter();
-  initSwipe();
+            const idToken = resVerify.idToken || (resVerify.profile && resVerify.profile.idToken);
+            if (!idToken) {
+                setLoading('loading-flow', false);
+                return showNotif('notif-flow', "Token verifikasi tidak ditemukan.", "error");
+            }
 
-  if (state.transactions.length > 0){
-    $('txList').innerHTML = ''; $('dashTxList').innerHTML = '';
-    state.transactions.slice().reverse().forEach(tx => {
-      const el = document.createElement('div');
-      el.className = 'tx-item'; el.innerHTML = txItemHtml(tx);
-      el.addEventListener('click', () => showTxDetail(tx));
-      $('txList').prepend(el);
-    });
-    state.transactions.slice(0,5).forEach(tx => {
-      const el = document.createElement('div');
-      el.className = 'tx-item'; el.innerHTML = txItemHtml(tx);
-      el.addEventListener('click', () => showTxDetail(tx));
-      $('dashTxList').appendChild(el);
-    });
-    $('dashTxCount').textContent = state.transactions.length;
-    $('txListCount').textContent = state.transactions.length;
-    state.marketing.activity.slice(0,MAX_FEED).reverse().forEach(item => {
-      const el = document.createElement('div');
-      el.className = 'feed-item ' + item.type;
-      el.innerHTML = feedHtml(item);
-      $('feed').prepend(el);
-    });
-  }
-  if (state.marketing.activity.length > 0) $('feedCount').textContent = state.marketing.activity.length;
+            // 2. Premium
+            const resPrem = await callApi("apply-premium", { email: userEmail, idToken });
 
-  drawBalanceChart(); renderSpark();
-  runLogin();
+            setLoading('loading-flow', false);
 
-  $('phoneInput').addEventListener('input', e => formatPhoneInput(e.target));
-  $('withdrawPhone').addEventListener('input', e => formatPhoneInput(e.target));
-  $('btnPair').addEventListener('click', doPairing);
-  $('btnToggle').addEventListener('click', () => {
-    if (!state.paired) return;
-    state.online = !state.online;
-    if (state.online){ startEarning(); startMarketing(); toast('Sesi online dimulai.'); haptic(40); }
-    else { stopEarning(); stopMarketing(); toast('Sesi dihentikan.','warn'); haptic(40); }
-    updateUI(); save();
-  });
-
-  $('txSearch').addEventListener('input', e => { searchQuery = e.target.value; renderAllTx(); });
-  document.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
-      chip.classList.add('active'); filterMode = chip.dataset.filter;
-      renderAllTx(); haptic(15);
-    });
-  });
-  $('btnExport').addEventListener('click', exportCSV);
-
-  $('withdrawAmount').addEventListener('input', e => {
-    e.target.value = e.target.value.replace(/\D/g,'').slice(0,15);
-    document.querySelectorAll('.preset-chip').forEach(c=>c.classList.remove('active'));
-    updateFeeBreakdown();
-  });
-  document.querySelectorAll('.preset-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.preset-chip').forEach(c=>c.classList.remove('active'));
-      chip.classList.add('active');
-      const amt = chip.dataset.amt;
-      if (amt === 'max') $('withdrawAmount').value = Math.max(0, getAvailableBalance() - 2500);
-      else $('withdrawAmount').value = parseInt(amt);
-      updateFeeBreakdown(); haptic(15);
-    });
-  });
-  $('btnWithdraw').addEventListener('click', processWithdrawal);
-
-  $('btnSettings').addEventListener('click', openSettings);
-  $('btnSettingsClose').addEventListener('click', closeSettings);
-  $('settingsBackdrop').addEventListener('click', e => { if (e.target.id === 'settingsBackdrop') closeSettings(); });
-  $('btnModalClose').addEventListener('click', () => { $('modalBackdrop').classList.remove('show'); document.body.style.overflow = ''; });
-  $('modalBackdrop').addEventListener('click', e => { if (e.target.id === 'modalBackdrop'){ $('modalBackdrop').classList.remove('show'); document.body.style.overflow = ''; } });
-
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => { switchTab(btn.dataset.tab); haptic(15); });
-  });
-
-  window.addEventListener('resize', () => drawBalanceChart());
-
-  if (state.online){ startEarning(); startMarketing(); }
-}
-
-document.addEventListener('DOMContentLoaded', init);
-</script>
+            if (resPrem.success) {
+                hideAllNotif();
+                document.getElementById('step-2').classList.remove('step-active'); // Sembunyikan step 2
+                document.getElementById('step-3').classList.add('step-active');    // Munculkan step 3
+            } else {
+                showNotif('notif-flow', resPrem.message || "Gagal mengaktifkan premium.", "error");
+            }
+        }
+    </script>
 </body>
 </html>
