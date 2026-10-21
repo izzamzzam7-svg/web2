@@ -54,19 +54,7 @@ a.linkbtn{display:block;text-decoration:none;text-align:center}
 </style>
 </head>
 <body>
-<section class="screen active" id="keyScreen">
-  <div class="panel">
-    <div class="brand">XGOOD ACCESS SYSTEM</div>
-    <h1>ENTER KEY</h1>
-    <p class="sub">Masukkan access key untuk membuka TANZZURA.</p>
-    <label class="field-label" for="accessKey">ACCESS KEY</label>
-    <input id="accessKey" autocomplete="off" autocapitalize="characters" placeholder="Masukkan key..." />
-    <button class="btn" id="confirmKey">KONFIRMASI KEY</button>
-    <p class="tiny">Akses lokal pada perangkat ini.</p>
-  </div>
-</section>
-
-<section class="screen" id="welcomeScreen">
+<section class="screen active" id="welcomeScreen">
   <div class="panel">
     <div class="brand">ACCESS GRANTED</div>
     <img class="welcome-image" src="assets/welcome.png" alt="XGOOD Welcome artwork">
@@ -125,34 +113,11 @@ a.linkbtn{display:block;text-decoration:none;text-align:center}
 </div>
 
 <script>
-const ACCESS_KEY = "TANZZURA-PERMANEN-22";
-const screens = ["keyScreen","welcomeScreen","toolScreen"];
+const screens = ["welcomeScreen","toolScreen"];
 const $ = id => document.getElementById(id);
 function showScreen(id){screens.forEach(s=>$(s).classList.toggle("active",s===id));$("menuScreen").style.display=id==="menuScreen"?"block":"none";window.scrollTo(0,0)}
 function modal(html){$("modalContent").innerHTML=html;$("overlay").classList.add("show")}
 function closeModal(){$("overlay").classList.remove("show")}
-$("confirmKey").addEventListener("click",()=>{
-  const enteredKey = $("accessKey").value.trim();
-  if(enteredKey !== ACCESS_KEY){
-    modal(`<h2>KEY TIDAK COCOK</h2><p>Periksa kembali key yang kamu masukkan.</p><button class="btn" id="modalOk">COBA LAGI</button>`);
-    $("modalOk").onclick = closeModal;
-    return;
-  }
-  modal(`<div class="spinner"></div><h2>MEMVERIFIKASI KEY</h2><p>Menyiapkan akses panel TANZZURA...</p><div class="progress"><span id="prog"></span></div><div class="percent" id="pct">0%</div>`);
-  let n = 0;
-  const timer = setInterval(()=>{
-    n = Math.min(100, n + 5);
-    const p = $("prog"), t = $("pct");
-    if(p) p.style.width = n + "%";
-    if(t) t.textContent = n + "%";
-    if(n >= 100){
-      clearInterval(timer);
-      modal(`<h2>KEY BERHASIL</h2><p>Key diterima pada perangkat ini.</p><div class="result-list"><b>STATUS:</b> AKTIF<br><b>EXPIRED:</b> 2099</div><button class="btn" id="keyOk">OK</button>`);
-      $("keyOk").onclick = ()=>{ closeModal(); showScreen("welcomeScreen"); };
-    }
-  }, 65);
-});
-$("accessKey").addEventListener("keydown",e=>{if(e.key==="Enter")$("confirmKey").click()});
 $("enterMenu").onclick=()=>showScreen("menuScreen");
 $("backMenu").onclick=()=>showScreen("menuScreen");
 
