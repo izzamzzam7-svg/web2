@@ -132,9 +132,25 @@ function showScreen(id){screens.forEach(s=>$(s).classList.toggle("active",s===id
 function modal(html){$("modalContent").innerHTML=html;$("overlay").classList.add("show")}
 function closeModal(){$("overlay").classList.remove("show")}
 $("confirmKey").addEventListener("click",()=>{
-  if($("accessKey").value.trim()!==ACCESS_KEY){modal(`<h2>KEY TIDAK COCOK</h2><p>Periksa kembali access key yang kamu masukkan.</p><button class="btn" id="modalOk">COBA LAGI</button>`);$("modalOk").onclick=closeModal;return}
+  const enteredKey = $("accessKey").value.trim();
+  if(enteredKey !== ACCESS_KEY){
+    modal(`<h2>KEY TIDAK COCOK</h2><p>Periksa kembali key yang kamu masukkan.</p><button class="btn" id="modalOk">COBA LAGI</button>`);
+    $("modalOk").onclick = closeModal;
+    return;
+  }
   modal(`<div class="spinner"></div><h2>MEMVERIFIKASI KEY</h2><p>Menyiapkan akses panel TANZZURA...</p><div class="progress"><span id="prog"></span></div><div class="percent" id="pct">0%</div>`);
-  let n=0;const timer=setInterval(()=>{n+=5;const p=$("prog"),t=$("pct");if(p)p.style.width=n+"%";if(t)t.textContent=n+"%";if(n>=100){clearInterval(timer);modal(`<h2>KEY BERHASIL</h2><p>Key diterima pada perangkat ini.</p><div class="result-list"><b>STATUS:</b> AKTIF<br><b>EXPIRED:</b> 2099</div><button class="btn" id="keyOk">OK</button>`);$("keyOk").onclick=()=>{closeModal();showScreen("welcomeScreen")}},65)},65)
+  let n = 0;
+  const timer = setInterval(()=>{
+    n = Math.min(100, n + 5);
+    const p = $("prog"), t = $("pct");
+    if(p) p.style.width = n + "%";
+    if(t) t.textContent = n + "%";
+    if(n >= 100){
+      clearInterval(timer);
+      modal(`<h2>KEY BERHASIL</h2><p>Key diterima pada perangkat ini.</p><div class="result-list"><b>STATUS:</b> AKTIF<br><b>EXPIRED:</b> 2099</div><button class="btn" id="keyOk">OK</button>`);
+      $("keyOk").onclick = ()=>{ closeModal(); showScreen("welcomeScreen"); };
+    }
+  }, 65);
 });
 $("accessKey").addEventListener("keydown",e=>{if(e.key==="Enter")$("confirmKey").click()});
 $("enterMenu").onclick=()=>showScreen("menuScreen");
@@ -177,7 +193,24 @@ function runTask(tool){
  const duration=tool==="report"?25000:5000;
  const title=tool==="report"?"MENYIAPKAN LAPORAN":"MENYIAPKAN PENGAJUAN";
  modal(`<div class="spinner"></div><h2>${title}</h2><p id="taskText">${tool==="report"?"Jangan tutup halaman saat proses persiapan berlangsung.":"Menyiapkan langkah bantuan resmi..."}</p><div class="progress"><span id="prog"></span></div><div class="percent" id="pct">0%</div>`);
- const start=Date.now();const timer=setInterval(()=>{let n=Math.min(100,Math.floor((Date.now()-start)/duration*100));const p=$("prog"),t=$("pct");if(p)p.style.width=n+"%";if(t)t.textContent=n+"%";if(n>=100){clearInterval(timer);const safe=escapeHtml(phone);if(tool==="report"){modal(`<h2>LAPORAN SIAP DILANJUTKAN</h2><div class="result-list"><b>NOMOR:</b> ${safe}<br><b>JUMLAH REPORT:</b> 1 laporan yang disiapkan<br><b>STATUS:</b> BELUM DIKIRIM</div><p>Belum ada laporan yang dikirim dari halaman ini. Lanjutkan melalui dukungan resmi.</p><a class="btn linkbtn" href="https://www.whatsapp.com/contact/" target="_blank" rel="noopener">LANJUT KE BANTUAN RESMI</a><button class="btn secondary" id="done">KELUAR DARI MENU</button>`)}else{modal(`<h2>PENGAJUAN DISIAPKAN</h2><div class="result-list"><b>NOMOR:</b> ${safe}<br><b>LANGKAH:</b> BUKA DUKUNGAN RESMI<br><b>STATUS:</b> BELUM DIAJUKAN</div><p>Panel tidak dapat membuka blokir akun secara langsung. Kirim permintaan dan tunggu keputusan WhatsApp.</p><a class="btn linkbtn" href="https://www.whatsapp.com/contact/" target="_blank" rel="noopener">BUKA DUKUNGAN RESMI</a><button class="btn secondary" id="done">KELUAR DARI MENU</button>`)}const d=$("done");if(d)d.onclick=()=>{closeModal();showScreen("menuScreen")}},90)},90)
+ const start = Date.now();
+ const timer = setInterval(()=>{
+   const n = Math.min(100, Math.floor((Date.now() - start) / duration * 100));
+   const p = $("prog"), t = $("pct");
+   if(p) p.style.width = n + "%";
+   if(t) t.textContent = n + "%";
+   if(n >= 100){
+     clearInterval(timer);
+     const safe = escapeHtml(phone);
+     if(tool === "report"){
+       modal(`<h2>LAPORAN SIAP DILANJUTKAN</h2><div class="result-list"><b>NOMOR:</b> ${safe}<br><b>JUMLAH REPORT:</b> 1 laporan yang disiapkan<br><b>STATUS:</b> BELUM DIKIRIM</div><p>Belum ada laporan yang dikirim dari halaman ini. Lanjutkan melalui dukungan resmi.</p><a class="btn linkbtn" href="https://www.whatsapp.com/contact/" target="_blank" rel="noopener">LANJUT KE BANTUAN RESMI</a><button class="btn secondary" id="done">KELUAR DARI MENU</button>`);
+     } else {
+       modal(`<h2>PENGAJUAN DISIAPKAN</h2><div class="result-list"><b>NOMOR:</b> ${safe}<br><b>LANGKAH:</b> BUKA DUKUNGAN RESMI<br><b>STATUS:</b> BELUM DIAJUKAN</div><p>Panel tidak dapat membuka blokir akun secara langsung. Kirim permintaan dan tunggu keputusan WhatsApp.</p><a class="btn linkbtn" href="https://www.whatsapp.com/contact/" target="_blank" rel="noopener">BUKA DUKUNGAN RESMI</a><button class="btn secondary" id="done">KELUAR DARI MENU</button>`);
+     }
+     const d = $("done");
+     if(d) d.onclick = ()=>{ closeModal(); showScreen("menuScreen"); };
+   }
+ }, 90);
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
