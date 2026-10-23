@@ -2,715 +2,155 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PPL Project V3</title>
-<link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ensiklopedia Satwa Nusantara</title>
 <style>
-/* === VARIABEL WARNA NEO-BRUTALISM 3D === */
-:root {
-  --bg-app: #0a0a0a;
-  --bg-card: #1a1a1a;
-  --bg-input: #0f0f0f;
-  --border-thick: #333333;
-  --border-focus: #00e676;
-  --neon-green: #00e676;
-  --neon-cyan: #00e5ff;
-  --neon-yellow: #ffd700;
-  --neon-red: #ff1744;
-  --text-main: #ffffff;
-  --text-sub: #aaaaaa;
-  --shadow-solid: #000000;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Space Mono',monospace;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg-app);color:var(--text-main);display:flex;justify-content:center;min-height:100vh;padding-bottom:70px;overflow-x:hidden}
-
-.app{width:100%;max-width:380px;background:var(--bg-app);min-height:100vh;position:relative;display:flex;flex-direction:column;border-left:3px solid var(--border-thick);border-right:3px solid var(--border-thick)}
-
-/* === TOPBAR 3D === */
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px;background:var(--bg-card);border-bottom:3px solid var(--border-thick);position:sticky;top:0;z-index:100}
-.icon-btn{width:38px;height:38px;background:var(--bg-app);border:2.5px solid var(--neon-green);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:bold;cursor:pointer;box-shadow:3px 3px 0 var(--shadow-solid);color:var(--neon-green);transition:all .1s}
-.icon-btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--shadow-solid)}
-.brand-center{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;margin:0 10px}
-.brand-text{font-family:'VT323',monospace;font-size:24px;letter-spacing:2px;color:var(--text-main);font-weight:bold;line-height:1;text-shadow: 0 0 10px rgba(255,255,255,0.2);}
-.brand-line{height:3px;width:90%;background:var(--neon-green);margin:4px 0;border-radius:2px;box-shadow: 0 0 8px var(--neon-green);}
-
-/* === PAGE & CARDS === */
-.page{display:none;padding:16px;flex:1;flex-direction:column;gap:16px;animation:slideUp 0.3s ease}
-.page.active{display:flex}
-@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-.b-card{background:var(--bg-card);border:2.5px solid var(--border-thick);border-radius:14px;padding:16px;box-shadow:5px 5px 0 var(--shadow-solid);position:relative;transition:transform 0.15s; z-index: 1;}
-.b-card:active{transform:translate(2px, 2px); box-shadow: 3px 3px 0 var(--shadow-solid);}
-
-.card-title{font-family:'VT323',monospace;font-size:20px;letter-spacing:1px;color:var(--text-main);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.card-title svg{width:22px;height:22px;fill:var(--neon-green)}
-
-/* === OVERLAY MODAL SUKSES === */
-.overlay-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(4px)}
-.overlay-modal.show{opacity:1;pointer-events:auto}
-.modal-box{background:var(--bg-card);border:3px solid var(--neon-green);border-radius:20px;padding:32px 24px;width:100%;max-width:300px;text-align:center;box-shadow:6px 6px 0 var(--shadow-solid), inset 0 0 20px rgba(0,230,118,0.05);position:relative;transform:scale(0.9);transition:transform 0.3s}
-.overlay-modal.show .modal-box{transform:scale(1)}
-.modal-icon-wrap{position:relative;width:80px;height:80px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
-.modal-ring{position:absolute;inset:0;border-radius:50%;border:3px solid transparent;border-top-color:var(--neon-green);border-right-color:var(--neon-green);animation:spin 2s linear infinite}
-.modal-ring-2{position:absolute;inset:8px;border-radius:50%;border:3px solid transparent;border-bottom-color:var(--neon-green);border-left-color:var(--neon-green);animation:spin-reverse 3s linear infinite}
-.modal-circle{width:50px;height:50px;background:var(--neon-green);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,230,118,0.6);z-index:2;border:2px solid #000;}
-.modal-circle svg{width:28px;height:28px;fill:#000;margin-top:2px}
-.modal-title{font-family:'VT323',monospace;font-size:32px;color:var(--text-main);margin-bottom:10px;letter-spacing:1px}
-.modal-desc{font-size:12px;color:var(--text-sub);line-height:1.6;margin-bottom:24px;font-weight:bold;}
-.modal-btn{width:100%;padding:14px;background:var(--neon-green);color:#000;border:2.5px solid #000;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;font-family:'Orbitron', 'VT323', monospace;transition:all 0.1s;box-shadow: 3px 3px 0 #000;}
-.modal-btn:active{background:#00b359;transform:translate(3px,3px);box-shadow: 0 0 0 #000;}
-@keyframes spin{100%{transform:rotate(360deg)}}
-@keyframes spin-reverse{100%{transform:rotate(-360deg)}}
-
-/* === INPUT TARGET === */
-.target-input-wrap{display:flex;align-items:center;background:var(--bg-input);border:2.5px solid var(--border-thick);border-radius:10px;overflow:visible;transition:all 0.2s;position:relative;box-shadow: 3px 3px 0 var(--shadow-solid); z-index: 10;}
-.target-input-wrap:focus-within{border-color:var(--neon-green);}
-.flag-box{display:flex;align-items:center;gap:6px;padding:12px 14px;border-right:2.5px solid var(--border-thick);font-weight:700;font-size:14px;background:var(--bg-card);color:var(--text-main);cursor:pointer;user-select:none;border-radius: 8px 0 0 8px; transition: background 0.2s;}
-.flag-box:hover { background: var(--border-thick); }
-.flag-box span{font-size:18px;line-height:1}
-.flag-box i{margin-left:4px;font-size:10px;color:var(--text-sub)}
-.target-input-wrap input{flex:1;padding:12px 14px;border:none;outline:none;font-size:14px;font-family:'Space Mono';background:transparent;color:var(--text-main);font-weight:700;min-width:0}
-.target-input-wrap input::placeholder{color:#666;font-weight:400}
-
-/* Dropdown Negara */
-.country-dropdown{position:absolute;top:calc(100% + 8px);left:0;width:260px;background:var(--bg-card);border:2.5px solid var(--border-thick);border-radius:12px;box-shadow:4px 4px 0 var(--shadow-solid);max-height:220px;overflow-y:auto;z-index:9999;display:none;}
-.country-dropdown.show{display:block; animation: fadeIn 0.2s ease;}
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-.country-option{display:flex;align-items:center;gap:10px;padding:12px 14px;font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--border-thick);transition:background 0.1s;color:var(--text-main)}
-.country-option:last-child{border-bottom:none}
-.country-option:hover{background:var(--neon-green);color:#000}
-.country-option:hover span.flag{color:#000}
-
-/* === CUSTOM SELECT PAYLOAD === */
-.custom-select-wrap{position:relative;user-select:none; z-index: 5;}
-.custom-select-trigger{display:flex;justify-content:space-between;align-items:center;background:var(--bg-input);border:2.5px solid var(--border-thick);border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--shadow-solid);transition:all 0.1s;color:var(--text-main)}
-.custom-select-trigger:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--shadow-solid)}
-.custom-select-trigger span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px}
-.custom-select-trigger svg{width:18px;height:18px;fill:var(--neon-green);transition:transform 0.3s}
-.custom-select-wrap.open .custom-select-trigger svg{transform:rotate(180deg)}
-.custom-options{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--bg-card);border:2.5px solid var(--border-thick);border-radius:12px;box-shadow:4px 4px 0 var(--shadow-solid);max-height:200px;overflow-y:auto;z-index:999;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all 0.2s}
-.custom-select-wrap.open .custom-options{opacity:1;visibility:visible;transform:translateY(0)}
-.custom-option{padding:14px;font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--border-thick);transition:background 0.1s;color:var(--text-sub)}
-.custom-option:last-child{border-bottom:none}
-.custom-option:hover,.custom-option.selected{background:var(--neon-green);color:#000}
-
-/* === BUTTON SEND BUG === */
-.btn-send{width:100%;padding:16px;background:var(--neon-cyan);border:3px solid #000;border-radius:12px;font-size:20px;font-weight:900;cursor:pointer;box-shadow:5px 5px 0 var(--shadow-solid);display:flex;align-items:center;justify-content:center;gap:10px;color:#000;text-transform:uppercase;letter-spacing:1.5px;transition:all 0.1s;font-family:'VT323',monospace;margin-top:10px; z-index: 10; position: relative;}
-.btn-send:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--shadow-solid)}
-.btn-send svg{width:22px;height:22px;fill:#000}
-
-/* === EMPTY STATE === */
-.empty-state{text-align:center;padding:40px 16px;background:var(--bg-card);border:3px dashed var(--border-thick);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-top:10px;box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
-.empty-state svg{width:48px;height:48px;fill:var(--text-sub)}
-.empty-state h3{font-family:'VT323',monospace;font-size:22px;color:var(--text-main);letter-spacing:1px}
-.empty-state p{font-size:12px;color:var(--text-sub);line-height:1.5;max-width:90%;font-weight:bold;}
-
-/* === BOTTOM NAV 3D === */
-.bottom-nav{position:fixed;bottom:0;width:100%;max-width:380px;background:var(--bg-card);border-top:3px solid var(--border-thick);display:flex;justify-content:space-around;padding:10px 0 16px;z-index:100}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;opacity:.5;transition:all 0.2s;padding:4px 8px;flex:1}
-.nav-item.active{opacity:1;transform:translateY(-3px)}
-.nav-item.active .nav-icon{background:var(--neon-green);border:2.5px solid #000;border-radius:10px;box-shadow:3px 3px 0 #000}
-.nav-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:2.5px solid transparent;transition:all 0.2s}
-.nav-icon svg{width:20px;height:20px;fill:var(--text-sub)}
-.nav-item.active .nav-icon svg{fill:#000}
-.nav-label{font-size:10px;font-weight:900;color:var(--text-sub);text-transform:uppercase;letter-spacing:0.5px;font-family:'VT323',monospace;}
-.nav-item.active .nav-label{color:var(--neon-green)}
-
-/* === LOGIN BOX === */
-.login-overlay{position:fixed;inset:0;background:var(--bg-app);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;transition:opacity 0.3s}
-.login-overlay.hidden{opacity:0;pointer-events:none}
-.login-box{background:var(--bg-card);border:3px solid var(--border-thick);border-radius:18px;padding:28px 20px;width:100%;max-width:320px;box-shadow:6px 6px 0 var(--shadow-solid);position:relative}
-.login-box h2{font-family:'VT323',monospace;font-size:30px;margin-bottom:20px;text-align:center;letter-spacing:2px;color:var(--neon-green);text-shadow:0 0 10px rgba(0,230,118,0.3);}
-.l-field{margin-bottom:16px}
-.l-field label{display:block;font-size:11px;font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;color:var(--text-sub)}
-.l-field input{width:100%;padding:14px;border:2.5px solid var(--border-thick);border-radius:8px;font-size:14px;font-family:'Space Mono';background:var(--bg-input);outline:none;transition:all 0.2s;color:var(--text-main);font-weight:700;box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);}
-.l-field input:focus{border-color:var(--neon-green);box-shadow:3px 3px 0 var(--neon-green);}
-.l-btn{width:100%;padding:16px;background:var(--neon-green);border:3px solid #000;border-radius:10px;font-size:18px;font-weight:900;cursor:pointer;box-shadow:4px 4px 0 var(--shadow-solid);margin-top:12px;font-family:'VT323',monospace;letter-spacing:2px;color:#000;transition:all 0.1s}
-.l-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow-solid)}
-.l-err{color:var(--neon-red);font-size:12px;text-align:center;margin-top:12px;min-height:14px;font-weight:bold;}
-
-/* === TABS === */
-.tabs-row{display:flex;gap:10px}
-.tab-btn{flex:1;padding:12px;background:var(--bg-card);border:2.5px solid var(--border-thick);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--shadow-solid);text-align:center;color:var(--text-sub);font-family:'Space Mono';text-transform:uppercase;letter-spacing:0.5px;transition:all 0.1s}
-.tab-btn.active{background:var(--neon-cyan);color:#000;border-color:#000;}
-.tab-btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--shadow-solid)}
-.tab-content{display:none;flex-direction:column;gap:16px}
-.tab-content.active{display:flex}
-
-/* === FULL SENDER PAGE === */
-#full-sender-page{position:fixed;inset:0;background:var(--bg-app);z-index:99999;display:none;flex-direction:column;overflow-y:auto;color:var(--text-main);font-family:'Space Mono',sans-serif}
-#full-sender-page.active{display:flex}
-
-.fs-appbar{position:sticky;top:0;height:64px;display:flex;align-items:center;padding:0 12px;background:var(--bg-card);border-bottom:3px solid var(--border-thick);z-index:100}
-.fs-btn{background:none;border:none;color:var(--text-sub);cursor:pointer;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:background .18s,color .18s;flex-shrink:0;font-size:16px}
-.fs-btn:hover{background:rgba(255,255,255,0.05);color:var(--neon-green)}
-.fs-title{flex:1;text-align:center;font-weight:900;font-size:15px;letter-spacing:2px;color:var(--neon-green);font-family:'VT323',monospace}
-
-.fs-body{flex:1;padding:16px 16px 90px 16px}
-
-.fs-banner{background:var(--bg-card);border:2.5px solid var(--border-thick);border-radius:12px;padding:16px;display:flex;gap:14px;margin-bottom:20px;color:var(--text-sub);font-size:12px;line-height:1.6;box-shadow:3px 3px 0 var(--shadow-solid);}
-.fs-banner i{color:var(--neon-yellow);font-size:20px;margin-top:2px}
-
-.fs-sender-list{display:flex;flex-direction:column;gap:16px}
-.fs-sender-card{background:var(--bg-card);border:2.5px solid var(--border-thick);border-radius:14px;padding:16px;position:relative;display:flex;flex-direction:column;gap:16px;box-shadow:4px 4px 0 var(--shadow-solid);}
-.fs-card-top{display:flex;align-items:center;justify-content:space-between}
-.fs-card-left{display:flex;align-items:center;gap:14px}
-.fs-globe-icon{width:36px;height:36px;border-radius:50%;background:var(--bg-app);border:2px solid var(--border-thick);display:flex;align-items:center;justify-content:center;color:var(--neon-cyan);font-size:16px}
-.fs-card-title{font-size:14px;font-weight:700;color:var(--text-main);line-height:1.4}
-.fs-badge{background:var(--bg-app);border:2px solid var(--neon-cyan);color:var(--neon-cyan);padding:4px 10px;border-radius:6px;font-size:10px;font-weight:900;letter-spacing:1px}
-
-.fs-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fs-btn-outline{background:var(--bg-app);border:2px solid var(--border-thick);color:var(--text-main);display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;box-shadow:2px 2px 0 #000;transition:0.1s}
-.fs-btn-outline:active{transform:translate(2px,2px);box-shadow:0 0 0 #000;}
-.fs-btn-outline-locked{background:var(--bg-card);border:2px solid var(--border-thick);color:#555;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;font-weight:700;font-size:12px;cursor:not-allowed}
-.fs-btn-danger{background:#3a0a0a;border:2px solid var(--neon-red);color:var(--neon-red);display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;box-shadow:2px 2px 0 #000;transition:0.1s}
-.fs-btn-danger:active{transform:translate(2px,2px);box-shadow:0 0 0 #000;}
-
-.fs-fab{position:fixed;bottom:24px;right:20px;width:60px;height:60px;border-radius:50%;background:var(--neon-green);color:#000;font-size:26px;display:flex;align-items:center;justify-content:center;border:3px solid #000;cursor:pointer;z-index:90;box-shadow:4px 4px 0 var(--shadow-solid);transition:0.1s;}
-.fs-fab:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--shadow-solid);}
-
-.fs-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s}
-.fs-overlay.open{opacity:1;pointer-events:all}
-.fs-sheet{background:var(--bg-card);border-radius:20px;border:3px solid var(--border-thick);width:100%;max-width:340px;transform:scale(0.95);transition:transform .22s;overflow:hidden;box-shadow:6px 6px 0 var(--shadow-solid)}
-.fs-overlay.open .fs-sheet{transform:scale(1)}
-
-.fs-sheet-inner{padding:24px}
-.fs-sheet-title{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-.fs-sheet-title-icon{width:32px;height:32px;border-radius:50%;background:var(--neon-green);border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:14px;color:#000;box-shadow:2px 2px 0 #000;}
-.fs-sheet-title span{font-weight:900;font-size:18px;color:var(--text-main);letter-spacing:1px;font-family:'VT323',monospace;}
-
-.fs-input-wrap{position:relative;margin-bottom:24px}
-.fs-input-wrap::before{content:'Enter phone number';position:absolute;top:-8px;left:12px;background:var(--bg-card);padding:0 6px;font-size:10px;color:var(--text-sub);z-index:2;font-weight:bold;}
-.fs-input-field{width:100%;background:var(--bg-input);border:2.5px solid var(--border-thick);border-radius:10px;padding:16px 16px 16px 40px;color:var(--text-main);font-size:14px;outline:none;transition:border-color .18s;font-family:'Space Mono';font-weight:bold;}
-.fs-input-field:focus{border-color:var(--neon-cyan)}
-.fs-input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-sub);font-size:16px}
-
-.fs-toggle-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;padding:0 4px}
-.fs-toggle-text h4{font-size:15px;font-weight:700;color:var(--text-main);margin-bottom:6px}
-.fs-toggle-text p{font-size:11px;color:var(--text-sub);line-height:1.4;max-width:160px;font-weight:bold;}
-.fs-toggle{position:relative;width:52px;height:28px;background:var(--bg-app);border:2.5px solid var(--border-thick);border-radius:20px;cursor:pointer;transition:all 0.2s;box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);}
-.fs-toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:var(--text-sub);border-radius:50%;transition:transform 0.2s, background 0.2s}
-.fs-toggle.on{background:var(--bg-app);border-color:var(--neon-green);}
-.fs-toggle.on::after{transform:translateX(22px);background:var(--neon-green);box-shadow: 0 0 8px var(--neon-green);}
-
-.fs-sheet-actions{display:flex;justify-content:flex-end;gap:12px;align-items:center}
-.fs-btn-text{background:none;border:none;color:var(--text-sub);font-size:14px;font-weight:900;cursor:pointer;padding:10px;letter-spacing:1px;font-family:'VT323',monospace;}
-.fs-btn-solid{background:var(--neon-green);color:#000;border:2.5px solid #000;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:900;cursor:pointer;letter-spacing:1px;transition:all 0.1s;box-shadow:3px 3px 0 #000;font-family:'VT323',monospace;}
-.fs-btn-solid:active{transform:translate(3px,3px);box-shadow:0 0 0 #000;}
-
-.fs-snackbar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg-card);border:2.5px solid var(--neon-green);color:var(--text-main);font-size:13px;font-weight:bold;padding:16px 20px;border-radius:12px;box-shadow:4px 4px 0 #000;z-index:99999;opacity:0;transition:opacity .3s, transform .3s;pointer-events:none;width:calc(100% - 32px);max-width:340px;display:flex;gap:12px;align-items:center}
-.fs-snackbar.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.fs-snackbar i{color:var(--neon-green);font-size:18px}
+:root{--green:#176b45;--lime:#b8e986;--dark:#10291e;--cream:#f5f7ef;--card:#fff;--muted:#64736a}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--cream);color:var(--dark)}
+header{background:linear-gradient(135deg,#0d4931,#238354);color:white;padding:28px 18px 34px}
+nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{font-weight:900;font-size:1.2rem;letter-spacing:.3px}.logo span{color:var(--lime)}
+nav a{color:white;text-decoration:none;margin-left:15px;font-size:.92rem}
+.hero{max-width:1100px;margin:34px auto 0;display:grid;grid-template-columns:1.25fr .75fr;gap:20px;align-items:center}
+.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:.76rem;color:var(--lime);font-weight:800}
+h1{font-size:clamp(2.1rem,5vw,4rem);line-height:1.05;margin:12px 0}
+.hero p{max-width:600px;color:#e1f0e6;line-height:1.7}
+.hero-art{font-size:clamp(6rem,15vw,11rem);text-align:center;filter:drop-shadow(0 15px 15px #082d1d66)}
+.search-wrap{max-width:1100px;margin:-22px auto 0;padding:0 18px;position:relative}
+.search{background:white;box-shadow:0 12px 35px #163b2417;border-radius:16px;padding:12px;display:flex;gap:10px}
+.search input{border:0;outline:0;flex:1;padding:12px;font-size:1rem;min-width:0}
+button,select{font:inherit;cursor:pointer}
+.search button,.primary{border:0;background:var(--green);color:white;border-radius:11px;padding:12px 18px;font-weight:750}
+main{max-width:1100px;margin:35px auto;padding:0 18px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+h2{margin:0;font-size:1.55rem}.muted{color:var(--muted);font-size:.92rem}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.chip{border:1px solid #d8e3d8;background:#fff;color:#355542;border-radius:999px;padding:9px 14px;font-size:.88rem}
+.chip.active,.chip:hover{background:var(--green);color:white;border-color:var(--green)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
+.stat{background:#e6efdf;border-radius:15px;padding:16px}.stat strong{display:block;font-size:1.5rem;color:var(--green)}.stat span{font-size:.86rem;color:#526858}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.animal{background:var(--card);border:1px solid #e6eae2;border-radius:18px;overflow:hidden;box-shadow:0 5px 18px #183c2410;transition:transform .2s}
+.animal:hover{transform:translateY(-4px)}
+.animal-top{height:145px;background:linear-gradient(135deg,#d9edcf,#edf4e8);display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative}
+.favorite{position:absolute;top:10px;right:10px;border:0;border-radius:50%;width:38px;height:38px;background:#ffffffdf;font-size:1.2rem}
+.animal-body{padding:16px}.tag{display:inline-block;background:#eaf4e6;color:#286342;border-radius:6px;padding:4px 8px;font-size:.73rem;font-weight:800}
+.animal h3{margin:10px 0 4px}.latin{font-style:italic;color:var(--muted);font-size:.85rem}.animal p{font-size:.9rem;line-height:1.55;color:#526158;min-height:43px}
+.details{display:flex;gap:8px;flex-wrap:wrap;font-size:.8rem;color:#3d5948;margin:12px 0}
+.detail-btn{width:100%;border:1px solid #cbdccc;background:white;color:var(--green);padding:10px;border-radius:10px;font-weight:750}
+.detail-btn:hover{background:#eff7ed}
+.empty{grid-column:1/-1;text-align:center;padding:35px;background:white;border-radius:15px;color:var(--muted)}
+.about{margin-top:42px;background:#163e2c;color:white;padding:25px;border-radius:20px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.about p{line-height:1.7;color:#dce9df}.about ul{line-height:1.9;color:#e8f2e9}
+footer{text-align:center;padding:28px 18px;color:var(--muted);font-size:.88rem}
+.modal{position:fixed;inset:0;background:#071d12b8;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+.modal.show{display:flex}.modal-box{background:white;max-width:520px;width:100%;border-radius:20px;padding:24px;max-height:85vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;gap:12px}.close{border:0;background:#edf2ea;border-radius:50%;width:36px;height:36px;font-size:1.2rem}
+.modal-emoji{text-align:center;font-size:6rem;background:#e8f3e2;border-radius:14px;padding:12px;margin:15px 0}
+.info-row{padding:10px 0;border-bottom:1px solid #e7ece5}.info-row b{display:block;margin-bottom:3px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.hero-art{display:none}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.about{grid-template-columns:1fr}nav a{margin-left:7px}.animal-top{height:120px;font-size:4rem}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:12px}.stat strong{font-size:1.2rem}.search button{padding:10px}.logo{width:100%}}
 </style>
 </head>
 <body>
-
-<!-- MODAL SUKSES -->
-<div class="overlay-modal" id="successModal">
-  <div class="modal-box">
-    <div class="modal-icon-wrap">
-      <div class="modal-ring"></div>
-      <div class="modal-ring-2"></div>
-      <div class="modal-circle">
-        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-      </div>
+<header id="beranda">
+  <nav>
+    <div class="logo">🌿 SATWA<span>PEDIA</span></div>
+    <div><a href="#beranda">Beranda</a><a href="#katalog">Katalog</a><a href="#tentang">Tentang</a></div>
+  </nav>
+  <div class="hero">
+    <div><div class="eyebrow">Jelajahi keanekaragaman hayati</div>
+      <h1>Mengenal Satwa,<br>Menjaga Alam.</h1>
+      <p>Ensiklopedia satwa untuk mengenal hewan, habitat, makanan, dan keunikan mereka. Temukan satwa favoritmu dan pelajari cara ikut melindunginya.</p>
     </div>
-    <h2 class="modal-title">Sukses Send Bug</h2>
-    <p class="modal-desc" id="modalDesc">Payload berhasil dikirim ke target.</p>
-    <button class="modal-btn" id="btnCloseModal">Selesai</button>
+    <div class="hero-art" aria-hidden="true">🦜</div>
   </div>
-</div>
-
-<!-- LOGIN OVERLAY -->
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-box">
-    <h2>PPL ACCESS</h2>
-    <div class="l-field">
-      <label>Email Operator</label>
-      <input type="email" id="inEmail" placeholder="dimxx@gmail.com" autocomplete="off">
-    </div>
-    <div class="l-field">
-      <label>Password</label>
-      <input type="password" id="inPass" placeholder="••••" autocomplete="off">
-    </div>
-    <button class="l-btn" id="btnLogin">MASUK PANEL</button>
-    <div class="l-err" id="loginErr"></div>
+</header>
+<div class="search-wrap"><form class="search" id="searchForm"><input id="searchInput" placeholder="Cari nama satwa, habitat, atau makanan..." aria-label="Cari satwa"><button type="submit">Cari 🔎</button></form></div>
+<main>
+  <div class="stats">
+    <div class="stat"><strong id="totalCount">24</strong><span>Satwa di katalog</span></div>
+    <div class="stat"><strong>6</strong><span>Kelompok utama</span></div>
+    <div class="stat"><strong id="favoriteCount">0</strong><span>Satwa favorit</span></div>
   </div>
-</div>
-
-<!-- MAIN APP -->
-<div class="app" id="mainApp">
-  <div class="topbar">
-    <div class="icon-btn" id="btnMenu">≡</div>
-    <div class="brand-center">
-      <div class="brand-line"></div>
-      <div class="brand-text">PPL PROJECT</div>
-      <div class="brand-line"></div>
+  <section id="katalog">
+    <div class="section-head"><div><h2>Jelajahi satwa</h2><div class="muted">Pilih kelompok atau cari satwa yang ingin kamu ketahui.</div></div>
+      <select id="sortSelect" aria-label="Urutkan satwa"><option value="name">Urutkan: Nama A–Z</option><option value="category">Urutkan: Kelompok</option></select>
     </div>
-    <div class="icon-btn" id="btnSettings">⚙</div>
-  </div>
-
-  <!-- PAGE HOME -->
-  <div class="page active" id="pageHome">
-    <div class="b-card">
-      <div style="display:flex; gap:14px; align-items:center; margin-bottom:16px;">
-        <div style="width:64px;height:64px;background:var(--bg-app);border:2.5px solid var(--neon-yellow);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 #000;">
-          <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:var(--neon-yellow);"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;flex:1;">
-          <div style="font-size:20px;font-weight:900;color:var(--text-main);letter-spacing:0.5px;text-transform:capitalize;font-family:'VT323',monospace;" id="uiUsername">GUEST</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <span class="tag" style="padding:4px 10px;border:2px solid #000;border-radius:6px;font-size:10px;font-weight:900;box-shadow:2px 2px 0 #000;background:var(--neon-yellow);color:#000;font-family:'VT323',monospace;" id="uiRole">USER</span>
-            <span class="tag" style="padding:4px 10px;border:2px solid #000;border-radius:6px;font-size:10px;font-weight:900;box-shadow:2px 2px 0 #000;background:var(--neon-green);color:#000;font-family:'VT323',monospace;">PREMIUM</span>
-            <span class="tag" style="padding:4px 10px;border:2px solid #000;border-radius:6px;font-size:10px;font-weight:900;box-shadow:2px 2px 0 #000;background:var(--neon-cyan);color:#000;font-family:'VT323',monospace;">ID: 9999</span>
-          </div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;">
-        <div style="flex:1;background:var(--bg-app);border:2px solid var(--border-thick);border-radius:10px;padding:10px;box-shadow:2px 2px 0 #000;display:flex;flex-direction:column;justify-content:center">
-          <small style="font-size:9px;font-weight:900;text-transform:uppercase;color:var(--text-sub);margin-bottom:2px;font-family:'VT323',monospace;">DEVICE</small>
-          <b style="font-size:12px;font-weight:700;color:var(--text-main);">Realme 70</b>
-        </div>
-        <div style="flex:1;background:var(--bg-app);border:2px solid var(--border-thick);border-radius:10px;padding:10px;box-shadow:2px 2px 0 #000;display:flex;flex-direction:column;justify-content:center">
-          <small style="font-size:9px;font-weight:900;text-transform:uppercase;color:var(--text-sub);margin-bottom:2px;font-family:'VT323',monospace;">ONLINE</small>
-          <b style="font-size:12px;font-weight:700;color:var(--text-main);">1</b>
-        </div>
-        <div style="flex:1;background:var(--bg-app);border:2px solid var(--border-thick);border-radius:10px;padding:10px;box-shadow:2px 2px 0 #000;display:flex;flex-direction:column;justify-content:center">
-          <small style="font-size:9px;font-weight:900;text-transform:uppercase;color:var(--text-sub);margin-bottom:2px;font-family:'VT323',monospace;">ROLE</small>
-          <b style="font-size:12px;font-weight:700;color:var(--text-main);" id="uiRoleStat">USER</b>
-        </div>
-      </div>
-    </div>
-
-    <!-- VIDEO CARD -->
-    <div class="b-card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;background:#000;border-radius:14px;border:2.5px solid var(--border-thick);box-shadow:4px 4px 0 #000;">
-      <div style="position:relative;width:100%;aspect-ratio:16/9;background:#000">
-        <video autoplay loop muted playsinline preload="auto" src="https://files.catbox.moe/o5xo95.mp4" style="width:100%;height:100%;object-fit:cover;pointer-events:none"></video>
-        <div style="position:absolute;bottom:12px;left:12px;font-family:'VT323',monospace;font-size:28px;color:#fff;text-shadow:2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;letter-spacing:1.5px;pointer-events:none;line-height:1">PPL PROJECT</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGE WHATSAPP -->
-  <div class="page" id="pageWa">
-    <div class="b-card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;background:#000;border-radius:14px;border:2.5px solid var(--border-thick);box-shadow:4px 4px 0 #000;">
-      <div style="position:relative;width:100%;aspect-ratio:16/9;background:#000">
-        <video autoplay loop muted playsinline preload="auto" src="https://files.catbox.moe/o5xo95.mp4" style="width:100%;height:100%;object-fit:cover;pointer-events:none"></video>
-        <div style="position:absolute;bottom:12px;left:12px;font-family:'VT323',monospace;font-size:28px;color:#fff;text-shadow:2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;letter-spacing:1.5px;pointer-events:none;line-height:1">PPL PROJECT</div>
-      </div>
-    </div>
-
-    <div class="tabs-row">
-      <button type="button" class="tab-btn active" id="tabBug">Bug Nomor</button>
-      <button type="button" class="tab-btn" id="tabSender">Sender</button>
-    </div>
-
-    <!-- TAB BUG -->
-    <div class="tab-content active" id="contentBug">
-      <div class="b-card">
-        <div class="card-title">
-          <svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
-          Target Number
-        </div>
-        <div class="target-input-wrap">
-          <div class="flag-box" onclick="toggleCountry('dropBug')">
-            <span id="flagBug">🇮🇩</span> <span id="codeBug">+62</span> <i class="fas fa-caret-down"></i>
-          </div>
-          <input type="tel" id="targetNumber" placeholder="e.g. 8xxx...">
-          <div class="country-dropdown" id="dropBug">
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇮🇩','+62')"><span class="flag">🇮🇩</span> Indonesia +62</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇲🇾','+60')"><span class="flag">🇲🇾</span> Malaysia +60</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇸🇬','+65')"><span class="flag">🇸🇬</span> Singapore +65</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇺🇸','+1')"><span class="flag">🇺🇸</span> USA +1</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇬🇧','+44')"><span class="flag">🇬🇧</span> UK +44</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇯🇵','+81')"><span class="flag">🇯🇵</span> Japan +81</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇰🇷','+82')"><span class="flag">🇰🇷</span> South Korea +82</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇨🇳','+86')"><span class="flag">🇨🇳</span> China +86</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇮🇳','+91')"><span class="flag">🇮🇳</span> India +91</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇵🇭','+63')"><span class="flag">🇵🇭</span> Philippines +63</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇹🇭','+66')"><span class="flag">🇹🇭</span> Thailand +66</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇻🇳','+84')"><span class="flag">🇻🇳</span> Vietnam +84</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇦🇺','+61')"><span class="flag">🇦🇺</span> Australia +61</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇷🇺','+7')"><span class="flag">🇷🇺</span> Russia +7</div>
-            <div class="country-option" onclick="selectCountry('dropBug','flagBug','codeBug','🇧🇷','+55')"><span class="flag">🇧🇷</span> Brazil +55</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="b-card">
-        <div class="card-title">
-          <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-          Select Payload Bug
-        </div>
-        
-        <div class="custom-select-wrap" id="bugDropdown">
-          <div class="custom-select-trigger" id="bugTrigger">
-            <span id="bugText">Blank Screen</span>
-            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-          </div>
-          <div class="custom-options" id="bugOptions">
-            <div class="custom-option" data-val="crash_global">Crash Global</div>
-            <div class="custom-option" data-val="crash_ios">Crash IOS</div>
-            <div class="custom-option" data-val="crash_android">Crash Android</div>
-            <div class="custom-option" data-val="delay_invisible">Delay Invisible By @AmbatukamBePenat</div>
-            <div class="custom-option" data-val="contact_fc">Contact FC Anti Block @AmbatukamBePenat</div>
-            <div class="custom-option" data-val="dragon_crash">Dragon crash</div>
-            <div class="custom-option" data-val="delayinvis">delayinvis</div>
-            <div class="custom-option selected" data-val="blank_screen">Blank Screen</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TOMBOL SEND BUG (DIPASTIKAN BISA DIKLIK) -->
-      <button type="button" class="btn-send" id="btnSendBug">
-        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-        SEND BUG
-      </button>
-    </div>
-  </div>
-
-  <!-- PAGE RAT -->
-  <div class="page" id="pageRat">
-    <div class="empty-state">
-      <svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></svg>
-      <h3>DEVICE BELUM ADA YANG TERHUBUNG</h3>
-      <p>Pastikan target sudah membuka payload dan terhubung ke jaringan.</p>
-    </div>
-  </div>
-
-  <!-- PAGE TOOLS -->
-  <div class="page" id="pageTools">
-    <div class="empty-state">
-      <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg>
-      <h3>TOOLS BELUM DITAMBAHKAN</h3>
-      <p>Nanti gua kita tambahin ya.</p>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav">
-    <div class="nav-item active" id="navHome">
-      <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg></div>
-      <div class="nav-label">Home</div>
-    </div>
-    <div class="nav-item" id="navWa">
-      <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
-      <div class="nav-label">WhatsApp</div>
-    </div>
-    <div class="nav-item" id="navRat">
-      <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
-      <div class="nav-label">RAT</div>
-    </div>
-    <div class="nav-item" id="navTools">
-      <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div>
-      <div class="nav-label">Tools</div>
-    </div>
-  </div>
-</div>
-
-<!-- FULL SENDER PAGE -->
-<div id="full-sender-page">
-  <header class="fs-appbar">
-    <button type="button" class="fs-btn" id="btnBackSenderPage">
-      <i class="fas fa-chevron-left"></i>
-    </button>
-    <span class="fs-title">Manage Bug Sender</span>
-    <button type="button" class="fs-btn" id="btnRefreshSenderPage">
-      <i class="fas fa-rotate-right"></i>
-    </button>
-  </header>
-
-  <div class="fs-body">
-    <div class="fs-banner">
-      <i class="fas fa-shield-alt"></i>
-      <div>Sistem sender telah dioptimalkan oleh Fanz. Semua koneksi terenkripsi End-to-End.</div>
-    </div>
-
-    <div class="fs-sender-list" id="fs-list">
-      <div class="fs-sender-card">
-        <div class="fs-card-top">
-          <div class="fs-card-left">
-            <div class="fs-globe-icon"><i class="fas fa-globe"></i></div>
-            <div class="fs-card-title">Fanz Global Node-1<br>(US)</div>
-          </div>
-          <div class="fs-badge">GLOBAL</div>
-        </div>
-        <div class="fs-card-actions">
-          <button type="button" class="fs-btn-outline" onclick="fsRefreshNode()">
-            <i class="fas fa-rotate-right"></i> REFRESH
-          </button>
-          <button type="button" class="fs-btn-outline-locked" disabled>
-            <i class="fas fa-lock"></i> LOCKED
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <button type="button" class="fs-fab" onclick="fsShowAdd()">
-    <i class="fas fa-plus"></i>
-  </button>
-
-  <!-- MODAL ADD SENDER -->
-  <div class="fs-overlay" id="fs-add-modal">
-    <div class="fs-sheet">
-      <div class="fs-sheet-inner">
-        <div class="fs-sheet-title">
-          <div class="fs-sheet-title-icon"><i class="fas fa-plus"></i></div>
-          <span>Add New Sender</span>
-        </div>
-        
-        <div class="target-input-wrap" style="margin-bottom:24px; border:2.5px solid var(--border-thick); background:transparent">
-          <div class="flag-box" style="background:transparent; border-right:2.5px solid var(--border-thick); color:var(--text-main); padding:16px 14px;" onclick="toggleCountry('dropSender')">
-            <span id="flagSender">🇮🇩</span> <span id="codeSender">+62</span> <i class="fas fa-caret-down"></i>
-          </div>
-          <input class="fs-input-field" style="border:none; padding-left:14px; background:transparent;" id="fs-input-phone" type="tel" placeholder="Enter phone number" inputmode="tel" />
-          <div class="country-dropdown" id="dropSender" style="background:var(--bg-card); border-color:var(--border-thick); box-shadow:4px 4px 0 #000">
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇮🇩','+62')"><span class="flag">🇮🇩</span> Indonesia +62</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇲🇾','+60')"><span class="flag">🇲🇾</span> Malaysia +60</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇸🇬','+65')"><span class="flag">🇸🇬</span> Singapore +65</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇺🇸','+1')"><span class="flag">🇺🇸</span> USA +1</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇬🇧','+44')"><span class="flag">🇬🇧</span> UK +44</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇯🇵','+81')"><span class="flag">🇯🇵</span> Japan +81</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇰🇷','+82')"><span class="flag">🇰🇷</span> South Korea +82</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇨🇳','+86')"><span class="flag">🇨🇳</span> China +86</div>
-            <div class="country-option" style="color:var(--text-main); border-color:var(--border-thick)" onclick="selectCountry('dropSender','flagSender','codeSender','🇮🇳','+91')"><span class="flag">🇮🇳</span> India +91</div>
-          </div>
-        </div>
-        
-        <div class="fs-toggle-row">
-          <div class="fs-toggle-text">
-            <h4>Global<br>Sender</h4>
-            <p>Tambah global sender untuk semua member.</p>
-          </div>
-          <div class="fs-toggle" id="fs-toggle-global" onclick="this.classList.toggle('on')"></div>
-        </div>
-        
-        <div class="fs-sheet-actions">
-          <button type="button" class="fs-btn-text" onclick="fsCloseModal('fs-add-modal')">CANCEL</button>
-          <button type="button" class="fs-btn-solid" onclick="fsSubmitAdd()">CONNECT</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="fs-snackbar" id="fs-snackbar">
-    <i class="fas fa-check-square"></i>
-    <span id="fs-snackbar-text">Sender berhasil dihubungkan ke server!</span>
-  </div>
-</div>
-
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="animalGrid"></div>
+  </section>
+  <section class="about" id="tentang">
+    <div><div class="eyebrow">Kenali dan lindungi</div><h2>Alam adalah rumah bersama</h2><p>Setiap satwa punya peran dalam ekosistem. Menjaga habitat, tidak membeli satwa liar hasil perdagangan ilegal, dan mengurangi sampah adalah langkah sederhana untuk membantu mereka.</p></div>
+    <div><h3>Kelompok satwa</h3><ul><li><b>Mamalia:</b> menyusui anaknya.</li><li><b>Burung:</b> berbulu dan memiliki paruh.</li><li><b>Reptil:</b> kulit bersisik dan bernapas dengan paru-paru.</li><li><b>Ikan:</b> hidup di air dan umumnya bernapas dengan insang.</li><li><b>Amfibi:</b> umumnya menjalani tahap hidup di air dan darat.</li><li><b>Invertebrata:</b> hewan tanpa tulang belakang.</li></ul></div>
+  </section>
+</main>
+<footer>© 2026 SatwaPedia • Website edukasi satwa • Belajar untuk menjaga keanekaragaman hayati 🌱</footer>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box"><div class="modal-head"><div><span class="tag" id="modalCategory"></span><h2 id="modalTitle"></h2><div class="latin" id="modalLatin"></div></div><button class="close" id="closeModal" aria-label="Tutup">×</button></div><div class="modal-emoji" id="modalEmoji"></div><p id="modalDescription"></p><div id="modalInfo"></div></div></div>
 <script>
-// === LOGIKA JS TETAP 100% SAMA, TIDAK ADA YANG DIUBAH ===
-const DOM = {
-  loginOverlay: document.getElementById("loginOverlay"),
-  btnLogin: document.getElementById("btnLogin"),
-  inEmail: document.getElementById("inEmail"),
-  inPass: document.getElementById("inPass"),
-  loginErr: document.getElementById("loginErr"),
-  uiUsername: document.getElementById("uiUsername"),
-  uiRole: document.getElementById("uiRole"),
-  uiRoleStat: document.getElementById("uiRoleStat"),
-  mainApp: document.getElementById("mainApp"),
-  pages: {
-    home: document.getElementById("pageHome"),
-    wa: document.getElementById("pageWa"),
-    rat: document.getElementById("pageRat"),
-    tools: document.getElementById("pageTools")
-  },
-  navs: {
-    home: document.getElementById("navHome"),
-    wa: document.getElementById("navWa"),
-    rat: document.getElementById("navRat"),
-    tools: document.getElementById("navTools")
-  },
-  successModal: document.getElementById("successModal"),
-  btnCloseModal: document.getElementById("btnCloseModal"),
-  dropdown: document.getElementById("bugDropdown"),
-  trigger: document.getElementById("bugTrigger"),
-  options: document.getElementById("bugOptions"),
-  bugText: document.getElementById("bugText"),
-  tabBug: document.getElementById("tabBug"),
-  tabSender: document.getElementById("tabSender"),
-  contentBug: document.getElementById("contentBug"),
-  fullSenderPage: document.getElementById("full-sender-page")
-};
-
-function switchPage(pageId) {
-  Object.values(DOM.pages).forEach(p => p.classList.remove("active"));
-  Object.values(DOM.navs).forEach(n => n.classList.remove("active"));
-  if (DOM.pages[pageId] && DOM.navs[pageId]) {
-    DOM.pages[pageId].classList.add("active");
-    DOM.navs[pageId].classList.add("active");
-  }
+const animals = [
+{name:"Harimau Sumatra",latin:"Panthera tigris sumatrae",category:"Mamalia",emoji:"🐅",habitat:"Hutan tropis Sumatra",food:"Karnivor; rusa dan babi hutan",status:"Terancam kritis",description:"Subspesies harimau yang hidup di Pulau Sumatra. Memiliki loreng rapat dan berperan sebagai predator puncak.",fact:"Harimau memiliki pola loreng yang unik pada setiap individu."},
+{name:"Gajah Asia",latin:"Elephas maximus",category:"Mamalia",emoji:"🐘",habitat:"Hutan dan padang rumput Asia",food:"Rumput, daun, kulit kayu, buah",status:"Terancam punah",description:"Mamalia besar dengan belalai yang digunakan untuk mengambil makanan, minum, dan berkomunikasi.",fact:"Gajah menggunakan belalainya untuk banyak aktivitas sehari-hari."},
+{name:"Orangutan Kalimantan",latin:"Pongo pygmaeus",category:"Mamalia",emoji:"🦧",habitat:"Hutan hujan Kalimantan",food:"Buah, daun, kulit kayu, serangga",status:"Terancam kritis",description:"Primata arboreal yang menghabiskan banyak waktu di pepohonan dan membantu penyebaran biji.",fact:"Orangutan dikenal memiliki kemampuan belajar dan menggunakan alat sederhana."},
+{name:"Badak Jawa",latin:"Rhinoceros sondaicus",category:"Mamalia",emoji:"🦏",habitat:"Hutan tropis dataran rendah",food:"Daun, tunas, ranting",status:"Terancam kritis",description:"Badak langka yang kini bertahan di kawasan Ujung Kulon, Indonesia.",fact:"Badak Jawa umumnya memiliki satu cula kecil."},
+{name:"Komodo",latin:"Varanus komodoensis",category:"Reptil",emoji:"🦎",habitat:"Pulau-pulau Nusa Tenggara Timur",food:"Daging hewan",status:"Terancam",description:"Kadal terbesar yang masih hidup, berasal dari beberapa pulau di Indonesia.",fact:"Komodo memiliki indra penciuman yang sangat baik."},
+{name:"Anoa",latin:"Bubalus spp.",category:"Mamalia",emoji:"🐃",habitat:"Hutan Sulawesi",food:"Rumput, daun, tunas",status:"Terancam",description:"Kerabat kerbau berukuran kecil yang merupakan satwa endemik Sulawesi.",fact:"Anoa sering disebut kerbau kerdil."},
+{name:"Bekantan",latin:"Nasalis larvatus",category:"Mamalia",emoji:"🐒",habitat:"Hutan mangrove dan tepi sungai Kalimantan",food:"Daun, buah, biji",status:"Terancam",description:"Primata berhidung panjang yang hidup berkelompok di sekitar sungai dan mangrove.",fact:"Bekantan jantan biasanya memiliki hidung lebih besar."},
+{name:"Penyu Hijau",latin:"Chelonia mydas",category:"Reptil",emoji:"🐢",habitat:"Laut tropis dan pantai berpasir",food:"Lamun dan alga saat dewasa",status:"Terancam",description:"Reptil laut yang bermigrasi jauh dan kembali ke pantai untuk bertelur.",fact:"Penyu betina bertelur di pantai berpasir."},
+{name:"Burung Cenderawasih",latin:"Paradisaeidae",category:"Burung",emoji:"🦜",habitat:"Hutan Papua dan sekitarnya",food:"Buah dan serangga",status:"Bervariasi menurut spesies",description:"Kelompok burung yang terkenal dengan bulu dan tarian kawinnya yang indah.",fact:"Banyak spesies cenderawasih jantan melakukan pertunjukan untuk menarik pasangan."},
+{name:"Elang Jawa",latin:"Nisaetus bartelsi",category:"Burung",emoji:"🦅",habitat:"Hutan pegunungan Pulau Jawa",food:"Mamalia kecil, burung, reptil",status:"Terancam",description:"Burung pemangsa endemik Jawa dengan jambul khas di kepalanya.",fact:"Elang Jawa menjadi salah satu inspirasi lambang Garuda Pancasila."},
+{name:"Jalak Bali",latin:"Leucopsar rothschildi",category:"Burung",emoji:"🐦",habitat:"Hutan Bali bagian barat",food:"Serangga, buah, biji",status:"Terancam kritis",description:"Burung putih dengan kulit biru di sekitar mata yang berasal dari Bali.",fact:"Jalak Bali merupakan satwa endemik Indonesia."},
+{name:"Kakatua Jambul Kuning",latin:"Cacatua sulphurea",category:"Burung",emoji:"🦜",habitat:"Hutan dan kawasan berpohon di Indonesia",food:"Biji, kacang, buah",status:"Terancam kritis",description:"Burung cerdas dengan jambul kuning yang dapat ditegakkan.",fact:"Kakatua menggunakan paruh dan kaki untuk memegang makanan."},
+{name:"Merak Hijau",latin:"Pavo muticus",category:"Burung",emoji:"🦚",habitat:"Hutan terbuka dan padang rumput Asia",food:"Biji, buah, serangga kecil",status:"Terancam",description:"Burung besar dengan bulu berkilau; pejantan memamerkan bulu ekornya saat berkembang biak.",fact:"Bulu pajangan merak membantu menarik pasangan."},
+{name:"Buaya Muara",latin:"Crocodylus porosus",category:"Reptil",emoji:"🐊",habitat:"Muara, sungai, mangrove, pesisir",food:"Ikan dan hewan lain",status:"Risiko rendah secara global",description:"Reptil besar yang mampu hidup di lingkungan air tawar maupun air asin.",fact:"Buaya adalah reptil yang telah ada sejak zaman purba."},
+{name:"Ular Sanca Kembang",latin:"Malayopython reticulatus",category:"Reptil",emoji:"🐍",habitat:"Hutan, rawa, dan dekat permukiman",food:"Mamalia dan burung",status:"Bervariasi menurut wilayah",description:"Ular besar yang tidak berbisa dan melumpuhkan mangsa dengan lilitan.",fact:"Sanca menggunakan organ sensor untuk membantu mendeteksi panas."},
+{name:"Katak Pohon",latin:"Rhacophoridae",category:"Amfibi",emoji:"🐸",habitat:"Hutan lembap dan pepohonan dekat air",food:"Serangga kecil",status:"Bervariasi menurut spesies",description:"Kelompok katak yang beradaptasi hidup di pepohonan dengan bantalan perekat pada jari.",fact:"Kulit amfibi peka terhadap perubahan lingkungan."},
+{name:"Salamander",latin:"Caudata",category:"Amfibi",emoji:"🦎",habitat:"Tempat lembap, kolam, dan aliran air",food:"Serangga dan hewan kecil",status:"Bervariasi menurut spesies",description:"Amfibi bertubuh memanjang dan berekor yang banyak ditemukan di belahan bumi utara.",fact:"Sebagian salamander mampu meregenerasi bagian tubuh tertentu."},
+{name:"Ikan Badut",latin:"Amphiprioninae",category:"Ikan",emoji:"🐠",habitat:"Terumbu karang Indo-Pasifik",food:"Plankton dan hewan kecil",status:"Bervariasi menurut spesies",description:"Ikan laut berwarna cerah yang hidup berdampingan dengan anemon laut.",fact:"Lapisan lendir membantu ikan badut terlindung dari sengatan anemon."},
+{name:"Hiu Paus",latin:"Rhincodon typus",category:"Ikan",emoji:"🦈",habitat:"Laut tropis dan subtropis",food:"Plankton dan ikan kecil",status:"Terancam",description:"Ikan terbesar di dunia, tetapi makanannya terutama organisme kecil yang disaring dari air.",fact:"Pola totol pada tubuh hiu paus berbeda pada tiap individu."},
+{name:"Ikan Arwana Asia",latin:"Scleropages formosus",category:"Ikan",emoji:"🐟",habitat:"Sungai dan rawa air tawar Asia Tenggara",food:"Serangga, ikan kecil, krustasea",status:"Terancam",description:"Ikan air tawar bersisik besar yang berasal dari Asia Tenggara.",fact:"Arwana mampu melompat untuk menangkap mangsa di dekat permukaan."},
+{name:"Lumba-lumba",latin:"Delphinidae",category:"Mamalia",emoji:"🐬",habitat:"Laut dan beberapa sungai",food:"Ikan dan cumi-cumi",status:"Bervariasi menurut spesies",description:"Mamalia laut yang bernapas dengan paru-paru dan menggunakan suara untuk berkomunikasi.",fact:"Lumba-lumba menggunakan ekolokasi untuk membantu menemukan objek."},
+{name:"Paus Biru",latin:"Balaenoptera musculus",category:"Mamalia",emoji:"🐋",habitat:"Samudra di berbagai wilayah dunia",food:"Krill",status:"Terancam",description:"Hewan terbesar yang diketahui pernah hidup di Bumi.",fact:"Paus biru menyaring krill dari air menggunakan lempeng balin."},
+{name:"Kupu-kupu",latin:"Lepidoptera",category:"Invertebrata",emoji:"🦋",habitat:"Kebun, padang rumput, dan hutan",food:"Nektar; ulat memakan tumbuhan",status:"Bervariasi menurut spesies",description:"Serangga bersayap yang mengalami metamorfosis dari telur, ulat, kepompong, hingga dewasa.",fact:"Banyak kupu-kupu membantu penyerbukan tanaman."},
+{name:"Lebah Madu",latin:"Apis mellifera",category:"Invertebrata",emoji:"🐝",habitat:"Kebun, padang bunga, dan hutan",food:"Nektar dan serbuk sari",status:"Bervariasi menurut populasi",description:"Serangga sosial yang hidup dalam koloni dan berperan penting dalam penyerbukan.",fact:"Lebah pekerja dapat memberi petunjuk arah sumber makanan kepada koloni."},
+{name:"Gurita",latin:"Octopus",category:"Invertebrata",emoji:"🐙",habitat:"Laut, dasar berbatu dan terumbu",food:"Kepiting, kerang, hewan laut kecil",status:"Bervariasi menurut spesies",description:"Hewan laut bertubuh lunak dengan delapan lengan dan kemampuan kamuflase.",fact:"Gurita dikenal cerdas dan mampu memecahkan beberapa jenis masalah."},
+{name:"Kepiting Bakau",latin:"Scylla spp.",category:"Invertebrata",emoji:"🦀",habitat:"Hutan mangrove dan muara",food:"Moluska, ikan kecil, bahan organik",status:"Bervariasi menurut spesies",description:"Krustasea yang hidup di kawasan mangrove dan memiliki capit kuat.",fact:"Mangrove menjadi tempat penting bagi banyak kepiting dan satwa pesisir."}
+];
+const categories=["Semua","Mamalia","Burung","Reptil","Ikan","Amfibi","Invertebrata"];
+let activeCategory="Semua", query="", favorites=new Set();
+const grid=document.getElementById("animalGrid"), filters=document.getElementById("filters");
+function renderFilters(){filters.innerHTML=categories.map(c=>`<button class="chip ${activeCategory===c?'active':''}" data-category="${c}">${c}</button>`).join("");}
+function render(){
+ const sort=document.getElementById("sortSelect").value;
+ let list=animals.filter(a=>(activeCategory==="Semua"||a.category===activeCategory)&&[a.name,a.latin,a.category,a.habitat,a.food].join(" ").toLowerCase().includes(query.toLowerCase()));
+ list.sort((a,b)=>sort==="category"?(a.category.localeCompare(b.category)||a.name.localeCompare(b.name)):a.name.localeCompare(b.name));
+ document.getElementById("totalCount").textContent=animals.length;
+ document.getElementById("favoriteCount").textContent=favorites.size;
+ grid.innerHTML=list.length?list.map(a=>`<article class="animal"><div class="animal-top"><span>${a.emoji}</span><button class="favorite" data-fav="${a.name}" aria-label="Favoritkan ${a.name}">${favorites.has(a.name)?"❤️":"🤍"}</button></div><div class="animal-body"><span class="tag">${a.category}</span><h3>${a.name}</h3><div class="latin">${a.latin}</div><p>${a.description}</p><div class="details"><span>📍 ${a.habitat.split(" ").slice(0,4).join(" ")}${a.habitat.split(" ").length>4?"…":""}</span></div><button class="detail-btn" data-detail="${a.name}">Lihat detail →</button></div></article>`).join(""):`<div class="empty">Satwa tidak ditemukan. Coba kata kunci atau kategori lain.</div>`;
 }
-
-DOM.navs.home.addEventListener("click", () => switchPage("home"));
-DOM.navs.wa.addEventListener("click", () => switchPage("wa"));
-DOM.navs.rat.addEventListener("click", () => switchPage("rat"));
-DOM.navs.tools.addEventListener("click", () => switchPage("tools"));
-
-DOM.btnLogin.addEventListener("click", () => {
-  const e = DOM.inEmail.value.trim().toLowerCase();
-  const p = DOM.inPass.value;
-  if (!e || !p) { DOM.loginErr.textContent = "Isi semua kolom!"; return; }
-  const isMHA = (e === "dimxx@gmail.com" && p === "11");
-  DOM.loginOverlay.classList.add("hidden");
-  const role = isMHA ? "MHA DEV" : "USER";
-  DOM.uiUsername.textContent = e.split("@")[0];
-  DOM.uiRole.textContent = role;
-  DOM.uiRoleStat.textContent = role;
+filters.addEventListener("click",e=>{const b=e.target.closest("[data-category]");if(!b)return;activeCategory=b.dataset.category;renderFilters();render();});
+grid.addEventListener("click",e=>{
+ const fav=e.target.closest("[data-fav]");if(fav){const n=fav.dataset.fav;favorites.has(n)?favorites.delete(n):favorites.add(n);render();return;}
+ const det=e.target.closest("[data-detail]");if(det)openDetail(animals.find(a=>a.name===det.dataset.detail));
 });
-
-function toggleCountry(id) {
-  const drop = document.getElementById(id);
-  document.querySelectorAll('.country-dropdown').forEach(el => {
-    if(el.id !== id) el.classList.remove('show');
-  });
-  drop.classList.toggle('show');
+document.getElementById("searchForm").addEventListener("submit",e=>{e.preventDefault();query=document.getElementById("searchInput").value.trim();render();});
+document.getElementById("searchInput").addEventListener("input",e=>{query=e.target.value.trim();render();});
+document.getElementById("sortSelect").addEventListener("change",render);
+function openDetail(a){
+ if(!a)return;
+ document.getElementById("modalCategory").textContent=a.category;
+ document.getElementById("modalTitle").textContent=a.name;
+ document.getElementById("modalLatin").textContent=a.latin;
+ document.getElementById("modalEmoji").textContent=a.emoji;
+ document.getElementById("modalDescription").textContent=a.description;
+ document.getElementById("modalInfo").innerHTML=`<div class="info-row"><b>Habitat</b>${a.habitat}</div><div class="info-row"><b>Makanan</b>${a.food}</div><div class="info-row"><b>Status konservasi</b>${a.status}</div><div class="info-row"><b>Fakta menarik</b>${a.fact}</div>`;
+ document.getElementById("modal").classList.add("show");
 }
-
-function selectCountry(dropId, flagId, codeId, flag, code) {
-  document.getElementById(flagId).textContent = flag;
-  document.getElementById(codeId).textContent = code;
-  document.getElementById(dropId).classList.remove('show');
-}
-
-document.addEventListener("click", (e) => {
-  if (!e.target.closest('.target-input-wrap')) {
-    document.querySelectorAll('.country-dropdown').forEach(el => el.classList.remove('show'));
-  }
-});
-
-DOM.trigger.addEventListener("click", (e) => {
-  e.stopPropagation();
-  DOM.dropdown.classList.toggle("open");
-});
-
-DOM.options.addEventListener("click", (e) => {
-  if (e.target.classList.contains("custom-option")) {
-    const val = e.target.getAttribute("data-val");
-    const text = e.target.innerText;
-    document.querySelectorAll(".custom-option").forEach(opt => opt.classList.remove("selected"));
-    e.target.classList.add("selected");
-    DOM.bugText.textContent = text;
-    DOM.dropdown.classList.remove("open");
-    DOM.dropdown.setAttribute("data-selected", val);
-  }
-});
-
-document.addEventListener("click", (e) => {
-  if (!DOM.dropdown.contains(e.target)) {
-    DOM.dropdown.classList.remove("open");
-  }
-});
-
-// === FUNGSI UTAMA TOMBOL SEND BUG ===
-DOM.btnSendBug.addEventListener("click", (e) => {
-  e.preventDefault(); // Mencegah reload halaman
-  const target = document.getElementById("targetNumber").value.trim();
-  
-  // Validasi jika nomor kosong
-  if (!target) { 
-    alert("Masukkan target number dulu sebelum mengirim bug!"); 
-    return; 
-  }
-  
-  // Ambil data kode negara & payload (opsional buat nampil di modal)
-  const code = document.getElementById("codeBug").textContent;
-  const payload = document.getElementById("bugText").textContent;
-  
-  // Tampilkan modal sukses
-  document.getElementById("modalDesc").innerHTML = `Payload <b>${payload}</b> berhasil dikirim ke target <b>${code}${target}</b>.`;
-  DOM.successModal.classList.add("show");
-});
-
-DOM.btnCloseModal.addEventListener("click", () => {
-  DOM.successModal.classList.remove("show");
-  document.getElementById("targetNumber").value = ""; // Reset input setelah sukses
-});
-
-// === AKSI BUKA HALAMAN SENDER ===
-DOM.tabSender.addEventListener("click", () => {
-  DOM.fullSenderPage.classList.add("active");
-});
-
-document.getElementById("btnBackSenderPage").addEventListener("click", () => {
-  DOM.fullSenderPage.classList.remove("active");
-});
-
-document.getElementById("btnRefreshSenderPage").addEventListener("click", () => {
-  fsRefreshNode();
-});
-
-// === LOGIKA SENDER PAGE ===
-function fsShowAdd() {
-  document.getElementById("fs-input-phone").value = "";
-  document.getElementById("fs-toggle-global").classList.remove("on");
-  document.getElementById("fs-add-modal").classList.add("open");
-}
-
-function fsCloseModal(id) {
-  document.getElementById(id).classList.remove("open");
-}
-
-function fsSubmitAdd() {
-  const num = document.getElementById("fs-input-phone").value.trim();
-  const code = document.getElementById("codeSender").textContent;
-  if(!num) { alert("Masukkan nomor!"); return; }
-  fsCloseModal("fs-add-modal");
-  
-  const isGlobal = document.getElementById("fs-toggle-global").classList.contains("on");
-  const badgeText = isGlobal ? "GLOBAL" : "PRIVATE";
-  
-  const newCard = document.createElement("div");
-  newCard.className = "fs-sender-card";
-  newCard.innerHTML = `
-    <div class="fs-card-top">
-      <div class="fs-card-left">
-        <div class="fs-globe-icon"><i class="fas fa-globe"></i></div>
-        <div class="fs-card-title">${isGlobal ? 'Private Sender' : 'Private Sender'}<br>(${code}${num})</div>
-      </div>
-      <div class="fs-badge">${badgeText}</div>
-    </div>
-    <div class="fs-card-actions">
-      <button type="button" class="fs-btn-outline" onclick="fsRefreshNode()">
-        <i class="fas fa-rotate-right"></i> REFRESH
-      </button>
-      <button type="button" class="fs-btn-danger" onclick="this.closest('.fs-sender-card').remove()">
-        <i class="fas fa-trash-can"></i> DELETE
-      </button>
-    </div>
-  `;
-  
-  document.getElementById("fs-list").appendChild(newCard);
-  
-  const snack = document.getElementById("fs-snackbar");
-  snack.classList.add("show");
-  setTimeout(() => {
-    snack.classList.remove("show");
-  }, 3000);
-}
-
-function fsRefreshNode() {
-  const snack = document.getElementById("fs-snackbar");
-  document.getElementById("fs-snackbar-text").textContent = "Node berhasil di-refresh!";
-  snack.classList.add("show");
-  setTimeout(() => {
-    snack.classList.remove("show");
-  }, 2000);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const videos = document.querySelectorAll('video');
-  videos.forEach(v => {
-    v.muted = true;
-    v.play().catch(() => {});
-  });
-});
+function closeModal(){document.getElementById("modal").classList.remove("show");}
+document.getElementById("closeModal").addEventListener("click",closeModal);
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+renderFilters();render();
 </script>
 </body>
 </html>
