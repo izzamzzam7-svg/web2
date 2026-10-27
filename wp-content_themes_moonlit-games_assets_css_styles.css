@@ -1,0 +1,2194 @@
+/* ============================================================
+   Moonlit Games — Gaming News & Reviews
+   Vanilla HTML/CSS/JS. Light + Dark themes.
+   ============================================================ */
+
+/* ---------- THEME TOKENS ---------- */
+:root,
+[data-theme="dark"] {
+  --bg-primary:   #10151f;
+  --bg-secondary: #18202f;
+  --bg-tertiary:  #222c40;
+  --bg-elevated:  #26314a;
+  --accent-primary:   #8dff1f;
+  --accent-secondary: #29ddff;
+  --accent-tertiary:  #ff4d7d;
+  --text-primary:   #ffffff;
+  --text-secondary: #b8c2d4;
+  --text-muted:     #7d8aa3;
+  --border-subtle: rgba(141, 255, 31, 0.16);
+  --border-glow:   rgba(141, 255, 31, 0.45);
+  --border-hard:   rgba(255, 255, 255, 0.08);
+  --overlay-dark: rgba(16, 21, 31, 0.72);
+  --card-shadow:  0 8px 30px rgba(0, 0, 0, 0.35);
+  --scanline-opacity: 1;
+}
+
+[data-theme="light"] {
+  --bg-primary:   #f4f6fb;
+  --bg-secondary: #ffffff;
+  --bg-tertiary:  #eef1f8;
+  --bg-elevated:  #ffffff;
+  --accent-primary:   #4aa900;
+  --accent-secondary: #0090c0;
+  --accent-tertiary:  #e0356a;
+  --text-primary:   #131824;
+  --text-secondary: #47536b;
+  --text-muted:     #7a879e;
+  --border-subtle: rgba(74, 169, 0, 0.22);
+  --border-glow:   rgba(74, 169, 0, 0.45);
+  --border-hard:   rgba(19, 24, 36, 0.10);
+  --overlay-dark: rgba(20, 24, 34, 0.55);
+  --card-shadow:  0 8px 24px rgba(60, 80, 120, 0.12);
+  --scanline-opacity: 0.35;
+}
+
+:root {
+  --sidebar-width: 260px;
+  --sidebar-collapsed: 76px;
+  --sidebar-ease: cubic-bezier(0.33, 0.1, 0.25, 1);
+  --sidebar-dur: 320ms;
+  --content-max: 1280px;
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ls-display: 0.04em;
+  --ls-heading: 0.02em;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+img { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+input { font-family: inherit; }
+
+.font-display  { font-family: 'Bebas Neue', sans-serif; }
+.font-headline { font-family: 'Chakra Petch', sans-serif; }
+.font-body     { font-family: 'Inter', sans-serif; }
+.font-mono     { font-family: 'JetBrains Mono', monospace; }
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  letter-spacing: var(--ls-display);
+  text-transform: uppercase;
+  color: var(--text-primary);
+  position: relative;
+  display: inline-block;
+}
+.section-title::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 48px; height: 3px; background-color: var(--accent-primary);
+}
+
+.category-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+  display: inline-block; white-space: nowrap;
+}
+
+/* ---------- Standardized category palette ----------
+   Every category has ONE fixed colour (unique — no duplicates) plus a
+   translucent chip background, used everywhere a category badge appears.
+   Layout: base rule = light theme (colour + chip bg); a [data-theme="dark"]
+   rule brightens the text for dark mode. The .cat-text variants drop the chip
+   (used for related items / search results) and only carry the colour.
+
+   REAL TAXONOMY CATEGORIES
+     Games : AAA, AA, Indie, F2P, Casino
+     News  : PC, Xbox, Playstation, TCG, Boardgames
+   LEGACY / GENERIC (search index + misc): news, review, guide, feature,
+     esports, hardware, industry, releases.
+   Each hue below is distinct from every other. */
+
+/* --- Games --- */
+.cat-aaa         { color:#c79214; background-color: rgba(212,160,23,0.16); }   /* gold */
+.cat-aa          { color:#b2542a; background-color: rgba(192,94,46,0.16); }    /* copper */
+.cat-indie       { color:#e0912a; background-color: rgba(224,145,42,0.16); }   /* amber */
+.cat-f2p         { color:#1f9e82; background-color: rgba(46,168,138,0.16); }   /* teal */
+.cat-casino      { color:#c0392b; background-color: rgba(192,57,43,0.16); }    /* crimson */
+.cat-provider    { color:#0e8f9e; background-color: rgba(20,178,196,0.16); }   /* cyan */
+/* --- News --- */
+.cat-pc          { color:#2ea8d6; background-color: rgba(46,168,214,0.16); }   /* sky blue */
+.cat-xbox        { color:#5faf14; background-color: rgba(95,175,20,0.16); }    /* green */
+.cat-playstation { color:#3a6fd6; background-color: rgba(58,111,214,0.16); }   /* royal blue */
+.cat-tcg         { color:#8a63e8; background-color: rgba(154,123,240,0.18); }  /* purple */
+.cat-boardgames  { color:#c0468f; background-color: rgba(201,79,156,0.16); }   /* magenta */
+/* --- Legacy / generic --- */
+.cat-news        { color:#2f8fb8; background-color: rgba(47,143,184,0.16); }   /* steel blue */
+.cat-review      { color:#4a9e6f; background-color: rgba(74,158,111,0.16); }   /* sea green */
+.cat-guide       { color:#a86a3d; background-color: rgba(168,106,61,0.16); }   /* bronze */
+.cat-feature     { color:#6d5bd0; background-color: rgba(109,91,208,0.18); }   /* indigo */
+.cat-esports     { color:#d65a2e; background-color: rgba(214,90,46,0.16); }    /* burnt orange */
+.cat-hardware    { color:#4f9a9a; background-color: rgba(79,154,154,0.16); }   /* slate teal */
+.cat-industry    { color:#9a8a3a; background-color: rgba(154,138,58,0.16); }   /* olive */
+.cat-releases    { color:#c94f6d; background-color: rgba(201,79,109,0.16); }   /* rose */
+.cat-page        { color:#7a8699; background-color: rgba(122,134,153,0.16); }  /* slate grey */
+
+[data-theme="dark"] .cat-aaa         { color:#ffcf40; }
+[data-theme="dark"] .cat-aa          { color:#ff9d5c; }
+[data-theme="dark"] .cat-indie       { color:#ffb454; }
+[data-theme="dark"] .cat-f2p         { color:#3fd9b3; }
+[data-theme="dark"] .cat-casino      { color:#ff6b5c; }
+[data-theme="dark"] .cat-provider    { color:#2fd4e6; }
+[data-theme="dark"] .cat-pc          { color:#4fc9f5; }
+[data-theme="dark"] .cat-xbox        { color:#8dff1f; }
+[data-theme="dark"] .cat-playstation { color:#6a9dff; }
+[data-theme="dark"] .cat-tcg         { color:#b79cff; }
+[data-theme="dark"] .cat-boardgames  { color:#f56fc0; }
+[data-theme="dark"] .cat-news        { color:#5fb8dc; }
+[data-theme="dark"] .cat-review      { color:#6fd096; }
+[data-theme="dark"] .cat-guide       { color:#d69a5c; }
+[data-theme="dark"] .cat-feature     { color:#9c8aff; }
+[data-theme="dark"] .cat-esports     { color:#ff8a5c; }
+[data-theme="dark"] .cat-hardware    { color:#6fd0d0; }
+[data-theme="dark"] .cat-industry    { color:#c9b45c; }
+[data-theme="dark"] .cat-releases    { color:#ff8098; }
+[data-theme="dark"] .cat-page        { color:#9fb0c4; }
+
+/* Category text (no chip) — related items, search results */
+.cat-text { background-color: transparent; padding: 0; }
+.cat-text.cat-aaa         { color:#c79214; } .cat-text.cat-aa          { color:#b2542a; }
+.cat-text.cat-indie       { color:#e0912a; } .cat-text.cat-f2p         { color:#1f9e82; }
+.cat-text.cat-casino      { color:#c0392b; } .cat-text.cat-provider    { color:#0e8f9e; }
+.cat-text.cat-pc          { color:#2ea8d6; }
+.cat-text.cat-xbox        { color:#5faf14; } .cat-text.cat-playstation { color:#3a6fd6; }
+.cat-text.cat-tcg         { color:#8a63e8; } .cat-text.cat-boardgames  { color:#c0468f; }
+.cat-text.cat-news        { color:#2f8fb8; } .cat-text.cat-review      { color:#4a9e6f; }
+.cat-text.cat-guide       { color:#a86a3d; } .cat-text.cat-feature     { color:#6d5bd0; }
+.cat-text.cat-esports     { color:#d65a2e; } .cat-text.cat-hardware    { color:#4f9a9a; }
+.cat-text.cat-industry    { color:#9a8a3a; } .cat-text.cat-releases    { color:#c94f6d; }
+.cat-text.cat-page        { color:#7a8699; }
+
+[data-theme="dark"] .cat-text.cat-aaa         { color:#ffcf40; }
+[data-theme="dark"] .cat-text.cat-aa          { color:#ff9d5c; }
+[data-theme="dark"] .cat-text.cat-indie       { color:#ffb454; }
+[data-theme="dark"] .cat-text.cat-f2p         { color:#3fd9b3; }
+[data-theme="dark"] .cat-text.cat-casino      { color:#ff6b5c; }
+[data-theme="dark"] .cat-text.cat-provider    { color:#2fd4e6; }
+[data-theme="dark"] .cat-text.cat-pc          { color:#4fc9f5; }
+[data-theme="dark"] .cat-text.cat-xbox        { color:#8dff1f; }
+[data-theme="dark"] .cat-text.cat-playstation { color:#6a9dff; }
+[data-theme="dark"] .cat-text.cat-tcg         { color:#b79cff; }
+[data-theme="dark"] .cat-text.cat-boardgames  { color:#f56fc0; }
+[data-theme="dark"] .cat-text.cat-news        { color:#5fb8dc; }
+[data-theme="dark"] .cat-text.cat-review      { color:#6fd096; }
+[data-theme="dark"] .cat-text.cat-guide       { color:#d69a5c; }
+[data-theme="dark"] .cat-text.cat-feature     { color:#9c8aff; }
+[data-theme="dark"] .cat-text.cat-esports     { color:#ff8a5c; }
+[data-theme="dark"] .cat-text.cat-hardware    { color:#6fd0d0; }
+[data-theme="dark"] .cat-text.cat-industry    { color:#c9b45c; }
+[data-theme="dark"] .cat-text.cat-releases    { color:#ff8098; }
+[data-theme="dark"] .cat-text.cat-page        { color:#9fb0c4; }
+
+
+.card-hover { transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; border: 1px solid transparent; }
+.card-hover:hover { border-color: var(--border-glow); box-shadow: 0 12px 32px rgba(0,0,0,0.28), 0 0 24px rgba(141, 255, 31, 0.12); transform: translateY(-3px); }
+[data-theme="light"] .card-hover:hover { border-color: var(--accent-primary); box-shadow: 0 14px 32px rgba(60,80,120,0.20), 0 0 20px rgba(74,169,0,0.12); }
+
+.glass-panel { background: var(--overlay-dark); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+h1, h2, h3, h4, h5, h6 { letter-spacing: var(--ls-heading); }
+.font-display { letter-spacing: var(--ls-display); }
+
+.line-clamp-1 { display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden; }
+.line-clamp-2 { display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+.line-clamp-3 { display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden; }
+.scrollbar-hide { scrollbar-width:none; -ms-overflow-style:none; }
+.scrollbar-hide::-webkit-scrollbar { display:none; }
+
+@keyframes marquee { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+@keyframes score-pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+@keyframes modal-in { 0%{opacity:0;transform:translateY(12px) scale(0.98);} 100%{opacity:1;transform:translateY(0) scale(1);} }
+@keyframes fade-in { from{opacity:0;} to{opacity:1;} }
+.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-score-pulse { animation: score-pulse 2s ease-in-out infinite; }
+
+#scanline-canvas {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+  mix-blend-mode: overlay; opacity: var(--scanline-opacity);
+}
+
+.brand-lockup { display:flex; align-items:center; gap:12px; }
+.brand-mark { width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0; display: block; box-shadow: 0 0 18px rgba(141,255,31,0.28); }
+.brand-name { font-family: 'Chakra Petch', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.01em; white-space: nowrap; color: var(--text-primary); overflow: hidden; max-width: 200px; transition: opacity 140ms ease-out, max-width 260ms var(--sidebar-ease); }
+.brand-name .accent { color: var(--accent-primary); }
+
+.sidebar {
+  position: fixed; left: 0; top: 0; height: 100vh;
+  width: var(--sidebar-width); z-index: 51;
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
+  overflow: visible;
+  transition: width var(--sidebar-dur) var(--sidebar-ease), transform var(--sidebar-dur) var(--sidebar-ease);
+}
+.sidebar.collapsed { width: var(--sidebar-collapsed); }
+
+/* Pre-JS collapsed state (from stored preference) to avoid a flash on load (task 9) */
+html[data-sidebar="collapsed"] .sidebar { width: var(--sidebar-collapsed); }
+html[data-sidebar="collapsed"] .sidebar .sidebar-logo { padding: 0; justify-content: center; gap: 0; }
+html[data-sidebar="collapsed"] .sidebar .sidebar-logo .brand-mark { width: 34px; height: 34px; border-radius: 9px; }
+html[data-sidebar="collapsed"] .sidebar .sidebar-logo .brand-lockup { gap: 0; }
+html[data-sidebar="collapsed"] .sidebar .brand-name { opacity: 0; max-width: 0; }
+html[data-sidebar="collapsed"] .sidebar .nav-item { padding-left: 0; justify-content: center; gap: 0; }
+html[data-sidebar="collapsed"] .sidebar .nav-item .nav-label { opacity: 0; max-width: 0; pointer-events: none; }
+html[data-sidebar="collapsed"] .sidebar .theme-toggle { padding-left: 0; justify-content: center; gap: 0; }
+html[data-sidebar="collapsed"] .sidebar .theme-toggle .nav-label { opacity: 0; max-width: 0; pointer-events: none; }
+html[data-sidebar="collapsed"] .sidebar .sidebar-toggle { right: -22px; }
+html[data-sidebar="collapsed"] .topbar { left: var(--sidebar-collapsed); }
+html[data-sidebar="collapsed"] .main-content { margin-left: var(--sidebar-collapsed); }
+@media (max-width: 991px) {
+  html[data-sidebar="collapsed"] .topbar { left: 0; }
+  html[data-sidebar="collapsed"] .main-content { margin-left: 0; }
+  html[data-sidebar="collapsed"] .sidebar { width: var(--sidebar-width); }
+}
+
+.sidebar-toggle {
+  position: absolute; right: -16px; top: 12px;
+  width: 32px; height: 32px; border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center; z-index: 60;
+  background-color: var(--accent-primary); color: #0a0e17;
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.4), 0 0 0 1px var(--border-glow);
+  transition: transform 0.2s ease, background-color 0.2s ease, right var(--sidebar-dur) var(--sidebar-ease);
+}
+/* When collapsed, nudge the toggle outward so it clears the centered logo */
+.sidebar.collapsed .sidebar-toggle { right: -22px; }
+.sidebar-toggle:hover { transform: scale(1.12); }
+.sidebar-toggle .chevron { display:inline-flex; transition: transform 0.3s ease; }
+
+.sidebar-logo { display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 56px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0; overflow: hidden; }
+.sidebar.collapsed .sidebar-logo { padding: 0; justify-content: center; gap: 0; }
+.sidebar.collapsed .sidebar-logo .brand-mark { width: 34px; height: 34px; border-radius: 9px; }
+.sidebar.collapsed .sidebar-logo .brand-lockup { gap: 0; }
+.sidebar.collapsed .brand-name { opacity: 0; max-width: 0; }
+
+.sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; overflow-x: hidden; }
+.nav-item { display: flex; align-items: center; gap: 12px; height: 44px; padding-left: 12px; border-radius: 8px; position: relative; transition: background-color 0.2s ease, color 0.2s ease; }
+.sidebar.collapsed .nav-item { padding-left: 0; justify-content: center; gap: 0; }
+.nav-item .nav-icon { min-width: 20px; color: var(--text-secondary); transition: color 0.2s ease; display:inline-flex; }
+.nav-item .nav-label { font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap; color: var(--text-secondary); overflow: hidden; max-width: 160px; transition: opacity 140ms ease-out, max-width 260ms var(--sidebar-ease), color 0.2s ease; }
+.sidebar.collapsed .nav-item .nav-label { opacity: 0; max-width: 0; pointer-events: none; }
+.nav-item:hover { background-color: var(--bg-tertiary); }
+.nav-item:hover .nav-icon, .nav-item:hover .nav-label { color: var(--text-primary); }
+.nav-item .active-bar { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 0; border-radius: 0 3px 3px 0; background-color: var(--accent-primary); transition: height 0.2s ease; }
+.nav-item:hover .active-bar { height: 20px; }
+.nav-item.active { background-color: var(--bg-tertiary); }
+.nav-item.active .active-bar { height: 24px; }
+.nav-item.active .nav-icon, .nav-item.active .nav-label { color: var(--text-primary); }
+
+.sidebar-bottom { padding: 16px 12px; border-top: 1px solid var(--border-subtle); flex-shrink: 0; }
+
+.theme-toggle { display: flex; align-items: center; gap: 12px; width: 100%; height: 44px; padding-left: 12px; border-radius: 8px; transition: background-color 0.2s ease; }
+.sidebar.collapsed .theme-toggle { padding-left: 0; justify-content: center; gap: 0; }
+.theme-toggle:hover { background-color: var(--bg-tertiary); }
+.theme-toggle .nav-icon { min-width: 20px; color: var(--text-secondary); display:inline-flex; transition: color 0.2s ease; }
+.theme-toggle:hover .nav-icon { color: var(--text-primary); }
+.theme-toggle .nav-label { font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap; color: var(--text-secondary); overflow: hidden; max-width: 160px; transition: opacity 140ms ease-out, max-width 260ms var(--sidebar-ease), color 0.2s ease; }
+.theme-toggle:hover .nav-label { color: var(--text-primary); }
+.sidebar.collapsed .theme-toggle .nav-label { opacity: 0; max-width: 0; pointer-events: none; }
+
+/* ---- Language switcher (sits above the theme toggle) ---- */
+.lang-switcher { position: relative; margin-bottom: 6px; }
+.lang-switcher-toggle { display: flex; align-items: center; gap: 12px; width: 100%; height: 44px; padding-left: 12px; padding-right: 10px; border-radius: 8px; background: transparent; border: 0; cursor: pointer; transition: background-color 0.2s ease; }
+.lang-switcher-toggle:hover { background-color: var(--bg-tertiary); }
+.lang-switcher-toggle .nav-icon,
+.lang-switcher-toggle .lang-current-flag { min-width: 20px; width: 20px; height: 20px; color: var(--text-secondary); display: inline-flex; align-items: center; justify-content: center; }
+/* Polylang prints a small flag <img>; keep it tidy and consistent in the row. */
+.lang-switcher-toggle .lang-current-flag img,
+.lang-menu .lang-flag img { display: block; width: 20px; height: auto; border-radius: 3px; }
+.lang-switcher-toggle .lang-current-name { font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap; color: var(--text-secondary); overflow: hidden; max-width: 160px; transition: opacity 140ms ease-out, max-width 260ms var(--sidebar-ease), color 0.2s ease; }
+.lang-switcher-toggle:hover .lang-current-name,
+.lang-switcher-toggle:hover .nav-icon { color: var(--text-primary); }
+.lang-caret { margin-left: auto; color: var(--text-secondary); display: inline-flex; transition: transform 0.2s ease, opacity 140ms ease-out; }
+.lang-switcher.open .lang-caret { transform: rotate(180deg); }
+
+/* Collapsed sidebar: show only the flag, hide the name + caret (both toggle mechanisms). */
+.sidebar.collapsed .lang-switcher-toggle { padding-left: 0; padding-right: 0; justify-content: center; gap: 0; }
+.sidebar.collapsed .lang-switcher-toggle .lang-current-name,
+.sidebar.collapsed .lang-caret { opacity: 0; max-width: 0; pointer-events: none; overflow: hidden; }
+html[data-sidebar="collapsed"] .sidebar .lang-switcher-toggle { padding-left: 0; padding-right: 0; justify-content: center; gap: 0; }
+html[data-sidebar="collapsed"] .sidebar .lang-switcher-toggle .lang-current-name,
+html[data-sidebar="collapsed"] .sidebar .lang-caret { opacity: 0; max-width: 0; pointer-events: none; overflow: hidden; }
+
+/* Popup menu */
+.lang-menu { position: absolute; left: 0; right: 0; bottom: calc(100% + 8px); margin: 0; padding: 6px; list-style: none; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: 10px; box-shadow: var(--card-shadow); opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease; z-index: 120; max-height: 320px; overflow-y: auto; }
+.lang-switcher.open .lang-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.lang-menu-item { margin: 0; }
+.lang-menu-item a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 7px; text-decoration: none; color: var(--text-secondary); font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap; transition: background-color 0.15s ease, color 0.15s ease; }
+.lang-menu-item a:hover { background-color: var(--bg-tertiary); color: var(--text-primary); }
+.lang-menu .lang-flag { min-width: 20px; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; }
+.lang-menu .lang-name { flex: 1; }
+.lang-menu .lang-check { color: var(--accent-primary); display: inline-flex; }
+.lang-menu-item.is-active a { color: var(--text-primary); }
+.lang-menu-item.is-no-translation a { opacity: 0.55; }
+
+/* When the sidebar is collapsed, let the popup escape the narrow rail. */
+.sidebar.collapsed .lang-menu { left: 0; right: auto; min-width: 180px; }
+html[data-sidebar="collapsed"] .sidebar .lang-menu { left: 0; right: auto; min-width: 180px; }
+
+.sidebar-tooltip { position: fixed; z-index: 100; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-family: 'Chakra Petch', sans-serif; font-weight: 500; pointer-events: none; background-color: var(--bg-elevated); color: var(--text-primary); transform: translateY(-50%); white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.15s ease; box-shadow: var(--card-shadow); border: 1px solid var(--border-subtle); }
+.sidebar-tooltip.visible { opacity: 1; visibility: visible; }
+
+.sidebar-backdrop { position: fixed; inset: 0; z-index: 45; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
+.sidebar-backdrop.visible { opacity: 1; visibility: visible; }
+
+.topbar { position: fixed; top: 0; right: 0; left: var(--sidebar-width); height: 56px; z-index: 50; display: flex; align-items: center; border-bottom: 1px solid var(--border-subtle); transition: left var(--sidebar-dur) var(--sidebar-ease); }
+.topbar.sidebar-collapsed { left: var(--sidebar-collapsed); }
+/* Light theme: give the bar a solid backing + stronger text so trending reads (task 13) */
+[data-theme="light"] .topbar { background: rgba(255,255,255,0.94); border-bottom-color: rgba(19,24,36,0.10); }
+[data-theme="light"] .ticker-item { color: var(--text-primary); }
+[data-theme="light"] .ticker-sep { color: rgba(74,169,0,0.5); }
+[data-theme="light"] .topbar-clock { color: var(--text-secondary); }
+
+.topbar-menu-btn { display: none; width: 40px; height: 40px; margin-left: 8px; border-radius: 8px; align-items: center; justify-content: center; color: var(--text-secondary); }
+.topbar-menu-btn:hover { background-color: var(--bg-tertiary); }
+/* Animated hamburger -> X (task 11) */
+.hamburger { position: relative; width: 22px; height: 16px; display: inline-block; }
+.hamburger span {
+  position: absolute; left: 0; width: 100%; height: 2px; border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.3s var(--ease-smooth), opacity 0.2s ease-out, top 0.3s var(--ease-smooth);
+}
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { top: 7px; }
+.hamburger span:nth-child(3) { top: 14px; }
+.topbar-menu-btn.is-open .hamburger span:nth-child(1) { top: 7px; transform: rotate(45deg); }
+.topbar-menu-btn.is-open .hamburger span:nth-child(2) { opacity: 0; }
+.topbar-menu-btn.is-open .hamburger span:nth-child(3) { top: 7px; transform: rotate(-45deg); }
+.topbar-menu-btn.is-open { color: var(--accent-primary); }
+
+.ticker-wrap { display:flex; align-items:center; gap:12px; flex:1; min-width:0; padding:0 16px 0 30px; }
+.ticker-label { display:flex; align-items:center; gap:6px; flex-shrink:0; color: var(--accent-primary); }
+.ticker-label svg { color: var(--accent-primary); stroke: var(--accent-primary); }
+.ticker-label span { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-primary); }
+.ticker-viewport { overflow:hidden; flex:1; position:relative; }
+.ticker-viewport:hover .ticker-track { animation-play-state: paused; }
+.ticker-track { display:flex; align-items:center; white-space:nowrap; width:max-content; }
+.ticker-item { font-family:'Inter',sans-serif; font-size:14px; color:var(--text-secondary); transition: color 0.2s ease-out; }
+.ticker-item:hover { color: var(--accent-primary); }
+.ticker-sep { margin:0 18px; color:var(--accent-primary); opacity:0.55; font-size:12px; }
+
+.topbar-clock { font-family:'JetBrains Mono',sans-serif; font-size:14px; padding:0 16px; border-left:1px solid var(--border-subtle); flex-shrink:0; color:var(--text-muted); }
+
+.topbar-actions { display:flex; align-items:center; gap:10px; padding:0 16px; border-left:1px solid var(--border-subtle); flex-shrink:0; }
+.search-btn { display: flex; align-items: center; gap: 8px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; padding: 0 16px; height: 38px; border-radius: 8px; transition: box-shadow 0.2s ease, border-color 0.2s ease; color: var(--accent-primary); border: 1px solid var(--border-subtle); }
+.search-btn:hover { box-shadow: 0 0 18px rgba(141,255,31,0.28); border-color: var(--border-glow); background-color: var(--bg-tertiary); }
+[data-theme="light"] .search-btn:hover { background-color: rgba(74,169,0,0.08); border-color: var(--accent-primary); box-shadow: 0 2px 12px rgba(74,169,0,0.18); }
+.search-btn svg { color: var(--accent-primary); }
+
+.main-content { margin-left: var(--sidebar-width); padding-top: 56px; transition: margin-left var(--sidebar-dur) var(--sidebar-ease); }
+.main-content.sidebar-collapsed { margin-left: var(--sidebar-collapsed); }
+.container { max-width: var(--content-max); margin: 0 auto; }
+.section { padding: 44px 24px; max-width: var(--content-max); margin: 0 auto; }
+
+/* Full-width standout band for the Slot Reviews section */
+.slot-reviews-band { position: relative; margin: 44px 0; padding: 8px 0; isolation: isolate; }
+.slot-reviews-band .section { padding-top: 40px; padding-bottom: 40px; }
+.slot-reviews-band-bg {
+  position: absolute; inset: 0; z-index: -1; overflow: hidden;
+  border-top: 1px solid var(--border-glow);
+  border-bottom: 1px solid var(--border-glow);
+  background:
+    linear-gradient(180deg, rgba(141,255,31,0.05), transparent 30%, transparent 70%, rgba(41,221,255,0.05)),
+    linear-gradient(105deg, var(--bg-secondary), var(--bg-tertiary));
+}
+.slot-reviews-band-bg::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(60% 120% at 8% 0%, rgba(141,255,31,0.12), transparent 55%),
+    radial-gradient(55% 120% at 95% 100%, rgba(41,221,255,0.12), transparent 55%);
+  pointer-events: none;
+}
+.slot-reviews-band-bg::after {
+  content: ''; position: absolute; inset: 0; opacity: 0.5; pointer-events: none;
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(ellipse 70% 90% at 50% 50%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 90% at 50% 50%, #000 20%, transparent 75%);
+}
+[data-theme="light"] .slot-reviews-band-bg {
+  background:
+    linear-gradient(180deg, rgba(74,169,0,0.05), transparent 30%, transparent 70%, rgba(0,144,192,0.05)),
+    linear-gradient(105deg, var(--bg-secondary), #ffffff);
+}
+[data-theme="light"] .slot-reviews-band-bg::before {
+  background:
+    radial-gradient(60% 120% at 8% 0%, rgba(74,169,0,0.10), transparent 55%),
+    radial-gradient(55% 120% at 95% 100%, rgba(0,144,192,0.10), transparent 55%);
+}
+@media (max-width: 991px) { .slot-reviews-band { margin: 32px 0; } }
+
+.hero { position:relative; width:100%; overflow:hidden; height:520px; }
+.hero-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+.hero-fallback { position:absolute; inset:0; width:100%; height:100%; background-size:cover; background-position:center; background-image:url('images/hero-review-cyberpunk.jpg'); z-index:-1; }
+.hero-overlay { position:absolute; inset:0; z-index:1; background: linear-gradient(to top, var(--overlay-dark) 0%, rgba(16,21,31,0.35) 40%, transparent 72%); }
+.hero-content { position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end; padding:0 32px 48px; z-index:2; max-width:var(--content-max); margin:0 auto; }
+.hero-badge { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:4px; margin-bottom:16px; width:fit-content; }
+.hero-badge.breaking { background-color:var(--accent-tertiary); color:#ffffff; }
+.hero-title { font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:clamp(32px,4vw,56px); letter-spacing:0.01em; line-height:1.1; margin-bottom:12px; color:#ffffff; text-shadow:0 2px 24px rgba(0,0,0,0.8); max-width:700px; }
+.hero-subtitle { font-family:'Inter',sans-serif; font-size:18px; margin-bottom:20px; color:rgba(255,255,255,0.86); text-shadow:0 1px 12px rgba(0,0,0,0.6); max-width:500px; }
+.hero-meta { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.meta-badge { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:4px; background-color:var(--accent-primary); color:#0a0e17; }
+.meta-inline { display:flex; align-items:center; gap:6px; font-family:'Inter',sans-serif; font-size:14px; color:rgba(255,255,255,0.86); }
+.meta-author { display:flex; align-items:center; gap:8px; }
+.meta-author img { width:32px; height:32px; border-radius:9999px; object-fit:cover; }
+.meta-author span { font-family:'Inter',sans-serif; font-size:14px; font-weight:500; color:#ffffff; }
+.meta-muted { font-family:'Inter',sans-serif; font-size:14px; color:rgba(255,255,255,0.66); }
+.hero-cta { margin-top:20px; }
+.btn-primary { position: relative; font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:600; letter-spacing:0.02em; padding:0 22px; height:46px; border-radius:6px; transition:box-shadow 0.25s ease-out, transform 0.15s ease-out, background-color 0.25s ease-out; background-color:var(--accent-primary); color:#0a0e17; display:inline-flex; align-items:center; justify-content:center; overflow:hidden; }
+.btn-primary:hover { box-shadow:0 8px 28px rgba(141,255,31,0.5), 0 0 0 3px rgba(141,255,31,0.22); transform: translateY(-2px) scale(1.02); background-color:#a3ff45; }
+.btn-primary:active { transform: translateY(0) scale(0.98); }
+
+.stories-scroll { display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:4px; cursor:grab; }
+.stories-scroll.dragging { cursor:grabbing; scroll-snap-type:none; scroll-behavior:auto; }
+.stories-scroll.dragging .story-card { pointer-events:none; }
+.stories-scroll.dragging img { -webkit-user-drag:none; user-select:none; }
+.stories-scroll .story-card { flex:0 0 clamp(230px, 22%, 280px); scroll-snap-align:start; }
+.story-card { display:flex; flex-direction:column; padding:14px; border-radius:14px; border:1px solid transparent; position:relative; transition: background-color 0.3s ease-out, border-color 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s ease-out; }
+/* Progress bar below the stories slider */
+.stories-progress { display:none; position:relative; height:4px; border-radius:9999px; background:var(--border-subtle); margin-top:22px; overflow:hidden; }
+.stories-progress.is-active { display:block; }
+.stories-progress-bar { position:absolute; left:0; top:0; height:100%; border-radius:9999px; background:var(--accent-primary); width:20%; transition:width 0.1s linear, transform 0.1s linear; will-change:transform; }
+.story-card:hover { background-color: var(--bg-secondary); border-color: var(--border-glow); transform: translateY(-5px); box-shadow: 0 14px 34px rgba(0,0,0,0.32), 0 0 24px rgba(141,255,31,0.10); }
+[data-theme="light"] .story-card:hover { box-shadow: 0 14px 32px rgba(60,80,120,0.18), 0 0 22px rgba(74,169,0,0.12); border-color: var(--accent-primary); }
+.story-number { font-family:'Bebas Neue',sans-serif; font-size:52px; line-height:1; display:block; margin-bottom:10px; letter-spacing:0.03em; color:var(--accent-primary); opacity:0.4; transition: opacity 0.3s ease-out, transform 0.3s ease-out; }
+.story-card:hover .story-number { opacity:0.95; transform: translateX(2px); }
+.story-thumb { width:100%; height:132px; border-radius:10px; overflow:hidden; margin-bottom:12px; position:relative; }
+.story-thumb::after { content:''; position:absolute; inset:0; background:linear-gradient(to top, rgba(141,255,31,0.16), transparent 60%); opacity:0; transition: opacity 0.3s ease-out; }
+.story-card:hover .story-thumb::after { opacity:1; }
+.story-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; }
+.story-card:hover .story-thumb img { transform:scale(1.08); }
+.story-content { display:flex; flex-direction:column; flex:1; }
+.story-badge { margin-bottom:8px; display:inline-block; align-self:flex-start; }
+.story-headline { font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:600; letter-spacing:0.01em; margin-bottom:8px; line-height:1.3; color:var(--text-primary); transition: color 0.2s ease-out; }
+.story-card:hover .story-headline { color: var(--accent-primary); }
+.story-timestamp { font-family:'Inter',sans-serif; font-size:12px; color:var(--text-muted); margin-top:auto; }
+
+.featured-grid { display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:1fr; gap:24px; }
+.featured-card { border-radius:14px; overflow:hidden; background-color:var(--bg-secondary); box-shadow: var(--card-shadow); display:flex; flex-direction:column; }
+.span-single { grid-column:span 1; }
+/* Hero feature card: 2 cols x 2 rows. It stretches to the full height of the
+   two stacked cards on the right; the hero media (flex:1 below) grows to absorb
+   any slack so the image fills the card instead of leaving a gap under the text. */
+.span-hero { grid-column:span 2; grid-row:span 2; }
+
+.card-media { position:relative; overflow:hidden; }
+.card-media.ratio-16-9 { aspect-ratio:16/9; }
+/* Featured right-column cards: use a shorter (wider) image so the two stacked
+   cards don't make the right column tall, which in turn keeps the 2x2 hero from
+   over-stretching and leaving empty space under its text. Scoped to .span-hero's
+   sibling singles so other 16:9 media around the site is unaffected. */
+.span-single.featured-card .card-media.ratio-16-9 { aspect-ratio:2/1; }
+.card-media img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; }
+.card-media:hover img { transform:scale(1.05); }
+.score-badge { position:absolute; top:12px; right:16px; display:flex; align-items:baseline; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5)); }
+.score-badge .score-num { font-family:'Bebas Neue',sans-serif; font-size:48px; font-weight:400; letter-spacing:0.02em; color:var(--accent-primary); }
+.score-badge .score-max { font-family:'Bebas Neue',sans-serif; font-size:20px; color:rgba(255,255,255,0.7); }
+.card-body { padding:20px; flex:1; display:flex; flex-direction:column; }
+.card-title { font-family:'Chakra Petch',sans-serif; font-weight:600; letter-spacing:0.01em; margin:0 0 10px; line-height:1.3; color:var(--text-primary); }
+.card-title.lg { font-size:18px; }
+.card-excerpt { font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; color:var(--text-secondary); margin-bottom:16px; }
+.card-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:14px; margin-top:auto; border-top:1px solid var(--border-subtle); }
+.card-badge-wrap { margin-bottom:14px; display:inline-block; align-self:flex-start; }
+.footer-author { display:flex; align-items:center; gap:8px; min-width:0; flex:1 1 auto; }
+.footer-author img { width:22px; height:22px; border-radius:9999px; object-fit:cover; flex-shrink:0; }
+.footer-author span { font-family:'Inter',sans-serif; font-size:12px; font-weight:500; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+.footer-author-name { font-family:'Inter',sans-serif; font-size:12px; font-weight:500; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; flex:1 1 auto; }
+.footer-meta { display:flex; align-items:center; gap:5px; font-family:'Inter',sans-serif; font-size:12px; color:var(--text-muted); white-space:nowrap; flex-shrink:0; }
+
+/* Hero feature card internals */
+.hero-card-media { position:relative; overflow:hidden; flex:1; min-height:280px; }
+.hero-card-media img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease; }
+.span-hero:hover .hero-card-media img { transform:scale(1.05); }
+.hero-card-media .score-badge .score-num { font-size:60px; }
+.hero-card-media .score-badge .score-max { font-size:24px; }
+.featured-ribbon {
+  position:absolute; top:16px; left:16px;
+  font-family:'Chakra Petch',sans-serif; font-size:12px; font-weight:700;
+  letter-spacing:0.08em; text-transform:uppercase;
+  padding:6px 14px; border-radius:8px;
+  background: var(--accent-primary); color:#0a1207;
+  box-shadow: 0 4px 14px rgba(141,255,31,0.4);
+}
+.hero-card-body { padding:24px 26px 26px; display:flex; flex-direction:column; }
+.card-title.hero-title { font-size:26px; margin-bottom:12px; }
+.hero-card-body .card-excerpt { font-size:15px; }
+
+.trust-section { padding: 20px 24px 44px; max-width: var(--content-max); margin: 0 auto; }
+.trust-panel { position: relative; display: grid; grid-template-columns: minmax(280px, 42%) 1fr; gap: 40px; border-radius: 24px; overflow: hidden; padding: 44px; background: radial-gradient(120% 140% at 0% 0%, rgba(141,255,31,0.14), transparent 55%), linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary)); border: 1px solid var(--border-subtle); box-shadow: var(--card-shadow); transition: border-color 0.35s ease-out, box-shadow 0.35s ease-out, transform 0.35s ease-out; }
+.trust-panel:hover { border-color: var(--border-glow); box-shadow: 0 18px 50px rgba(0,0,0,0.4), 0 0 40px rgba(141,255,31,0.12); transform: translateY(-4px); }
+[data-theme="light"] .trust-panel:hover { box-shadow: 0 18px 44px rgba(60,80,120,0.20), 0 0 36px rgba(74,169,0,0.14); }
+.trust-panel:hover .trust-glow { opacity: 1; transform: scale(1.1); }
+.trust-glow { transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+.trust-panel:hover .collage-a { transform: translateY(-6px) rotate(-1deg); }
+.trust-panel:hover .collage-b { transform: translateY(-3px) rotate(4deg); }
+.trust-panel:hover .collage-c { transform: translateY(-8px) rotate(-5deg); }
+.collage-card { transition: transform 0.4s ease-out; }
+.trust-collage { position: relative; min-height: 320px; }
+.trust-collage .collage-card { position: absolute; border-radius: 18px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.35); border: 2px solid rgba(255,255,255,0.06); }
+.trust-collage .collage-card img { width:100%; height:100%; object-fit:cover; }
+.collage-a { width: 46%; height: 78%; left: 4%; top: 12%; z-index: 3; }
+.collage-b { width: 42%; height: 60%; left: 40%; top: 2%; z-index: 2; transform: rotate(3deg); }
+.collage-c { width: 40%; height: 52%; left: 46%; top: 46%; z-index: 4; transform: rotate(-4deg); }
+.trust-glow { position:absolute; width:60%; height:60%; left:8%; top:20%; background: radial-gradient(circle, rgba(141,255,31,0.25), transparent 70%); filter: blur(40px); z-index:0; pointer-events:none; }
+.trust-content { display:flex; flex-direction:column; justify-content:center; position:relative; z-index:1; min-width:0; }
+.trust-eyebrow { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent-primary); margin-bottom:14px; }
+.trust-title { font-family:'Chakra Petch',sans-serif; font-weight:700; letter-spacing:0.01em; font-size:clamp(30px,3.4vw,44px); line-height:1.1; color:var(--text-primary); margin-bottom:16px; }
+.trust-desc { font-family:'Inter',sans-serif; font-size:16px; line-height:1.7; color:var(--text-secondary); max-width:640px; margin-bottom:28px; }
+/* Minimalist stat counters (task 5) */
+.trust-stats { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px; }
+.trust-stat {
+  padding:20px 18px; border-radius:14px;
+  background: var(--bg-primary);
+  border:1px solid var(--border-subtle);
+  transition: border-color 0.25s ease-out, transform 0.25s ease-out, background-color 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+.trust-stat:hover { border-color: var(--border-glow); transform: translateY(-4px); background: var(--bg-tertiary); box-shadow: 0 10px 26px rgba(0,0,0,0.22); }
+[data-theme="light"] .trust-stat:hover { border-color: var(--accent-primary); box-shadow: 0 10px 24px rgba(60,80,120,0.14); }
+.trust-stat-icon {
+  width:38px; height:38px; border-radius:10px; margin-bottom:14px;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(141,255,31,0.14); color: var(--accent-primary);
+}
+[data-theme="light"] .trust-stat-icon { background: rgba(74,169,0,0.12); }
+.trust-stat-num {
+  font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:44px; line-height:1;
+  letter-spacing:0.02em; color: var(--accent-primary); margin-bottom:6px;
+}
+.trust-stat-label { font-family:'Inter',sans-serif; font-size:13px; font-weight:500; color:var(--text-secondary); line-height:1.3; }
+
+.news-list { display:flex; flex-direction:column; }
+.news-list { position: relative; }
+.news-item { display:flex; gap:20px; padding:18px 16px; margin:0 -16px; cursor:pointer; border-radius:0; border-bottom:1px solid var(--border-subtle); transition:background-color 0.2s ease-out, box-shadow 0.2s ease-out, border-radius 0.2s ease-out; }
+.news-item:hover { background-color: var(--bg-secondary); border-bottom-color: transparent; border-radius:12px; box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+[data-theme="light"] .news-item:hover { box-shadow: 0 4px 18px rgba(60,80,120,0.14); }
+.news-thumb { width:140px; height:90px; border-radius:6px; overflow:hidden; flex-shrink:0; }
+.news-thumb img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; }
+.news-item:hover .news-thumb img { transform:scale(1.05); }
+.news-body { flex:1; min-width:0; }
+.news-badge { margin-bottom:8px; display:inline-block; }
+.news-headline { font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:600; letter-spacing:0.01em; margin-bottom:4px; line-height:1.3; color:var(--text-primary); }
+.news-item:hover .news-headline { color: var(--accent-primary); }
+.news-excerpt { font-family:'Inter',sans-serif; font-size:14px; color:var(--text-secondary); }
+/* Latest News preview: one line on wide layouts, two lines on ≤640px where the
+   cards go full-width and have room for a second line. */
+.mlg-news-excerpt { display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+@media (max-width: 640px) { .mlg-news-excerpt { -webkit-line-clamp:2; } }
+.news-meta { display:flex; flex-direction:column; align-items:flex-end; justify-content:center; flex-shrink:0; gap:8px; }
+.news-time { display:flex; align-items:center; gap:4px; font-family:'Inter',sans-serif; font-size:12px; white-space:nowrap; color:var(--text-muted); }
+
+.load-more-wrap { display:flex; justify-content:center; margin-top:32px; }
+.load-more-btn { display:inline-flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:600; letter-spacing:0.02em; padding:0 32px; height:48px; border-radius:8px; transition:box-shadow 0.2s ease-out, transform 0.15s ease-out, background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out; background-color:var(--bg-tertiary); color:var(--accent-primary); border:1px solid var(--border-glow); }
+.load-more-btn:hover { background-color: var(--accent-primary); color:#0a1207; border-color: var(--accent-primary); box-shadow:0 8px 24px rgba(141,255,31,0.4); transform: translateY(-2px); }
+.load-more-btn:active { transform: translateY(0) scale(0.98); }
+[data-theme="light"] .load-more-btn { background-color:#ffffff; border-color: var(--accent-primary); color: var(--accent-primary); }
+[data-theme="light"] .load-more-btn:hover { background-color: var(--accent-primary); color:#ffffff; border-color: var(--accent-primary); box-shadow:0 8px 22px rgba(74,169,0,0.32); }
+
+.newsletter { position:relative; overflow:hidden; background:linear-gradient(to right,var(--bg-secondary),var(--bg-tertiary)); }
+.newsletter-grid-overlay { position:absolute; inset:0; pointer-events:none; background-image: linear-gradient(rgba(141,255,31,0.05) 1px,transparent 1px), linear-gradient(90deg,rgba(141,255,31,0.05) 1px,transparent 1px); background-size:40px 40px; }
+.newsletter-inner { position:relative; z-index:10; display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:40px; padding:48px 32px; max-width:var(--content-max); margin:0 auto; }
+.newsletter-text { flex:1 1 auto; min-width:0; }
+.newsletter-heading-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.newsletter-heading-row svg { flex-shrink: 0; width: 22px; height: 22px; }
+.newsletter-heading { font-family:'Bebas Neue',sans-serif; font-size:40px; letter-spacing:0.05em; color:var(--accent-primary); line-height:1; white-space:nowrap; }
+.newsletter-desc { font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; color:var(--text-secondary); max-width:560px; }
+.newsletter-form { display:flex; gap:12px; flex-shrink:0; }
+.newsletter-input-wrap { position:relative; width:300px; }
+.newsletter-input-wrap .mail-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none; color:var(--text-muted); transition:color 0.2s ease; display:inline-flex; flex-shrink:0; }
+.newsletter-input-wrap .mail-icon svg { width:18px; height:18px; flex-shrink:0; }
+.newsletter-input { width:100%; height:44px; padding:0 16px 0 40px; border-radius:6px; font-family:'Inter',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s ease, box-shadow 0.2s ease; background-color:var(--bg-primary); border:1px solid var(--border-subtle); color:var(--text-primary); }
+.newsletter-input::placeholder { color:var(--text-muted); }
+.newsletter-input:focus { border-color:var(--accent-primary); box-shadow:0 0 12px rgba(141,255,31,0.18); }
+.newsletter-input-wrap:focus-within .mail-icon { color:var(--accent-primary); }
+.subscribe-btn { height:44px; padding:0 24px; border-radius:6px; font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:600; letter-spacing:0.02em; transition:box-shadow 0.25s ease-out, transform 0.15s ease-out, background-color 0.25s ease-out; background-color:var(--accent-primary); color:#0a0e17; flex-shrink:0; }
+.subscribe-btn:hover { box-shadow:0 8px 26px rgba(141,255,31,0.48), 0 0 0 3px rgba(141,255,31,0.2); transform: translateY(-2px) scale(1.02); background-color:#a3ff45; }
+.subscribe-btn:active { transform: translateY(0) scale(0.98); }
+[data-theme="light"] .subscribe-btn { color:#ffffff; }
+[data-theme="light"] .subscribe-btn:hover { background-color:#3d8f00; box-shadow:0 8px 24px rgba(74,169,0,0.4), 0 0 0 3px rgba(74,169,0,0.2); }
+
+.footer { border-top:1px solid var(--border-subtle); background-color:var(--bg-primary); }
+.footer-main { padding:48px 32px; max-width:var(--content-max); margin:0 auto; }
+.footer-columns { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:40px; }
+.footer-brand-row { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.footer-desc { font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; margin-bottom:20px; color:var(--text-secondary); }
+.footer-col-title { font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:16px; color:var(--text-primary); }
+.footer-links { display:flex; flex-direction:column; gap:10px; }
+.footer-links a { font-family:'Inter',sans-serif; font-size:14px; transition:color 0.2s ease; color:var(--text-secondary); }
+.footer-links a:hover { color:var(--accent-primary); }
+.footer-bottom { padding:0; border-top:1px solid var(--border-subtle); }
+.footer-bottom-inner { padding:20px 32px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; max-width:var(--content-max); margin:0 auto; }
+.footer-copy { font-family:'Inter',sans-serif; font-size:12px; color:var(--text-muted); margin:0; text-align:left; }
+.footer-legal-links { display:flex; gap:24px; }
+.footer-legal-links a { font-family:'Inter',sans-serif; font-size:12px; color:var(--text-muted); transition:color 0.2s ease-out; }
+.footer-legal-links a:hover { color:var(--accent-primary); }
+
+.search-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(6,9,15,0.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: flex-start; justify-content: center; padding: 88px 20px 20px; opacity: 0; visibility: hidden; transition: opacity 0.2s ease; }
+.search-overlay.visible { opacity: 1; visibility: visible; }
+.search-modal { width: 100%; max-width: 640px; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); overflow: hidden; animation: modal-in 0.22s var(--ease-smooth); }
+.search-input-row { display: flex; align-items: center; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border-subtle); }
+.search-input-row svg { color: var(--accent-primary); flex-shrink: 0; }
+.search-modal-input { flex: 1; background: transparent; border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 17px; color: var(--text-primary); }
+.search-modal-input::placeholder { color: var(--text-muted); }
+.search-kbd { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 7px; border-radius: 5px; background: var(--bg-tertiary); color: var(--text-muted); border: 1px solid var(--border-subtle); }
+.search-results { max-height: 52vh; overflow-y: auto; padding: 8px; }
+.search-hint { padding: 28px 20px; text-align: center; color: var(--text-muted); font-family:'Inter',sans-serif; font-size: 14px; }
+.search-result { display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 10px; cursor: pointer; transition: background-color 0.15s ease; }
+.search-result:hover, .search-result.active { background: var(--bg-tertiary); }
+.search-result-thumb { width: 64px; height: 44px; border-radius: 7px; overflow: hidden; flex-shrink: 0; }
+.search-result-thumb img { width:100%; height:100%; object-fit:cover; }
+.search-result-body { flex: 1; min-width: 0; }
+.search-result-cat { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color: var(--accent-secondary); }
+.search-result-title { font-family:'Chakra Petch',sans-serif; font-size:15px; font-weight:600; color: var(--text-primary); line-height:1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search-result-meta { font-family:'Inter',sans-serif; font-size:12px; color: var(--text-muted); }
+.search-footer { display:flex; align-items:center; gap:16px; padding: 10px 18px; border-top:1px solid var(--border-subtle); font-family:'Inter',sans-serif; font-size:12px; color:var(--text-muted); }
+.search-footer .kbd-hint { display:flex; align-items:center; gap:6px; }
+
+.article-wrap { max-width: var(--content-max); margin: 0 auto; padding: 32px 24px 60px; }
+.breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:8px; font-family:'Inter',sans-serif; font-size:13px; color:var(--text-muted); margin-bottom:28px; }
+.breadcrumb a { color:var(--text-secondary); transition:color 0.2s ease; }
+.breadcrumb a:hover { color:var(--accent-primary); }
+.breadcrumb .sep { color:var(--text-muted); }
+.breadcrumb .current { color:var(--text-primary); }
+.article-layout { display:grid; grid-template-columns: 1fr 320px; gap:40px; align-items:start; }
+.article-main { min-width:0; }
+.article-hero-img { width:100%; border-radius:14px; overflow:hidden; margin-bottom:24px; position:relative; }
+/* Standardised hero height so every article looks consistent regardless of the
+   uploaded image's aspect ratio. object-fit:cover crops without distortion. */
+.article-hero-img img { width:100%; height:440px; object-fit:cover; object-position:center; display:block; }
+.article-hero-img .score-badge { top:16px; right:20px; }
+@media (max-width: 1024px) { .article-hero-img img { height:360px; } }
+@media (max-width: 768px)  { .article-hero-img img { height:260px; border-radius:12px; } }
+@media (max-width: 480px)  { .article-hero-img img { height:200px; } }
+.article-header-badges { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+.article-title { font-family:'Chakra Petch',sans-serif; font-weight:700; letter-spacing:0.01em; font-size:clamp(28px,3.4vw,44px); line-height:1.15; color:var(--text-primary); margin-bottom:16px; }
+.article-meta-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:28px; padding-bottom:24px; border-bottom:1px solid var(--border-subtle); }
+.article-meta-row .meta-author img { width:36px; height:36px; }
+.article-meta-row .meta-author span { color:var(--text-primary); }
+.article-meta-row .meta-inline, .article-meta-row .meta-muted { color: var(--text-muted); }
+.article-body { font-family:'Inter',sans-serif; font-size:16.5px; line-height:1.8; color:var(--text-secondary); }
+.article-body h2 { font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; letter-spacing:0.01em; color:var(--text-primary); margin:36px 0 14px; }
+.article-body h3 { font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:20px; letter-spacing:0.01em; color:var(--text-primary); margin:28px 0 12px; }
+.article-body p { margin-bottom:18px; }
+.article-body ul { margin:0 0 18px 22px; list-style:disc; }
+.article-body ol { margin:0 0 18px 22px; list-style:decimal; }
+.article-body li { margin-bottom:8px; }
+/* Safety net: WordPress (wpautop / the classic editor's HTML tidying) sometimes
+   pulls the paragraph that follows a list INSIDE the <ul>/<ol>. That paragraph
+   would then inherit the list's 22px indent and sit out of line with the rest of
+   the body copy. Pull any such stray paragraph back to the text column. */
+.article-body ul > p,
+.article-body ol > p {
+  margin-left: -22px;
+}
+.article-body blockquote { border-left:3px solid var(--accent-primary); padding:16px 20px; margin:24px 0; font-style:italic; color:var(--text-primary); background:var(--bg-secondary); border-radius:0 8px 8px 0; }
+/* Inside a blockquote, drop the paragraph's own spacing so the quote box has
+   even padding top and bottom instead of an extra gap under the last line. */
+.article-body blockquote p { margin-bottom:0; }
+.article-body blockquote p + p { margin-top:12px; }
+.article-body strong { color: var(--text-primary); }
+/* Article links: clearly visible with an underline and the cyan accent (reads as
+   a link and stands out against the body text in both dark and light themes).
+   The underline sits slightly below the text for readability, and hover shifts
+   to the green accent for feedback. Scoped to .article-body so it overrides the
+   global "a { text-decoration:none; color:inherit }" without touching nav/UI links. */
+.article-body a { color: var(--accent-secondary); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; transition: color 0.15s ease, text-decoration-color 0.15s ease; }
+.article-body a:hover { color: var(--accent-primary); }
+.article-body a:focus-visible { outline: 2px solid var(--accent-secondary); outline-offset: 2px; border-radius: 2px; }
+.verdict-box { margin:32px 0; padding:24px; border-radius:14px; background:var(--bg-secondary); border:1px solid var(--border-subtle); display:flex; align-items:center; gap:24px; }
+.verdict-score { font-family:'Bebas Neue',sans-serif; font-size:64px; line-height:1; color:var(--accent-primary); letter-spacing:0.02em; flex-shrink:0; }
+.verdict-text h4 { font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
+.verdict-text p { font-family:'Inter',sans-serif; font-size:14px; color:var(--text-secondary); margin:0; line-height:1.6; }
+.article-sidebar { position:sticky; top:80px; display:flex; flex-direction:column; gap:28px; }
+.sidebar-widget { background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:14px; padding:20px; box-shadow: var(--card-shadow); }
+.sidebar-widget-title { font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-primary); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; gap:8px; }
+.sidebar-widget-title svg { color: var(--accent-primary); }
+.related-item { display:flex; gap:12px; border-radius: 0; padding: 10px 8px; margin: 0 -8px; transition: background-color 0.2s ease-out, border-radius 0.2s ease-out; }
+/* Related pool: only the first 5 show until JS shuffles the pool. JS then
+   toggles .related-hide to reveal a random 5. Both rules keep exactly 5 visible
+   so there's never a flash of the full 20-item pool. */
+#related-articles[data-related-shuffle] .related-item:nth-child(n+6) { display: none; }
+#related-articles[data-related-shuffle] .related-item.related-hide { display: none; }
+#related-articles[data-related-shuffle] .related-item.related-show { display: flex; }
+.related-item:not(:last-child) { border-bottom:1px solid var(--border-subtle); }
+.related-item:hover { background-color: var(--bg-tertiary); border-radius: 8px; }
+.related-item:hover .related-title { color: var(--accent-primary); }
+.related-title { transition: color 0.2s ease-out; }
+.related-thumb { width:72px; height:52px; border-radius:8px; overflow:hidden; flex-shrink:0; }
+.related-thumb img { width:100%; height:100%; object-fit:cover; }
+.related-body { flex:1; min-width:0; }
+.related-cat-wrap { margin-bottom:6px; }
+.related-cat-wrap .category-badge { font-size:9px; padding:3px 8px; }
+.related-title { font-family:'Chakra Petch',sans-serif; font-size:13.5px; font-weight:600; line-height:1.3; color:var(--text-primary); margin:2px 0 4px; }
+.related-time { font-family:'Inter',sans-serif; font-size:11px; color:var(--text-muted); }
+.tag-list { display:flex; flex-wrap:wrap; gap:8px; }
+.tag-pill { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.04em; padding:6px 12px; border-radius:20px; background:var(--bg-tertiary); color:var(--text-secondary); border:1px solid var(--border-subtle); transition: all 0.2s ease; }
+.tag-pill:hover { color:#0a1207; background: var(--accent-primary); border-color:var(--accent-primary); }
+[data-theme="light"] .tag-pill:hover { color:#ffffff; }
+
+/* Popular categories list (task 18) */
+.cat-list { display:flex; flex-direction:column; gap:4px; }
+.cat-link { display:flex; align-items:center; justify-content:space-between; padding:8px; margin:0 -8px; border-radius:8px; transition:background-color 0.2s ease-out; }
+.cat-link:hover { background: var(--bg-tertiary); }
+.cat-link-count { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
+
+/* Review scorecard table (task 20) */
+.review-table-wrap { width:100%; overflow-x:auto; margin:24px 0 28px; border-radius:12px; -webkit-overflow-scrolling:touch; }
+.review-table { width:100%; min-width:520px; border-collapse:separate; border-spacing:0; margin:0; font-family:'Inter',sans-serif; font-size:14.5px; border:1px solid var(--border-subtle); border-radius:12px; overflow:hidden; }
+.review-table thead th { background: var(--bg-tertiary); color:var(--text-primary); font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; text-align:left; padding:12px 16px; }
+.review-table thead th:nth-child(2) { text-align:center; width:90px; }
+.review-table tbody td { padding:13px 16px; border-top:1px solid var(--border-subtle); color:var(--text-secondary); vertical-align:middle; }
+.review-table tbody td:first-child { color:var(--text-primary); font-weight:600; font-family:'Chakra Petch',sans-serif; white-space:nowrap; }
+.review-table tbody td:nth-child(2) { text-align:center; }
+.review-table tbody tr:hover td { background: var(--bg-secondary); }
+.review-table tfoot td { padding:14px 16px; border-top:2px solid var(--border-glow); background: var(--bg-tertiary); color:var(--text-primary); font-family:'Chakra Petch',sans-serif; font-weight:700; }
+.review-table tfoot td:first-child { text-transform:uppercase; letter-spacing:0.04em; font-size:13px; white-space:nowrap; }
+.review-table tfoot td:nth-child(2) { text-align:center; }
+.score-pill { display:inline-block; min-width:38px; text-align:center; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:14px; padding:3px 9px; border-radius:6px; }
+.score-high { color:#0a1207; background: var(--accent-primary); }
+.score-mid  { color:#0a1207; background:#ffb454; }
+.score-low  { color:#ffffff; background: var(--accent-tertiary); }
+[data-theme="light"] .score-high { color:#ffffff; }
+
+/* Latest articles below the review (task 19) */
+.latest-articles { margin-top:56px; padding-top:36px; border-top:1px solid var(--border-subtle); }
+.latest-articles-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
+.latest-see-all { display:flex; align-items:center; gap:4px; font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:600; color:var(--accent-primary); transition: gap 0.2s ease-out; }
+.latest-see-all:hover { gap:8px; }
+/* Big image card (left) + text cards grid (right) */
+.latest-grid { display:grid; grid-template-columns: 1fr 1.5fr; gap:20px; align-items:stretch; }
+.latest-big { display:flex; flex-direction:column; background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:14px; overflow:hidden; transition:border-color 0.25s ease-out, transform 0.25s ease-out, box-shadow 0.25s ease-out; }
+.latest-big:hover { border-color:var(--border-glow); transform:translateY(-4px); box-shadow: var(--card-shadow); }
+[data-theme="light"] .latest-big:hover { border-color: var(--accent-primary); }
+.latest-big-media { aspect-ratio:16/10; overflow:hidden; }
+.latest-big-media img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; }
+.latest-big:hover .latest-big-media img { transform:scale(1.05); }
+.latest-big-body { padding:22px; display:flex; flex-direction:column; align-items:flex-start; gap:10px; flex:1; }
+.latest-big-body .category-badge { align-self:flex-start; }
+.latest-big-title { font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:22px; line-height:1.25; color:var(--text-primary); transition: color 0.2s ease-out; }
+.latest-big:hover .latest-big-title { color: var(--accent-primary); }
+.latest-big-excerpt { font-family:'Inter',sans-serif; font-size:14px; line-height:1.6; color:var(--text-secondary); flex:1; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+/* Right side: 6 text-only cards, 2 columns x 3 rows */
+.latest-text-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; }
+.latest-card {
+  display:flex; flex-direction:column; align-items:flex-start; gap:8px;
+  padding:18px; background:var(--bg-secondary);
+  border:1px solid var(--border-subtle); border-radius:14px;
+  transition:border-color 0.25s ease-out, transform 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+.latest-card:hover { border-color:var(--border-glow); transform:translateY(-4px); box-shadow: var(--card-shadow); }
+[data-theme="light"] .latest-card:hover { border-color: var(--accent-primary); }
+.latest-card .category-badge { align-self:flex-start; }
+.latest-card-title { font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:15px; line-height:1.3; color:var(--text-primary); transition: color 0.2s ease-out; }
+.latest-card:hover .latest-card-title { color: var(--accent-primary); }
+.latest-card-excerpt { font-family:'Inter',sans-serif; font-size:13px; line-height:1.55; color:var(--text-secondary); flex:1; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+.latest-date { font-family:'Inter',sans-serif; font-size:12px; color:var(--text-muted); margin-top:2px; }
+@media (max-width: 1100px) {
+  .latest-grid { grid-template-columns: 1fr; }
+  .latest-big-media { aspect-ratio:21/9; }
+}
+@media (max-width: 640px) {
+  .latest-text-grid { grid-template-columns: 1fr; }
+}
+
+.legal-wrap { max-width: var(--content-max); margin:0 auto; padding:40px 24px 72px; }
+.legal-header { margin-bottom:36px; padding-bottom:28px; border-bottom:1px solid var(--border-subtle); }
+.legal-title { font-family:'Chakra Petch',sans-serif; font-weight:700; letter-spacing:0.01em; font-size:clamp(30px,4vw,46px); color:var(--text-primary); margin-bottom:12px; }
+.legal-updated { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted); }
+.legal-body { font-family:'Inter',sans-serif; font-size:16px; line-height:1.8; color:var(--text-secondary); max-width: 100%; }
+.legal-body h2 { font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:24px; letter-spacing:0.01em; color:var(--text-primary); margin:38px 0 14px; scroll-margin-top: 80px; }
+.legal-body h3 { font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:18px; color:var(--text-primary); margin:26px 0 10px; }
+.legal-body p { margin-bottom:16px; }
+.legal-body ul { margin:0 0 16px 22px; list-style:disc; }
+.legal-body li { margin-bottom:8px; }
+.legal-body a { color:var(--accent-primary); text-decoration:underline; }
+.legal-toc { background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:12px; padding:20px 24px; margin-bottom:36px; }
+.legal-toc h4 { font-family:'Chakra Petch',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:12px; }
+.legal-toc ul { list-style:none; margin:0; display:grid; grid-template-columns:repeat(2,1fr); gap:8px 20px; }
+.legal-toc a { font-family:'Inter',sans-serif; font-size:14px; color:var(--text-secondary); text-decoration:none; }
+.legal-toc a:hover { color:var(--accent-primary); }
+
+.subpage-topbar { height:64px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid var(--border-subtle); position:sticky; top:0; z-index:50; background:var(--bg-primary); }
+.subpage-topbar .back-link { display:flex; align-items:center; gap:8px; font-family:'Chakra Petch',sans-serif; font-size:14px; font-weight:500; color:var(--text-secondary); }
+.subpage-topbar .back-link:hover { color:var(--accent-primary); }
+
+/* Top stories step down gracefully to avoid cramping (task 1) */
+@media (max-width: 1200px) {
+  .stories-scroll .story-card { flex: 0 0 clamp(220px, 30%, 260px); }
+}
+/* Stack trust panel before stats overflow (task 2) */
+@media (max-width: 1260px) {
+  .trust-panel { grid-template-columns: 1fr; }
+  .trust-collage { min-height: 320px; height: 320px; width: 100%; max-width: 520px; margin: 0 auto; }
+}
+@media (max-width: 1024px) {
+  .topbar-clock { display: none; }
+  .article-layout { grid-template-columns: 1fr; }
+  .article-sidebar { position: static; }
+  .trust-panel { grid-template-columns: 1fr; }
+  /* Keep the collage visible when the panel stacks (task 8) */
+  .trust-collage { min-height: 340px; height: 340px; width: 100%; max-width: 520px; margin: 0 auto; }
+  /* Newsletter stacks cleanly before it gets cramped (tasks 4, 6) */
+  .newsletter-inner { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .newsletter-form { width: 100%; max-width: 560px; }
+  .newsletter-input-wrap { flex: 1; width: auto; }
+  /* Top stories: 3 across on tablet (task 1) */
+  .stories-scroll .story-card { flex: 0 0 clamp(210px, 42%, 250px); }
+}
+@media (max-width: 900px) {
+  .featured-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
+  .span-single { grid-column: span 1; }
+  .span-hero { grid-column: span 2; grid-row: span 1; }
+  .span-hero .hero-card-media { min-height: 240px; }
+}
+/* Mobile drawer + collapse behavior at 991px and below (task 9) */
+@media (max-width: 991px) {
+  .sidebar { transform: translateX(-100%); width: var(--sidebar-width) !important; top: 56px; height: calc(100vh - 56px); box-shadow: 8px 0 40px rgba(0,0,0,0.4); }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .sidebar .sidebar-toggle { display: none; }
+  .sidebar.collapsed { width: var(--sidebar-width) !important; }
+  .sidebar.collapsed .brand-name { opacity: 1; max-width: 160px; }
+  .sidebar.collapsed .sidebar-logo .brand-lockup { gap: 12px; }
+  .sidebar.collapsed .nav-item { padding-left: 12px; justify-content: flex-start; gap: 12px; }
+  .sidebar.collapsed .nav-item .nav-label { opacity: 1; max-width: 160px; }
+  .sidebar.collapsed .theme-toggle { padding-left: 12px; justify-content: flex-start; gap: 12px; }
+  .sidebar.collapsed .theme-toggle .nav-label { opacity: 1; max-width: 160px; }
+  .topbar { left: 0 !important; }
+  .topbar.sidebar-collapsed { left: 0 !important; }
+  .topbar-menu-btn { display: flex; }
+  .main-content { margin-left: 0 !important; }
+  .main-content.sidebar-collapsed { margin-left: 0 !important; }
+  /* Give trending more room */
+  .ticker-wrap { padding: 0 8px; gap: 8px; }
+  .topbar-actions { padding: 0 10px; }
+  .search-btn { padding: 0 12px; }
+}
+@media (max-width: 768px) {
+  .hero { height: 440px; }
+  .hero-content { padding: 0 20px 32px; }
+  /* Featured stays 2-column on mobile (task 10) */
+  .featured-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; grid-auto-rows: auto; }
+  .span-single { grid-column: span 1; }
+  .span-hero { grid-column: span 2; grid-row: span 1; }
+  .span-hero .hero-card-media { min-height: 200px; }
+  .card-title.hero-title { font-size: 20px; }
+  .hero-card-body { padding: 18px; }
+  .card-body { padding: 16px; }
+  .card-title.lg { font-size: 16px; }
+  /* Top stories 2 across on mobile (task 1) */
+  .stories-scroll { gap: 14px; } .stories-scroll .story-card { flex: 0 0 78%; min-width: 78%; }
+  .story-number { font-size: 40px; }
+  .newsletter-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .newsletter-form { width: 100%; flex-direction: column; }
+  .newsletter-input-wrap { flex: 1; width: 100%; }
+  .newsletter-heading { white-space: normal; }
+  .subscribe-btn { width: 100%; }
+  .footer-columns { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .footer-bottom-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .trust-section { padding: 12px 16px 32px; }
+  .trust-panel { padding: 28px 22px; gap: 28px; }
+  .trust-stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .section { padding: 32px 18px; }
+  .article-wrap { padding: 24px 18px 48px; }
+  .legal-toc ul { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .footer-columns { grid-template-columns: 1fr; }
+  .news-item { gap: 14px; }
+  .news-thumb { width: 104px; height: 70px; }
+  .news-meta { display: none; }
+  .search-overlay { padding: 64px 12px 12px; }
+  .trust-stats { grid-template-columns: repeat(2, 1fr); }
+  .hero-title { font-size: 30px; }
+  /* Trending: drop the label + search text so headlines get full width (task 16) */
+  .ticker-label span { display: none; }
+  .search-btn span { display: none; }
+  .search-btn { padding: 0; width: 38px; justify-content: center; }
+  .ticker-item { font-size: 13px; }
+}
+
+/* ============================================================
+   NEW SECTIONS — shared header row
+   ============================================================ */
+.section-head-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 28px; flex-wrap: wrap; }
+.section-see-all { display: inline-flex; align-items: center; gap: 4px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 600; color: var(--accent-primary); transition: gap 0.2s ease-out; white-space: nowrap; }
+.section-see-all:hover { gap: 8px; }
+
+/* ============================================================
+   INDIE SPOTLIGHT — cinematic hero + poster row
+   ============================================================ */
+.indie-head-text { display: flex; flex-direction: column; gap: 6px; }
+.indie-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-secondary); }
+.indie-grid { display: flex; flex-direction: column; gap: 20px; }
+
+/* Cinematic hero with text overlaid on the artwork */
+.indie-hero { position: relative; display: block; border-radius: 20px; overflow: hidden; min-height: 380px; border: 1px solid var(--border-subtle); box-shadow: var(--card-shadow); transition: border-color 0.25s ease-out, box-shadow 0.25s ease-out; }
+.indie-hero:hover { border-color: var(--border-glow); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+[data-theme="light"] .indie-hero:hover { border-color: var(--accent-primary); box-shadow: 0 20px 44px rgba(60,80,120,0.2); }
+.indie-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+.indie-hero:hover .indie-hero-img { transform: scale(1.04); }
+.indie-hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,11,18,0.9) 0%, rgba(8,11,18,0.62) 42%, rgba(8,11,18,0.15) 75%, transparent 100%), linear-gradient(0deg, rgba(8,11,18,0.85) 0%, transparent 45%); }
+.indie-hero-content { position: relative; z-index: 2; height: 100%; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; padding: 24px 28px; }
+.indie-hero-badge { align-self: flex-start; font-family: 'Chakra Petch', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #0a1207; background: var(--accent-primary); padding: 6px 14px; border-radius: 999px; }
+.indie-hero-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.indie-hero-text { max-width: 560px; }
+.indie-hero-genre { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-secondary); }
+.indie-hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 5vw, 52px); line-height: 1; letter-spacing: var(--ls-display); text-transform: uppercase; color: #fff; margin: 8px 0 10px; }
+.indie-hero-excerpt { font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.82); }
+.indie-hero-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.02em; color: var(--accent-primary); transition: gap 0.2s ease-out; }
+.indie-hero:hover .indie-hero-link { gap: 12px; }
+.indie-hero-scorewrap { display: inline-flex; align-items: baseline; flex-shrink: 0; padding: 0 4px; }
+.indie-hero-score { font-family: 'Bebas Neue', sans-serif; font-size: 64px; line-height: 1; letter-spacing: 0.02em; color: var(--accent-primary); text-shadow: 0 3px 18px rgba(0,0,0,0.6); }
+.indie-hero-scoremax { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: rgba(255,255,255,0.7); margin-left: 2px; }
+
+/* Poster row below the hero */
+.indie-poster-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.indie-poster { display: flex; flex-direction: column; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.22s ease-out, border-color 0.22s ease-out, box-shadow 0.22s ease-out; }
+.indie-poster:hover { transform: translateY(-5px); border-color: var(--border-glow); box-shadow: 0 16px 38px rgba(0,0,0,0.3); }
+[data-theme="light"] .indie-poster:hover { border-color: var(--accent-primary); box-shadow: 0 16px 34px rgba(60,80,120,0.16); }
+.indie-poster-media { position: relative; aspect-ratio: 16/10; overflow: hidden; }
+.indie-poster-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.indie-poster:hover .indie-poster-media img { transform: scale(1.07); }
+.indie-poster-num { position: absolute; top: 10px; left: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 1; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.7); opacity: 0.9; }
+.indie-poster-score { position: absolute; bottom: 10px; right: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; line-height: 1; color: #0a1207; background: var(--accent-primary); padding: 3px 9px 2px; border-radius: 6px; }
+[data-theme="light"] .indie-poster-score { color: #fff; }
+.indie-poster-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 5px; }
+.indie-poster-genre { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-secondary); }
+.indie-poster-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.25; color: var(--text-primary); transition: color 0.2s ease-out; }
+.indie-poster:hover .indie-poster-title { color: var(--accent-primary); }
+.indie-poster-studio { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--text-muted); }
+
+@media (max-width: 900px) {
+  .indie-hero-content { padding: 20px 22px; }
+  .indie-hero-score { font-size: 52px; }
+}
+@media (max-width: 680px) {
+  .indie-hero { min-height: 340px; }
+  .indie-hero-content { min-height: 340px; }
+  .indie-hero-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .indie-hero-scorewrap { order: -1; }
+  .indie-hero-score { font-size: 44px; }
+}
+/* ≤640px — poster row becomes a horizontal slider */
+@media (max-width: 640px) {
+  .indie-poster-row {
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    cursor: grab;
+  }
+  .indie-poster-row::-webkit-scrollbar { display: none; }
+  .indie-poster-row.dragging { cursor: grabbing; scroll-snap-type: none; }
+  .indie-poster-row .indie-poster {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+  .indie-poster-media { aspect-ratio: 16/9; }
+}
+
+/* ============================================================
+   LATEST GAMES — cover cards with score chip + platform icons
+   ============================================================ */
+.games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.games-slider-row { display: contents; }
+.game-card { display: flex; flex-direction: column; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.25s ease-out, border-color 0.25s ease-out, box-shadow 0.25s ease-out; }
+.game-card:hover { transform: translateY(-5px); border-color: var(--border-glow); box-shadow: 0 16px 40px rgba(0,0,0,0.32); }
+[data-theme="light"] .game-card:hover { border-color: var(--accent-primary); box-shadow: 0 16px 38px rgba(60,80,120,0.18); }
+.game-card-media { position: relative; aspect-ratio: 16/10; overflow: hidden; }
+.game-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.game-card:hover .game-card-media img { transform: scale(1.06); }
+.game-score-chip { position: absolute; top: 12px; right: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; line-height: 1; letter-spacing: 0.02em; color: #0a1207; background: var(--accent-primary); padding: 5px 10px 3px; border-radius: 8px; box-shadow: 0 4px 14px rgba(141,255,31,0.4); }
+[data-theme="light"] .game-score-chip { color: #fff; box-shadow: 0 4px 12px rgba(74,169,0,0.35); }
+.game-card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.game-genre { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-secondary); }
+.game-card-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.25; color: var(--text-primary); transition: color 0.2s ease-out; }
+.game-card:hover .game-card-title { color: var(--accent-primary); }
+.game-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+.game-platforms { display: flex; align-items: center; gap: 8px; }
+.game-platform { display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); transition: color 0.2s ease-out; }
+.game-card:hover .game-platform { color: var(--text-secondary); }
+.game-date { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+.game-foot-author { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ============================================================
+   SLOT GAME REVIEWS — media + score ring + RTP/volatility specs
+   ============================================================ */
+.slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.slots-slider-row { display: contents; }
+.slot-card { display: flex; flex-direction: column; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.25s ease-out, border-color 0.25s ease-out, box-shadow 0.25s ease-out; }
+.slot-card:hover { transform: translateY(-5px); border-color: var(--border-glow); box-shadow: 0 16px 40px rgba(0,0,0,0.32); }
+[data-theme="light"] .slot-card:hover { border-color: var(--accent-primary); box-shadow: 0 16px 38px rgba(60,80,120,0.18); }
+.slot-card-media { position: relative; aspect-ratio: 4/3; overflow: hidden; }
+.slot-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.slot-card:hover .slot-card-media img { transform: scale(1.06); }
+.slot-media-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,13,20,0.82) 0%, rgba(10,13,20,0.15) 55%, transparent 100%); }
+.slot-tag { position: absolute; top: 10px; left: 10px; z-index: 2; font-family: 'Chakra Petch', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 9px; border-radius: 6px; color: #0a1207; }
+.slot-tag-hot { background: var(--accent-tertiary); color: #fff; }
+.slot-tag-new { background: var(--accent-secondary); color: #04222c; }
+.slot-tag-top { background: var(--accent-primary); }
+[data-theme="light"] .slot-tag-top { color: #fff; }
+.slot-ring { position: absolute; bottom: 12px; right: 12px; z-index: 2; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(closest-side, var(--bg-secondary) 76%, transparent 77% 100%), conic-gradient(var(--accent-primary) calc(var(--pct) * 1%), rgba(255,255,255,0.22) 0); box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+[data-theme="light"] .slot-ring { background: radial-gradient(closest-side, #fff 76%, transparent 77% 100%), conic-gradient(var(--accent-primary) calc(var(--pct) * 1%), rgba(19,24,36,0.14) 0); }
+.slot-ring-num { font-family: 'Bebas Neue', sans-serif; font-size: 19px; line-height: 1; color: var(--text-primary); }
+.slot-card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.slot-card-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.25; color: var(--text-primary); transition: color 0.2s ease-out; }
+.slot-card:hover .slot-card-title { color: var(--accent-primary); }
+.slot-provider { font-family: 'Inter', sans-serif; font-size: 12.5px; color: var(--text-muted); margin-bottom: 4px; }
+.slot-specs { display: flex; gap: 10px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+.slot-spec { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.slot-spec-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.slot-spec-val { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 13.5px; color: var(--text-primary); }
+
+/* ============================================================
+   SHARED TABS (Game Reviews + News Reviews)
+   ============================================================ */
+.section-head-tabs { align-items: center; }
+.tab-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab-btn { font-family: 'Chakra Petch', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.01em; padding: 8px 16px; border-radius: 9999px; color: var(--text-secondary); background: var(--bg-secondary); border: 1px solid var(--border-subtle); cursor: pointer; transition: color 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out; }
+.tab-btn:hover { color: var(--text-primary); border-color: var(--border-glow); }
+.tab-btn.active { color: #0a1207; background: var(--accent-primary); border-color: var(--accent-primary); }
+[data-theme="light"] .tab-btn.active { color: #fff; }
+
+/* ============================================================
+   GAME REVIEWS — 4-col image cards with score
+   ============================================================ */
+.game-reviews-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.gr-card { display: flex; flex-direction: column; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.25s ease-out, border-color 0.25s ease-out, box-shadow 0.25s ease-out; }
+.gr-card:hover { transform: translateY(-5px); border-color: var(--border-glow); box-shadow: 0 16px 40px rgba(0,0,0,0.32); }
+[data-theme="light"] .gr-card:hover { border-color: var(--accent-primary); box-shadow: 0 16px 38px rgba(60,80,120,0.18); }
+.gr-card-media { position: relative; aspect-ratio: 16/10; overflow: hidden; }
+.gr-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.gr-card:hover .gr-card-media img { transform: scale(1.06); }
+.gr-score { position: absolute; bottom: 12px; right: 12px; display: inline-flex; align-items: baseline; font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; letter-spacing: 0.02em; color: var(--accent-primary); text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+.gr-score-max { font-size: 14px; color: rgba(255,255,255,0.75); margin-left: 1px; }
+[data-theme="light"] .gr-score { text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.gr-card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; flex: 1; }
+.gr-card-body .category-badge { align-self: flex-start; }
+.gr-card-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.3; color: var(--text-primary); transition: color 0.2s ease-out; }
+.gr-card:hover .gr-card-title { color: var(--accent-primary); }
+.gr-card-excerpt { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.55; color: var(--text-secondary); flex: 1; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+.gr-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+.gr-author { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gr-date { display: inline-flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+
+/* ============================================================
+   NEWS REVIEWS — numbered horizontal rows (distinct design)
+   ============================================================ */
+.news-reviews-list { display: flex; flex-direction: column; gap: 12px; }
+.nr-row { display: flex; align-items: center; gap: 20px; padding: 16px 20px; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 14px; transition: transform 0.2s ease-out, border-color 0.2s ease-out, background-color 0.2s ease-out; }
+.nr-row:hover { transform: translateX(4px); border-color: var(--border-glow); background: var(--bg-tertiary); }
+[data-theme="light"] .nr-row:hover { border-color: var(--accent-primary); }
+.nr-index { font-family: 'Bebas Neue', sans-serif; font-size: 34px; line-height: 1; letter-spacing: 0.02em; color: var(--accent-primary); opacity: 0.5; flex-shrink: 0; width: 40px; text-align: center; transition: opacity 0.2s ease-out; }
+.nr-row:hover .nr-index { opacity: 1; }
+.nr-thumb { width: 96px; height: 68px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+.nr-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.nr-row:hover .nr-thumb img { transform: scale(1.08); }
+.nr-body { flex: 1; min-width: 0; }
+.nr-meta-top { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+.nr-read { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); }
+.nr-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.3; color: var(--text-primary); margin-bottom: 4px; transition: color 0.2s ease-out; }
+.nr-row:hover .nr-title { color: var(--accent-primary); }
+.nr-excerpt { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.5; color: var(--text-secondary); overflow: hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.nr-date { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+.nr-arrow { display: inline-flex; color: var(--text-muted); flex-shrink: 0; transition: color 0.2s ease-out, transform 0.2s ease-out; }
+.nr-row:hover .nr-arrow { color: var(--accent-primary); transform: translateX(3px); }
+
+/* Slider-row wrappers are transparent on desktop */
+.gr-slider-row { display: contents; }
+.nr-slider-row { display: contents; }
+
+/* GAME REVIEWS — "View All Reviews" button (solid pill style) */
+.gr-more-wrap { display: flex; justify-content: center; margin-top: 36px; }
+.gr-more-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.02em; padding: 0 28px; height: 50px; border-radius: 9999px; color: #0a1207; background: var(--accent-primary); border: 1px solid var(--accent-primary); box-shadow: 0 6px 20px rgba(141,255,31,0.28); transition: transform 0.15s ease-out, box-shadow 0.2s ease-out, gap 0.2s ease-out; }
+.gr-more-btn:hover { transform: translateY(-2px); gap: 12px; box-shadow: 0 10px 28px rgba(141,255,31,0.42); }
+.gr-more-btn svg { transition: transform 0.2s ease-out; }
+[data-theme="light"] .gr-more-btn { color: #fff; box-shadow: 0 6px 18px rgba(74,169,0,0.3); }
+[data-theme="light"] .gr-more-btn:hover { box-shadow: 0 10px 26px rgba(74,169,0,0.4); }
+
+/* NEWS REVIEWS — "Explore More News" button (matches View More design) */
+.nr-more-wrap { display: flex; justify-content: center; margin-top: 28px; }
+.nr-more-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; padding: 0 32px; height: 48px; border-radius: 8px; color: var(--accent-primary); background-color: var(--bg-tertiary); border: 1px solid var(--border-glow); transition: box-shadow 0.2s ease-out, transform 0.15s ease-out, background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out; }
+.nr-more-btn:hover { background-color: var(--accent-primary); color: #0a1207; border-color: var(--accent-primary); box-shadow: 0 8px 24px rgba(141,255,31,0.4); transform: translateY(-2px); }
+.nr-more-btn:active { transform: translateY(0) scale(0.98); }
+[data-theme="light"] .nr-more-btn { background-color: #ffffff; border-color: var(--accent-primary); color: var(--accent-primary); }
+[data-theme="light"] .nr-more-btn:hover { background-color: var(--accent-primary); color: #ffffff; border-color: var(--accent-primary); box-shadow: 0 8px 22px rgba(74,169,0,0.32); }
+.nr-more-plus { font-family: 'Bebas Neue', sans-serif; font-size: 20px; line-height: 1; }
+
+/* NEW SECTIONS — responsive */
+@media (max-width: 1100px) {
+  .slots-grid { grid-template-columns: repeat(2, 1fr); }
+  .game-reviews-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .games-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .section-head-tabs { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .tab-bar { width: 100%; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; padding-bottom: 2px; }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn { flex-shrink: 0; }
+  .game-reviews-grid { grid-template-columns: 1fr; }
+  .nr-row { gap: 12px; padding: 12px 14px; }
+  .nr-index { display: none; }
+  .nr-date, .nr-arrow { display: none; }
+  .nr-excerpt { white-space: normal; }
+}
+
+/* ============================================================
+   Mobile sliders (≤640px): first/featured post stays static,
+   the rest become horizontal swipeable sliders.
+   Applies to Featured + Latest News (home) and Latest Articles (review).
+   ============================================================ */
+/* On desktop the slider-row wrappers are transparent to the grid/list */
+.featured-slider-row { display: contents; }
+.news-slider-row { display: contents; }
+.games-slider-row { display: contents; }
+.slots-slider-row { display: contents; }
+
+/* Slider navigation (arrows + dots) — hidden by default, shown on mobile */
+.slider-nav { display: none; }
+/* Nav row: [prev] [dots] [next]. The dots box is a FIXED-width, centered flex
+   container with NO internal scroll — this is the layout Safari handles most
+   reliably. A fixed width means the active dot expanding (8→22px) can't change
+   the box size, so the arrows never shift ("jump"). Excess dots beyond what
+   fits are clipped rather than scrolled, which keeps rendering cheap. */
+.slider-nav-row { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.slider-nav-btn {
+  width: 38px; height: 38px; border-radius: 9999px; flex: 0 0 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-secondary); color: var(--accent-primary);
+  border: 1px solid var(--border-subtle);
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out, opacity 0.2s ease-out;
+}
+.slider-nav-btn:hover { background: var(--bg-tertiary); border-color: var(--border-glow); }
+.slider-nav-btn:disabled { opacity: 0.35; pointer-events: none; }
+.slider-dots {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 132px; flex: 0 0 132px; height: 22px; overflow: hidden;
+}
+.slider-dot {
+  width: 8px; height: 8px; flex: 0 0 8px; border-radius: 9999px; padding: 0;
+  border: none; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none;
+  background: var(--border-glow); opacity: 0.4;
+  transition: opacity 0.2s ease-out, flex-basis 0.2s ease-out, width 0.2s ease-out, background-color 0.2s ease-out;
+}
+.slider-dot.active { opacity: 1; width: 22px; flex-basis: 22px; background: var(--accent-primary); }
+
+@media (max-width: 640px) {
+  /* --- FEATURED slider: hero card full-width, rest slide --- */
+  .featured-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    grid-template-columns: none;
+  }
+  .featured-grid .span-hero {
+    width: 100%;
+  }
+  .featured-slider-row {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    width: 100%;
+  }
+  .featured-slider-row::-webkit-scrollbar { display: none; }
+  .featured-slider-row .featured-card {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+  }
+
+  /* --- LATEST NEWS slider: first item static, rest slide --- */
+  /* First (static) item: card styling, no stray divider line */
+  .news-list > .news-item {
+    flex-direction: column;
+    margin: 0 0 18px;
+    border-radius: 14px;
+    border: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-secondary);
+    padding: 12px;
+  }
+  .news-list > .news-item .news-thumb { width: 100%; height: 160px; }
+  .news-list > .news-item .news-content { padding-top: 10px; }
+  .news-slider-row {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .news-slider-row::-webkit-scrollbar { display: none; }
+  .news-slider-row .news-item {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+    flex-direction: column;
+    margin: 0;
+    border-radius: 14px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-secondary);
+    padding: 12px;
+  }
+  .news-slider-row .news-item:hover { border-radius: 14px; }
+  .news-slider-row .news-thumb { width: 100%; height: 160px; }
+  .news-slider-row .news-content { padding-top: 10px; }
+
+  /* --- LATEST ARTICLES (review) slider: big card static, text cards slide --- */
+  .latest-text-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .latest-text-grid::-webkit-scrollbar { display: none; }
+  .latest-text-grid .latest-card {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+
+  /* --- LATEST GAMES slider --- */
+  .games-grid { display: block; }
+  .games-slider-row {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .games-slider-row::-webkit-scrollbar { display: none; }
+  .games-slider-row .game-card {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+
+  /* --- SLOT REVIEWS slider --- */
+  .slots-grid { display: block; }
+  .slots-slider-row {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .slots-slider-row::-webkit-scrollbar { display: none; }
+  .slots-slider-row .slot-card {
+    flex: 0 0 72%;
+    scroll-snap-align: start;
+  }
+
+  /* --- GAME REVIEWS slider (mobile, despite tabs) --- */
+  .game-reviews-grid { display: block; }
+  .gr-slider-row {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .gr-slider-row::-webkit-scrollbar { display: none; }
+  .gr-slider-row .gr-card {
+    flex: 0 0 80%;
+    scroll-snap-align: start;
+  }
+
+  /* --- NEWS REVIEWS slider (mobile, despite tabs) --- */
+  .news-reviews-list { display: block; }
+  .nr-slider-row {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .nr-slider-row::-webkit-scrollbar { display: none; }
+  .nr-slider-row .nr-row {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .nr-slider-row .nr-thumb { width: 100%; height: 150px; }
+  .nr-slider-row .nr-index { display: none; }
+  .nr-slider-row .nr-date, .nr-slider-row .nr-arrow { display: none; }
+  .nr-slider-row .nr-excerpt { white-space: normal; }
+
+  /* Slider navigation (arrows + dots) — visible on mobile */
+  .slider-nav { display: block !important; margin-top: 18px; }
+}
+
+/* ============================================================
+   ARCHIVE PAGE (archive.html) — News Reviews archive
+   ============================================================ */.archive-wrap { max-width: var(--content-max); margin: 0 auto; padding: 40px 24px 72px; }
+.archive-header { margin-bottom: 32px; }
+.archive-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-primary); margin-bottom: 12px; }
+.archive-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 0.01em; font-size: clamp(30px, 4vw, 46px); line-height: 1.1; color: var(--text-primary); margin-bottom: 12px; }
+.archive-sub { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; color: var(--text-secondary); max-width: 640px; }
+
+/* Category filter */
+.archive-filter { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle); }
+.archive-filter-btn { font-family: 'Chakra Petch', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.01em; padding: 9px 18px; border-radius: 9999px; color: var(--text-secondary); background: var(--bg-secondary); border: 1px solid var(--border-subtle); cursor: pointer; transition: color 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out; text-decoration: none; display: inline-block; }
+.archive-filter-btn:hover { color: var(--text-primary); border-color: var(--border-glow); }
+.archive-filter-btn.active { color: #0a1207; background: var(--accent-primary); border-color: var(--accent-primary); }
+[data-theme="light"] .archive-filter-btn.active { color: #fff; }
+
+/* Archive grid — 3 columns */
+.archive-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.archive-card { display: flex; flex-direction: column; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.25s ease-out, border-color 0.25s ease-out, box-shadow 0.25s ease-out; }
+.archive-card:hover { transform: translateY(-5px); border-color: var(--border-glow); box-shadow: 0 16px 40px rgba(0,0,0,0.32); }
+[data-theme="light"] .archive-card:hover { border-color: var(--accent-primary); box-shadow: 0 16px 38px rgba(60,80,120,0.18); }
+.archive-card-media { position: relative; aspect-ratio: 16/10; overflow: hidden; }
+.archive-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.archive-card:hover .archive-card-media img { transform: scale(1.06); }
+.archive-card-media .category-badge { position: absolute; top: 12px; left: 12px; }
+.archive-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.archive-card-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 17px; line-height: 1.3; color: var(--text-primary); transition: color 0.2s ease-out; }
+.archive-card:hover .archive-card-title { color: var(--accent-primary); }
+.archive-card-excerpt { font-family: 'Inter', sans-serif; font-size: 13.5px; line-height: 1.55; color: var(--text-secondary); flex: 1; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+.archive-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 12px; border-top: 1px solid var(--border-subtle); }
+.archive-card-date { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-muted); }
+.archive-card-read { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); }
+.archive-empty { text-align: center; padding: 48px 0; font-family: 'Inter', sans-serif; font-size: 15px; color: var(--text-muted); }
+
+/* Pagination */
+.archive-pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 44px; flex-wrap: wrap; }
+.page-btn { min-width: 42px; height: 42px; padding: 0 12px; border-radius: 10px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); background: var(--bg-secondary); border: 1px solid var(--border-subtle); cursor: pointer; transition: color 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out; }
+.page-btn:hover:not(:disabled):not(.active) { color: var(--text-primary); border-color: var(--border-glow); background: var(--bg-tertiary); }
+.page-btn.active { color: #0a1207; background: var(--accent-primary); border-color: var(--accent-primary); }
+[data-theme="light"] .page-btn.active { color: #fff; }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.page-arrow { padding: 0; }
+
+@media (max-width: 1024px) {
+  .archive-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .archive-grid { grid-template-columns: 1fr; }
+  .archive-filter { gap: 8px; }
+  .archive-filter-btn { padding: 8px 14px; font-size: 12.5px; }
+}
+
+/* ============================================================
+   CASINO REVIEW PAGE (review-casino.html)
+   ============================================================ */
+/* --- Top banner + game details panel (side by side) --- */
+.casino-hero { display: grid; grid-template-columns: 1fr 340px; gap: 24px; margin: 8px 0 36px; align-items: stretch; }
+.casino-hero-banner { position: relative; border-radius: 18px; overflow: hidden; min-height: 420px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.casino-hero-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.casino-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,13,20,0.25) 0%, rgba(10,13,20,0.15) 45%, rgba(10,13,20,0.78) 100%); }
+.casino-hero-actions { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 14px; width: min(360px, 70%); }
+.casino-cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 54px; border-radius: 10px; font-family: 'Chakra Petch', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; transition: transform 0.15s ease-out, box-shadow 0.2s ease-out, filter 0.2s ease-out; }
+.casino-cta-primary { background: var(--accent-tertiary); color: #fff; box-shadow: 0 8px 24px rgba(255,77,125,0.35); }
+.casino-cta-primary:hover { transform: translateY(-2px); filter: brightness(1.06); box-shadow: 0 12px 30px rgba(255,77,125,0.48); }
+.casino-cta-secondary { background: #fff; color: #131824; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.casino-cta-secondary:hover { transform: translateY(-2px); filter: brightness(0.97); }
+.casino-hero-title-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 22px; }
+.casino-hero-name { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 22px; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
+.casino-hero-score { display: inline-flex; align-items: baseline; font-family: 'Bebas Neue', sans-serif; font-size: 34px; line-height: 1; letter-spacing: 0.02em; color: var(--accent-primary); text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
+.casino-hero-score-max { font-size: 16px; color: rgba(255,255,255,0.8); margin-left: 1px; }
+
+.casino-details { background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 24px 26px; box-shadow: var(--card-shadow); }
+.casino-details-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 20px; color: var(--text-primary); margin-bottom: 8px; }
+.casino-details-list { display: flex; flex-direction: column; }
+.casino-detail { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--border-subtle); }
+.casino-detail:last-child { border-bottom: none; }
+.casino-detail dt { font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text-secondary); }
+.casino-detail dd { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 15px; color: var(--text-primary); text-align: right; }
+.casino-detail dd.detail-accent { color: var(--accent-primary); }
+
+/* --- Top casino cards — unified ranked-row design --- */
+.top-casinos { margin: 4px 0 32px; padding: 24px; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 16px; }
+.top-casinos-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2; color: var(--text-primary); margin: 0 0 20px; }
+/* When the toplist renders inside .article-body, its generic "h2" rule (which
+   carries a 36px top margin) would otherwise push the title down. This more
+   specific selector cancels that so the gap above the title stays tight. */
+.article-body .top-casinos-title { margin-top: 0; }
+.top-casinos-list { display: block; }
+.casino-slider-row { display: flex; flex-direction: column; gap: 14px; }
+
+.casino-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 18px 22px;
+  transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.casino-card:hover { transform: translateY(-3px); border-color: var(--border-glow); box-shadow: 0 12px 30px rgba(0,0,0,0.28); }
+[data-theme="light"] .casino-card:hover { border-color: var(--accent-primary); box-shadow: 0 12px 28px rgba(60,80,120,0.16); }
+/* Top pick gets a subtle accent frame */
+.casino-card-top { border-color: var(--accent-tertiary); box-shadow: 0 0 0 1px rgba(255,77,125,0.25); }
+/* On hover the base rule replaces box-shadow with just the drop shadow, which
+   wiped out the top pick's 1px accent frame (most visibly the top edge). Keep
+   the frame layered under the drop shadow, and hold the accent border colour. */
+.casino-card-top:hover { border-color: var(--accent-tertiary); box-shadow: 0 0 0 1px rgba(255,77,125,0.25), 0 12px 30px rgba(0,0,0,0.28); }
+[data-theme="light"] .casino-card-top:hover { border-color: var(--accent-tertiary); box-shadow: 0 0 0 1px rgba(255,77,125,0.25), 0 12px 28px rgba(60,80,120,0.16); }
+.casino-card-top::before { content: ''; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 0 3px 3px 0; background: var(--accent-tertiary); }
+
+/* Rank column */
+.casino-rank-col { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; width: 46px; }
+.casino-rank { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 24px; line-height: 1; color: #fff; background: var(--accent-secondary); }
+[data-theme="dark"] .casino-rank { background: #3a3f8f; }
+.casino-card-top .casino-rank { background: var(--accent-tertiary); }
+.casino-rank-tag { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-tertiary); text-align: center; line-height: 1.1; }
+
+/* Brand + rating */
+.casino-brand { display: flex; flex-direction: column; gap: 8px; flex: 0 0 auto; align-items: flex-start; }
+.casino-logo { display: inline-flex; align-items: center; justify-content: center; height: 54px; min-width: 150px; padding: 8px 20px; border-radius: 10px; overflow: hidden; }
+.casino-logo-name { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.01em; color: #131824; text-align: center; line-height: 1.1; white-space: nowrap; }
+/* Text-only logos keep a light backdrop so the dark name stays readable; image
+   logos have no background so nothing shows around/through the artwork. */
+.casino-logo:not(.casino-logo-has-img) { background: #fff; }
+/* When a logo image is set, drop the box padding so the image fills the whole
+   box edge-to-edge (cover), with the box's border-radius clipping the corners. */
+.casino-logo.casino-logo-has-img { padding: 0; }
+/* The image is sized to a definite pixel height that matches the logo box
+   (54px) rather than height:100%. iOS Safari can't resolve a percentage height
+   against the flex-column parent used in the mobile slider, which collapsed and
+   distorted the logo; a fixed px height sizes identically in every browser. */
+.casino-logo-img { width: 100%; height: 54px; object-fit: cover; border-radius: 10px; display: block; }
+.casino-stars { display: flex; align-items: center; gap: 3px; }
+.cstar { display: inline-flex; color: var(--border-hard); }
+.cstar.on { color: var(--accent-tertiary); }
+.casino-score-num { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 13px; color: var(--text-secondary); margin-left: 5px; }
+
+/* Bonus — grows to fill the space between brand and CTA */
+.casino-bonus-col { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.casino-name-heading { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 15px; line-height: 1.2; color: var(--text-primary); margin-bottom: 2px; }
+.casino-bonus-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-primary); }
+.casino-bonus { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 16px; line-height: 1.35; color: var(--text-primary); }
+
+/* CTA */
+.casino-offer-btn { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 26px; border-radius: 10px; font-family: 'Chakra Petch', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: var(--accent-tertiary); box-shadow: 0 6px 18px rgba(255,77,125,0.3); transition: transform 0.15s ease-out, filter 0.2s ease-out, box-shadow 0.2s ease-out; white-space: nowrap; }
+.casino-offer-btn:hover { transform: translateY(-2px); filter: brightness(1.06); box-shadow: 0 10px 24px rgba(255,77,125,0.42); }
+
+.casino-disclaimer { font-family: 'Inter', sans-serif; font-size: 12.5px; line-height: 1.6; color: var(--text-muted); padding: 16px; margin-top: 28px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--bg-secondary); }
+
+/* --- Casino review responsive --- */
+@media (max-width: 1024px) {
+  .casino-hero { grid-template-columns: 1fr; }
+  .casino-hero-banner { min-height: 340px; }
+}
+/* Tablet / narrow content: brand on top row, bonus + CTA share the next row cleanly */
+@media (max-width: 820px) {
+  .casino-card { gap: 14px 18px; padding: 16px 18px; }
+  .casino-brand { flex-direction: row; align-items: center; gap: 14px; flex-basis: 100%; }
+  .casino-bonus-col { flex: 1 1 auto; order: 3; }
+  .casino-offer-btn { order: 4; flex-shrink: 0; }
+}
+@media (max-width: 560px) {
+  .casino-offer-btn { width: 100%; }
+}
+/* ≤640px — horizontal slider of compact vertical cards */
+@media (max-width: 640px) {
+  .top-casinos-list { display: block; }
+  .casino-slider-row {
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* overflow-x:auto forces overflow-y to clip, which sliced off the top-pick
+       card's hover lift (translateY -3px) and its 1px top accent frame at the
+       row's top edge. Pad the scroll box on top/sides to give the lifted card
+       and its frame room to show, then pull the box back up with a matching
+       negative margin so the row's visual position is unchanged. */
+    padding: 6px 2px 4px;
+    margin-top: -6px;
+    cursor: grab;
+    align-items: flex-start;
+  }
+  .casino-slider-row::-webkit-scrollbar { display: none; }
+  .casino-slider-row.dragging { cursor: grabbing; scroll-snap-type: none; }
+  /* Reset the tablet overrides so every card is a clean compact column */
+  .casino-slider-row .casino-card {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    text-align: center;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 22px 18px;
+  }
+  .casino-slider-row .casino-rank-col { flex-direction: row; align-items: center; justify-content: center; width: auto; gap: 8px; order: 0; }
+  .casino-slider-row .casino-brand { flex: 0 0 auto; flex-direction: column; align-items: center; gap: 8px; order: 1; }
+  .casino-slider-row .casino-logo { width: auto; min-width: 0; max-width: 100%; height: 54px; box-sizing: border-box; padding: 8px 24px; }
+  /* iOS Safari can't resolve a percentage image height when the flex-column
+     logo box has an auto width and an indefinite height, so it collapses and
+     stretches the logo. Pin the box to a definite size for the image case and
+     give the image a definite px height so it renders the same as in Chrome. */
+  .casino-slider-row .casino-logo.casino-logo-has-img { width: 150px; max-width: 100%; height: 54px; padding: 0; }
+  .casino-slider-row .casino-logo-img { width: 100%; height: 54px; }
+  .casino-slider-row .casino-stars { justify-content: center; }
+  .casino-slider-row .casino-bonus-col { flex: 0 0 auto; align-items: center; order: 2; }
+  .casino-slider-row .casino-offer-btn { width: 100%; flex-shrink: 0; order: 3; margin-top: 4px; }
+  .casino-hero-name { font-size: 18px; }
+  .casino-hero-score { font-size: 28px; }
+  .top-casinos { padding: 18px; }
+  .top-casinos-title { font-size: 19px; }
+}
+
+/* ============================================================
+   PAGE BANNER — reusable hero banner with breadcrumb
+   (used by my.html, about.html, and other subpages)
+   ============================================================ */
+.page-banner {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.page-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(141,255,31,0.10), transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(41,221,255,0.10), transparent 45%);
+  pointer-events: none;
+}
+[data-theme="light"] .page-banner::before {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(74,169,0,0.08), transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(0,144,192,0.08), transparent 45%);
+}
+/* faint grid texture like the newsletter block */
+.page-banner-grid {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 78%);
+}
+.page-banner-inner {
+  position: relative;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 30px 24px 44px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.page-banner-text { min-width: 0; }
+.page-banner .breadcrumb { margin-bottom: 20px; }
+.page-banner-eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-primary);
+  margin-bottom: 12px; display: inline-block;
+}
+.page-banner-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 6vw, 62px);
+  line-height: 1; letter-spacing: var(--ls-display); text-transform: uppercase;
+  color: var(--text-primary); margin-bottom: 14px;
+}
+.page-banner-sub {
+  font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6;
+  color: var(--text-secondary); max-width: 560px;
+}
+/* Right-hand decorative visual */
+.page-banner-visual {
+  position: relative; aspect-ratio: 16/10; border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--border-subtle); box-shadow: var(--card-shadow);
+}
+.page-banner-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.page-banner-visual::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 40%, rgba(141,255,31,0.12));
+  pointer-events: none;
+}
+[data-theme="light"] .page-banner-visual::after { background: linear-gradient(120deg, transparent 40%, rgba(74,169,0,0.10)); }
+/* accent bar under the banner (echoes the homepage divider) */
+.page-banner-accent { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); opacity: 0.85; }
+
+@media (max-width: 860px) {
+  .page-banner-inner { grid-template-columns: 1fr; gap: 24px; padding: 24px 20px 36px; }
+  .page-banner-visual { max-width: 480px; }
+}
+@media (max-width: 560px) {
+  .page-banner-visual { display: none; }
+}
+
+/* Page body that follows a banner (constrained content) */
+.page-body-wrap { max-width: var(--content-max); margin: 0 auto; padding: 44px 24px 64px; }
+@media (max-width: 768px) { .page-body-wrap { padding: 32px 18px 48px; } }
+
+/* ============================================================
+   GUIDES GRID (my.html) — tall image cards
+   ============================================================ */
+.guides-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.guide-card { display: flex; flex-direction: column; background: transparent; transition: transform 0.25s ease-out; }
+.guide-card:hover { transform: translateY(-5px); }
+.guide-card-media { position: relative; aspect-ratio: 3/4; border-radius: 14px; overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-subtle); }
+.guide-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.guide-card:hover .guide-card-media img { transform: scale(1.06); }
+.guide-card-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,13,20,0.5), transparent 45%); pointer-events: none; }
+.guide-card:hover .guide-card-media { border-color: var(--border-glow); }
+[data-theme="light"] .guide-card:hover .guide-card-media { border-color: var(--accent-primary); }
+.guide-card-tag { position: absolute; top: 12px; left: 12px; z-index: 2; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #0a1207; background: var(--accent-primary); padding: 4px 10px; border-radius: 5px; }
+[data-theme="light"] .guide-card-tag { color: #fff; }
+.guide-card-body { padding: 16px 4px 0; display: flex; flex-direction: column; gap: 8px; }
+.guide-card-title { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.3; color: var(--text-primary); transition: color 0.2s ease-out; }
+.guide-card:hover .guide-card-title { color: var(--accent-primary); }
+.guide-card .guide-card-body .guide-card-desc { font-family: 'Inter', sans-serif; font-size: 13.5px; line-height: 1.55; color: var(--text-secondary); display:-webkit-box !important; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; }
+
+@media (max-width: 1100px) { .guides-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px) { .guides-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px) { .guides-grid { grid-template-columns: 1fr; } .guide-card-media { aspect-ratio: 16/10; } }
+
+/* ============================================================
+   TOP PROMO SECTIONS (above hero) — app, NFT, partners
+   ============================================================ */
+.promo-band { position: relative; width: 100%; overflow: hidden; }
+
+/* --- App download promo --- */
+.promo-app { background: var(--bg-primary); border-bottom: 1px solid var(--border-subtle); }
+.promo-app-inner { max-width: 760px; margin: 0 auto; padding: 64px 24px 68px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; }
+.promo-app-logo-img { max-width: min(440px, 82%); height: auto; display: block; }
+.promo-app-desc { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.65; color: var(--text-secondary); max-width: 540px; }
+.promo-store-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.store-btn { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; min-width: 190px; border-radius: 10px; background: #000; border: 1px solid var(--accent-secondary); color: #fff; transition: transform 0.15s ease-out, box-shadow 0.2s ease-out; }
+.store-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(41,221,255,0.25); }
+.store-btn svg { flex-shrink: 0; }
+.store-btn-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.store-btn-top { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.02em; color: rgba(255,255,255,0.85); }
+.store-btn-name { font-family: 'Chakra Petch', sans-serif; font-size: 19px; font-weight: 700; }
+.promo-learn-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 48px; border-radius: 9999px; background: #000; border: 1px solid var(--accent-secondary); color: #fff; font-family: 'Chakra Petch', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.02em; transition: background-color 0.2s ease-out, color 0.2s ease-out, transform 0.15s ease-out, box-shadow 0.2s ease-out; }
+.promo-learn-btn:hover { transform: translateY(-2px); background: var(--accent-secondary); color: #05121a; box-shadow: 0 8px 24px rgba(41,221,255,0.32); }
+[data-theme="light"] .store-btn, [data-theme="light"] .promo-learn-btn { background: #101828; }
+[data-theme="light"] .promo-learn-btn:hover { background: var(--accent-secondary); color: #fff; }
+
+/* --- NFT / collectibles --- */
+.promo-nft { background: var(--bg-primary); border-bottom: 1px solid var(--border-subtle); }
+.promo-nft-bg { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 100% at 78% 50%, rgba(41,221,255,0.14), transparent 60%), radial-gradient(45% 90% at 30% 90%, rgba(255,77,125,0.10), transparent 60%); }
+.promo-nft-inner { position: relative; max-width: var(--content-max); margin: 0 auto; padding: 56px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.promo-nft-titles { display: flex; flex-direction: column; }
+.promo-nft-title { font-size: clamp(52px, 8vw, 96px); line-height: 0.85; letter-spacing: 0.02em; background: linear-gradient(180deg, #7dffd4, #29ddff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.promo-nft-sub { font-size: clamp(24px, 3.5vw, 40px); line-height: 1; letter-spacing: 0.02em; background: linear-gradient(90deg, var(--accent-tertiary), var(--accent-secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-top: 2px; }
+.promo-nft-desc { font-family: 'Inter', sans-serif; font-size: 15.5px; line-height: 1.7; color: var(--text-secondary); max-width: 460px; margin: 22px 0 24px; }
+.promo-nft-getlabel { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--text-primary); display: block; margin-bottom: 12px; }
+.promo-nft-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+.market-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 28px; height: 56px; min-width: 180px; border-radius: 9999px; background: #000; border: 1px solid var(--accent-secondary); color: #fff; font-family: 'Chakra Petch', sans-serif; font-size: 15px; font-weight: 600; transition: transform 0.15s ease-out, box-shadow 0.2s ease-out; }
+.market-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(41,221,255,0.28); }
+.market-btn img { max-height: 26px; max-width: 150px; width: auto; height: auto; object-fit: contain; }
+[data-theme="light"] .market-btn { background: #101828; }
+.promo-nft-visual { position: relative; aspect-ratio: 16/10; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-subtle); box-shadow: var(--card-shadow); }
+.promo-nft-visual img { width: 100%; height: 100%; object-fit: cover; }
+.promo-nft-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(8,11,18,0.5) 0%, transparent 55%); }
+
+/* --- Partners --- */
+.promo-partners { background: var(--bg-primary); border-bottom: 1px solid var(--border-subtle); }
+.partners-inner { max-width: var(--content-max); margin: 0 auto; padding: 56px 24px 60px; }
+.partners-label { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); text-align: center; margin-bottom: 28px; }
+.partners-label-collab { margin-top: 48px; }
+.partners-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.partners-grid-collab { grid-template-columns: repeat(5, 1fr); max-width: 900px; margin: 0 auto; }
+.partner-chip { display: flex; align-items: center; justify-content: center; height: 84px; padding: 16px 20px; border-radius: 12px; background: #171d29; border: 1px solid rgba(255,255,255,0.08); transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out; }
+.partner-chip:hover { transform: translateY(-3px); border-color: var(--border-glow); box-shadow: 0 10px 26px rgba(0,0,0,0.26); }
+[data-theme="light"] .partner-chip { background: #1a2130; border-color: rgba(0,0,0,0.12); }
+[data-theme="light"] .partner-chip:hover { border-color: var(--accent-primary); box-shadow: 0 10px 26px rgba(60,80,120,0.18); }
+.partner-chip img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; opacity: 0.92; transition: opacity 0.2s ease-out; }
+.partner-chip:hover img { opacity: 1; }
+.partner-chip-collab { height: 92px; }
+/* AWS logo: dark artwork on transparent bg. Invert to white in both themes so the chip matches the others instead of showing a lone white plate. */
+.partner-chip-aws img { opacity: 1; filter: brightness(0) invert(1); }
+
+@media (max-width: 1000px) {
+  .partners-grid { grid-template-columns: repeat(4, 1fr); }
+  .partners-grid-collab { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 860px) {
+  .promo-nft-inner { grid-template-columns: 1fr; gap: 28px; }
+  .promo-nft-visual { max-width: 520px; order: -1; }
+}
+@media (max-width: 640px) {
+  .promo-app-inner { padding: 48px 20px 52px; }
+  .promo-store-btns { flex-direction: column; align-items: stretch; }
+  .store-btn { justify-content: center; }
+  .partners-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .partners-grid-collab { grid-template-columns: repeat(2, 1fr); }
+  .partner-chip { height: 68px; padding: 12px 14px; }
+  .partner-chip-collab { height: 72px; }
+}
+@media (max-width: 400px) {
+  .partners-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------- Dynamic empty-state note (server-rendered sections with no posts) ---------- */
+.mlg-empty-note {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 15px;
+  background: var(--surface-1, rgba(255,255,255,0.02));
+  border: 1px dashed var(--border-color, rgba(255,255,255,0.12));
+  border-radius: 14px;
+}
+
+/* ==========================================================================
+   Smooth horizontal sliders (all viewports)
+   The single biggest factor in smooth touch dragging is touch-action: without
+   pan-x the browser stalls each touch while it guesses the scroll axis, which
+   feels laggy. pan-x tells it "this scrolls horizontally" up front so native
+   momentum scrolling kicks in instantly. We rely on the browser's own inertial
+   scrolling (buttery on iOS) rather than JS-driven scroll, and only add a light
+   snap once that momentum has fully settled.
+   ========================================================================== */
+.featured-slider-row,
+.news-slider-row,
+.games-slider-row,
+.slots-slider-row,
+.gr-slider-row,
+.nr-slider-row,
+.casino-slider-row,
+.indie-poster-row,
+.stories-scroll,
+.latest-text-grid {
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* -------------------------------------------------------------------------
+ * Article figures & image captions (added for editorial image credits)
+ * Uses the existing design tokens so it themes correctly in dark + light.
+ * ------------------------------------------------------------------------- */
+.article-body figure,
+.article-body .wp-block-image {
+  margin: 30px 0;
+}
+/* Every image in the article body — whether wrapped in a <figure> or dropped
+   straight into a paragraph by the editor — gets the same rounded, framed look.
+   display:block removes the inline baseline gap (the extra space a bare inline
+   <img> leaves beneath it), and centering keeps loose images tidy. */
+.article-body figure img,
+.article-body .wp-block-image img,
+.article-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border-hard);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+/* Figure/block images fill the content column. */
+.article-body figure img,
+.article-body .wp-block-image img {
+  width: 100%;
+}
+/* A bare image sitting directly in a paragraph: give it breathing room that
+   matches the figure spacing (instead of the paragraph's own 18px), and align it
+   to the left to sit flush with the body text. This also removes the oversized
+   gap next to nearby headings. */
+.article-body p > img:only-child {
+  margin: 24px 0;
+}
+.article-body p > img {
+  margin: 8px 0;
+}
+/* Figures/blocks also align left by default. */
+.article-body figure,
+.article-body .wp-block-image { margin-left: 0; margin-right: 0; }
+/* Honor WordPress alignment classes so editor-placed images look intentional. */
+.article-body img.aligncenter,
+.article-body .aligncenter { margin-left: auto; margin-right: auto; }
+.article-body img.alignnone { margin-left: 0; margin-right: auto; }
+.article-body img.alignleft { float: left; margin: 6px 24px 16px 0; }
+.article-body img.alignright { float: right; margin: 6px 0 16px 24px; }
+.article-body figcaption,
+.article-body .wp-block-image figcaption {
+  margin-top: 10px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent-primary);
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* -------------------------------------------------------------------------
+ * Responsive video embeds (YouTube, Vimeo, etc.)
+ * Cleanest markup — no wrapper div, iframe straight in the figure:
+ *
+ *   <figure>
+ *     <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+ *     <figcaption>Optional caption</figcaption>
+ *   </figure>
+ *
+ * The iframe's width/height attributes are optional — it's forced to a fluid
+ * 16:9 box that scales with the column. The wrapper-based selectors below are
+ * kept only so WordPress's own embed markup (wp-block-embed) and any legacy
+ * <div class="video-embed"> wrappers stay responsive too.
+ * Scoped to .article-body, which every template uses, so this applies site-wide.
+ * ------------------------------------------------------------------------- */
+
+/* Primary: a bare iframe (in a figure, a paragraph, or straight in the body). */
+.article-body figure > iframe,
+.article-body > iframe,
+.article-body > p > iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 12px;
+  margin: 24px 0;
+}
+/* A figure that holds a video embed gets its own spacing and drops the image
+   frame (its iframe/border-radius is handled above). */
+.article-body figure:has(iframe),
+.article-body figure.wp-block-embed {
+  margin: 30px 0;
+}
+.article-body figure > iframe {
+  margin: 0; /* the figure provides the outer spacing */
+}
+
+/* Fallback: WordPress's wrapped embeds and any legacy .video-embed div. The
+   wrapper becomes the 16:9 box and the iframe fills it absolutely. */
+.article-body .wp-block-embed__wrapper,
+.article-body .fluid-width-video-wrapper,
+.article-body .video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0;
+}
+.article-body .wp-block-embed__wrapper iframe,
+.article-body .fluid-width-video-wrapper iframe,
+.article-body .video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+}
+
+
+ * ------------------------------------------------------------------------- */
+.article-body .top-casinos img,
+.article-body .top-casinos .casino-logo-img {
+  margin: 0;
+  border: none;
+  box-shadow: none;
+  /* border-radius is set by the component's own rules (.casino-logo-img). */
+}
+/* Restore the logo image's own sizing — the generic ".article-body img" rule
+   above forces height:auto, which made the logo render at its natural (tall)
+   height instead of filling the fixed box. Use the same definite 54px height as
+   the component rule (NOT height:100%, which iOS Safari can't resolve against
+   the mobile slider's flex-column parent — that was distorting the logo). */
+.article-body .top-casinos .casino-logo-img {
+  width: 100%;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.article-body .top-casinos a {
+  text-decoration: none;
+}
+.article-body .top-casinos .casino-offer-btn,
+.article-body .top-casinos .casino-offer-btn:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* -------------------------------------------------------------------------
+ * Article body tables (spec / fact / comparison tables inside review content)
+ *
+ * Editor tables arrive in two shapes, and both are handled here:
+ *
+ *   A. Key/value spec table — no <thead>, the label cell is a row header:
+ *        <table>
+ *          <caption>At a glance</caption>
+ *          <tbody><tr><th scope="row">Engine</th><td>Megaways</td></tr></tbody>
+ *        </table>
+ *
+ *   B. Comparison table — a real <thead> with column headers, plain <td> body.
+ *
+ * Every table is wrapped in <div class="table-scroll"> by
+ * mlg_wrap_content_tables() so wide tables scroll instead of breaking the
+ * article column. Themed for dark + light off the shared tokens.
+ * ------------------------------------------------------------------------- */
+
+/* ---- Scroll shell ---- */
+.article-body .table-scroll {
+  width: 100%;
+  margin: 28px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* The shell owns the outer spacing, so the table itself sits flush inside it. */
+.article-body .table-scroll > table { margin: 0; }
+/* Defensive: never let a double-wrap stack up extra margin. */
+.article-body .table-scroll .table-scroll { margin: 0; }
+
+/* Thin themed scrollbar instead of the chunky OS default. */
+.article-body .table-scroll::-webkit-scrollbar { height: 8px; }
+.article-body .table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.article-body .table-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 99px;
+}
+.article-body .table-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--border-glow);
+}
+
+/* ---- Table shell ---- */
+.article-body table {
+  width: 100%;
+  border-collapse: separate; /* required — `collapse` breaks border-radius */
+  border-spacing: 0;
+  margin: 28px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ---- Caption ----
+   Rendered outside the table's border box, so it reads as a title above the
+   table rather than a row. Matches the article figcaption treatment. */
+.article-body table > caption {
+  caption-side: top;
+  text-align: left;
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent-primary);
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ---- Base cells ---- */
+.article-body table th,
+.article-body table td {
+  padding: 13px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-hard);
+}
+/* No hairline under the final row — the table border closes it off. */
+.article-body table tbody tr:last-child > th,
+.article-body table tbody tr:last-child > td,
+.article-body table > tr:last-child > th,
+.article-body table > tr:last-child > td {
+  border-bottom: 0;
+}
+
+/* ---- Column headers (<thead>) ---- */
+.article-body table thead th {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ---- Label column ----
+   Shape A: the editor emits <th scope="row">. This is the rule the old
+   stylesheet was missing — it only ever styled `td:first-child`, so spec
+   tables lost their column width and label emphasis entirely. */
+.article-body table tbody th {
+  width: 34%;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+/* Shape A fallback: headerless tables that use a plain first cell as the label.
+   Scoped with :not(:has(thead)) so real comparison tables keep natural widths. */
+.article-body table:not(:has(thead)) tbody td:first-child {
+  width: 34%;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ---- Value cells ---- */
+.article-body table tbody td {
+  color: var(--text-secondary);
+}
+
+/* ---- Zebra striping — keeps long spec lists scannable ---- */
+.article-body table tbody tr:nth-child(even) > td {
+  background: rgba(255, 255, 255, 0.02);
+}
+[data-theme="light"] .article-body table tbody tr:nth-child(even) > td {
+  background: rgba(19, 24, 36, 0.022);
+}
+
+/* ---- Row hover ---- */
+.article-body table tbody tr:hover > td {
+  background: rgba(141, 255, 31, 0.05);
+}
+.article-body table tbody tr:hover > th {
+  background: var(--bg-elevated);
+}
+[data-theme="light"] .article-body table tbody tr:hover > td {
+  background: rgba(74, 169, 0, 0.06);
+}
+[data-theme="light"] .article-body table tbody tr:hover > th {
+  background: var(--bg-tertiary);
+}
+
+/* ---- Footer row ---- */
+.article-body table tfoot td,
+.article-body table tfoot th {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  border-top: 2px solid var(--border-glow);
+  border-bottom: 0;
+}
+
+/* ---- Links inside tables pick up the accent ---- */
+.article-body table a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.18s var(--ease-smooth);
+}
+.article-body table a:hover {
+  border-bottom-color: var(--accent-primary);
+}
+
+/* ---- Corner rounding ----
+   `overflow:hidden` alone is unreliable on table boxes, so the corner cells are
+   rounded explicitly. 11px = the 12px shell radius minus the 1px border. */
+.article-body table thead tr:first-child > *:first-child { border-top-left-radius: 11px; }
+.article-body table thead tr:first-child > *:last-child  { border-top-right-radius: 11px; }
+.article-body table:not(:has(thead)) tbody tr:first-child > *:first-child { border-top-left-radius: 11px; }
+.article-body table:not(:has(thead)) tbody tr:first-child > *:last-child  { border-top-right-radius: 11px; }
+.article-body table:not(:has(tfoot)) tbody tr:last-child > *:first-child { border-bottom-left-radius: 11px; }
+.article-body table:not(:has(tfoot)) tbody tr:last-child > *:last-child  { border-bottom-right-radius: 11px; }
+.article-body table tfoot tr:last-child > *:first-child { border-bottom-left-radius: 11px; }
+.article-body table tfoot tr:last-child > *:last-child  { border-bottom-right-radius: 11px; }
+
+/* ---- Gutenberg's own table block wrapper ----
+   Neutralise the figure so it doesn't add a second frame around our table. */
+.article-body figure.wp-block-table {
+  margin: 28px 0;
+  overflow-x: auto;
+}
+.article-body figure.wp-block-table > table { margin: 0; }
+.article-body figure.wp-block-table > figcaption {
+  margin-top: 10px;
+}
+
+/* -------------------------------------------------------------------------
+ * Tablet / mobile
+ * ------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .article-body table { font-size: 14.5px; }
+  .article-body table th,
+  .article-body table td { padding: 12px 14px; }
+  .article-body table tbody th { width: 38%; }
+}
+
+@media (max-width: 560px) {
+  /* Two-column spec tables stack into label-over-value blocks. Far easier to
+     read on a phone than sideways scrolling, and the label keeps its accent. */
+  .article-body table:has(tbody > tr > th[scope="row"]) tbody tr {
+    display: block;
+    border-bottom: 1px solid var(--border-hard);
+  }
+  .article-body table:has(tbody > tr > th[scope="row"]) tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .article-body table:has(tbody > tr > th[scope="row"]) tbody th,
+  .article-body table:has(tbody > tr > th[scope="row"]) tbody td {
+    display: block;
+    width: auto;
+    border-bottom: 0;
+    background: transparent;
+  }
+  .article-body table:has(tbody > tr > th[scope="row"]) tbody th {
+    padding: 12px 14px 2px;
+    font-size: 11.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+  }
+  .article-body table:has(tbody > tr > th[scope="row"]) tbody td {
+    padding: 0 14px 12px;
+    color: var(--text-primary);
+  }
+  /* Stacked rows fit the column, so the scroll shell stops clipping them. */
+  .article-body .table-scroll:has(table:has(tbody > tr > th[scope="row"])) {
+    overflow-x: visible;
+  }
+
+  /* Tables that genuinely need columns keep scrolling, with a sensible floor
+     so the text doesn't crush down to one word per line. */
+  .article-body table:has(thead) { min-width: 460px; }
+}
