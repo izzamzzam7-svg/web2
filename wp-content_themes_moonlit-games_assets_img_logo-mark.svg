@@ -1,0 +1,19 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mlgGrad" x1="45" y1="35" x2="160" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#b4ff5c"/>
+      <stop offset="0.5" stop-color="#8dff1f"/>
+      <stop offset="1" stop-color="#5fd400"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark rounded-square backing -->
+  <rect x="10" y="10" width="180" height="180" rx="44" fill="#0d1420"/>
+  <rect x="10" y="10" width="180" height="180" rx="44" fill="url(#mlgGrad)" opacity="0.06"/>
+
+  <!-- Fuller crescent moon: outer disc r=62 minus offset inner disc r=48 -->
+  <path d="M 98 162 A 62 62 0 1 1 152 70 A 48 48 0 1 0 98 162 Z" fill="url(#mlgGrad)"/>
+
+  <!-- 4-point sparkle star (upper right) -->
+  <path d="M152 46c1.5 8.6 3.5 10.6 12.1 12.1-8.6 1.5-10.6 3.5-12.1 12.1-1.5-8.6-3.5-10.6-12.1-12.1 8.6-1.5 10.6-3.5 12.1-12.1z" fill="#ffffff"/>
+</svg>
