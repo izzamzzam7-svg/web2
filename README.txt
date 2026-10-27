@@ -1,5 +1,5 @@
-FanzShoftBoy - Music Web Project
-URL: https://FanzShoftBoy.web.id
+Website Downloader - 𝗕𝗢𝗧 𝗕𝗨𝗜𝗟𝗗 𝗕𝗬 𝗫𝗘𝗡𝗢𝗢¿
+URL: https://www.moonlitgames.io/games/mahjong-ways-2
 Metode: Fallback (no JS render)
-Files: 15
-Tanggal: 25/10/2026, 10.40.48 WIB
+Files: 38
+Tanggal: 27/10/2026, 15.22.41 WIB
