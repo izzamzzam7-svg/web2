@@ -1,1982 +1,343 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#bdbdbd">
-<title>Fitur</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XDY SADAP ORDER — Auto Order APK</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#bdbdbd;--k:#000}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:#000;font:14px/1.4 'Space Grotesk',system-ui,sans-serif;min-height:100vh}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
-.wrap{max-width:1100px;margin:0 auto;padding:20px 18px 80px}
+  :root{
+    --bg:#05080f; --card:rgba(10,17,40,.7); --card2:rgba(7,11,25,.9);
+    --input:#030610; --accent:#0084ff; --accent-glow:#00aaff;
+    --green:#22c55e; --telegram:#229ED9; --whatsapp:#25D366;
+    --text:#e5e7eb; --muted:#8ba3c7; --border:rgba(0,132,255,.25);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+  body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;
+    background-image:radial-gradient(circle at 15% 10%,rgba(0,132,255,.15),transparent 40%),
+                     radial-gradient(circle at 85% 90%,rgba(0,170,255,.1),transparent 45%);
+    background-attachment:fixed}
 
-/* tombol / kotak putih + bayangan hitam + kilau */
-.b,.box{position:relative;overflow:hidden;background:linear-gradient(180deg,#fff 0%,#f6f6f6 55%,#e4e4e4 100%);color:#000;border:2px solid #000;border-radius:6px;box-shadow:4px 4px 0 #000}
-.b{padding:9px 14px;font-weight:700;font-size:13px;transition:transform .12s,box-shadow .12s;display:inline-flex;gap:8px;align-items:center;justify-content:center}
-.b:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #000}
-.b:active,.b.on{transform:translate(4px,4px);box-shadow:0 0 0 #000}
-.b.on{background:linear-gradient(180deg,#d9d9d9,#cfcfcf)}
-.b::before,.box::before{content:"";position:absolute;left:0;right:0;top:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));pointer-events:none}
-.b::after,.box::after{content:"";position:absolute;top:-10%;left:-70%;width:40%;height:120%;pointer-events:none;transform:skewX(-20deg);
-background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.08) 30%,rgba(255,255,255,1) 50%,rgba(0,0,0,.08) 70%,rgba(0,0,0,0))}
-.b::after{animation:gl 4.2s ease-in-out infinite}
-.nav .b:nth-child(2n)::after{animation-delay:.7s}
-.nav .b:nth-child(3n)::after{animation-delay:1.5s}
-.it:hover::after{animation:gl 1s ease-out 1}
-@keyframes gl{0%,60%{left:-70%}100%{left:130%}}
-.b>*,.box>*{position:relative;z-index:1}
+  header{display:flex;justify-content:space-between;align-items:center;padding:20px 6%;
+    position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    background:rgba(5,8,15,.85);border-bottom:1px solid var(--border)}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;font-family:'Orbitron',sans-serif}
+  .logo .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .logo span{background:linear-gradient(90deg,var(--accent-glow),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
 
-.top{display:flex;align-items:center;gap:14px;padding:12px 14px;margin-bottom:22px}
-.logo{font-weight:700;font-size:18px;letter-spacing:.04em;white-space:nowrap}
-.srch{flex:1;min-width:0}
-.srch input{width:100%;height:40px;padding:0 12px;border:2px solid #000;border-radius:6px;background:#fff;font:inherit;font-size:15px;outline:0;box-shadow:inset 2px 2px 0 rgba(0,0,0,.18)}
-.srch input:focus{background:#fffde0}
+  .gravity-hero{position:relative;padding:40px 6% 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:350px}
+  .floating-photos{display:flex;justify-content:center;gap:20px;margin-bottom:30px;position:relative;z-index:2}
+  .float-img{width:110px;height:110px;border-radius:20px;object-fit:cover;border:2px solid var(--border);
+    box-shadow:0 10px 30px rgba(0,132,255,.3);animation:float 4s ease-in-out infinite;background:var(--card)}
+  .float-img:nth-child(1){animation-delay:0s;transform:rotate(-5deg)}
+  .float-img:nth-child(2){animation-delay:1.3s;transform:scale(1.1) translateY(-10px);z-index:3}
+  .float-img:nth-child(3){animation-delay:2.6s;transform:rotate(5deg)}
+  @keyframes float{0%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-20px) rotate(5deg);box-shadow:0 20px 40px rgba(0,170,255,.5)}100%{transform:translateY(0) rotate(-5deg)}}
 
-.nav{display:flex;flex-wrap:nowrap;gap:12px;margin:0 -18px 16px;padding:6px 18px 12px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;cursor:grab}
-.nav::-webkit-scrollbar{display:none}
-.nav.drag{cursor:grabbing;scroll-snap-type:none}
-.nav .b{flex:none;white-space:nowrap;scroll-snap-align:start}
-.nav em{font:500 11px 'IBM Plex Mono',monospace;font-style:normal;background:#000;color:#fff;border-radius:3px;padding:1px 5px}
+  .hero{text-align:center;padding:0 6% 20px;z-index:2}
+  .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:rgba(0,132,255,.1);
+    padding:7px 16px;border-radius:999px;font-size:.8rem;color:var(--accent-glow);margin-bottom:20px;box-shadow:0 0 15px rgba(0,132,255,.2)}
+  .hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.15;font-family:'Orbitron',sans-serif}
+  .hero h1 span{background:linear-gradient(90deg,var(--accent-glow),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 20px rgba(0,170,255,.3)}
+  .hero p{color:var(--muted);max-width:620px;margin:16px auto 0;font-size:1rem}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
-.it{cursor:pointer}
-.it.open{grid-column:1/-1}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px}
-.nm{font-weight:700;font-size:15px;text-align:left}
-.cp{padding:7px 12px;font-size:12px}
-.cp.ok{background:#fff}
-.body{display:none;padding:0 12px 14px;cursor:auto}
-.it.open .body{display:block}
-.inst{display:flex;align-items:center;justify-content:space-between;gap:10px;font:12.5px 'IBM Plex Mono',monospace;margin-bottom:10px;padding:8px 10px;border:2px solid #000;border-radius:6px;background:#fff;overflow-x:auto;white-space:nowrap}
-pre{background:#000;color:#f2f2f2;border-radius:6px;padding:14px 16px;overflow:auto;font:12.5px/1.7 'IBM Plex Mono',monospace;max-height:520px;tab-size:2;-webkit-overflow-scrolling:touch}
-.cm{color:#8a8a8a}.st{color:#8ee6a0}.kw{color:#ffb86b}.nu{color:#f1d37a}
-.empty{grid-column:1/-1;text-align:center;padding:50px 0;font-weight:700}
-.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#fff;color:#000;border:2px solid #000;box-shadow:4px 4px 0 #000;padding:9px 18px;border-radius:6px;font-weight:700;transition:.2s;pointer-events:none;z-index:99}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:600px){.logo{font-size:15px}.grid{grid-template-columns:1fr}.top{padding:10px}}
+  .hero-banner{width:100%;max-width:900px;margin:10px auto 30px;padding:0 6%;text-align:center}
+  .hero-banner img{width:100%;border-radius:16px;border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,132,255,.2);transition:transform .3s,box-shadow .3s}
+  .hero-banner img:hover{transform:scale(1.01);box-shadow:0 15px 50px rgba(0,170,255,.4)}
+
+  .wrap{max-width:800px;margin:0 auto;padding:0 6% 60px}
+  .card{background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:20px;padding:26px;margin-bottom:24px;box-shadow:0 8px 32px rgba(0,0,0,.4);transition:border-color .3s}
+  .card:hover{border-color:rgba(0,170,255,.4)}
+  .card h2{font-size:1.1rem;margin-bottom:6px;display:flex;align-items:center;gap:8px;color:#fff;font-family:'Orbitron',sans-serif}
+  .card .sub{color:var(--muted);font-size:.82rem;margin-bottom:22px}
+
+  label{display:block;font-size:.85rem;color:var(--muted);margin:16px 0 8px;font-weight:600}
+  input,select{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--border);background:var(--input);color:var(--text);font-size:.9rem;outline:none;transition:.25s}
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,132,255,.2)}
+
+  .paket-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .paket{border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:.25s;background:rgba(0,0,0,.4);position:relative;overflow:hidden}
+  .paket:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 0 15px rgba(0,132,255,.2)}
+  .paket.active{border-color:var(--accent-glow);background:rgba(0,132,255,.1);box-shadow:0 0 20px rgba(0,170,255,.2) inset}
+  .paket b{display:block;font-size:1rem;color:#fff}
+  .paket small{color:var(--muted);font-size:.75rem}
+  .paket .price{display:block;margin-top:8px;color:var(--accent-glow);font-weight:700;font-size:1.05rem}
+
+  .qris-container{text-align:center;margin:20px 0;background:#fff;padding:15px;border-radius:14px;box-shadow:0 0 20px rgba(255,255,255,.1)}
+  .qris-container img{width:100%;max-width:350px;border-radius:8px;display:block;margin:0 auto}
+  .qris-note{font-size:.8rem;color:#333;margin-top:10px;text-align:center;font-weight:600}
+  .upload-area{border:2px dashed var(--border);padding:20px;text-align:center;border-radius:12px;cursor:pointer;transition:.25s;background:var(--input);margin-top:10px}
+  .upload-area:hover{border-color:var(--accent);background:rgba(0,132,255,.05)}
+  .upload-area p{font-size:.85rem;color:var(--muted)}
+  .upload-area span{color:var(--accent-glow);font-weight:600}
+  .file-name{font-size:.8rem;color:var(--green);margin-top:10px;display:none}
+
+  .total{display:flex;justify-content:space-between;padding:16px 0 6px;font-weight:800;font-size:1.2rem;border-top:1px dashed var(--border);margin-top:20px}
+  .total .amount{color:var(--accent-glow);text-shadow:0 0 10px rgba(0,170,255,.4)}
+
+  .btn{display:flex;justify-content:center;align-items:center;gap:8px;width:100%;text-align:center;padding:15px;border-radius:14px;border:none;cursor:pointer;font-weight:700;font-size:1rem;margin-top:18px;transition:.3s;font-family:inherit;text-decoration:none}
+  .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-glow));color:#fff;box-shadow:0 8px 30px rgba(0,132,255,.3)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,132,255,.5)}
+  .btn-telegram{background:var(--telegram);color:#fff;display:none;margin-top:15px;box-shadow:0 8px 30px rgba(34,158,217,.25)}
+  .btn-telegram:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(34,158,217,.4)}
+  .btn-whatsapp{background:var(--whatsapp);color:#fff;display:none;margin-top:12px;box-shadow:0 8px 30px rgba(37,211,102,.25)}
+  .btn-whatsapp:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(37,211,102,.4)}
+
+  .section-preview{text-align:center;padding:40px 6%;max-width:900px;margin:0 auto}
+  .section-preview h2{font-family:'Orbitron',sans-serif;color:var(--accent-glow);margin-bottom:10px;font-size:1.5rem;text-shadow:0 0 10px rgba(0,170,255,.4)}
+  .section-preview p{color:var(--muted);font-size:.9rem;margin-bottom:30px}
+  .grid-fitur{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+  .fitur-item{position:relative;aspect-ratio:1/1;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 15px rgba(0,0,0,.5);cursor:pointer;background:var(--card2);transition:transform .3s,box-shadow .3s}
+  .fitur-item:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 10px 30px rgba(0,170,255,.3);border-color:var(--accent)}
+  .fitur-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s;pointer-events:none;display:block}
+  .fitur-item:hover img{transform:scale(1.1)}
+  .fitur-overlay{position:absolute;bottom:0;left:0;width:100%;background:linear-gradient(to top,rgba(3,6,16,.9),transparent);padding:15px 10px 10px;text-align:left;pointer-events:none}
+  .fitur-overlay span{color:#fff;font-size:.75rem;font-weight:600;text-shadow:0 2px 4px rgba(0,0,0,.8)}
+
+  /* LIGHTBOX FULLSCREEN */
+  .lightbox{position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;background:rgba(0,0,0,.97);display:none;align-items:center;justify-content:center;z-index:9999;padding:10px}
+  .lightbox.active{display:flex}
+  .lightbox img{max-width:100vw;max-height:100vh;object-fit:contain;border-radius:6px;animation:zoomIn .25s ease-out}
+  @keyframes zoomIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+  .lightbox-close{position:fixed;top:14px;right:14px;width:48px;height:48px;border-radius:50%;background:rgba(0,132,255,.35);border:2px solid var(--accent-glow);color:#fff;font-size:1.8rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10000;transition:.2s;font-family:inherit}
+  .lightbox-close:hover{background:var(--accent);transform:rotate(90deg)}
+  .lightbox-caption{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:var(--accent-glow);font-size:.9rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-shadow:0 0 15px rgba(0,170,255,.8);z-index:10000;padding:6px 18px;background:rgba(0,0,0,.6);border-radius:999px;border:1px solid var(--border)}
+
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120%);background:#0a1128;border:1px solid var(--accent);color:var(--text);padding:12px 22px;border-radius:12px;font-size:.85rem;z-index:99;transition:.4s;box-shadow:0 10px 40px rgba(0,132,255,.25);text-align:center}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast.error{border-color:#ef4444;box-shadow:0 10px 40px rgba(239,68,68,.25)}
+
+  footer{text-align:center;padding:34px 6%;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border)}
+  footer b{color:var(--accent-glow)}
+
+  @media(max-width:768px){.grid-fitur{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:600px){
+    .paket-grid{grid-template-columns:1fr}
+    .card{padding:20px}
+    .hero-banner{padding:0 4%}
+    .float-img{width:85px;height:85px}
+    .gravity-hero{min-height:280px;padding-top:20px}
+    .grid-fitur{gap:10px}
+    .fitur-overlay span{font-size:.65rem}
+    .lightbox-close{top:10px;right:10px;width:42px;height:42px;font-size:1.5rem}
+    .lightbox-caption{font-size:.75rem;bottom:14px}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top box">
-    <div class="logo" id="logo">0 FITUR</div>
-    <label class="srch"><input id="q" type="search" placeholder="Cari..." autocomplete="off"></label>
+
+<header>
+  <div class="logo"><div class="dot"></div> XDY <span>SADAP ORDER</span></div>
+</header>
+
+<div class="gravity-hero">
+  <div class="floating-photos">
+    <img src="https://files.catbox.moe/usddqo.jpeg" alt="Preview 1" class="float-img" onerror="this.src='https://via.placeholder.com/150/0a1128/00aaff?text=Foto+1'">
+    <img src="https://files.catbox.moe/8ygpcu.jpeg" alt="Preview 2" class="float-img" onerror="this.src='https://via.placeholder.com/150/0a1128/00aaff?text=Foto+2'">
+    <img src="https://files.catbox.moe/usddqo.jpeg" alt="Preview 3" class="float-img" onerror="this.src='https://via.placeholder.com/150/0a1128/00aaff?text=Foto+3'">
   </div>
-  <nav class="nav" id="nav"></nav>
-  <div class="grid" id="list"></div>
+  <section class="hero">
+    <div class="badge">⚡ Welcome to XDY SADAP ORDER</div>
+    <h1>Auto Order <span>XDY SADAP</span></h1>
+    <p>Silakan isi data akun yang ingin dibuat, pilih role, lakukan pembayaran, dan kirim bukti ke Telegram atau WhatsApp admin.</p>
+  </section>
 </div>
-<div class="toast" id="toast">Tersalin</div>
+
+<div class="hero-banner">
+  <img src="https://files.catbox.moe/aooi8x.jpg" alt="XDY SADAP BANNER" onerror="this.src='https://via.placeholder.com/900x400/0a1128/0084ff?text=XDY+SADAP+ORDER'">
+</div>
+
+<div class="section-preview">
+  <h2>Tampilan & Fitur Aplikasi</h2>
+  <p>Intip kecanggihan fitur XDY SADAP di bawah ini. <strong style="color:var(--accent-glow)">Klik gambar untuk melihat full screen.</strong></p>
+  <div class="grid-fitur">
+    <div class="fitur-item">
+      <img src="https://files.catbox.moe/58ulin.jpg" alt="Fitur 1" onerror="this.src='https://via.placeholder.com/300/0a1128/0084ff?text=Fitur+1'">
+      <div class="fitur-overlay"><span>TAMPILAN</span></div>
+    </div>
+    <div class="fitur-item">
+      <img src="https://files.catbox.moe/iaqipu.jpg" alt="Fitur 2" onerror="this.src='https://via.placeholder.com/300/0a1128/0084ff?text=Fitur+2'">
+      <div class="fitur-overlay"><span>DEVICE</span></div>
+    </div>
+    <div class="fitur-item">
+      <img src="https://files.catbox.moe/2kcv45.jpg" alt="Fitur 3" onerror="this.src='https://via.placeholder.com/300/0a1128/0084ff?text=Fitur+3'">
+      <div class="fitur-overlay"><span>FITUR</span></div>
+    </div>
+    <div class="fitur-item">
+      <img src="https://files.catbox.moe/4b26gx.jpg" alt="Fitur 4" onerror="this.src='https://via.placeholder.com/300/0a1128/0084ff?text=Fitur+4'">
+      <div class="fitur-overlay"><span>FITUR</span></div>
+    </div>
+    <div class="fitur-item">
+      <img src="https://files.catbox.moe/iduuzs.jpg" alt="Fitur 5" onerror="this.src='https://via.placeholder.com/300/0a1128/0084ff?text=Fitur+5'">
+      <div class="fitur-overlay"><span>FITUR</span></div>
+    </div>
+    <div class="fitur-item">
+      <img src="https://files.catbox.moe/hn15i6.jpg" alt="Fitur 6" onerror="this.src='https://via.placeholder.com/300/0a1128/0084ff?text=Fitur+6'">
+      <div class="fitur-overlay"><span>FITUR</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h2>1. Data Akun & Role</h2>
+    <p class="sub">Buat Username dan Password untuk akun XDY SADAP Anda.</p>
+    <label>Username</label>
+    <input type="text" id="username" placeholder="Contoh: adiganteng" autocomplete="off">
+    <label>Password</label>
+    <input type="text" id="password" placeholder="Contoh: adiganteng123" autocomplete="off">
+    <label>Pilih Role Akses</label>
+    <div class="paket-grid" id="paketGrid">
+      <div class="paket" data-nama="Role MEM" data-harga="15000">
+        <b>Role MEM</b><small>Akses Member</small><span class="price">Rp 15.000</span>
+      </div>
+      <div class="paket active" data-nama="Role RES" data-harga="20000">
+        <b>Role RES</b><small>Akses Reseller</small><span class="price">Rp 20.000</span>
+      </div>
+      <div class="paket" data-nama="Role OWNER" data-harga="30000">
+        <b>Role OWNER</b><small>Akses Owner</small><span class="price">Rp 30.000</span>
+      </div>
+      <div class="paket" data-nama="Role DEVELOPER" data-harga="50000">
+        <b>Role DEVELOPER</b><small>All Akses</small><span class="price">Rp 50.000</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. Pembayaran (QRIS)</h2>
+    <p class="sub">Scan QRIS di bawah ini menggunakan aplikasi m-banking atau e-wallet Anda.</p>
+    <div class="qris-container">
+      <img src="https://files.catbox.moe/pay1q9.jpg" alt="QRIS ADI STORE" onerror="this.src='https://via.placeholder.com/350x500/f0f0f0/333?text=Gambar+QRIS+Belum+Ada'">
+      <div class="qris-note">ADI STORE, DIGITAL & KREATIF<br>NMID: ID1026553422001</div>
+    </div>
+    <div class="total">
+      <span>Total Tagihan</span>
+      <span class="amount" id="sTotal">Rp 20.000</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Kirim Bukti Pembayaran</h2>
+    <p class="sub">Upload screenshot bukti transfer, lalu kirim ke Telegram atau WhatsApp Admin.</p>
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+      <p>Klik untuk <span>Upload Bukti TF</span></p>
+      <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+      <div class="file-name" id="fileName">✓ File terpilih</div>
+    </div>
+    <button class="btn btn-primary" id="btnOrder">📦 Buat Pesanan</button>
+    <a href="#" class="btn btn-telegram" id="btnTelegram" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      Kirim Bukti ke Telegram
+    </a>
+    <a href="#" class="btn btn-whatsapp" id="btnWhatsapp" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+      Kirim Bukti ke WhatsApp
+    </a>
+    <p style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:12px;">
+      *Klik salah satu tombol Telegram / WhatsApp di atas setelah pesanan dibuat.
+    </p>
+  </div>
+</div>
+
+<!-- LIGHTBOX FULLSCREEN -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">&times;</button>
+  <img src="" alt="Full Screen" id="lightboxImg">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<footer>
+  &copy; 2026 <b>XDY SADAP ORDER BY ADI</b>. All Rights Reserved.
+</footer>
+
+<div class="toast" id="toast">Pesan</div>
 
 <script>
-const CATS=[['all','Semua'],['dl','Downloader'],['api','API Publik'],['free','API Key Gratis'],['bot','Bot & Server'],['sosmed','Sosmed'],['media','Musik & Media'],['info','Info'],['anime','Anime & Game'],['id','Indonesia'],['dev','Developer'],['tools','Tools'],['fun','Fun']];
-const UA="const UA = 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36';\n";
-const YT="import { execFile } from 'node:child_process';\nimport { promisify } from 'node:util';\nconst run = promisify(execFile);\n\n";
-
-const S=[
-/* ---------- DOWNLOADER ---------- */
-{cat:'dl',title:'TikTok',desc:'Video tanpa watermark (HD), musik, dan slide foto.',deps:[],code:String.raw`async function tiktok(url) {
-  const r = await fetch('https://www.tikwm.com/api/?hd=1&url=' + encodeURIComponent(url));
-  const j = await r.json();
-  if (j.code !== 0) throw new Error(j.msg || 'Gagal ambil data');
-  const d = j.data;
-  return {
-    title: d.title,
-    author: d.author.nickname,
-    video: d.hdplay || d.play,
-    music: d.music,
-    images: d.images || []
-  };
-}
-
-// contoh:
-console.log(await tiktok('https://vt.tiktok.com/xxxxxx'));`},
-
-{cat:'dl',title:'Universal (yt-dlp)',desc:'YouTube, Instagram, Facebook, Twitter, Reddit, dan ribuan situs lain.',deps:['yt-dlp'],install:'pip install -U yt-dlp',code:YT+String.raw`async function ytdlp(url) {
-  const { stdout } = await run('yt-dlp', ['-J', '--no-playlist', url], { maxBuffer: 1024 * 1024 * 50 });
-  const d = JSON.parse(stdout);
-  return {
-    title: d.title,
-    thumbnail: d.thumbnail,
-    duration: d.duration,
-    formats: (d.formats || [])
-      .filter(f => f.vcodec !== 'none' && f.acodec !== 'none')
-      .map(f => ({ quality: f.format_note || f.height, ext: f.ext, url: f.url }))
-  };
-}
-
-// contoh:
-console.log(await ytdlp('https://www.youtube.com/watch?v=dQw4w9WgXcQ'));`},
-
-{cat:'dl',title:'YouTube ke MP3',desc:'Ambil audio dari link YouTube jadi file mp3.',deps:['yt-dlp','ffmpeg'],install:'pkg install yt-dlp ffmpeg',code:YT+String.raw`async function ytmp3(url, out = 'audio') {
-  await run('yt-dlp', [
-    '-x', '--audio-format', 'mp3', '--audio-quality', '0',
-    '--no-playlist', '-o', out + '.%(ext)s', url
-  ]);
-  return out + '.mp3';
-}
-
-// contoh:
-console.log(await ytmp3('https://youtu.be/dQw4w9WgXcQ'));`},
-
-{cat:'dl',title:'YouTube ke MP4',desc:'Download video dengan batas resolusi (360, 480, 720, 1080).',deps:['yt-dlp','ffmpeg'],install:'pkg install yt-dlp ffmpeg',code:YT+String.raw`async function ytmp4(url, out = 'video', height = 720) {
-  await run('yt-dlp', [
-    '-f', 'bv*[height<=' + height + ']+ba/b[height<=' + height + ']',
-    '--merge-output-format', 'mp4', '--no-playlist',
-    '-o', out + '.%(ext)s', url
-  ]);
-  return out + '.mp4';
-}
-
-// contoh:
-console.log(await ytmp4('https://youtu.be/dQw4w9WgXcQ', 'video', 480));`},
-
-{cat:'dl',title:'Instagram (Reels dan Post)',desc:'Download reels dan post publik. Kalau kena limit, pakai cookies browser.',deps:['yt-dlp'],install:'pip install -U yt-dlp',code:YT+String.raw`async function instagram(url, cookiesFile) {
-  const args = ['-J', url];
-  if (cookiesFile) args.push('--cookies', cookiesFile); // opsional, format Netscape
-  const { stdout } = await run('yt-dlp', args, { maxBuffer: 1024 * 1024 * 50 });
-  const d = JSON.parse(stdout);
-  return (d.entries || [d]).map(e => ({ type: e.ext === 'jpg' ? 'image' : 'video', url: e.url, thumb: e.thumbnail }));
-}
-
-// contoh:
-console.log(await instagram('https://www.instagram.com/reel/xxxxx/'));`},
-
-{cat:'dl',title:'Facebook Video',desc:'Link direct video Facebook / Reels publik.',deps:['yt-dlp'],install:'pip install -U yt-dlp',code:YT+String.raw`async function facebook(url) {
-  const { stdout } = await run('yt-dlp', ['-f', 'best', '-g', '--no-playlist', url]);
-  return stdout.trim().split('\n'); // link direct video (+ audio kalau terpisah)
-}
-
-// contoh:
-console.log(await facebook('https://www.facebook.com/watch/?v=123456789'));`},
-
-{cat:'dl',title:'SoundCloud',desc:'Link audio direct dari track SoundCloud.',deps:['yt-dlp'],install:'pip install -U yt-dlp',code:YT+String.raw`async function soundcloud(url) {
-  const { stdout } = await run('yt-dlp', ['-J', url], { maxBuffer: 1024 * 1024 * 20 });
-  const d = JSON.parse(stdout);
-  return { title: d.title, artist: d.uploader, duration: d.duration, thumbnail: d.thumbnail, audio: d.url };
-}
-
-// contoh:
-console.log(await soundcloud('https://soundcloud.com/artist/track'));`},
-
-{cat:'dl',title:'Twitter / X',desc:'Foto dan video dari tweet lewat API fxtwitter.',deps:[],code:String.raw`async function twitter(url) {
-  const m = url.match(/(?:twitter|x)\.com\/([^/]+)\/status\/(\d+)/);
-  if (!m) throw new Error('URL tweet tidak valid');
-  const r = await fetch('https://api.fxtwitter.com/' + m[1] + '/status/' + m[2]);
-  const { tweet } = await r.json();
-  return {
-    text: tweet.text,
-    author: tweet.author.name,
-    photos: (tweet.media?.photos || []).map(p => p.url),
-    videos: (tweet.media?.videos || []).map(v => v.url)
-  };
-}
-
-// contoh:
-console.log(await twitter('https://x.com/user/status/1234567890'));`},
-
-{cat:'dl',title:'Reddit',desc:'Gambar atau video dari post Reddit pakai trik .json.',deps:[],code:String.raw`async function reddit(url) {
-  const api = url.split('?')[0].replace(/\/$/, '') + '.json';
-  const r = await fetch(api, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-  const [{ data }] = await r.json();
-  const p = data.children[0].data;
-  return {
-    title: p.title,
-    subreddit: p.subreddit,
-    image: p.url_overridden_by_dest,
-    video: p.secure_media?.reddit_video?.fallback_url || null
-  };
-}
-
-// contoh:
-console.log(await reddit('https://www.reddit.com/r/pics/comments/xxxxx/judul/'));`},
-
-{cat:'dl',title:'Pinterest (pin)',desc:'Gambar dan video dari link pin, termasuk pin.it.',deps:['cheerio'],install:'npm i cheerio',code:UA+String.raw`import * as cheerio from 'cheerio';
-
-async function pinterest(url) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA }, redirect: 'follow' });
-  const $ = cheerio.load(await res.text());
-  const og = p => $('meta[property="og:' + p + '"]').attr('content');
-  return { title: og('title'), description: og('description'), image: og('image'), video: og('video') };
-}
-
-// contoh:
-console.log(await pinterest('https://pin.it/xxxxx'));`},
-
-{cat:'dl',title:'MediaFire',desc:'Link download langsung, nama file, dan ukuran.',deps:['cheerio'],install:'npm i cheerio',code:UA+String.raw`import * as cheerio from 'cheerio';
-
-async function mediafire(url) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA } });
-  const $ = cheerio.load(await res.text());
-  const btn = $('#downloadButton');
-  return {
-    name: $('.dl-btn-label').attr('title') || $('.filename').first().text().trim(),
-    size: (btn.text().match(/\((.*?)\)/) || [])[1],
-    link: btn.attr('href')
-  };
-}
-
-// contoh:
-console.log(await mediafire('https://www.mediafire.com/file/xxxxx/file'));`},
-
-{cat:'dl',title:'Google Drive',desc:'Ubah link share Drive jadi link download langsung.',deps:[],code:String.raw`function gdrive(url) {
-  const id = (url.match(/\/d\/([\w-]+)/) || url.match(/[?&]id=([\w-]+)/) || [])[1];
-  if (!id) throw new Error('ID file tidak ketemu');
-  return 'https://drive.usercontent.google.com/download?id=' + id + '&export=download&confirm=t';
-}
-
-// contoh:
-console.log(gdrive('https://drive.google.com/file/d/1AbCdEf/view'));`},
-
-{cat:'dl',title:'GitHub Repo ke ZIP',desc:'Link ZIP repo publik beserta info dasarnya.',deps:[],code:String.raw`async function github(url) {
-  const m = url.match(/github\.com\/([^/]+)\/([^/#?]+)/);
-  if (!m) throw new Error('URL repo tidak valid');
-  const repo = m[2].replace(/\.git$/, '');
-  const r = await fetch('https://api.github.com/repos/' + m[1] + '/' + repo, { headers: { 'User-Agent': 'scraper' } });
-  const d = await r.json();
-  return {
-    name: d.full_name,
-    stars: d.stargazers_count,
-    desc: d.description,
-    zip: 'https://api.github.com/repos/' + m[1] + '/' + repo + '/zipball/' + d.default_branch
-  };
-}
-
-// contoh:
-console.log(await github('https://github.com/user/repo'));`},
-
-/* ---------- SOSMED ---------- */
-{cat:'sosmed',title:'TikTok User Posts',desc:'Daftar video terbaru dari satu akun TikTok.',deps:[],code:String.raw`async function tiktokUser(username, count = 12) {
-  const r = await fetch('https://www.tikwm.com/api/user/posts?unique_id=' + encodeURIComponent(username) + '&count=' + count);
-  const j = await r.json();
-  if (j.code !== 0) throw new Error(j.msg);
-  return j.data.videos.map(v => ({
-    id: v.video_id, title: v.title, cover: v.cover,
-    play: v.play, likes: v.digg_count, views: v.play_count
-  }));
-}
-
-// contoh (rate limit ~1 request/detik):
-console.log(await tiktokUser('khaby.lame'));`},
-
-{cat:'sosmed',title:'TikTok Search',desc:'Cari video TikTok berdasarkan kata kunci.',deps:[],code:String.raw`async function tiktokSearch(q, count = 10) {
-  const r = await fetch('https://www.tikwm.com/api/feed/search?keywords=' + encodeURIComponent(q) + '&count=' + count);
-  const j = await r.json();
-  return (j.data?.videos || []).map(v => ({
-    title: v.title, author: v.author.unique_id, play: v.play, cover: v.cover
-  }));
-}
-
-// contoh:
-console.log(await tiktokSearch('resep nasi goreng'));`},
-
-{cat:'sosmed',title:'Instagram Profile',desc:'Info profil publik: bio, followers, foto profil HD. Sering kena blokir, pakai seperlunya.',deps:[],code:String.raw`async function igProfile(username) {
-  const r = await fetch('https://i.instagram.com/api/v1/users/web_profile_info/?username=' + username, {
-    headers: { 'x-ig-app-id': '936619743392459', 'User-Agent': 'Mozilla/5.0' }
-  });
-  if (!r.ok) throw new Error('Diblokir / rate limit: ' + r.status);
-  const u = (await r.json()).data.user;
-  return {
-    username: u.username, name: u.full_name, bio: u.biography,
-    followers: u.edge_followed_by.count, following: u.edge_follow.count,
-    posts: u.edge_owner_to_timeline_media.count,
-    avatar: u.profile_pic_url_hd, private: u.is_private
-  };
-}
-
-// contoh:
-console.log(await igProfile('instagram'));`},
-
-{cat:'sosmed',title:'Pinterest Search',desc:'Cari gambar di Pinterest, hasil berupa URL gambar asli.',deps:[],code:String.raw`async function pinSearch(q, limit = 10) {
-  const data = JSON.stringify({ options: { query: q, scope: 'pins' }, context: {} });
-  const url = 'https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=' +
-    encodeURIComponent('/search/pins/?q=' + q) + '&data=' + encodeURIComponent(data);
-  const r = await fetch(url, { headers: {
-    'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json',
-    'X-Pinterest-PWS-Handler': 'www/search/[scope].js'
-  } });
-  const j = await r.json();
-  return j.resource_response.data.results.slice(0, limit).map(p => ({
-    title: p.title || p.grid_title,
-    image: p.images?.orig?.url,
-    link: 'https://pinterest.com/pin/' + p.id
-  }));
-}
-
-// contoh:
-console.log(await pinSearch('wallpaper aesthetic'));`},
-
-{cat:'sosmed',title:'YouTube Search',desc:'Cari video YouTube: judul, channel, durasi, views, thumbnail.',deps:['yt-search'],install:'npm i yt-search',code:String.raw`import yts from 'yt-search';
-
-async function ytsearch(q, limit = 5) {
-  const { videos } = await yts(q);
-  return videos.slice(0, limit).map(v => ({
-    title: v.title, channel: v.author.name, duration: v.timestamp,
-    views: v.views, url: v.url, thumb: v.thumbnail
-  }));
-}
-
-// contoh:
-console.log(await ytsearch('lofi hip hop'));`},
-
-{cat:'sosmed',title:'Spotify Info',desc:'Judul dan cover dari link track, album, atau playlist (oEmbed).',deps:[],code:String.raw`async function spotify(url) {
-  const r = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(url));
-  if (!r.ok) throw new Error('Link tidak valid');
-  const d = await r.json();
-  return { title: d.title, thumbnail: d.thumbnail_url, embed: d.html };
-}
-
-// contoh:
-console.log(await spotify('https://open.spotify.com/track/xxxxx'));`},
-
-/* ---------- MUSIK & MEDIA ---------- */
-{cat:'media',title:'Lirik Lagu',desc:'Cari lirik (plain dan synced) lewat LRCLIB.',deps:[],code:String.raw`async function lyrics(query) {
-  const r = await fetch('https://lrclib.net/api/search?q=' + encodeURIComponent(query));
-  const list = await r.json();
-  if (!list.length) throw new Error('Lirik tidak ketemu');
-  const s = list[0];
-  return { title: s.trackName, artist: s.artistName, plain: s.plainLyrics, synced: s.syncedLyrics };
-}
-
-// contoh:
-console.log(await lyrics('Bohemian Rhapsody Queen'));`},
-
-{cat:'media',title:'Deezer Search',desc:'Cari lagu, dapat preview mp3 30 detik dan cover.',deps:[],code:String.raw`async function deezer(q, limit = 5) {
-  const r = await fetch('https://api.deezer.com/search?limit=' + limit + '&q=' + encodeURIComponent(q));
-  const { data } = await r.json();
-  return data.map(t => ({
-    title: t.title, artist: t.artist.name, album: t.album.title,
-    cover: t.album.cover_big, preview: t.preview, url: t.link
-  }));
-}
-
-// contoh:
-console.log(await deezer('tulus pamit'));`},
-
-{cat:'media',title:'iTunes Search',desc:'Cari musik, film, atau podcast di Apple (region Indonesia).',deps:[],code:String.raw`async function itunes(q, media = 'music') { // music | movie | podcast | software
-  const r = await fetch('https://itunes.apple.com/search?limit=5&country=id&media=' + media + '&term=' + encodeURIComponent(q));
-  const { results } = await r.json();
-  return results.map(x => ({
-    name: x.trackName || x.collectionName,
-    artist: x.artistName,
-    art: (x.artworkUrl100 || '').replace('100x100', '600x600'),
-    preview: x.previewUrl,
-    url: x.trackViewUrl || x.collectionViewUrl
-  }));
-}
-
-// contoh:
-console.log(await itunes('hindia', 'music'));`},
-
-{cat:'media',title:'Wallpaper (Wallhaven)',desc:'Cari wallpaper HD, hasil SFW.',deps:[],code:String.raw`async function wallpaper(q, limit = 10) {
-  const r = await fetch('https://wallhaven.cc/api/v1/search?sorting=relevance&purity=100&q=' + encodeURIComponent(q));
-  const { data } = await r.json();
-  return data.slice(0, limit).map(w => ({ id: w.id, res: w.resolution, full: w.path, thumb: w.thumbs.large }));
-}
-
-// contoh:
-console.log(await wallpaper('mountain'));`},
-
-{cat:'media',title:'Screenshot Website',desc:'Screenshot halaman web jadi gambar 1280x720.',deps:[],code:String.raw`import { writeFileSync } from 'node:fs';
-
-async function screenshot(url) {
-  const r = await fetch('https://image.thum.io/get/width/1280/crop/720/' + url);
-  if (!r.ok) throw new Error('Gagal screenshot');
-  return Buffer.from(await r.arrayBuffer());
-}
-
-// contoh:
-writeFileSync('ss.png', await screenshot('https://example.com'));`},
-
-{cat:'media',title:'QR Code',desc:'Teks atau link jadi gambar QR.',deps:[],code:String.raw`function qrcode(text, size = 400) {
-  return 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(text);
-}
-
-// contoh:
-console.log(qrcode('https://example.com'));`},
-
-{cat:'media',title:'Text to Speech',desc:'Ubah teks jadi suara mp3 untuk bahasa apa pun.',deps:[],code:String.raw`import { writeFileSync } from 'node:fs';
-
-async function tts(text, lang = 'id') {
-  const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + lang + '&q=' + encodeURIComponent(text);
-  const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-  return Buffer.from(await r.arrayBuffer());
-}
-
-// contoh:
-writeFileSync('suara.mp3', await tts('Halo, apa kabar?'));`},
-
-{cat:'media',title:'Avatar Generator',desc:'Avatar unik dari teks apa pun (DiceBear), format PNG atau SVG.',deps:[],code:String.raw`function avatar(seed, style = 'avataaars', format = 'png') {
-  // style: avataaars | bottts | pixel-art | lorelei | adventurer | fun-emoji
-  return 'https://api.dicebear.com/7.x/' + style + '/' + format + '?size=512&seed=' + encodeURIComponent(seed);
-}
-
-// contoh:
-console.log(avatar('budi', 'bottts'));`},
-
-/* ---------- INFO & KAMUS ---------- */
-{cat:'info',title:'Wikipedia',desc:'Ringkasan artikel dan thumbnail, bahasa Indonesia.',deps:[],code:String.raw`async function wiki(query) {
-  const r = await fetch('https://id.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(query));
-  if (!r.ok) throw new Error('Artikel tidak ketemu');
-  const d = await r.json();
-  return { title: d.title, summary: d.extract, image: d.thumbnail?.source, url: d.content_urls?.desktop.page };
-}
-
-// contoh:
-console.log(await wiki('Candi Borobudur'));`},
-
-{cat:'info',title:'Kamus Inggris',desc:'Arti, fonetik, dan jenis kata dari kamus bahasa Inggris.',deps:[],code:String.raw`async function kamus(word) {
-  const r = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word));
-  if (!r.ok) throw new Error('Kata tidak ada');
-  const [d] = await r.json();
-  return {
-    word: d.word, phonetic: d.phonetic,
-    meanings: d.meanings.map(m => ({ type: m.partOfSpeech, def: m.definitions[0].definition }))
-  };
-}
-
-// contoh:
-console.log(await kamus('serendipity'));`},
-
-{cat:'info',title:'Urban Dictionary',desc:'Arti slang dan istilah gaul.',deps:[],code:String.raw`async function urban(term) {
-  const r = await fetch('https://api.urbandictionary.com/v0/define?term=' + encodeURIComponent(term));
-  const { list } = await r.json();
-  if (!list.length) throw new Error('Istilah tidak ada');
-  const d = list[0];
-  return { word: d.word, definition: d.definition.replace(/[\[\]]/g, ''), example: d.example.replace(/[\[\]]/g, ''), up: d.thumbs_up };
-}
-
-// contoh:
-console.log(await urban('rizz'));`},
-
-{cat:'info',title:'Translate',desc:'Terjemahkan teks ke bahasa apa pun, deteksi bahasa otomatis.',deps:[],code:String.raw`async function translate(text, to = 'id') {
-  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&dt=t&tl=' + to + '&q=' + encodeURIComponent(text);
-  const d = await (await fetch(url)).json();
-  return { hasil: d[0].map(x => x[0]).join(''), bahasaAsal: d[2] };
-}
-
-// contoh:
-console.log(await translate('How are you today?', 'id'));`},
-
-{cat:'info',title:'Cuaca',desc:'Cuaca saat ini per kota.',deps:[],code:String.raw`async function cuaca(kota) {
-  const d = await (await fetch('https://wttr.in/' + encodeURIComponent(kota) + '?format=j1')).json();
-  const c = d.current_condition[0];
-  return {
-    kota,
-    suhu: c.temp_C + '°C',
-    terasa: c.FeelsLikeC + '°C',
-    kondisi: c.weatherDesc[0].value,
-    kelembapan: c.humidity + '%',
-    angin: c.windspeedKmph + ' km/j'
-  };
-}
-
-// contoh:
-console.log(await cuaca('Jakarta'));`},
-
-{cat:'info',title:'Kurs Mata Uang',desc:'Kurs terbaru, default USD ke Rupiah.',deps:[],code:String.raw`async function kurs(dari = 'USD', ke = 'IDR') {
-  const d = await (await fetch('https://open.er-api.com/v6/latest/' + dari)).json();
-  return { dari, ke, rate: d.rates[ke], update: d.time_last_update_utc };
-}
-
-// contoh:
-console.log(await kurs('USD', 'IDR'));`},
-
-{cat:'info',title:'Harga Crypto',desc:'Harga koin dalam Rupiah plus perubahan 24 jam (CoinGecko).',deps:[],code:String.raw`async function crypto(id = 'bitcoin', cur = 'idr') {
-  const r = await fetch('https://api.coingecko.com/api/v3/simple/price?include_24hr_change=true&ids=' + id + '&vs_currencies=' + cur);
-  const d = await r.json();
-  if (!d[id]) throw new Error('Koin tidak ketemu (pakai id CoinGecko)');
-  return { coin: id, harga: d[id][cur], change24h: d[id][cur + '_24h_change'] };
-}
-
-// contoh:
-console.log(await crypto('ethereum'));`},
-
-{cat:'info',title:'Info Negara',desc:'Ibu kota, populasi, bendera, mata uang, bahasa.',deps:[],code:String.raw`async function negara(nama) {
-  const r = await fetch('https://restcountries.com/v3.1/name/' + encodeURIComponent(nama));
-  if (!r.ok) throw new Error('Negara tidak ketemu');
-  const [c] = await r.json();
-  return {
-    nama: c.name.common, ibukota: c.capital?.[0], region: c.region,
-    populasi: c.population, bendera: c.flags.png,
-    mataUang: Object.keys(c.currencies || {}), bahasa: Object.values(c.languages || {})
-  };
-}
-
-// contoh:
-console.log(await negara('Japan'));`},
-
-{cat:'info',title:'Series TV (TVmaze)',desc:'Cari serial: rating, genre, status, poster, sinopsis.',deps:[],code:String.raw`async function series(q) {
-  const list = await (await fetch('https://api.tvmaze.com/search/shows?q=' + encodeURIComponent(q))).json();
-  return list.slice(0, 5).map(({ show: s }) => ({
-    name: s.name, genres: s.genres, rating: s.rating.average,
-    premiered: s.premiered, status: s.status, poster: s.image?.original,
-    summary: (s.summary || '').replace(/<[^>]+>/g, '')
-  }));
-}
-
-// contoh:
-console.log(await series('breaking bad'));`},
-
-/* ---------- ANIME & GAME ---------- */
-{cat:'anime',title:'Anime Search',desc:'Skor, sinopsis, jumlah episode via Jikan (MyAnimeList).',deps:[],code:String.raw`async function anime(query) {
-  const r = await fetch('https://api.jikan.moe/v4/anime?limit=1&q=' + encodeURIComponent(query));
-  const { data } = await r.json();
-  const a = data[0];
-  if (!a) throw new Error('Anime tidak ketemu');
-  return {
-    title: a.title, score: a.score, episodes: a.episodes, status: a.status,
-    synopsis: a.synopsis, poster: a.images.jpg.large_image_url, url: a.url
-  };
-}
-
-// contoh:
-console.log(await anime('Frieren'));`},
-
-{cat:'anime',title:'Top Anime',desc:'Peringkat anime teratas MyAnimeList.',deps:[],code:String.raw`async function animeTop(limit = 10) {
-  const { data } = await (await fetch('https://api.jikan.moe/v4/top/anime?limit=' + limit)).json();
-  return data.map(a => ({ rank: a.rank, title: a.title, score: a.score, episodes: a.episodes, poster: a.images.jpg.image_url }));
-}
-
-// contoh:
-console.log(await animeTop(10));`},
-
-{cat:'anime',title:'Anime Musim Ini',desc:'Daftar anime yang sedang tayang musim ini.',deps:[],code:String.raw`async function animeSeason(limit = 10) {
-  const { data } = await (await fetch('https://api.jikan.moe/v4/seasons/now?limit=' + limit)).json();
-  return data.map(a => ({ title: a.title, score: a.score, type: a.type, broadcast: a.broadcast?.string, poster: a.images.jpg.image_url }));
-}
-
-// contoh:
-console.log(await animeSeason());`},
-
-{cat:'anime',title:'Manga Search',desc:'Cari manga: skor, chapter, sinopsis.',deps:[],code:String.raw`async function manga(query) {
-  const { data } = await (await fetch('https://api.jikan.moe/v4/manga?limit=1&q=' + encodeURIComponent(query))).json();
-  const m = data[0];
-  if (!m) throw new Error('Manga tidak ketemu');
-  return { title: m.title, score: m.score, chapters: m.chapters, status: m.status, synopsis: m.synopsis, cover: m.images.jpg.large_image_url };
-}
-
-// contoh:
-console.log(await manga('Vagabond'));`},
-
-{cat:'anime',title:'Steam Search',desc:'Cari game di Steam, harga region Indonesia.',deps:[],code:String.raw`async function steam(q) {
-  const r = await fetch('https://store.steampowered.com/api/storesearch/?cc=id&l=indonesian&term=' + encodeURIComponent(q));
-  const { items } = await r.json();
-  return items.slice(0, 5).map(i => ({
-    id: i.id, name: i.name,
-    harga: i.price ? 'Rp ' + (i.price.final / 100).toLocaleString('id-ID') : 'Gratis',
-    img: i.tiny_image, url: 'https://store.steampowered.com/app/' + i.id
-  }));
-}
-
-// contoh:
-console.log(await steam('elden ring'));`},
-
-{cat:'anime',title:'Game Gratis',desc:'Giveaway game gratis terbaru (Steam, Epic, GOG, dll).',deps:[],code:String.raw`async function gameGratis(limit = 10) {
-  const list = await (await fetch('https://www.gamerpower.com/api/giveaways?type=game')).json();
-  return list.slice(0, limit).map(g => ({
-    title: g.title, worth: g.worth, platforms: g.platforms,
-    end: g.end_date, url: g.open_giveaway_url, img: g.image
-  }));
-}
-
-// contoh:
-console.log(await gameGratis());`},
-
-{cat:'anime',title:'Pokemon',desc:'Data Pokemon: tipe, tinggi, berat, artwork.',deps:[],code:String.raw`async function pokemon(nama) {
-  const r = await fetch('https://pokeapi.co/api/v2/pokemon/' + nama.toLowerCase());
-  if (!r.ok) throw new Error('Pokemon tidak ketemu');
-  const d = await r.json();
-  return {
-    id: d.id, name: d.name, types: d.types.map(t => t.type.name),
-    height: d.height / 10 + ' m', weight: d.weight / 10 + ' kg',
-    image: d.sprites.other['official-artwork'].front_default
-  };
-}
-
-// contoh:
-console.log(await pokemon('pikachu'));`},
-
-/* ---------- INDONESIA ---------- */
-{cat:'id',title:'Jadwal Sholat',desc:'Waktu sholat harian per kota (metode Kemenag).',deps:[],code:String.raw`async function sholat(kota = 'Jakarta') {
-  const r = await fetch('https://api.aladhan.com/v1/timingsByCity?country=Indonesia&method=20&city=' + encodeURIComponent(kota));
-  const { data } = await r.json();
-  const t = data.timings;
-  return { kota, tanggal: data.date.readable, subuh: t.Fajr, dzuhur: t.Dhuhr, ashar: t.Asr, maghrib: t.Maghrib, isya: t.Isha };
-}
-
-// contoh:
-console.log(await sholat('Bandung'));`},
-
-{cat:'id',title:'Al-Quran',desc:'Surah lengkap dengan teks Arab dan terjemahan Indonesia.',deps:[],code:String.raw`async function quran(nomorSurah = 1) {
-  const [ar, id] = await Promise.all([
-    fetch('https://api.alquran.cloud/v1/surah/' + nomorSurah).then(r => r.json()),
-    fetch('https://api.alquran.cloud/v1/surah/' + nomorSurah + '/id.indonesian').then(r => r.json())
-  ]);
-  return {
-    nama: ar.data.englishName,
-    ayat: ar.data.ayahs.map((a, i) => ({ no: a.numberInSurah, arab: a.text, arti: id.data.ayahs[i].text }))
-  };
-}
-
-// contoh:
-console.log(await quran(1));`},
-
-{cat:'id',title:'Daftar Surah',desc:'114 surah: nama latin, arti, jumlah ayat, tempat turun, audio.',deps:[],code:String.raw`async function daftarSurah() {
-  const { data } = await (await fetch('https://equran.id/api/v2/surat')).json();
-  return data.map(s => ({
-    nomor: s.nomor, nama: s.namaLatin, arti: s.arti,
-    ayat: s.jumlahAyat, turun: s.tempatTurun, audio: s.audioFull?.['05']
-  }));
-}
-
-// contoh:
-console.log(await daftarSurah());`},
-
-{cat:'id',title:'Hadits',desc:'Ambil hadits per kitab (bukhari, muslim, tirmidzi, dll).',deps:[],code:String.raw`async function hadits(kitab = 'muslim', dari = 1, sampai = 3) {
-  const r = await fetch('https://api.hadith.gading.dev/books/' + kitab + '?range=' + dari + '-' + sampai);
-  const { data } = await r.json();
-  return data.hadiths.map(h => ({ no: h.number, arab: h.arab, arti: h.id }));
-}
-
-// contoh:
-console.log(await hadits('bukhari', 1, 3));`},
-
-{cat:'id',title:'Gempa BMKG',desc:'Gempa terbaru dari data resmi BMKG dengan shakemap.',deps:[],code:String.raw`async function gempa() {
-  const r = await fetch('https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json');
-  const g = (await r.json()).Infogempa.gempa;
-  return {
-    waktu: g.Tanggal + ' ' + g.Jam,
-    magnitudo: g.Magnitude,
-    kedalaman: g.Kedalaman,
-    wilayah: g.Wilayah,
-    potensi: g.Potensi,
-    peta: 'https://data.bmkg.go.id/DataMKG/TEWS/' + g.Shakemap
-  };
-}
-
-// contoh:
-console.log(await gempa());`},
-
-{cat:'id',title:'Wilayah Indonesia',desc:'Provinsi, kabupaten/kota, kecamatan, dan kelurahan.',deps:[],code:String.raw`async function wilayah(level = 'provinces', id = '') {
-  // level: provinces | regencies (id provinsi) | districts (id kab) | villages (id kec)
-  const path = id ? level + '/' + id : level;
-  const r = await fetch('https://www.emsifa.com/api-wilayah-indonesia/api/' + path + '.json');
-  return r.json(); // [{ id, name }]
-}
-
-// contoh:
-console.log(await wilayah('provinces'));
-console.log(await wilayah('regencies', 32));`},
-
-{cat:'id',title:'Hari Libur Nasional',desc:'Daftar libur nasional dan cuti bersama per tahun.',deps:[],code:String.raw`async function libur(tahun = new Date().getFullYear()) {
-  const list = await (await fetch('https://api-harilibur.vercel.app/api?year=' + tahun)).json();
-  return list.map(l => ({ tanggal: l.holiday_date, nama: l.holiday_name, nasional: l.is_national_holiday }));
-}
-
-// contoh:
-console.log(await libur(2026));`},
-
-{cat:'id',title:'Berita Terkini (RSS)',desc:'Headline dari Antara, CNN Indonesia, Detik, atau RSS apa pun.',deps:[],code:String.raw`async function berita(feed = 'https://www.antaranews.com/rss/terkini.xml', limit = 10) {
-  // alternatif: https://www.cnnindonesia.com/nasional/rss
-  //             https://rss.detik.com/index.php/detikcom
-  const xml = await (await fetch(feed, { headers: { 'User-Agent': 'Mozilla/5.0' } })).text();
-  const tag = (s, t) => ((s.match(new RegExp('<' + t + '[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?</' + t + '>')) || [])[1] || '').trim();
-  return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, limit)
-    .map(m => ({ title: tag(m[1], 'title'), link: tag(m[1], 'link'), date: tag(m[1], 'pubDate') }));
-}
-
-// contoh:
-console.log(await berita());`},
-
-/* ---------- DEVELOPER ---------- */
-{cat:'dev',title:'GitHub User',desc:'Profil, repo, followers, dan avatar user GitHub.',deps:[],code:String.raw`async function ghUser(username) {
-  const r = await fetch('https://api.github.com/users/' + username, { headers: { 'User-Agent': 'scraper' } });
-  if (!r.ok) throw new Error('User tidak ketemu');
-  const u = await r.json();
-  return {
-    login: u.login, name: u.name, bio: u.bio, repos: u.public_repos,
-    followers: u.followers, following: u.following, avatar: u.avatar_url, url: u.html_url
-  };
-}
-
-// contoh:
-console.log(await ghUser('torvalds'));`},
-
-{cat:'dev',title:'NPM Package',desc:'Versi terbaru, deskripsi, lisensi, dan tanggal rilis paket npm.',deps:[],code:String.raw`async function npm(pkg) {
-  const r = await fetch('https://registry.npmjs.org/' + pkg);
-  if (!r.ok) throw new Error('Paket tidak ketemu');
-  const d = await r.json();
-  const v = d['dist-tags'].latest;
-  return { name: d.name, version: v, desc: d.description, license: d.license, homepage: d.homepage, released: d.time[v] };
-}
-
-// contoh:
-console.log(await npm('cheerio'));`},
-
-{cat:'dev',title:'DNS Lookup',desc:'Cek record A, AAAA, MX, TXT, NS lewat Cloudflare DoH.',deps:[],code:String.raw`async function dns(domain, type = 'A') {
-  const r = await fetch('https://cloudflare-dns.com/dns-query?name=' + domain + '&type=' + type, {
-    headers: { accept: 'application/dns-json' }
-  });
-  const d = await r.json();
-  return (d.Answer || []).map(a => ({ name: a.name, ttl: a.TTL, data: a.data }));
-}
-
-// contoh:
-console.log(await dns('example.com', 'MX'));`},
-
-{cat:'dev',title:'Whois (RDAP)',desc:'Status domain, tanggal daftar/expired, nameserver.',deps:[],code:String.raw`async function whois(domain) {
-  const r = await fetch('https://rdap.org/domain/' + domain);
-  if (!r.ok) throw new Error('Domain tidak ketemu');
-  const d = await r.json();
-  return {
-    domain: d.ldhName, status: d.status,
-    events: (d.events || []).map(e => e.eventAction + ': ' + e.eventDate),
-    nameservers: (d.nameservers || []).map(n => n.ldhName)
-  };
-}
-
-// contoh:
-console.log(await whois('google.com'));`},
-
-{cat:'dev',title:'IP Lookup',desc:'Negara, kota, ISP, dan zona waktu dari alamat IP.',deps:[],code:String.raw`async function ipinfo(ip = '') {
-  const d = await (await fetch('https://ipwho.is/' + ip)).json();
-  if (!d.success) throw new Error(d.message);
-  return { ip: d.ip, negara: d.country, kota: d.city, isp: d.connection?.isp, zona: d.timezone?.id };
-}
-
-// contoh:
-console.log(await ipinfo('8.8.8.8'));`},
-
-{cat:'dev',title:'Link Preview',desc:'Judul, deskripsi, gambar, dan favicon dari URL apa pun.',deps:['cheerio'],install:'npm i cheerio',code:UA+String.raw`import * as cheerio from 'cheerio';
-
-async function preview(url) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA }, redirect: 'follow' });
-  const $ = cheerio.load(await res.text());
-  const meta = k => $('meta[property="' + k + '"],meta[name="' + k + '"]').attr('content');
-  return {
-    title: meta('og:title') || $('title').text().trim(),
-    description: meta('og:description') || meta('description'),
-    image: meta('og:image'),
-    favicon: 'https://www.google.com/s2/favicons?sz=128&domain=' + new URL(url).hostname
-  };
-}
-
-// contoh:
-console.log(await preview('https://github.com'));`},
-
-/* ---------- TOOLS ---------- */
-{cat:'tools',title:'URL Shortener (is.gd)',desc:'Pendekkan link.',deps:[],code:String.raw`async function shorten(url) {
-  const d = await (await fetch('https://is.gd/create.php?format=json&url=' + encodeURIComponent(url))).json();
-  if (d.errorcode) throw new Error(d.errormessage);
-  return d.shorturl;
-}
-
-// contoh:
-console.log(await shorten('https://example.com/halaman/yang/sangat/panjang'));`},
-
-{cat:'tools',title:'URL Shortener (TinyURL)',desc:'Alternatif pemendek link tanpa API key.',deps:[],code:String.raw`async function tinyurl(url) {
-  const r = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(url));
-  return (await r.text()).trim();
-}
-
-// contoh:
-console.log(await tinyurl('https://example.com/halaman/panjang'));`},
-
-{cat:'tools',title:'OCR (Gambar ke Teks)',desc:'Baca teks dari gambar lewat URL (OCR.space, key demo).',deps:[],code:String.raw`async function ocr(imageUrl, lang = 'eng') { // eng | jpn | kor | chs | dll
-  const r = await fetch('https://api.ocr.space/parse/imageurl?apikey=helloworld&language=' + lang + '&url=' + encodeURIComponent(imageUrl));
-  const d = await r.json();
-  if (d.IsErroredOnProcessing) throw new Error(d.ErrorMessage);
-  return d.ParsedResults.map(p => p.ParsedText).join('\n');
-}
-
-// contoh:
-console.log(await ocr('https://example.com/struk.jpg'));`},
-
-{cat:'tools',title:'AI Image (Pollinations)',desc:'Generate gambar dari prompt, gratis tanpa key.',deps:[],code:String.raw`import { writeFileSync } from 'node:fs';
-
-async function aiImage(prompt, width = 1024, height = 1024) {
-  const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) +
-    '?nologo=true&width=' + width + '&height=' + height;
-  const r = await fetch(url);
-  return Buffer.from(await r.arrayBuffer());
-}
-
-// contoh:
-writeFileSync('hasil.jpg', await aiImage('kucing astronot di bulan, gaya anime'));`},
-
-{cat:'tools',title:'AI Text (Pollinations)',desc:'Tanya jawab teks sederhana tanpa API key.',deps:[],code:String.raw`async function aiText(prompt) {
-  const r = await fetch('https://text.pollinations.ai/' + encodeURIComponent(prompt));
-  return r.text();
-}
-
-// contoh:
-console.log(await aiText('Jelaskan apa itu API dalam 2 kalimat'));`},
-
-/* ---------- FUN ---------- */
-{cat:'fun',title:'Random Meme',desc:'Meme acak dari subreddit populer.',deps:[],code:String.raw`async function meme(sub = '') {
-  const d = await (await fetch('https://meme-api.com/gimme/' + sub)).json();
-  return { title: d.title, image: d.url, sub: d.subreddit, link: d.postLink };
-}
-
-// contoh:
-console.log(await meme('dankmemes'));`},
-
-{cat:'fun',title:'Waifu / Neko',desc:'Gambar anime SFW acak: waifu, neko, shinobu, megumin, dll.',deps:[],code:String.raw`async function waifu(type = 'waifu') {
-  const d = await (await fetch('https://api.waifu.pics/sfw/' + type)).json();
-  return d.url;
-}
-
-// contoh:
-console.log(await waifu('neko'));`},
-
-{cat:'fun',title:'Jokes',desc:'Lelucon acak, mode aman.',deps:[],code:String.raw`async function joke() {
-  const d = await (await fetch('https://v2.jokeapi.dev/joke/Any?safe-mode')).json();
-  return d.joke || d.setup + '\n' + d.delivery;
-}
-
-// contoh:
-console.log(await joke());`},
-
-{cat:'fun',title:'Quotes',desc:'Kutipan motivasi acak.',deps:[],code:String.raw`async function quote() {
-  const d = await (await fetch('https://dummyjson.com/quotes/random')).json();
-  return d.quote + ' - ' + d.author;
-}
-
-// contoh:
-console.log(await quote());`},
-
-{cat:'fun',title:'Kucing dan Anjing',desc:'Fakta kucing, foto kucing, dan foto anjing acak.',deps:[],code:String.raw`async function faktaKucing() {
-  return (await (await fetch('https://catfact.ninja/fact')).json()).fact;
-}
-
-async function fotoKucing() {
-  return (await (await fetch('https://api.thecatapi.com/v1/images/search')).json())[0].url;
-}
-
-async function fotoAnjing() {
-  return (await (await fetch('https://dog.ceo/api/breeds/image/random')).json()).message;
-}
-
-// contoh:
-console.log(await faktaKucing(), await fotoKucing(), await fotoAnjing());`},
-/* ---------- API PUBLIK ---------- */
-{cat:'api',title:'Siputz: Daftar Endpoint',desc:'Ambil semua endpoint Siputzx API (kategori, path, method, contoh).',deps:[],code:String.raw`const BASE = 'https://api.siputzx.my.id';
-const j = await (await fetch(BASE + '/api/get')).json();
-const kategori = j.data || j.result || j;
-
-if (!Array.isArray(kategori)) {
-  console.log(JSON.stringify(j, null, 2)); // struktur beda, lihat manual
-} else {
-  for (const c of kategori)
-    for (const e of c.endpoints || [])
-      console.log(e.method, BASE + e.path, e.example || '');
-}`},
-
-{cat:'api',title:'Siputz: Pemanggil Umum',desc:'Satu fungsi buat semua endpoint Siputzx. Apikey opsional.',deps:[],code:String.raw`const BASE = 'https://api.siputzx.my.id';
-
-async function siputz(path, params = {}, apikey) {
-  const url = BASE + path + '?' + new URLSearchParams(params);
-  const r = await fetch(url, { headers: apikey ? { Authorization: 'Bearer ' + apikey } : {} });
-  const j = await r.json();
-  if (j.status === false) throw new Error(j.error || j.message || 'Request gagal');
-  return j.data ?? j;
-}
-
-// path bisa berubah, cek daftar endpoint dulu (/api/get)
-console.log(await siputz('/api/d/tiktok', { url: 'https://vt.tiktok.com/xxxxx' }));`},
-
-{cat:'api',title:'Siputz: Instagram',desc:'Downloader Instagram lewat Siputzx.',deps:[],code:String.raw`async function igdl(url) {
-  const r = await fetch('https://api.siputzx.my.id/api/d/igdl?url=' + encodeURIComponent(url));
-  const j = await r.json();
-  if (j.status === false) throw new Error(j.error || 'Gagal');
-  return j.data;
-}
-
-// cek path di /api/get kalau error
-console.log(await igdl('https://www.instagram.com/reel/xxxxx/'));`},
-
-{cat:'api',title:'Siputz: YouTube MP3',desc:'Downloader audio YouTube lewat Siputzx.',deps:[],code:String.raw`async function ytmp3(url) {
-  const r = await fetch('https://api.siputzx.my.id/api/d/ytmp3?url=' + encodeURIComponent(url));
-  const j = await r.json();
-  if (j.status === false) throw new Error(j.error || 'Gagal');
-  return j.data;
-}
-
-// cek path di /api/get kalau error
-console.log(await ytmp3('https://youtu.be/dQw4w9WgXcQ'));`},
-
-{cat:'api',title:'Siputz: Pinterest Search',desc:'Cari gambar Pinterest lewat Siputzx.',deps:[],code:String.raw`async function pinterest(query) {
-  const r = await fetch('https://api.siputzx.my.id/api/s/pinterest?query=' + encodeURIComponent(query));
-  const j = await r.json();
-  if (j.status === false) throw new Error(j.error || 'Gagal');
-  return j.data;
-}
-
-// cek path di /api/get kalau error
-console.log(await pinterest('wallpaper aesthetic'));`},
-
-{cat:'api',title:'NASA APOD (DEMO_KEY)',desc:'Foto astronomi harian NASA. Key demo resmi, limit kecil.',deps:[],code:String.raw`async function apod() {
-  const r = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');
-  const d = await r.json();
-  return { title: d.title, date: d.date, image: d.hdurl || d.url, explanation: d.explanation };
-}
-
-console.log(await apod());`},
-
-{cat:'api',title:'Giphy (key publik)',desc:'Cari GIF pakai public beta key dari dokumentasi Giphy.',deps:[],code:String.raw`async function gif(q, limit = 5) {
-  const r = await fetch('https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=' + limit + '&q=' + encodeURIComponent(q));
-  const { data } = await r.json();
-  return data.map(g => ({ title: g.title, gif: g.images.original.url, mp4: g.images.original.mp4 }));
-}
-
-console.log(await gif('kucing lucu'));`},
-
-{cat:'api',title:'Open-Meteo Cuaca',desc:'Cuaca per koordinat tanpa API key.',deps:[],code:String.raw`async function cuacaKoordinat(lat = -6.2, lon = 106.8) {
-  const r = await fetch('https://api.open-meteo.com/v1/forecast?current_weather=true&timezone=auto&latitude=' + lat + '&longitude=' + lon);
-  return (await r.json()).current_weather; // temperature, windspeed, weathercode
-}
-
-console.log(await cuacaKoordinat());`},
-
-{cat:'api',title:'Geocoding (Nominatim)',desc:'Nama tempat jadi koordinat, dan sebaliknya (OpenStreetMap).',deps:[],code:String.raw`async function cariTempat(q) {
-  const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=3&q=' + encodeURIComponent(q), {
-    headers: { 'User-Agent': 'scraperhub/1.0' } // wajib
-  });
-  return (await r.json()).map(p => ({ nama: p.display_name, lat: p.lat, lon: p.lon }));
-}
-
-async function namaTempat(lat, lon) {
-  const r = await fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lon, {
-    headers: { 'User-Agent': 'scraperhub/1.0' }
-  });
-  return (await r.json()).display_name;
-}
-
-console.log(await cariTempat('Monas Jakarta'));`},
-
-{cat:'api',title:'Open Library (Buku)',desc:'Cari buku: judul, penulis, tahun terbit, cover.',deps:[],code:String.raw`async function buku(q) {
-  const r = await fetch('https://openlibrary.org/search.json?limit=5&q=' + encodeURIComponent(q));
-  const { docs } = await r.json();
-  return docs.map(b => ({
-    judul: b.title, penulis: b.author_name?.[0], tahun: b.first_publish_year,
-    cover: b.cover_i ? 'https://covers.openlibrary.org/b/id/' + b.cover_i + '-L.jpg' : null
-  }));
-}
-
-console.log(await buku('laskar pelangi'));`},
-
-{cat:'api',title:'Upload File (Catbox)',desc:'Upload file, dapat link publik. Tanpa key.',deps:[],code:String.raw`import { readFileSync } from 'node:fs';
-
-async function catbox(path, nama = 'file.bin') {
-  const f = new FormData();
-  f.append('reqtype', 'fileupload');
-  f.append('fileToUpload', new Blob([readFileSync(path)]), nama);
-  const r = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: f });
-  return (await r.text()).trim(); // link file
-}
-
-console.log(await catbox('./foto.jpg', 'foto.jpg'));`},
-
-{cat:'api',title:'Paste Teks (paste.rs)',desc:'Simpan teks, dapat link. Tanpa key.',deps:[],code:String.raw`async function paste(teks) {
-  const r = await fetch('https://paste.rs', { method: 'POST', body: teks });
-  return (await r.text()).trim();
-}
-
-console.log(await paste('halo dunia'));`},
-
-{cat:'api',title:'Google Suggest',desc:'Saran pencarian otomatis (autocomplete).',deps:[],code:String.raw`async function suggest(q, lang = 'id') {
-  const r = await fetch('https://suggestqueries.google.com/complete/search?client=firefox&hl=' + lang + '&q=' + encodeURIComponent(q));
-  return (await r.json())[1];
-}
-
-console.log(await suggest('resep nasi'));`},
-
-{cat:'api',title:'MyMemory Translate',desc:'Terjemahan alternatif tanpa key (limit harian).',deps:[],code:String.raw`async function mymemory(text, dari = 'en', ke = 'id') {
-  const r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + dari + '|' + ke);
-  return (await r.json()).responseData.translatedText;
-}
-
-console.log(await mymemory('good morning'));`},
-/* ---------- BOT & SERVER ---------- */
-{cat:'bot',title:'Baileys: Bot WhatsApp Dasar',desc:'Login QR atau pairing code, auto-reconnect, balas pesan.',deps:['@whiskeysockets/baileys','pino','qrcode-terminal'],install:'npm i @whiskeysockets/baileys pino qrcode-terminal',code:String.raw`import makeWASocket, { useMultiFileAuthState, DisconnectReason, Browsers } from '@whiskeysockets/baileys';
-import pino from 'pino';
-import qrcode from 'qrcode-terminal';
-
-const NOMOR = ''; // isi 628xxx buat login pakai pairing code, kosongkan buat QR
-
-async function start() {
-  const { state, saveCreds } = await useMultiFileAuthState('session');
-  const sock = makeWASocket({
-    auth: state,
-    logger: pino({ level: 'silent' }),
-    browser: Browsers.ubuntu('Chrome')
+  const TELEGRAM_ADMIN = "https://t.me/Meadi31";
+  const WA_ADMIN = "6283809566723";
+
+  const paketGrid   = document.getElementById('paketGrid');
+  const sTotal      = document.getElementById('sTotal');
+  const btnOrder    = document.getElementById('btnOrder');
+  const btnTelegram = document.getElementById('btnTelegram');
+  const btnWhatsapp = document.getElementById('btnWhatsapp');
+  const toast       = document.getElementById('toast');
+  const fileName    = document.getElementById('fileName');
+
+  let selected = { nama: 'Role RES', harga: 20000 };
+  let fileUploaded = false;
+  const rp = n => 'Rp ' + n.toLocaleString('id-ID');
+
+  paketGrid.addEventListener('click', e => {
+    const el = e.target.closest('.paket');
+    if(!el) return;
+    document.querySelectorAll('.paket').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    selected = { nama: el.dataset.nama, harga: +el.dataset.harga };
+    sTotal.textContent = rp(selected.harga);
   });
 
-  if (NOMOR && !sock.authState.creds.registered) {
-    setTimeout(async () => console.log('Kode pairing:', await sock.requestPairingCode(NOMOR)), 3000);
-  }
-
-  sock.ev.on('creds.update', saveCreds);
-  sock.ev.on('connection.update', ({ connection, lastDisconnect, qr }) => {
-    if (qr && !NOMOR) qrcode.generate(qr, { small: true });
-    if (connection === 'open') console.log('Terhubung');
-    if (connection === 'close') {
-      const code = lastDisconnect?.error?.output?.statusCode;
-      if (code !== DisconnectReason.loggedOut) start(); // reconnect
-      else console.log('Logout, hapus folder session lalu login ulang');
+  function handleFile(input) {
+    if (input.files && input.files[0]) {
+      fileUploaded = true;
+      fileName.style.display = 'block';
+      fileName.textContent = '✓ ' + input.files[0].name;
     }
-  });
-
-  sock.ev.on('messages.upsert', async ({ messages }) => {
-    const m = messages[0];
-    if (!m.message || m.key.fromMe) return;
-    const text = m.message.conversation || m.message.extendedTextMessage?.text || '';
-    if (text === '.ping') await sock.sendMessage(m.key.remoteJid, { text: 'pong' }, { quoted: m });
-  });
-}
-
-start();`},
-
-{cat:'bot',title:'Baileys: Handler Command',desc:'Struktur command dengan prefix dan argumen, tinggal tambah fungsi.',deps:['@whiskeysockets/baileys'],install:'npm i @whiskeysockets/baileys',code:String.raw`const prefix = '.';
-
-const commands = {
-  ping: async (sock, m) => sock.sendMessage(m.key.remoteJid, { text: 'pong' }, { quoted: m }),
-  halo: async (sock, m, args) => sock.sendMessage(m.key.remoteJid, { text: 'Halo ' + (args.join(' ') || 'kak') }, { quoted: m })
-  // tambah command di sini
-};
-
-export async function handle(sock, m) {
-  const msg = m.message || {};
-  const text = msg.conversation || msg.extendedTextMessage?.text || msg.imageMessage?.caption || msg.videoMessage?.caption || '';
-  if (!text.startsWith(prefix)) return;
-
-  const [cmd, ...args] = text.slice(prefix.length).trim().split(/\s+/);
-  const jid = m.key.remoteJid;
-  const isGroup = jid.endsWith('@g.us');
-  const sender = isGroup ? m.key.participant : jid;
-
-  try {
-    await commands[cmd.toLowerCase()]?.(sock, m, args, { isGroup, sender });
-  } catch (e) {
-    await sock.sendMessage(jid, { text: 'Error: ' + e.message }, { quoted: m });
   }
-}
 
-// pasang di: sock.ev.on('messages.upsert', ({ messages }) => handle(sock, messages[0]));`},
-
-{cat:'bot',title:'Baileys: Kirim Media',desc:'Gambar, video, audio, voice note, dokumen, reaksi, mention.',deps:['@whiskeysockets/baileys'],install:'npm i @whiskeysockets/baileys',code:String.raw`// sock = hasil makeWASocket(), jid = nomor@s.whatsapp.net atau idgrup@g.us, m = pesan masuk
-await sock.sendMessage(jid, { image: { url: 'https://example.com/a.jpg' }, caption: 'Halo' }, { quoted: m });
-await sock.sendMessage(jid, { video: { url: 'https://example.com/a.mp4' }, caption: 'Video' });
-await sock.sendMessage(jid, { audio: { url: 'https://example.com/a.mp3' }, mimetype: 'audio/mpeg' });
-await sock.sendMessage(jid, { audio: { url: 'https://example.com/a.mp3' }, mimetype: 'audio/mp4', ptt: true }); // voice note
-await sock.sendMessage(jid, { document: { url: 'https://example.com/a.pdf' }, fileName: 'file.pdf', mimetype: 'application/pdf' });
-await sock.sendMessage(jid, { react: { text: '👍', key: m.key } });
-await sock.sendMessage(jid, { text: 'Halo @6281234567890', mentions: ['6281234567890@s.whatsapp.net'] });
-await sock.sendMessage(jid, { location: { degreesLatitude: -6.2, degreesLongitude: 106.8 } });`},
-
-{cat:'bot',title:'Baileys: Download Media Masuk',desc:'Simpan gambar, video, audio, atau dokumen dari pesan.',deps:['@whiskeysockets/baileys'],install:'npm i @whiskeysockets/baileys pino',code:String.raw`import { downloadMediaMessage } from '@whiskeysockets/baileys';
-import { writeFileSync } from 'node:fs';
-import pino from 'pino';
-
-// pasang setelah sock dibuat
-sock.ev.on('messages.upsert', async ({ messages }) => {
-  const m = messages[0];
-  const tipe = Object.keys(m.message || {})[0];
-  const media = ['imageMessage', 'videoMessage', 'audioMessage', 'documentMessage', 'stickerMessage'];
-  if (!media.includes(tipe)) return;
-
-  const buffer = await downloadMediaMessage(m, 'buffer', {}, {
-    logger: pino({ level: 'silent' }),
-    reuploadRequest: sock.updateMediaMessage
+  btnOrder.addEventListener('click', () => {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if(!username){ showToast('Username wajib diisi!', true); return; }
+    if(!password){ showToast('Password wajib diisi!', true); return; }
+    if(!fileUploaded){ showToast('Harap upload bukti pembayaran terlebih dahulu!', true); return; }
+    const text = `Halo Admin XDY SADAP 👋\nSaya ingin konfirmasi pesanan:\n\n• Username : ${username}\n• Password : ${password}\n• Role     : ${selected.nama}\n• Total    : ${rp(selected.harga)}\n\nSaya sudah melakukan pembayaran dan melampirkan bukti transfer di chat ini. Mohon segera diproses ya, terima kasih!`;
+    const encoded = encodeURIComponent(text);
+    btnTelegram.href = `${TELEGRAM_ADMIN}?text=${encoded}`;
+    btnWhatsapp.href = `https://wa.me/${WA_ADMIN}?text=${encoded}`;
+    btnTelegram.style.display = 'flex';
+    btnWhatsapp.style.display = 'flex';
+    showToast('Pesanan siap! Silakan klik tombol Telegram atau WhatsApp.', false);
+    btnTelegram.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
-  writeFileSync('media_' + Date.now(), buffer);
-});
 
-// untuk media yang di-reply: m.message.extendedTextMessage.contextInfo.quotedMessage`},
-
-{cat:'bot',title:'Baileys: Fitur Grup',desc:'Tag semua, info grup, kick, tambah, promote, link invite.',deps:['@whiskeysockets/baileys'],install:'npm i @whiskeysockets/baileys',code:String.raw`// jid = idgrup@g.us
-const meta = await sock.groupMetadata(jid);
-const semua = meta.participants.map(p => p.id);
-
-// tag semua
-await sock.sendMessage(jid, { text: 'Halo semua', mentions: semua });
-
-// kick | add | promote | demote
-await sock.groupParticipantsUpdate(jid, ['6281234567890@s.whatsapp.net'], 'remove');
-
-// ganti nama & deskripsi
-await sock.groupUpdateSubject(jid, 'Nama Baru');
-await sock.groupUpdateDescription(jid, 'Deskripsi baru');
-
-// hanya admin yang boleh kirim pesan: 'announcement' | 'not_announcement'
-await sock.groupSettingUpdate(jid, 'announcement');
-
-// link invite
-const kode = await sock.groupInviteCode(jid);
-console.log('https://chat.whatsapp.com/' + kode);
-
-// bot harus admin untuk kick, add, promote, dan ganti setting`},
-
-{cat:'bot',title:'Telegraf: Bot Telegram Dasar',desc:'Command, balas teks, graceful stop. Token dari @BotFather.',deps:['telegraf'],install:'npm i telegraf',code:String.raw`import { Telegraf } from 'telegraf';
-
-const bot = new Telegraf(process.env.BOT_TOKEN);
-
-bot.start(ctx => ctx.reply('Halo ' + ctx.from.first_name));
-bot.command('ping', ctx => ctx.reply('pong'));
-bot.command('id', ctx => ctx.reply('ID kamu: ' + ctx.from.id + '\nChat: ' + ctx.chat.id));
-bot.on('text', ctx => ctx.reply('Kamu bilang: ' + ctx.message.text));
-
-bot.launch();
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
-
-// jalankan: BOT_TOKEN=123:abc node bot.mjs`},
-
-{cat:'bot',title:'Telegraf: Tombol Inline & Mini App',desc:'Inline keyboard, callback, dan tombol buka Mini App (WebApp).',deps:['telegraf'],install:'npm i telegraf',code:String.raw`import { Telegraf, Markup } from 'telegraf';
-
-const bot = new Telegraf(process.env.BOT_TOKEN);
-
-bot.command('menu', ctx => ctx.reply('Pilih menu:', Markup.inlineKeyboard([
-  [Markup.button.callback('TikTok', 'dl_tiktok'), Markup.button.callback('YouTube', 'dl_yt')],
-  [Markup.button.url('Website', 'https://example.com')],
-  [Markup.button.webApp('Buka Mini App', 'https://domain-kamu.com/app')] // wajib HTTPS
-])));
-
-bot.action('dl_tiktok', async ctx => {
-  await ctx.answerCbQuery('Kirim link TikTok');
-  await ctx.editMessageText('Kirim link TikTok-nya');
-});
-
-// menu keyboard biasa
-bot.command('kb', ctx => ctx.reply('Pilih:', Markup.keyboard([['Satu', 'Dua'], ['Tiga']]).resize()));
-
-bot.launch();`},
-
-{cat:'bot',title:'Telegraf: Kirim Media dari URL',desc:'Foto, video, audio, dokumen, dan album langsung dari link.',deps:['telegraf'],install:'npm i telegraf',code:String.raw`// di dalam handler: bot.on('text', async ctx => { ... })
-await ctx.replyWithPhoto({ url: 'https://example.com/a.jpg' }, { caption: 'Foto' });
-await ctx.replyWithVideo({ url: 'https://example.com/a.mp4' }, { caption: 'Video' });
-await ctx.replyWithAudio({ url: 'https://example.com/a.mp3' }, { title: 'Judul', performer: 'Artis' });
-await ctx.replyWithDocument({ url: 'https://example.com/a.zip' }, { caption: 'File' });
-
-// album (maks 10)
-await ctx.replyWithMediaGroup([
-  { type: 'photo', media: 'https://example.com/1.jpg' },
-  { type: 'photo', media: 'https://example.com/2.jpg' }
-]);
-
-// file dari Buffer / disk
-await ctx.replyWithDocument({ source: './file.pdf', filename: 'file.pdf' });
-
-// ambil link file yang user kirim
-const fileId = ctx.message.photo?.at(-1).file_id || ctx.message.document?.file_id;
-if (fileId) console.log((await ctx.telegram.getFileLink(fileId)).href);`},
-
-{cat:'bot',title:'grammY: Bot Telegram Modern',desc:'Alternatif Telegraf, ringan dan TypeScript-friendly.',deps:['grammy'],install:'npm i grammy',code:String.raw`import { Bot, InlineKeyboard } from 'grammy';
-
-const bot = new Bot(process.env.BOT_TOKEN);
-
-bot.command('start', ctx => ctx.reply('Halo'));
-bot.command('menu', ctx => ctx.reply('Pilih:', {
-  reply_markup: new InlineKeyboard().text('Satu', 'a').text('Dua', 'b').row().url('Web', 'https://example.com')
-}));
-bot.callbackQuery('a', async ctx => { await ctx.answerCallbackQuery('Pilih A'); });
-bot.on('message:text', ctx => ctx.reply('Echo: ' + ctx.message.text));
-
-bot.catch(err => console.error(err));
-bot.start();`},
-
-{cat:'bot',title:'Telegram Bot API (Tanpa Library)',desc:'sendMessage, sendPhoto, polling, dan webhook cuma pakai fetch.',deps:[],code:String.raw`const TOKEN = process.env.BOT_TOKEN;
-const api = (method, body) =>
-  fetch('https://api.telegram.org/bot' + TOKEN + '/' + method, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  }).then(r => r.json());
-
-// kirim
-await api('sendMessage', { chat_id: 123456789, text: 'Halo', parse_mode: 'HTML' });
-await api('sendPhoto', { chat_id: 123456789, photo: 'https://example.com/a.jpg', caption: 'Foto' });
-
-// polling
-let offset = 0;
-while (true) {
-  const { result } = await api('getUpdates', { offset, timeout: 30 });
-  for (const u of result) {
-    offset = u.update_id + 1;
-    if (u.message?.text) await api('sendMessage', { chat_id: u.message.chat.id, text: 'Echo: ' + u.message.text });
+  let toastTimer;
+  function showToast(msg, isError = false){
+    toast.textContent = msg;
+    toast.className = 'toast show ' + (isError ? 'error' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
   }
-}
 
-// atau webhook (sekali set):
-// await api('setWebhook', { url: 'https://domain-kamu.com/webhook' });`},
+  /* ============ LIGHTBOX FULLSCREEN ============ */
+  const lightbox        = document.getElementById('lightbox');
+  const lightboxImg     = document.getElementById('lightboxImg');
+  const lightboxClose   = document.getElementById('lightboxClose');
+  const lightboxCaption = document.getElementById('lightboxCaption');
 
-{cat:'bot',title:'Bot Telegram + TikTok Downloader',desc:'Kirim link TikTok ke bot, bot balas videonya. Contoh gabung scraper ke bot.',deps:['telegraf'],install:'npm i telegraf',code:String.raw`import { Telegraf } from 'telegraf';
+  document.querySelectorAll('.fitur-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const img = item.querySelector('img');
+      if(!img) return;
+      const cap = item.querySelector('.fitur-overlay span');
+      lightboxImg.src = img.src;
+      lightboxCaption.textContent = cap ? cap.textContent : '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
-
-async function tiktok(url) {
-  const r = await fetch('https://www.tikwm.com/api/?hd=1&url=' + encodeURIComponent(url));
-  const j = await r.json();
-  if (j.code !== 0) throw new Error(j.msg || 'Gagal ambil data');
-  return j.data;
-}
-
-bot.on('text', async ctx => {
-  const url = ctx.message.text.match(/https?:\/\/(?:www\.|vt\.|vm\.)?tiktok\.com\/\S+/)?.[0];
-  if (!url) return ctx.reply('Kirim link TikTok');
-  const wait = await ctx.reply('Tunggu...');
-  try {
-    const d = await tiktok(url);
-    if (d.images?.length) {
-      await ctx.replyWithMediaGroup(d.images.slice(0, 10).map(i => ({ type: 'photo', media: i })));
-    } else {
-      await ctx.replyWithVideo({ url: d.hdplay || d.play }, { caption: d.title });
-    }
-  } catch (e) {
-    await ctx.reply('Gagal: ' + e.message);
+  function closeLightbox(){
+    lightbox.classList.remove('active');
+    lightboxImg.src = '';
+    document.body.style.overflow = '';
   }
-  ctx.deleteMessage(wait.message_id).catch(() => {});
-});
-
-bot.launch();`},
-
-{cat:'bot',title:'Discord.js: Bot Dasar',desc:'Login, respon pesan, dan slash command sederhana.',deps:['discord.js'],install:'npm i discord.js',code:String.raw`import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } from 'discord.js';
-
-const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]
-});
-
-client.once('ready', async c => {
-  console.log('Login sebagai', c.user.tag);
-  const rest = new REST().setToken(process.env.DISCORD_TOKEN);
-  await rest.put(Routes.applicationCommands(c.user.id), {
-    body: [new SlashCommandBuilder().setName('ping').setDescription('Cek bot').toJSON()]
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
   });
-});
-
-client.on('interactionCreate', async i => {
-  if (i.isChatInputCommand() && i.commandName === 'ping') await i.reply('pong');
-});
-
-client.on('messageCreate', m => {
-  if (!m.author.bot && m.content === '!ping') m.reply('pong');
-});
-
-client.login(process.env.DISCORD_TOKEN);`},
-
-{cat:'bot',title:'Express: Jadikan Scraper REST API',desc:'Bungkus fungsi scraper jadi endpoint /api/... dengan JSON seragam.',deps:['express'],install:'npm i express',code:String.raw`import express from 'express';
-
-const app = express();
-app.use(express.json());
-
-// ganti dengan fungsi scraper kamu
-async function tiktok(url) {
-  const j = await (await fetch('https://www.tikwm.com/api/?hd=1&url=' + encodeURIComponent(url))).json();
-  if (j.code !== 0) throw new Error(j.msg);
-  return { title: j.data.title, video: j.data.hdplay || j.data.play, music: j.data.music };
-}
-
-const routes = { tiktok };
-
-app.get('/api/:nama', async (req, res) => {
-  const fn = routes[req.params.nama];
-  if (!fn) return res.status(404).json({ status: false, error: 'Endpoint tidak ada' });
-  try {
-    const { url, q } = req.query;
-    res.json({ status: true, data: await fn(url || q) });
-  } catch (e) {
-    res.status(500).json({ status: false, error: e.message });
-  }
-});
-
-app.get('/', (req, res) => res.json({ endpoints: Object.keys(routes).map(r => '/api/' + r + '?url=') }));
-app.listen(process.env.PORT || 3000, () => console.log('Jalan di port', process.env.PORT || 3000));
-
-// tes: curl "http://localhost:3000/api/tiktok?url=https://vt.tiktok.com/xxxxx"`},
-
-{cat:'bot',title:'Cooldown & Anti-Spam',desc:'Batasi pemakaian per user, cocok untuk bot WA / Telegram.',deps:[],code:String.raw`const last = new Map();
-
-// return sisa detik kalau masih cooldown, 0 kalau boleh
-export function cooldown(userId, detik = 5) {
-  const now = Date.now();
-  const sisa = (last.get(userId) || 0) + detik * 1000 - now;
-  if (sisa > 0) return Math.ceil(sisa / 1000);
-  last.set(userId, now);
-  return 0;
-}
-
-// pakai:
-// const s = cooldown(sender, 10);
-// if (s) return reply('Tunggu ' + s + ' detik');`},
-
-{cat:'bot',title:'Termux: Setup Node, ffmpeg, yt-dlp',desc:'Perintah sekali jalan buat siapin server bot di Android.',deps:[],install:'termux-setup-storage',code:String.raw`# update & paket dasar
-pkg update -y && pkg upgrade -y
-pkg install -y nodejs-lts git ffmpeg python imagemagick libwebp wget curl
-
-# yt-dlp
-pip install -U yt-dlp
-
-# project
-mkdir bot && cd bot
-npm init -y
-npm i telegraf @whiskeysockets/baileys pino express
-
-# jalankan dengan file .env (Node 20.6+)
-node --env-file=.env index.mjs
-
-# biar nggak mati saat layar mati
-termux-wake-lock`},
-
-{cat:'bot',title:'PM2: Bot Jalan Terus',desc:'Auto-restart, log, dan jalan lagi setelah reboot.',deps:[],install:'npm i -g pm2',code:String.raw`pm2 start index.mjs --name bot          # mulai
-pm2 start index.mjs --name bot --node-args="--env-file=.env"
-pm2 logs bot                            # lihat log
-pm2 restart bot
-pm2 stop bot
-pm2 delete bot
-pm2 list
-pm2 save && pm2 startup                 # jalan otomatis setelah reboot`},
-
-{cat:'bot',title:'Cloudflare Tunnel: Buka ke Internet',desc:'Expose server lokal ke domain tanpa buka port.',deps:[],code:String.raw`# cara cepat (URL acak trycloudflare.com)
-cloudflared tunnel --url http://localhost:3000
-
-# domain sendiri
-cloudflared tunnel login
-cloudflared tunnel create nama-tunnel
-cloudflared tunnel route dns nama-tunnel api.domainkamu.com
-cloudflared tunnel run --url http://localhost:3000 nama-tunnel`},
-
-/* ---------- API KEY GRATIS (daftar sendiri) ---------- */
-{cat:'free',title:'Groq (AI Chat Cepat)',desc:'LLM Llama, Qwen, dll. Free tier. Key: console.groq.com',deps:[],code:String.raw`// Daftar key gratis: https://console.groq.com/keys
-const KEY = process.env.GROQ_KEY;
-
-async function groq(prompt, model = 'llama-3.3-70b-versatile') { // cek nama model terbaru di dokumentasi
-  const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + KEY },
-    body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }] })
-  });
-  const j = await r.json();
-  if (!r.ok) throw new Error(j.error?.message || r.status);
-  return j.choices[0].message.content;
-}
-
-console.log(await groq('Jelaskan REST API dalam 2 kalimat'));`},
-
-{cat:'free',title:'Google Gemini',desc:'AI chat dan vision, free tier. Key: aistudio.google.com',deps:[],code:String.raw`// Daftar key gratis: https://aistudio.google.com/apikey
-const KEY = process.env.GEMINI_KEY;
-
-async function gemini(prompt, model = 'gemini-2.5-flash') { // cek nama model terbaru
-  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': KEY },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-  });
-  const j = await r.json();
-  if (!r.ok) throw new Error(j.error?.message || r.status);
-  return j.candidates[0].content.parts[0].text;
-}
-
-console.log(await gemini('Buatkan 3 nama bot Telegram'));`},
-
-{cat:'free',title:'OpenRouter (Model :free)',desc:'Banyak model gratis lewat satu API. Key: openrouter.ai',deps:[],code:String.raw`// Daftar key gratis: https://openrouter.ai/keys
-// Model gratis berakhiran ":free", daftar lengkap di https://openrouter.ai/models?max_price=0
-const KEY = process.env.OPENROUTER_KEY;
-
-async function openrouter(prompt, model = 'meta-llama/llama-3.3-70b-instruct:free') {
-  const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + KEY },
-    body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }] })
-  });
-  const j = await r.json();
-  if (!r.ok) throw new Error(j.error?.message || r.status);
-  return j.choices[0].message.content;
-}
-
-console.log(await openrouter('Halo!'));`},
-
-{cat:'free',title:'Hugging Face Router',desc:'Chat model open-source lewat endpoint kompatibel OpenAI.',deps:[],code:String.raw`// Daftar token gratis: https://huggingface.co/settings/tokens
-const KEY = process.env.HF_TOKEN;
-
-async function hf(prompt, model = 'meta-llama/Llama-3.1-8B-Instruct') {
-  const r = await fetch('https://router.huggingface.co/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + KEY },
-    body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }] })
-  });
-  const j = await r.json();
-  if (!r.ok) throw new Error(j.error?.message || j.error || r.status);
-  return j.choices[0].message.content;
-}
-
-console.log(await hf('Halo!'));`},
-
-{cat:'free',title:'Cloudflare Workers AI',desc:'LLM dan generate gambar (Flux) di free tier Cloudflare.',deps:[],code:String.raw`// Daftar: dash.cloudflare.com > AI > Workers AI, buat API token + catat Account ID
-const ACCOUNT = process.env.CF_ACCOUNT_ID;
-const TOKEN = process.env.CF_API_TOKEN;
-
-async function cf(model, body) {
-  const r = await fetch('https://api.cloudflare.com/client/v4/accounts/' + ACCOUNT + '/ai/run/' + model, {
-    method: 'POST',
-    headers: { Authorization: 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  const j = await r.json();
-  if (!j.success) throw new Error(JSON.stringify(j.errors));
-  return j.result;
-}
-
-export const chat = async prompt =>
-  (await cf('@cf/meta/llama-3.1-8b-instruct', { messages: [{ role: 'user', content: prompt }] })).response;
-
-export const gambar = async prompt => // hasil base64 JPEG
-  Buffer.from((await cf('@cf/black-forest-labs/flux-1-schnell', { prompt })).image, 'base64');
-
-console.log(await chat('Halo!'));`},
-
-{cat:'free',title:'TMDB (Film & Serial)',desc:'Cari film/serial, poster, rating, bahasa Indonesia. Key: themoviedb.org',deps:[],code:String.raw`// Daftar key gratis: https://www.themoviedb.org/settings/api
-const KEY = process.env.TMDB_KEY;
-
-async function film(q) {
-  const r = await fetch('https://api.themoviedb.org/3/search/movie?language=id-ID&query=' + encodeURIComponent(q) + '&api_key=' + KEY);
-  const { results } = await r.json();
-  return results.slice(0, 5).map(m => ({
-    title: m.title, year: m.release_date?.slice(0, 4), rating: m.vote_average, overview: m.overview,
-    poster: m.poster_path ? 'https://image.tmdb.org/t/p/w500' + m.poster_path : null
-  }));
-}
-
-console.log(await film('Interstellar'));`},
-
-{cat:'free',title:'OMDb (IMDb Data)',desc:'Info film via judul: rating IMDb, sutradara, plot. Key: omdbapi.com',deps:[],code:String.raw`// Daftar key gratis: https://www.omdbapi.com/apikey.aspx
-const KEY = process.env.OMDB_KEY;
-
-async function omdb(judul) {
-  const d = await (await fetch('https://www.omdbapi.com/?plot=short&apikey=' + KEY + '&t=' + encodeURIComponent(judul))).json();
-  if (d.Response === 'False') throw new Error(d.Error);
-  return { title: d.Title, year: d.Year, imdb: d.imdbRating, director: d.Director, actors: d.Actors, plot: d.Plot, poster: d.Poster };
-}
-
-console.log(await omdb('Inception'));`},
-
-{cat:'free',title:'RAWG (Database Game)',desc:'Cari game: rating, rilis, platform, gambar. Key: rawg.io',deps:[],code:String.raw`// Daftar key gratis: https://rawg.io/apidocs
-const KEY = process.env.RAWG_KEY;
-
-async function game(q) {
-  const r = await fetch('https://api.rawg.io/api/games?page_size=5&key=' + KEY + '&search=' + encodeURIComponent(q));
-  const { results } = await r.json();
-  return results.map(g => ({
-    name: g.name, released: g.released, rating: g.rating, image: g.background_image,
-    platforms: (g.platforms || []).map(p => p.platform.name)
-  }));
-}
-
-console.log(await game('hollow knight'));`},
-
-{cat:'free',title:'Pexels (Foto & Video Stok)',desc:'Foto dan video HD gratis pakai. Key: pexels.com/api',deps:[],code:String.raw`// Daftar key gratis: https://www.pexels.com/api/
-const KEY = process.env.PEXELS_KEY;
-
-async function pexels(q, tipe = 'photos') { // photos | videos
-  const url = tipe === 'videos'
-    ? 'https://api.pexels.com/videos/search?per_page=5&query='
-    : 'https://api.pexels.com/v1/search?per_page=5&query=';
-  const j = await (await fetch(url + encodeURIComponent(q), { headers: { Authorization: KEY } })).json();
-  return tipe === 'videos'
-    ? j.videos.map(v => ({ url: v.url, file: v.video_files[0].link, by: v.user.name }))
-    : j.photos.map(p => ({ url: p.url, image: p.src.large2x, by: p.photographer }));
-}
-
-console.log(await pexels('mountain'));`},
-
-{cat:'free',title:'Unsplash',desc:'Foto kualitas tinggi. Key: unsplash.com/developers',deps:[],code:String.raw`// Daftar key gratis: https://unsplash.com/developers
-const KEY = process.env.UNSPLASH_KEY;
-
-async function unsplash(q) {
-  const r = await fetch('https://api.unsplash.com/search/photos?per_page=5&query=' + encodeURIComponent(q), {
-    headers: { Authorization: 'Client-ID ' + KEY }
-  });
-  const { results } = await r.json();
-  return results.map(p => ({ id: p.id, image: p.urls.regular, full: p.urls.full, by: p.user.name, link: p.links.html }));
-}
-
-console.log(await unsplash('sunset'));`},
-
-{cat:'free',title:'Pixabay',desc:'Gambar, ilustrasi, dan video bebas pakai. Key: pixabay.com/api/docs',deps:[],code:String.raw`// Daftar key gratis: https://pixabay.com/api/docs/
-const KEY = process.env.PIXABAY_KEY;
-
-async function pixabay(q, tipe = 'photo') { // photo | illustration | vector
-  const r = await fetch('https://pixabay.com/api/?per_page=5&safesearch=true&key=' + KEY + '&image_type=' + tipe + '&q=' + encodeURIComponent(q));
-  const { hits } = await r.json();
-  return hits.map(h => ({ preview: h.previewURL, image: h.largeImageURL, tags: h.tags, by: h.user }));
-}
-
-console.log(await pixabay('kucing'));`},
-
-{cat:'free',title:'OpenWeatherMap',desc:'Cuaca saat ini per kota, bahasa Indonesia. Key: openweathermap.org',deps:[],code:String.raw`// Daftar key gratis: https://openweathermap.org/api
-const KEY = process.env.OWM_KEY;
-
-async function owm(kota) {
-  const r = await fetch('https://api.openweathermap.org/data/2.5/weather?units=metric&lang=id&appid=' + KEY + '&q=' + encodeURIComponent(kota));
-  const d = await r.json();
-  if (d.cod !== 200) throw new Error(d.message);
-  return { kota: d.name, suhu: d.main.temp, terasa: d.main.feels_like, kelembapan: d.main.humidity, cuaca: d.weather[0].description, angin: d.wind.speed };
-}
-
-console.log(await owm('Surabaya'));`},
-
-{cat:'free',title:'NewsAPI',desc:'Headline berita dunia dan pencarian artikel. Key: newsapi.org',deps:[],code:String.raw`// Daftar key gratis: https://newsapi.org/register (free plan: untuk development)
-const KEY = process.env.NEWSAPI_KEY;
-
-async function news(q, bahasa = 'id') {
-  const r = await fetch('https://newsapi.org/v2/everything?pageSize=5&sortBy=publishedAt&language=' + bahasa + '&q=' + encodeURIComponent(q) + '&apiKey=' + KEY);
-  const j = await r.json();
-  if (j.status !== 'ok') throw new Error(j.message);
-  return j.articles.map(a => ({ title: a.title, source: a.source.name, url: a.url, image: a.urlToImage, date: a.publishedAt }));
-}
-
-console.log(await news('teknologi'));`},
-
-{cat:'free',title:'YouTube Data API',desc:'Cari video dan info channel resmi. Key: Google Cloud Console.',deps:[],code:String.raw`// Daftar key gratis: https://console.cloud.google.com > APIs & Services > YouTube Data API v3
-const KEY = process.env.YT_KEY;
-
-async function youtube(q) {
-  const r = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&key=' + KEY + '&q=' + encodeURIComponent(q));
-  const j = await r.json();
-  if (j.error) throw new Error(j.error.message);
-  return j.items.map(v => ({
-    id: v.id.videoId, title: v.snippet.title, channel: v.snippet.channelTitle,
-    thumb: v.snippet.thumbnails.high.url, url: 'https://youtu.be/' + v.id.videoId
-  }));
-}
-
-console.log(await youtube('lofi'));`},
-
-{cat:'free',title:'ImgBB (Upload Gambar)',desc:'Upload gambar, dapat link permanen. Key: api.imgbb.com',deps:[],code:String.raw`import { readFileSync } from 'node:fs';
-
-// Daftar key gratis: https://api.imgbb.com/
-const KEY = process.env.IMGBB_KEY;
-
-async function imgbb(path) {
-  const body = new URLSearchParams();
-  body.append('image', readFileSync(path).toString('base64'));
-  const r = await fetch('https://api.imgbb.com/1/upload?key=' + KEY, { method: 'POST', body });
-  const j = await r.json();
-  if (!j.success) throw new Error(j.error?.message || 'Upload gagal');
-  return { url: j.data.url, display: j.data.display_url, delete: j.data.delete_url };
-}
-
-console.log(await imgbb('./foto.jpg'));`},
-
-{cat:'free',title:'Spotify Web API',desc:'Cari lagu, artis, dan album resmi. Key: developer.spotify.com',deps:[],code:String.raw`// Daftar (client id + secret): https://developer.spotify.com/dashboard
-const ID = process.env.SPOTIFY_ID;
-const SECRET = process.env.SPOTIFY_SECRET;
-
-async function token() {
-  const r = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: { Authorization: 'Basic ' + Buffer.from(ID + ':' + SECRET).toString('base64'), 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'grant_type=client_credentials'
-  });
-  return (await r.json()).access_token;
-}
-
-async function spotifySearch(q) {
-  const r = await fetch('https://api.spotify.com/v1/search?type=track&limit=5&q=' + encodeURIComponent(q), {
-    headers: { Authorization: 'Bearer ' + await token() }
-  });
-  return (await r.json()).tracks.items.map(t => ({
-    title: t.name, artist: t.artists.map(a => a.name).join(', '), album: t.album.name,
-    cover: t.album.images[0].url, preview: t.preview_url, url: t.external_urls.spotify
-  }));
-}
-
-console.log(await spotifySearch('hindia'));`},
-
-{cat:'free',title:'Genius (Cari Lagu)',desc:'Cari lagu dan link halaman liriknya. API tidak kasih teks lirik.',deps:[],code:String.raw`// Daftar token gratis: https://genius.com/api-clients
-const KEY = process.env.GENIUS_TOKEN;
-
-async function genius(q) {
-  const r = await fetch('https://api.genius.com/search?q=' + encodeURIComponent(q), { headers: { Authorization: 'Bearer ' + KEY } });
-  const j = await r.json();
-  return j.response.hits.slice(0, 5).map(h => ({ title: h.result.full_title, url: h.result.url, art: h.result.song_art_image_url }));
-}
-
-console.log(await genius('Bohemian Rhapsody'));`},
-
-{cat:'free',title:'VirusTotal (Cek URL)',desc:'Hasil scan URL dari puluhan antivirus. Key: virustotal.com',deps:[],code:String.raw`// Daftar key gratis: https://www.virustotal.com/gui/join-us
-const KEY = process.env.VT_KEY;
-
-async function cekUrl(url) {
-  const id = Buffer.from(url).toString('base64url'); // tanpa padding
-  const r = await fetch('https://www.virustotal.com/api/v3/urls/' + id, { headers: { 'x-apikey': KEY } });
-  const j = await r.json();
-  if (j.error) throw new Error(j.error.message); // NotFoundError = belum pernah discan
-  return j.data.attributes.last_analysis_stats; // { malicious, suspicious, harmless, ... }
-}
-
-console.log(await cekUrl('https://example.com'));`},
-
-{cat:'free',title:'Remove.bg (Hapus Background)',desc:'Hapus background foto otomatis. 50 preview/bulan gratis.',deps:[],code:String.raw`import { writeFileSync } from 'node:fs';
-
-// Daftar key gratis: https://www.remove.bg/api
-const KEY = process.env.REMOVEBG_KEY;
-
-async function removebg(imageUrl) {
-  const f = new FormData();
-  f.append('image_url', imageUrl);
-  f.append('size', 'auto');
-  const r = await fetch('https://api.remove.bg/v1.0/removebg', { method: 'POST', headers: { 'X-Api-Key': KEY }, body: f });
-  if (!r.ok) throw new Error('Gagal: ' + r.status);
-  return Buffer.from(await r.arrayBuffer()); // PNG transparan
-}
-
-writeFileSync('hasil.png', await removebg('https://example.com/foto.jpg'));`},
-
-{cat:'free',title:'IPinfo',desc:'Lokasi, ASN, dan perusahaan dari IP. Key: ipinfo.io',deps:[],code:String.raw`// Daftar token gratis: https://ipinfo.io/signup
-const KEY = process.env.IPINFO_TOKEN;
-
-async function ipinfoPro(ip = '') {
-  const r = await fetch('https://ipinfo.io/' + ip + '/json?token=' + KEY);
-  return r.json(); // ip, city, region, country, loc, org, timezone
-}
-
-console.log(await ipinfoPro('8.8.8.8'));`},
-
-/* ---------- API PUBLIK TAMBAHAN (tanpa key) ---------- */
-{cat:'api',title:'Alpha Vantage (key demo)',desc:'Harga saham. Key "demo" resmi, hanya jalan untuk simbol IBM.',deps:[],code:String.raw`async function saham(symbol = 'IBM', apikey = 'demo') {
-  // daftar key gratis buat simbol lain: https://www.alphavantage.co/support/#api-key
-  const r = await fetch('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apikey);
-  const q = (await r.json())['Global Quote'];
-  return { symbol: q['01. symbol'], harga: q['05. price'], perubahan: q['10. change percent'], volume: q['06. volume'] };
-}
-
-console.log(await saham());`},
-
-{cat:'api',title:'TheMealDB (Resep)',desc:'Resep masakan, bahan, dan video. Key uji "1" resmi.',deps:[],code:String.raw`async function resep(nama) {
-  const r = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=' + encodeURIComponent(nama));
-  const { meals } = await r.json();
-  if (!meals) throw new Error('Resep tidak ada');
-  return meals.map(m => ({
-    nama: m.strMeal, kategori: m.strCategory, asal: m.strArea, gambar: m.strMealThumb,
-    cara: m.strInstructions, video: m.strYoutube,
-    bahan: Array.from({ length: 20 }, (_, i) => [m['strIngredient' + (i + 1)], m['strMeasure' + (i + 1)]])
-      .filter(([b]) => b).map(([b, u]) => (u + ' ' + b).trim())
-  }));
-}
-
-console.log(await resep('Arrabiata'));`},
-
-{cat:'api',title:'TheCocktailDB',desc:'Resep minuman dan mocktail. Key uji "1" resmi.',deps:[],code:String.raw`async function minuman(nama) {
-  const r = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=' + encodeURIComponent(nama));
-  const { drinks } = await r.json();
-  if (!drinks) throw new Error('Tidak ada');
-  return drinks.map(d => ({ nama: d.strDrink, alkohol: d.strAlcoholic, gambar: d.strDrinkThumb, cara: d.strInstructions }));
-}
-
-console.log(await minuman('margarita'));`},
-
-{cat:'api',title:'Open Food Facts',desc:'Info produk dari barcode: nama, merek, gizi, Nutri-Score.',deps:[],code:String.raw`async function barcode(kode) {
-  const r = await fetch('https://world.openfoodfacts.org/api/v2/product/' + kode + '.json');
-  const j = await r.json();
-  if (j.status !== 1) throw new Error('Produk tidak ada');
-  const p = j.product;
-  return { nama: p.product_name, merek: p.brands, gambar: p.image_front_url, nutriscore: p.nutriscore_grade, gizi: p.nutriments };
-}
-
-console.log(await barcode('737628064502'));`},
-
-{cat:'api',title:'Frankfurter (Kurs)',desc:'Kurs dari Bank Sentral Eropa, termasuk histori.',deps:[],code:String.raw`async function kursEcb(dari = 'USD', ke = 'IDR', tanggal = 'latest') {
-  const r = await fetch('https://api.frankfurter.app/' + tanggal + '?from=' + dari + '&to=' + ke);
-  return r.json(); // { amount, base, date, rates }
-}
-
-console.log(await kursEcb());
-console.log(await kursEcb('EUR', 'IDR', '2024-01-02'));`},
-
-{cat:'api',title:'Hari Libur Dunia (Nager)',desc:'Libur nasional hampir semua negara, per tahun.',deps:[],code:String.raw`async function liburNegara(tahun = 2026, kodeNegara = 'ID') {
-  const r = await fetch('https://date.nager.at/api/v3/PublicHolidays/' + tahun + '/' + kodeNegara);
-  return (await r.json()).map(h => ({ tanggal: h.date, nama: h.localName, inggris: h.name }));
-}
-
-console.log(await liburNegara(2026, 'ID'));`},
-
-{cat:'api',title:'Zona Waktu Dunia',desc:'Jam sekarang di zona waktu mana pun.',deps:[],code:String.raw`async function jam(zona = 'Asia/Jakarta') {
-  const d = await (await fetch('https://worldtimeapi.org/api/timezone/' + zona)).json();
-  return { zona: d.timezone, waktu: d.datetime, utc: d.utc_offset, hari: d.day_of_week };
-}
-
-console.log(await jam('Asia/Tokyo'));`},
-
-{cat:'api',title:'Wikipedia Search',desc:'Cari artikel Wikipedia berdasarkan kata kunci.',deps:[],code:String.raw`async function wikiCari(q, bahasa = 'id') {
-  const r = await fetch('https://' + bahasa + '.wikipedia.org/w/api.php?action=query&list=search&format=json&srlimit=5&origin=*&srsearch=' + encodeURIComponent(q));
-  const j = await r.json();
-  return j.query.search.map(s => ({
-    judul: s.title, cuplikan: s.snippet.replace(/<[^>]+>/g, ''),
-    url: 'https://' + bahasa + '.wikipedia.org/wiki/' + encodeURIComponent(s.title.replace(/ /g, '_'))
-  }));
-}
-
-console.log(await wikiCari('wayang kulit'));`},
-
-{cat:'api',title:'DuckDuckGo Instant Answer',desc:'Jawaban singkat, definisi, dan topik terkait tanpa key.',deps:[],code:String.raw`async function ddg(q) {
-  const j = await (await fetch('https://api.duckduckgo.com/?format=json&no_html=1&skip_disambig=1&q=' + encodeURIComponent(q))).json();
-  return { judul: j.Heading, ringkasan: j.AbstractText, sumber: j.AbstractURL, gambar: j.Image ? 'https://duckduckgo.com' + j.Image : null, terkait: j.RelatedTopics.slice(0, 5).map(t => t.Text) };
-}
-
-console.log(await ddg('Node.js'));`},
-
-{cat:'api',title:'Wayback Machine',desc:'Cek snapshot arsip dari URL.',deps:[],code:String.raw`async function wayback(url) {
-  const j = await (await fetch('https://archive.org/wayback/available?url=' + encodeURIComponent(url))).json();
-  const s = j.archived_snapshots.closest;
-  return s ? { url: s.url, waktu: s.timestamp, status: s.status } : null;
-}
-
-console.log(await wayback('example.com'));`},
-
-{cat:'api',title:'NASA Image Library',desc:'Cari foto dan video resmi NASA, tanpa key.',deps:[],code:String.raw`async function nasa(q, tipe = 'image') { // image | video | audio
-  const r = await fetch('https://images-api.nasa.gov/search?media_type=' + tipe + '&q=' + encodeURIComponent(q));
-  const { collection } = await r.json();
-  return collection.items.slice(0, 5).map(i => ({ judul: i.data[0].title, deskripsi: i.data[0].description, tanggal: i.data[0].date_created, thumb: i.links?.[0]?.href }));
-}
-
-console.log(await nasa('apollo 11'));`},
-
-{cat:'api',title:'BMKG Prakiraan Cuaca',desc:'Prakiraan cuaca resmi per kode wilayah (adm4) kelurahan/desa.',deps:[],code:String.raw`// kode adm4 dari wilayah Indonesia (Kemendagri), mis. 31.71.03.1001
-async function cuacaBmkg(adm4 = '31.71.03.1001') {
-  const r = await fetch('https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=' + adm4);
-  const j = await r.json();
-  const hari = j.data[0].cuaca.flat();
-  return {
-    lokasi: j.lokasi.desa + ', ' + j.lokasi.kecamatan + ', ' + j.lokasi.kotkab,
-    prakiraan: hari.slice(0, 8).map(c => ({ waktu: c.local_datetime, suhu: c.t, cuaca: c.weather_desc, kelembapan: c.hu, angin: c.ws }))
-  };
-}
-
-console.log(await cuacaBmkg());`},
-
-{cat:'api',title:'BMKG Gempa M5+ dan Dirasakan',desc:'Daftar gempa M5.0+ terbaru dan gempa yang dirasakan.',deps:[],code:String.raw`async function gempaList(jenis = 'gempaterkini') { // gempaterkini (M5+) | gempadirasakan | autogempa
-  const j = await (await fetch('https://data.bmkg.go.id/DataMKG/TEWS/' + jenis + '.json')).json();
-  const list = [].concat(j.Infogempa.gempa);
-  return list.map(g => ({ waktu: g.Tanggal + ' ' + g.Jam, magnitudo: g.Magnitude, kedalaman: g.Kedalaman, wilayah: g.Wilayah, dirasakan: g.Dirasakan }));
-}
-
-console.log(await gempaList());`},
-
-{cat:'api',title:'USGS Gempa Dunia',desc:'Gempa seluruh dunia per jam, hari, atau minggu.',deps:[],code:String.raw`async function gempaDunia(skala = 'all_hour') { // all_hour | all_day | 4.5_week | significant_month
-  const j = await (await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/' + skala + '.geojson')).json();
-  return j.features.map(f => ({ mag: f.properties.mag, tempat: f.properties.place, waktu: new Date(f.properties.time).toISOString(), url: f.properties.url }));
-}
-
-console.log(await gempaDunia('4.5_week'));`},
-
-{cat:'api',title:'Alkitab (bible-api)',desc:'Ambil ayat Alkitab per referensi, beberapa terjemahan.',deps:[],code:String.raw`async function ayat(ref = 'john 3:16', terjemahan = 'web') {
-  const j = await (await fetch('https://bible-api.com/' + encodeURIComponent(ref) + '?translation=' + terjemahan)).json();
-  return { referensi: j.reference, teks: j.text.trim() };
-}
-
-console.log(await ayat('mazmur 23:1-3'));`},
-
-{cat:'dev',title:'GitHub Search Repo',desc:'Cari repository berdasarkan kata kunci, urut bintang.',deps:[],code:String.raw`async function ghCari(q, limit = 5) {
-  const r = await fetch('https://api.github.com/search/repositories?sort=stars&per_page=' + limit + '&q=' + encodeURIComponent(q), { headers: { 'User-Agent': 'scraper' } });
-  const { items } = await r.json();
-  return items.map(x => ({ nama: x.full_name, bintang: x.stargazers_count, bahasa: x.language, desc: x.description, url: x.html_url }));
-}
-
-console.log(await ghCari('telegram bot nodejs'));`},
-
-{cat:'dev',title:'Hacker News',desc:'Top stories dan detailnya via Firebase API.',deps:[],code:String.raw`async function hn(limit = 10) {
-  const ids = await (await fetch('https://hacker-news.firebaseio.com/v0/topstories.json')).json();
-  return Promise.all(ids.slice(0, limit).map(async id => {
-    const s = await (await fetch('https://hacker-news.firebaseio.com/v0/item/' + id + '.json')).json();
-    return { judul: s.title, skor: s.score, url: s.url, komentar: s.descendants, oleh: s.by };
-  }));
-}
-
-console.log(await hn(5));`},
-
-{cat:'dev',title:'Data Palsu (JSONPlaceholder)',desc:'REST API palsu untuk uji coba frontend: post, user, todo.',deps:[],code:String.raw`const BASE = 'https://jsonplaceholder.typicode.com';
-
-const posts = await (await fetch(BASE + '/posts?_limit=5')).json();
-const user = await (await fetch(BASE + '/users/1')).json();
-
-// POST (tidak benar-benar tersimpan)
-const baru = await (await fetch(BASE + '/posts', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ title: 'Halo', body: 'Isi', userId: 1 })
-})).json();
-
-console.log(posts, user, baru);
-// resource lain: /comments /albums /photos /todos`},
-
-{cat:'dev',title:'httpbin (Uji Request)',desc:'Cek header, IP, status code, delay, dan redirect.',deps:[],code:String.raw`const get = await (await fetch('https://httpbin.org/get?a=1')).json();
-const hdr = await (await fetch('https://httpbin.org/headers')).json();
-const post = await (await fetch('https://httpbin.org/post', { method: 'POST', body: 'halo' })).json();
-const st = await fetch('https://httpbin.org/status/418');       // status apa saja
-const lambat = await fetch('https://httpbin.org/delay/3');       // delay 3 detik
-const ua = await (await fetch('https://httpbin.org/user-agent')).json();
-
-console.log(get.origin, hdr.headers, post.data, st.status, ua);`},
-
-{cat:'dev',title:'Random User Generator',desc:'Data pengguna acak: nama, email, foto, alamat.',deps:[],code:String.raw`async function randomUser(jumlah = 5) {
-  const { results } = await (await fetch('https://randomuser.me/api/?results=' + jumlah)).json();
-  return results.map(u => ({
-    nama: u.name.first + ' ' + u.name.last, email: u.email, hp: u.phone,
-    foto: u.picture.large, kota: u.location.city, negara: u.location.country
-  }));
-}
-
-console.log(await randomUser(3));`},
-
-{cat:'dev',title:'Color API',desc:'Info warna dari HEX: nama, RGB, HSL, dan skema warna.',deps:[],code:String.raw`async function warna(hex = 'ff7a1a') {
-  const d = await (await fetch('https://www.thecolorapi.com/id?hex=' + hex.replace('#', ''))).json();
-  return { nama: d.name.value, hex: d.hex.value, rgb: d.rgb.value, hsl: d.hsl.value, gambar: d.image.bare };
-}
-
-async function skema(hex = 'ff7a1a', mode = 'analogic', jumlah = 5) { // monochrome | analogic | complement | triad | quad
-  const d = await (await fetch('https://www.thecolorapi.com/scheme?hex=' + hex + '&mode=' + mode + '&count=' + jumlah)).json();
-  return d.colors.map(c => c.hex.value);
-}
-
-console.log(await warna(), await skema());`},
-
-{cat:'tools',title:'Placeholder Image (Picsum)',desc:'Gambar acak sebagai placeholder, ukuran bebas.',deps:[],code:String.raw`function picsum(w = 800, h = 600, { seed, blur, grayscale } = {}) {
-  let url = 'https://picsum.photos/' + (seed ? 'seed/' + seed + '/' : '') + w + '/' + h;
-  const q = [];
-  if (grayscale) q.push('grayscale');
-  if (blur) q.push('blur=' + blur);
-  return url + (q.length ? '?' + q.join('&') : '');
-}
-
-console.log(picsum(1080, 720, { seed: 'bot' }));`},
-
-{cat:'fun',title:'Trivia Quiz',desc:'Soal pilihan ganda acak dari Open Trivia DB.',deps:[],code:String.raw`const dec = s => s.replace(/&quot;/g, '"').replace(/&#039;/g, "'").replace(/&amp;/g, '&');
-
-async function trivia(jumlah = 5) {
-  const { results } = await (await fetch('https://opentdb.com/api.php?type=multiple&amount=' + jumlah)).json();
-  return results.map(q => ({
-    kategori: q.category, tingkat: q.difficulty, soal: dec(q.question),
-    jawaban: dec(q.correct_answer),
-    pilihan: [...q.incorrect_answers, q.correct_answer].map(dec).sort(() => Math.random() - 0.5)
-  }));
-}
-
-console.log(await trivia(2));`},
-
-{cat:'fun',title:'Rick and Morty',desc:'Karakter dan episode serial Rick and Morty.',deps:[],code:String.raw`async function rm(nama) {
-  const r = await fetch('https://rickandmortyapi.com/api/character/?name=' + encodeURIComponent(nama));
-  const j = await r.json();
-  if (j.error) throw new Error(j.error);
-  return j.results.slice(0, 5).map(c => ({ nama: c.name, status: c.status, spesies: c.species, asal: c.origin.name, gambar: c.image }));
-}
-
-console.log(await rm('rick'));`},
-
-{cat:'fun',title:'Studio Ghibli',desc:'Daftar film Ghibli: sutradara, tahun, skor, sinopsis.',deps:[],code:String.raw`async function ghibli() {
-  const list = await (await fetch('https://ghibliapi.vercel.app/films')).json();
-  return list.map(f => ({ judul: f.title, jepang: f.original_title, tahun: f.release_date, sutradara: f.director, skor: f.rt_score, poster: f.image, sinopsis: f.description }));
-}
-
-console.log(await ghibli());`},
-
-{cat:'fun',title:'Neko / Anime Pic (nekos.best)',desc:'Gambar dan GIF anime SFW dengan nama artis.',deps:[],code:String.raw`async function nekos(tipe = 'neko') { // neko | waifu | kitsune | hug | pat | smile | dance ...
-  const { results } = await (await fetch('https://nekos.best/api/v2/' + tipe)).json();
-  return results.map(r => ({ url: r.url, artis: r.artist_name, sumber: r.source_url, anime: r.anime_name }));
-}
-
-console.log(await nekos('neko'));`},
-
-{cat:'fun',title:'Posisi ISS',desc:'Lokasi Stasiun Luar Angkasa Internasional real-time.',deps:[],code:String.raw`async function iss() {
-  const d = await (await fetch('https://api.wheretheiss.at/v1/satellites/25544')).json();
-  return { lat: d.latitude, lon: d.longitude, ketinggianKm: d.altitude, kecepatanKmJam: d.velocity, peta: 'https://www.google.com/maps?q=' + d.latitude + ',' + d.longitude };
-}
-
-console.log(await iss());`},
-
-{cat:'fun',title:'Tebak Umur dari Nama',desc:'Prediksi umur, gender, dan negara dari sebuah nama.',deps:[],code:String.raw`async function tebak(nama) {
-  const [a, g, n] = await Promise.all([
-    fetch('https://api.agify.io?name=' + nama).then(r => r.json()),
-    fetch('https://api.genderize.io?name=' + nama).then(r => r.json()),
-    fetch('https://api.nationalize.io?name=' + nama).then(r => r.json())
-  ]);
-  return { nama, umur: a.age, gender: g.gender, peluang: g.probability, negara: n.country.slice(0, 3) };
-}
-
-console.log(await tebak('budi'));`},
-
-{cat:'fun',title:'Chuck Norris dan Advice',desc:'Lelucon Chuck Norris dan nasihat acak.',deps:[],code:String.raw`async function chuck() {
-  return (await (await fetch('https://api.chucknorris.io/jokes/random')).json()).value;
-}
-
-async function nasihat() {
-  return (await (await fetch('https://api.adviceslip.com/advice')).json()).slip.advice;
-}
-
-console.log(await chuck());
-console.log(await nasihat());`}
-];
-
-const $=id=>document.getElementById(id);
-let cat='all',term='';
-
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function hl(code){
-  return esc(code).replace(/(\/\/.*$)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*")|\b(const|let|var|async|await|function|return|import|from|if|throw|new|of|in|try|catch)\b|\b(\d+(?:\.\d+)?)\b/gm,
-    (m,c,s,k,n)=>c?'<span class="cm">'+c+'</span>':s?'<span class="st">'+s+'</span>':k?'<span class="kw">'+k+'</span>':'<span class="nu">'+n+'</span>');
-}
-function toast(){const el=$('toast');el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),1200)}
-async function copy(text,btn){
-  try{await navigator.clipboard.writeText(text)}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
-  toast();
-  if(btn){const o=btn.textContent;btn.textContent='OK';setTimeout(()=>{btn.textContent=o},1000)}
-}
-function installOf(s){return s.install||(s.deps.length?'npm i '+s.deps.join(' '):'')}
-
-S.forEach((s,i)=>s.id=i);
-function renderNav(){
-  const c={all:S.length};S.forEach(s=>c[s.cat]=(c[s.cat]||0)+1);
-  $('nav').innerHTML=CATS.map(([k,v])=>'<button class="b'+(k===cat?' on':'')+'" data-c="'+k+'">'+v+' <em>'+(c[k]||0)+'</em></button>').join('');
-}
-function render(){
-  const t=term.toLowerCase();
-  const list=S.filter(s=>(cat==='all'||s.cat===cat)&&(!t||(s.title+' '+s.desc+' '+s.deps.join(' ')).toLowerCase().includes(t)));
-  $('list').innerHTML=list.map(s=>{
-    const ins=installOf(s);
-    return '<div class="it box" data-id="'+s.id+'" title="'+s.desc.replace(/"/g,'&quot;')+'"><div class="row"><span class="nm">'+s.title+'</span>'+
-      '<button class="b cp" data-copy="'+s.id+'">Salin</button></div>'+
-      '<div class="body">'+(ins?'<div class="inst"><span>$ '+esc(ins)+'</span><button class="b cp" data-inst="'+s.id+'">Salin</button></div>':'')+
-      '<pre><code></code></pre></div></div>';
-  }).join('')||'<div class="empty">Tidak ada hasil</div>';
-  renderNav();
-}
-$('list').addEventListener('click',e=>{
-  const cp=e.target.closest('[data-copy]');
-  if(cp){e.stopPropagation();copy(S[cp.dataset.copy].code,cp);return}
-  const ci=e.target.closest('[data-inst]');
-  if(ci){copy(installOf(S[ci.dataset.inst]),ci);return}
-  if(e.target.closest('.body'))return;
-  const it=e.target.closest('.it');
-  if(it){
-    const code=it.querySelector('code');
-    if(!code.innerHTML)code.innerHTML=hl(S[it.dataset.id].code);
-    it.classList.toggle('open');
-  }
-});
-(function(){const n=$('nav');let d=false,x=0,sl=0,moved=false;
-n.addEventListener('mousedown',e=>{d=true;moved=false;x=e.pageX;sl=n.scrollLeft});
-window.addEventListener('mouseup',()=>{d=false;n.classList.remove('drag')});
-window.addEventListener('mousemove',e=>{if(!d)return;const dx=e.pageX-x;if(Math.abs(dx)>4){moved=true;n.classList.add('drag')}n.scrollLeft=sl-dx});
-n.addEventListener('click',e=>{if(moved){e.stopImmediatePropagation();moved=false}},true);
-n.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){n.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});})();
-$('nav').addEventListener('click',e=>{const b=e.target.closest('.b');if(!b)return;cat=b.dataset.c;render()});
-$('q').addEventListener('input',e=>{term=e.target.value.trim();render()});
-document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement!==$('q')){e.preventDefault();$('q').focus()}});
-$('logo').textContent=S.length+' FITUR';
-render();
 </script>
 </body>
 </html>
