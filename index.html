@@ -1,995 +1,2301 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Konseling: Aplikasi Presentasi BK Interaktif</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        sage: {
-                            50: '#F4F7F4',
-                            100: '#E3EAE3',
-                            200: '#C7D6C7',
-                            500: '#7FA17F',
-                            600: '#5F7E5F',
-                            700: '#4A624A',
-                            800: '#384B38',
-                        },
-                        softblue: {
-                            50: '#F0F5FA',
-                            100: '#D9E6F2',
-                            500: '#4B88BE',
-                            600: '#3A6C97',
-                        },
-                        cream: '#FAF8F5'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .fade-in {
-            animation: fadeIn 0.35s ease-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Custom scrollbar for clean Swiss look */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F4F7F4;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #C7D6C7;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #7FA17F;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#075e54">
+<title>WhatsApp Clone</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background: #0b141a; height: 100vh; overflow: hidden; color: #e9edef; }
+.hidden { display: none !important; }
+.page { height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 500px; margin: 0 auto; background: #111b21; position: relative; }
+
+/* AUTH */
+.auth-page { background: linear-gradient(135deg, #075e54 0%, #128c7e 50%, #25d366 100%); display: flex; align-items: center; justify-content: center; padding: 20px; height: 100vh; position: relative; overflow: hidden; }
+.auth-box { background: #fff; border-radius: 24px; padding: 36px 28px; width: 100%; max-width: 420px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.4); position: relative; z-index: 1; color: #111b21; max-height: 90vh; overflow-y: auto; }
+.auth-box .logo { width: 80px; height: 80px; margin: 0 auto 16px; background: linear-gradient(135deg, #25d366, #128c7e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 8px 20px rgba(37,211,102,.3); }
+.auth-box h1 { font-size: 22px; color: #075e54; margin-bottom: 8px; font-weight: 700; }
+.auth-box .sub { font-size: 14px; color: #667781; margin-bottom: 28px; line-height: 1.5; }
+.phone-input { display: flex; gap: 8px; margin-bottom: 16px; }
+.phone-input select { padding: 14px 10px; border: 1.5px solid #e0e0e0; border-radius: 12px; font-size: 15px; background: #f8f9fa; color: #111b21; font-weight: 600; }
+.phone-input input { flex: 1; padding: 14px; border: 1.5px solid #e0e0e0; border-radius: 12px; font-size: 16px; min-width: 0; background: #f8f9fa; color: #111b21; }
+.phone-input input:focus, .phone-input select:focus { outline: none; border-color: #25d366; }
+.auth-box button { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(135deg, #25d366, #128c7e); color: white; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 12px rgba(37,211,102,.3); }
+.auth-box button:active { transform: scale(0.98); }
+.auth-box button:disabled { opacity: .6; }
+.auth-box .msg { margin-top: 14px; font-size: 13px; color: #d32f2f; min-height: 18px; line-height: 1.4; }
+.auth-box .msg.success { color: #25d366; }
+.auth-box .footer-link { margin-top: 22px; font-size: 13px; color: #667781; }
+.auth-box .footer-link a { color: #128c7e; text-decoration: none; cursor: pointer; font-weight: 600; }
+.otp-field { width: 100%; padding: 18px; font-size: 32px; letter-spacing: 14px; text-align: center; border: 2px solid #e0e0e0; border-radius: 14px; margin-bottom: 18px; font-weight: 700; color: #075e54; background: #f8f9fa; font-family: 'Courier New', monospace; }
+.otp-field:focus { outline: none; border-color: #25d366; }
+.link-btn { background: transparent !important; color: #128c7e !important; font-size: 14px !important; padding: 8px !important; box-shadow: none !important; }
+
+/* OTP NOTIF */
+.otp-notif { position: fixed; top: 16px; left: 50%; transform: translateX(-50%) translateY(-200%); background: linear-gradient(135deg, #1a73e8, #0d47a1); color: white; padding: 16px 20px; border-radius: 16px; width: calc(100% - 32px); max-width: 400px; box-shadow: 0 12px 40px rgba(0,0,0,.6); z-index: 9999; transition: transform .4s cubic-bezier(.34,1.56,.64,1); display: flex; gap: 12px; align-items: flex-start; }
+.otp-notif.show { transform: translateX(-50%) translateY(0); }
+.otp-notif .icon { font-size: 28px; flex-shrink: 0; }
+.otp-notif .content { flex: 1; }
+.otp-notif .content b { display: block; font-size: 14px; margin-bottom: 4px; }
+.otp-notif .content p { font-size: 13px; line-height: 1.4; opacity: .9; margin-bottom: 6px; }
+.otp-notif .content .code { font-size: 24px; font-weight: 800; letter-spacing: 6px; font-family: 'Courier New', monospace; background: rgba(255,255,255,.15); padding: 8px 12px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+.otp-notif .close { background: transparent; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; opacity: .7; }
+
+/* BANNED */
+.banned-box { background: #ffebee; border: 2px solid #d32f2f; border-radius: 14px; padding: 18px; margin-top: 16px; text-align: left; color: #b71c1c; }
+.banned-box h3 { font-size: 16px; margin-bottom: 8px; }
+.banned-box p { font-size: 13px; line-height: 1.5; margin-bottom: 8px; }
+.banned-box textarea { width: 100%; padding: 12px; border: 1.5px solid #d32f2f; border-radius: 10px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; background: white; color: #111b21; }
+
+/* APP */
+.app-header { background: #202c33; color: #e9edef; padding: 14px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; border-bottom: 1px solid #2a3942; }
+.app-header h1 { font-size: 20px; flex: 1; font-weight: 600; color: #25d366; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-header button { background: transparent; border: none; color: #aebac1; font-size: 22px; cursor: pointer; padding: 6px 8px; border-radius: 50%; }
+.app-header button:active { background: #2a3942; }
+.header-actions { display: flex; gap: 2px; }
+.status { font-size: 12px; color: #8696a0; white-space: nowrap; }
+
+.search-bar { padding: 10px 12px; background: #111b21; border-bottom: 1px solid #2a3942; flex-shrink: 0; }
+.search-bar input { width: 100%; padding: 12px 16px; border: none; background: #202c33; border-radius: 24px; font-size: 14px; color: #e9edef; }
+.search-bar input::placeholder { color: #8696a0; }
+.search-bar input:focus { outline: none; }
+
+.chat-list { flex: 1; overflow-y: auto; }
+.chat-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #1f2c33; cursor: pointer; }
+.chat-item:active { background: #202c33; }
+.avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #25d366, #128c7e); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; flex-shrink: 0; position: relative; }
+.avatar.group-avatar { background: linear-gradient(135deg, #ff9800, #e65100); }
+.avatar.online::after { content: ''; position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; background: #25d366; border: 2px solid #111b21; border-radius: 50%; }
+.chat-info { flex: 1; min-width: 0; }
+.chat-top { display: flex; justify-content: space-between; align-items: baseline; }
+.chat-top b { font-size: 15px; color: #e9edef; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+.time { font-size: 12px; color: #8696a0; flex-shrink: 0; }
+.chat-preview { font-size: 13px; color: #8696a0; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.empty { text-align: center; color: #8696a0; padding: 60px 20px; font-size: 14px; }
+
+/* STATUS */
+.status-section-title { padding: 14px 16px 8px; font-size: 13px; color: #8696a0; font-weight: 600; text-transform: uppercase; }
+.status-my { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #1f2c33; }
+.status-ring { padding: 3px; border-radius: 50%; background: linear-gradient(45deg, #25d366, #128c7e, #25d366); display: inline-block; }
+.status-ring .avatar { border: 3px solid #111b21; }
+.status-my .avatar .add-badge { position: absolute; bottom: -2px; right: -2px; width: 22px; height: 22px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; border: 2px solid #111b21; color: white; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-box { background: #202c33; border-radius: 16px; padding: 20px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; color: #e9edef; }
+.modal-box h2 { font-size: 18px; margin-bottom: 16px; color: #25d366; }
+.modal-box input[type="text"] { width: 100%; padding: 12px; background: #2a3942; border: none; border-radius: 10px; color: #e9edef; font-size: 15px; margin-bottom: 12px; }
+.modal-box input[type="text"]:focus { outline: 2px solid #25d366; }
+.modal-box textarea { width: 100%; min-height: 100px; padding: 12px; background: #2a3942; border: none; border-radius: 10px; color: #e9edef; font-size: 15px; font-family: inherit; resize: vertical; }
+.modal-box textarea:focus { outline: 2px solid #25d366; }
+.modal-box .actions { display: flex; gap: 8px; margin-top: 12px; }
+.modal-box .actions button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px; }
+.modal-box .actions .primary { background: #25d366; color: white; }
+.modal-box .actions .secondary { background: #2a3942; color: #e9edef; }
+.status-colors { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+.status-color { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+.status-color.selected { border-color: #25d366; }
+
+/* GROUP MEMBER PICKER */
+.member-list { max-height: 250px; overflow-y: auto; margin-bottom: 12px; border: 1px solid #2a3942; border-radius: 10px; }
+.member-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid #2a3942; cursor: pointer; }
+.member-item:active { background: #2a3942; }
+.member-item.selected { background: rgba(37,211,102,.1); }
+.member-item .avatar { width: 40px; height: 40px; font-size: 16px; }
+.member-item .info { flex: 1; min-width: 0; }
+.member-item .info b { font-size: 14px; color: #e9edef; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.member-item .info small { font-size: 12px; color: #8696a0; }
+.member-item .check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #8696a0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.member-item.selected .check { background: #25d366; border-color: #25d366; color: white; font-size: 14px; }
+
+/* STATUS VIEWER */
+.status-viewer { position: fixed; inset: 0; background: #000; z-index: 200; display: flex; flex-direction: column; }
+.status-progress { display: flex; gap: 4px; padding: 12px 16px 8px; }
+.status-progress .bar { flex: 1; height: 3px; background: rgba(255,255,255,.3); border-radius: 2px; overflow: hidden; }
+.status-progress .bar.done { background: #fff; }
+.status-viewer-header { display: flex; align-items: center; gap: 12px; padding: 8px 16px; color: white; }
+.status-viewer-header .avatar { width: 40px; height: 40px; font-size: 16px; }
+.status-viewer-header .info { flex: 1; }
+.status-viewer-header .info b { display: block; font-size: 15px; }
+.status-viewer-header .info small { font-size: 12px; opacity: .7; }
+.status-viewer-content { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+.status-text { font-size: 32px; font-weight: 700; line-height: 1.4; padding: 40px; border-radius: 20px; max-width: 100%; word-wrap: break-word; }
+.status-viewer-footer { padding: 16px; text-align: center; color: white; font-size: 14px; opacity: .7; }
+
+/* MESSAGES */
+.messages { flex: 1; overflow-y: auto; padding: 16px 12px; background: #0b141a; display: flex; flex-direction: column; gap: 4px; }
+.bubble { max-width: 78%; padding: 8px 12px 6px; border-radius: 10px; font-size: 15px; word-wrap: break-word; color: #e9edef; box-shadow: 0 1px 1px rgba(0,0,0,.2); position: relative; cursor: pointer; user-select: none; }
+.bubble.me { align-self: flex-end; background: #005c4b; border-top-right-radius: 2px; }
+.bubble.other { align-self: flex-start; background: #202c33; border-top-left-radius: 2px; }
+.bubble .sender-name { font-size: 12px; font-weight: 700; margin-bottom: 3px; color: #53bdeb; }
+.bubble .text { line-height: 1.4; }
+.bubble .meta { font-size: 10px; color: #8696a0; text-align: right; margin-top: 4px; display: flex; justify-content: flex-end; align-items: center; gap: 4px; }
+.bubble .check { color: #53bdeb; margin-left: 2px; }
+.bubble img { max-width: 100%; border-radius: 8px; margin: 4px 0; }
+.bubble.deleted { opacity: 0.6; font-style: italic; }
+
+/* INPUT */
+.input-area { display: flex; padding: 8px; gap: 8px; background: #202c33; border-top: 1px solid #2a3942; flex-shrink: 0; align-items: center; }
+.input-area input[type="text"] { flex: 1; padding: 12px 16px; border: none; border-radius: 24px; font-size: 15px; background: #2a3942; color: #e9edef; min-width: 0; }
+.input-area input[type="text"]::placeholder { color: #8696a0; }
+.input-area input[type="text"]:focus { outline: none; }
+.input-area .icon-btn { width: 46px; height: 46px; border-radius: 50%; background: transparent; color: #8696a0; border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.input-area .icon-btn:active { background: #2a3942; }
+.input-area .send-btn { width: 46px; height: 46px; border-radius: 50%; background: #25d366; color: white; border: none; font-size: 18px; cursor: pointer; flex-shrink: 0; }
+
+/* FAB */
+.fab { position: fixed; bottom: 80px; right: 20px; width: 56px; height: 56px; border-radius: 16px; background: #25d366; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 16px rgba(37,211,102,.4); cursor: pointer; z-index: 5; }
+
+/* BOTTOM NAV */
+.bottom-nav { display: flex; background: #202c33; border-top: 1px solid #2a3942; padding: 8px 0 10px; flex-shrink: 0; }
+.bottom-nav a { flex: 1; text-align: center; padding: 8px; color: #8696a0; text-decoration: none; font-size: 11px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; font-weight: 500; }
+.bottom-nav a .nav-icon { font-size: 22px; }
+.bottom-nav a.active { color: #25d366; }
+
+/* PROFILE */
+.profile-page { flex: 1; padding: 24px; overflow-y: auto; text-align: center; background: #111b21; }
+.profile-avatar { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #25d366, #128c7e); color: white; font-size: 48px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-weight: 600; box-shadow: 0 8px 24px rgba(37,211,102,.3); }
+.profile-name { font-size: 22px; font-weight: 700; color: #e9edef; }
+.profile-phone { color: #8696a0; margin-bottom: 32px; font-size: 14px; margin-top: 4px; }
+.profile-form { text-align: left; }
+.profile-form label { font-size: 13px; color: #8696a0; margin-bottom: 6px; display: block; font-weight: 600; }
+.profile-form input { width: 100%; padding: 14px; border: none; background: #202c33; border-radius: 10px; margin-bottom: 16px; font-size: 15px; color: #e9edef; }
+.profile-form input:focus { outline: 2px solid #25d366; }
+.profile-form button { width: 100%; padding: 14px; background: #25d366; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; }
+.profile-form .msg { color: #25d366; margin-top: 12px; text-align: center; }
+
+/* ADMIN */
+.admin-page { flex: 1; padding: 16px; overflow-y: auto; background: #111b21; }
+.admin-card { background: #202c33; padding: 16px; border-radius: 12px; margin-bottom: 16px; border: 1px solid #2a3942; }
+.admin-card h2 { font-size: 16px; margin-bottom: 14px; color: #25d366; }
+.admin-card label { font-size: 13px; color: #8696a0; display: block; margin-bottom: 6px; font-weight: 600; }
+.admin-card input, .admin-card textarea { width: 100%; padding: 12px; border: none; background: #2a3942; border-radius: 8px; margin-bottom: 12px; font-size: 15px; color: #e9edef; font-family: inherit; }
+.admin-card input:focus { outline: 2px solid #25d366; }
+.admin-card button { width: 100%; padding: 13px; background: #25d366; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; margin-top: 4px; }
+.admin-card button.danger { width: auto; padding: 6px 12px; background: #e53935; font-size: 12px; margin: 0; }
+.admin-card button.warn { background: #ff9800; }
+.admin-card button.success { background: #25d366; }
+.admin-card .msg { font-size: 13px; color: #25d366; margin-top: 10px; min-height: 18px; }
+.admin-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2a3942; font-size: 14px; gap: 8px; }
+.admin-item:last-child { border-bottom: none; }
+.admin-item small { color: #8696a0; font-size: 12px; display: block; margin-top: 2px; }
+.admin-item .btn-group { display: flex; gap: 6px; flex-shrink: 0; }
+.badge-banned { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #e53935; color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-left: 6px; }
+.badge-pending { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #ff9800; color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-left: 6px; }
+
+/* LOADING */
+.loading-overlay { position: fixed; inset: 0; background: rgba(11,20,26,.9); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+.spinner { width: 44px; height: 44px; border: 4px solid #2a3942; border-top-color: #25d366; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-overlay p { color: #e9edef; font-size: 14px; }
+
+/* SPLASH */
+.splash { position: fixed; inset: 0; background: #0b141a; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; }
+.splash .logo { font-size: 72px; animation: pulse 1.5s ease-in-out infinite; }
+.splash p { color: #8696a0; font-size: 14px; }
+@keyframes pulse { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.1); } }
+
+/* ===== CALL SCREEN ===== */
+.call-screen { position: fixed; inset: 0; background: linear-gradient(160deg, #0b141a 0%, #1a2c3a 100%); z-index: 5000; display: flex; flex-direction: column; color: white; }
+.call-screen.video-mode { background: #000; }
+.call-header { padding: 30px 20px 10px; text-align: center; flex-shrink: 0; }
+.call-header .avatar-lg { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, #25d366, #128c7e); color: white; font-size: 44px; font-weight: 600; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 30px rgba(37,211,102,.4); animation: callPulse 2s infinite; }
+@keyframes callPulse { 0%,100% { box-shadow: 0 8px 30px rgba(37,211,102,.4); } 50% { box-shadow: 0 8px 50px rgba(37,211,102,.8); } }
+.call-name { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+.call-status { font-size: 15px; opacity: .8; }
+.call-timer { font-size: 18px; margin-top: 8px; letter-spacing: 2px; font-variant-numeric: tabular-nums; }
+.call-videos { flex: 1; position: relative; overflow: hidden; }
+.remote-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.local-video { position: absolute; top: 20px; right: 20px; width: 110px; height: 150px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,255,255,.3); background: #000; z-index: 2; }
+.call-actions { display: flex; justify-content: center; gap: 16px; padding: 20px; flex-shrink: 0; background: rgba(0,0,0,.3); }
+.call-btn { width: 64px; height: 64px; border-radius: 50%; border: none; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
+.call-btn:active { transform: scale(0.9); }
+.call-btn.end { background: #e53935; color: white; }
+.call-btn.accept { background: #25d366; color: white; animation: ring 1s infinite; }
+@keyframes ring { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+.call-btn.mute { background: rgba(255,255,255,.15); color: white; }
+.call-btn.mute.active { background: white; color: #111b21; }
+.call-btn.switch { background: rgba(255,255,255,.15); color: white; }
+.incoming-info { text-align: center; padding: 20px; color: white; }
+
+/* Incoming call notification */
+.incoming-call-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 4500; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.incoming-call-box { background: linear-gradient(160deg, #075e54, #0b141a); border-radius: 24px; padding: 32px 24px; width: 100%; max-width: 380px; text-align: center; color: white; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+.incoming-call-box .avatar-lg { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, #25d366, #128c7e); font-size: 36px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; animation: callPulse 2s infinite; }
+.incoming-call-box h2 { font-size: 22px; margin-bottom: 6px; }
+.incoming-call-box p { font-size: 14px; opacity: .85; margin-bottom: 24px; }
+.incoming-call-actions { display: flex; gap: 16px; justify-content: center; }
+
+/* === FITUR BARU: LIGHT MODE === */
+body.light-mode { background: #efeae2; color: #111b21; }
+body.light-mode .page { background: #efeae2; }
+body.light-mode .app-header, body.light-mode .bottom-nav, body.light-mode .input-area, body.light-mode .search-bar { background: #f0f2f5; border-color: #d1d7db; }
+body.light-mode .app-header h1 { color: #111b21; }
+body.light-mode .app-header button { color: #54656f; }
+body.light-mode .search-bar input { background: #fff; color: #111b21; }
+body.light-mode .chat-item { border-color: #e9edef; }
+body.light-mode .chat-item:active { background: #f5f6f6; }
+body.light-mode .chat-top b { color: #111b21; }
+body.light-mode .bubble.other { background: #fff; color: #111b21; }
+body.light-mode .bubble.me { background: #d9fdd3; color: #111b21; }
+body.light-mode .bubble .meta { color: #667781; }
+body.light-mode .messages { background: #efeae2; }
+body.light-mode .input-area input[type="text"] { background: #fff; color: #111b21; }
+body.light-mode .modal-box { background: #fff; color: #111b21; }
+body.light-mode .modal-box input[type="text"] { background: #f0f2f5; color: #111b21; }
+body.light-mode .member-item { border-color: #e9edef; }
+body.light-mode .member-item .info b { color: #111b21; }
+body.light-mode .modal-box textarea { background: #f0f2f5; color: #111b21; }
+
+/* === FITUR BARU: REPLY & HAPUS PESAN === */
+.reply-preview { background: rgba(0,0,0,0.1); border-left: 3px solid #25d366; padding: 5px 8px; border-radius: 5px; font-size: 12px; margin-bottom: 5px; color: #8696a0; }
+body.light-mode .reply-preview { background: rgba(0,0,0,0.05); color: #667781; }
+
+.reply-bar { display: none; background: #202c33; padding: 8px 16px; border-left: 4px solid #25d366; font-size: 13px; color: #8696a0; position: relative; }
+body.light-mode .reply-bar { background: #f0f2f5; color: #54656f; }
+.reply-bar span { font-weight: bold; display: block; color: #e9edef; margin-bottom: 2px; }
+body.light-mode .reply-bar span { color: #111b21; }
+.reply-bar .close-reply { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 20px; color: #e53935; }
+
+/* === FITUR BARU: DERING === */
+.ringing-indicator { display: none; text-align: center; color: #25d366; margin-top: 10px; font-size: 14px; animation: blink 1s infinite; }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+</style>
 </head>
-<body class="bg-sage-50 text-sage-800 font-sans antialiased selection:bg-sage-200 selection:text-sage-800 min-h-screen flex flex-col">
+<body>
+<!-- SPLASH -->
+<div id="splash" class="splash">
+  <div class="logo">💬</div>
+  <p>Memuat...</p>
+</div>
 
-    <!-- Top Notification Modal / Toast -->
-    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-200%] transition-all duration-300 bg-sage-800 text-white px-6 py-3 rounded-xl shadow-lg flex items-center space-x-3">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-sage-200"></i>
-        <span id="toast-message" class="text-sm font-medium">Berhasil disimpan!</span>
+<!-- LOGIN -->
+<div id="page-login" class="auth-page hidden">
+  <div class="auth-box">
+    <div class="logo">💬</div>
+    <h1>Selamat Datang</h1>
+    <p class="sub">Masukkan nomor HP kamu untuk memulai chat</p>
+    <div class="phone-input">
+      <select id="countryCode">
+        <option value="+62">🇮🇩 +62</option>
+        <option value="+60">🇲🇾 +60</option>
+        <option value="+65">🇸🇬 +65</option>
+        <option value="+1">🇺🇸 +1</option>
+      </select>
+      <input id="phone" type="tel" placeholder="81234567890" maxlength="15">
     </div>
+    <button id="btnSendOtp" onclick="requestOtp()">Kirim Kode</button>
+    <p id="loginMsg" class="msg"></p>
+    <p class="footer-link"><a onclick="showPage('admin')">🔑 Login Admin</a></p>
+  </div>
+</div>
 
-    <!-- Navigation Header -->
-    <header class="bg-white/80 backdrop-blur-md border-b border-sage-100 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
-                <div class="w-10 h-10 rounded-xl bg-sage-500 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                    <i class="fa-solid fa-seedling"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg tracking-tight text-sage-800 leading-tight">E-Konseling Interaktif</h1>
-                    <p class="text-xs text-sage-600 font-medium">Bimbingan & Konseling Sekolah Modern</p>
-                </div>
-            </div>
+<!-- OTP -->
+<div id="page-otp" class="auth-page hidden">
+  <div class="auth-box">
+    <div class="logo">🔐</div>
+    <h1>Verifikasi</h1>
+    <p class="sub">Masukkan kode 6 digit untuk<br><b id="otpPhone" style="color:#075e54"></b></p>
+    <input id="otpInput" type="tel" inputmode="numeric" placeholder="••••••" maxlength="6" class="otp-field">
+    <button id="btnVerify" onclick="verifyOtp()">Verifikasi</button>
+    <p id="otpMsg" class="msg"></p>
+    <button class="link-btn" onclick="doLogout(true)">← Ganti nomor</button>
+  </div>
+</div>
 
-            <!-- Desktop Navigation Tabs -->
-            <nav class="hidden md:flex items-center space-x-1 bg-sage-50 p-1.5 rounded-2xl border border-sage-100">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all text-sage-700 bg-white shadow-xs">
-                    <i class="fa-solid fa-house-chimney mr-2"></i>Dashboard
-                </button>
-                <button onclick="switchTab('modul')" id="nav-modul" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-all text-sage-600 hover:text-sage-800">
-                    <i class="fa-solid fa-book-open mr-2"></i>Modul & Materi
-                </button>
-                <button onclick="switchTab('kuis')" id="nav-kuis" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-all text-sage-600 hover:text-sage-800">
-                    <i class="fa-solid fa-clipboard-question mr-2"></i>Diagnosis Minat
-                </button>
-                <button onclick="switchTab('jurnal')" id="nav-jurnal" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-all text-sage-600 hover:text-sage-800">
-                    <i class="fa-solid fa-book-bookmark mr-2"></i>Jurnal Refleksi
-                </button>
-                <button onclick="switchTab('konsultasi')" id="nav-konsultasi" class="nav-btn px-4 py-2 rounded-xl text-sm font-medium transition-all text-sage-600 hover:text-sage-800">
-                    <i class="fa-solid fa-comments mr-2"></i>Jadwal & Pesan
-                </button>
-            </nav>
-
-            <!-- Mobile Menu Toggle -->
-            <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-sage-100 text-sage-700 focus:outline-none">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Navigation Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-1 bg-white border-b border-sage-100 fade-in">
-            <button onclick="switchTab('dashboard'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center">
-                <i class="fa-solid fa-house-chimney mr-3 w-5"></i>Dashboard
-            </button>
-            <button onclick="switchTab('modul'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center">
-                <i class="fa-solid fa-book-open mr-3 w-5"></i>Modul & Materi
-            </button>
-            <button onclick="switchTab('kuis'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center">
-                <i class="fa-solid fa-clipboard-question mr-3 w-5"></i>Diagnosis Minat
-            </button>
-            <button onclick="switchTab('jurnal'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center">
-                <i class="fa-solid fa-book-bookmark mr-3 w-5"></i>Jurnal Refleksi
-            </button>
-            <button onclick="switchTab('konsultasi'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-sage-700 hover:bg-sage-50 flex items-center">
-                <i class="fa-solid fa-comments mr-3 w-5"></i>Jadwal & Pesan
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-
-        <!-- TAB 1: DASHBOARD -->
-        <section id="tab-dashboard" class="tab-content fade-in space-y-8">
-            <!-- Hero Banner -->
-            <div class="bg-gradient-to-r from-sage-800 to-sage-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
-                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-sage-600/30 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="space-y-4 max-w-2xl z-10">
-                    <span class="bg-sage-600/60 text-sage-100 text-xs font-semibold px-3.5 py-1.5 rounded-full uppercase tracking-wider inline-block backdrop-blur-sm">
-                        <i class="fa-solid fa-shield-heart mr-1.5"></i>Layanan Bimbingan Konseling Sekolah
-                    </span>
-                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
-                        Ruang Tumbuh & Pengembangan Potensi Siswa yang Aman
-                    </h2>
-                    <p class="text-sage-100 text-sm sm:text-base font-light leading-relaxed">
-                        Aplikasi presentasi dan layanan konseling interaktif dirancang untuk membantu siswa mengeksplorasi minat & bakat, menjaga kesehatan mental, serta merencanakan masa depan dengan percaya diri.
-                    </p>
-                    <div class="pt-2 flex flex-wrap gap-3">
-                        <button onclick="switchTab('kuis')" class="bg-white text-sage-800 px-6 py-3 rounded-2xl font-semibold text-sm hover:bg-sage-50 transition-all shadow-md flex items-center">
-                            <i class="fa-solid fa-sparkles mr-2 text-sage-600"></i>Mulai Diagnosis Minat
-                        </button>
-                        <button onclick="switchTab('modul')" class="bg-sage-600/50 hover:bg-sage-600 text-white border border-sage-500/50 px-6 py-3 rounded-2xl font-semibold text-sm transition-all backdrop-blur-sm flex items-center">
-                            <i class="fa-solid fa-book-open mr-2"></i>Eksplorasi Modul
-                        </button>
-                    </div>
-                </div>
-                <div class="mt-8 md:mt-0 z-10">
-                    <div class="w-44 h-44 sm:w-56 sm:h-56 bg-sage-600/40 border border-sage-500/30 rounded-3xl backdrop-blur-md flex flex-col items-center justify-center p-6 text-center shadow-inner">
-                        <i class="fa-solid fa-hands-holding-child text-5xl sm:text-6xl text-sage-200 mb-3"></i>
-                        <span class="text-xs font-semibold text-sage-100 tracking-wide uppercase">Konselor Siap Membantu</span>
-                        <span class="text-xs text-sage-200 mt-1">Sesi Privat & Rahasia</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats & Info Bar -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                <div class="bg-white p-6 rounded-2xl border border-sage-100 shadow-xs flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-xl bg-sage-50 text-sage-600 flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-brain"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sage-800 text-lg">Asesmen Mandiri</h4>
-                        <p class="text-xs text-sage-600">Diagnosis faktor internal & eksternal</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-sage-100 shadow-xs flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-xl bg-softblue-50 text-softblue-600 flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-book-bookmark"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sage-800 text-lg">Jurnal Harian</h4>
-                        <p class="text-xs text-sage-600">Catat refleksi emosi & harianmu</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-sage-100 shadow-xs flex items-center space-x-4">
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-calendar-check"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sage-800 text-lg">Jadwal BK</h4>
-                        <p class="text-xs text-sage-600">Booking konsultasi dengan mudah</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modul BK Grid -->
-            <div>
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="text-xl font-bold text-sage-800 tracking-tight">Modul Layanan Bimbingan Konseling</h3>
-                        <p class="text-xs sm:text-sm text-sage-600">Pilih topik materi atau layanan yang ingin Anda pelajari hari ini</p>
-                    </div>
-                    <button onclick="switchTab('modul')" class="text-xs font-semibold text-sage-700 hover:text-sage-800 flex items-center bg-white px-3 py-2 rounded-xl border border-sage-200">
-                        Lihat Semua <i class="fa-solid fa-arrow-right ml-1.5"></i>
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Card 1 -->
-                    <div onclick="openModulDetail(0)" class="bg-white p-6 rounded-3xl border border-sage-100 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group">
-                        <div>
-                            <div class="w-12 h-12 rounded-2xl bg-sage-100 text-sage-700 flex items-center justify-center text-xl mb-4 group-hover:bg-sage-500 group-hover:text-white transition-all">
-                                <i class="fa-solid fa-briefcase"></i>
-                            </div>
-                            <h4 class="font-bold text-sage-800 text-base mb-1">Layanan Karir</h4>
-                            <p class="text-xs text-sage-600 line-clamp-3">Eksplorasi pilihan studi lanjut, dunia kerja, serta pemahaman minat bakat vokasional.</p>
-                        </div>
-                        <div class="mt-6 flex items-center text-xs font-semibold text-sage-600 group-hover:text-sage-800">
-                            <span>Baca Selengkapnya</span>
-                            <i class="fa-solid fa-chevron-right ml-1.5 group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div onclick="openModulDetail(1)" class="bg-white p-6 rounded-3xl border border-sage-100 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group">
-                        <div>
-                            <div class="w-12 h-12 rounded-2xl bg-sage-100 text-sage-700 flex items-center justify-center text-xl mb-4 group-hover:bg-sage-500 group-hover:text-white transition-all">
-                                <i class="fa-solid fa-brain"></i>
-                            </div>
-                            <h4 class="font-bold text-sage-800 text-base mb-1">Kesehatan Mental</h4>
-                            <p class="text-xs text-sage-600 line-clamp-3">Manajemen stres, mengatasi kecemasan ujian, serta teknik relaksasi emosi positif.</p>
-                        </div>
-                        <div class="mt-6 flex items-center text-xs font-semibold text-sage-600 group-hover:text-sage-800">
-                            <span>Baca Selengkapnya</span>
-                            <i class="fa-solid fa-chevron-right ml-1.5 group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div onclick="openModulDetail(2)" class="bg-white p-6 rounded-3xl border border-sage-100 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group">
-                        <div>
-                            <div class="w-12 h-12 rounded-2xl bg-sage-100 text-sage-700 flex items-center justify-center text-xl mb-4 group-hover:bg-sage-500 group-hover:text-white transition-all">
-                                <i class="fa-solid fa-chart-line"></i>
-                            </div>
-                            <h4 class="font-bold text-sage-800 text-base mb-1">Motivasi Belajar</h4>
-                            <p class="text-xs text-sage-600 line-clamp-3">Strategi belajar efektif, mengatasi prokrastinasi, dan membangun konsistensi diri.</p>
-                        </div>
-                        <div class="mt-6 flex items-center text-xs font-semibold text-sage-600 group-hover:text-sage-800">
-                            <span>Baca Selengkapnya</span>
-                            <i class="fa-solid fa-chevron-right ml-1.5 group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-
-                    <!-- Card 4 -->
-                    <div onclick="openModulDetail(3)" class="bg-white p-6 rounded-3xl border border-sage-100 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group">
-                        <div>
-                            <div class="w-12 h-12 rounded-2xl bg-sage-100 text-sage-700 flex items-center justify-center text-xl mb-4 group-hover:bg-sage-500 group-hover:text-white transition-all">
-                                <i class="fa-solid fa-user-shield"></i>
-                            </div>
-                            <h4 class="font-bold text-sage-800 text-base mb-1">Konsultasi Pribadi</h4>
-                            <p class="text-xs text-sage-600 line-clamp-3">Pengembangan karakter, resolusi konflik sosial, dan pemahaman diri mendalam.</p>
-                        </div>
-                        <div class="mt-6 flex items-center text-xs font-semibold text-sage-600 group-hover:text-sage-800">
-                            <span>Baca Selengkapnya</span>
-                            <i class="fa-solid fa-chevron-right ml-1.5 group-hover:translate-x-1 transition-transform"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: MODUL & MATERI (Termasuk Analisis Minat & Bakat Ilmiah) -->
-        <section id="tab-modul" class="tab-content hidden fade-in space-y-6">
-            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-sage-100 shadow-xs">
-                <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-sage-100 pb-6 mb-6">
-                    <div>
-                        <span class="text-xs font-semibold text-sage-600 uppercase tracking-wider">Pustaka Pengetahuan BK</span>
-                        <h2 class="text-2xl font-bold text-sage-800 mt-1">Modul & Referensi Teori Psikologi Pendidikan</h2>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex flex-wrap gap-2">
-                        <button onclick="filterModul('all')" id="btn-filter-all" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sage-800 text-white transition-all">Semua</button>
-                        <button onclick="filterModul('teori')" id="btn-filter-teori" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sage-100 text-sage-700 hover:bg-sage-200 transition-all">Teori Minat & Bakat</button>
-                        <button onclick="filterModul('layanan')" id="btn-filter-layanan" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sage-100 text-sage-700 hover:bg-sage-200 transition-all">Layanan Siswa</button>
-                    </div>
-                </div>
-
-                <!-- Modul Content Grid -->
-                <div id="modul-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Item 1: Analisis Minat & Bakat (Teori Ilmiah) -->
-                    <div class="modul-card bg-sage-50/50 p-6 rounded-2xl border border-sage-100 flex flex-col justify-between" data-category="teori">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="bg-sage-200 text-sage-800 text-xs font-bold px-3 py-1 rounded-full">Teori Psikologi</span>
-                                <span class="text-xs text-sage-600"><i class="fa-regular fa-clock mr-1"></i> 5 Min Baca</span>
-                            </div>
-                            <h3 class="font-bold text-sage-800 text-lg mb-2">Konsep & Faktor Minat (Teori Reber & Slameto)</h3>
-                            <p class="text-xs sm:text-sm text-sage-600 leading-relaxed mb-4">
-                                Minat adalah kecenderungan hati yang tinggi terhadap sesuatu. Berdasarkan teori Reber (dalam Muhibbin Syah) serta Slameto, minat dipengaruhi oleh dua faktor utama: <b>Faktor Internal</b> (perhatian, keingintahuan, motivasi, kebutuhan) dan <b>Faktor Eksternal</b> (dukungan orang tua, guru, rekan sebaya, sarana prasarana, serta lingkungan).
-                            </p>
-                        </div>
-                        <button onclick="openModulModal('Teori Minat & Bakat', `Minat merupakan landasan penting bagi seseorang untuk melakukan kegiatan dengan baik yaitu dorongan seseorang untuk berbuat (Purwanto).<br><br><b>1. Faktor Internal:</b><br>- Perhatian: Kesadaran & kepedulian terhadap objek.<br>- Keingintahuan: Sikap selalu berupaya mengetahui lebih mendalam.<br>- Motivasi: Daya penggerak dari dalam diri.<br>- Kebutuhan: Konstruk untuk mengubah kondisi yang ada.<br><br><b>2. Faktor Eksternal:</b><br>- Dorongan Orang Tua & Guru<br>- Pengaruh Teman Sebaya (Rekan)<br>- Sarana & Prasarana<br>- Keadaan Lingkungan & Sosial`)" class="text-xs font-semibold text-sage-700 hover:text-sage-800 flex items-center bg-white px-4 py-2.5 rounded-xl border border-sage-200 w-fit">
-                            Baca Rangkuman Lengkap <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-
-                    <!-- Item 2: Layanan Karir -->
-                    <div class="modul-card bg-sage-50/50 p-6 rounded-2xl border border-sage-100 flex flex-col justify-between" data-category="layanan">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="bg-softblue-100 text-softblue-600 text-xs font-bold px-3 py-1 rounded-full">Bimbingan Karir</span>
-                                <span class="text-xs text-sage-600"><i class="fa-regular fa-clock mr-1"></i> 4 Min Baca</span>
-                            </div>
-                            <h3 class="font-bold text-sage-800 text-lg mb-2">Perencanaan Studi Lanjut & Pilihan Karir Vokasi</h3>
-                            <p class="text-xs sm:text-sm text-sage-600 leading-relaxed mb-4">
-                                Membantu siswa menyelaraskan keterampilan keahlian, minat vokasional, dan peluang di dunia industri modern. Siswa dibimbing untuk mengenali potensi diri dan merancang target masa depan yang realistis dan terukur.
-                            </p>
-                        </div>
-                        <button onclick="openModulModal('Layanan Karir & Studi Lanjut', `Bimbingan karir di sekolah membantu siswa menjembatani kompetensi keahlian dengan dunia kerja maupun pendidikan tinggi.<br><br><b>Fokus Utama:</b><br>1. Pemetaan bakat dan minat vokasional.<br>2. Informasi jalur seleksi studi lanjut.<br>3. Pelatihan soft-skills dan kesiapan kerja.`)" class="text-xs font-semibold text-sage-700 hover:text-sage-800 flex items-center bg-white px-4 py-2.5 rounded-xl border border-sage-200 w-fit">
-                            Baca Rangkuman Lengkap <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-
-                    <!-- Item 3: Kesehatan Mental -->
-                    <div class="modul-card bg-sage-50/50 p-6 rounded-2xl border border-sage-100 flex flex-col justify-between" data-category="layanan">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">Kesehatan Mental</span>
-                                <span class="text-xs text-sage-600"><i class="fa-regular fa-clock mr-1"></i> 4 Min Baca</span>
-                            </div>
-                            <h3 class="font-bold text-sage-800 text-lg mb-2">Manajemen Stres & Regulasi Emosi Remaja</h3>
-                            <p class="text-xs sm:text-sm text-sage-600 leading-relaxed mb-4">
-                                Masa remaja penuh dinamika emosional. Modul ini membahas teknik mindfulness, mengatasi kecemasan akademik, serta pentingnya mengenali batas diri dan meminta bantuan profesional saat dibutuhkan.
-                            </p>
-                        </div>
-                        <button onclick="openModulModal('Kesehatan Mental Remaja', `Kesehatan mental yang baik adalah fondasi keberhasilan belajar dan kebahagiaan hidup.<br><br><b>Strategi Praktis:</b><br>1. Teknik pernapasan 4-7-8 untuk meredakan cemas.<br>2. Journaling emosi harian.<br>3. Membangun dukungan sosial positif.`)" class="text-xs font-semibold text-sage-700 hover:text-sage-800 flex items-center bg-white px-4 py-2.5 rounded-xl border border-sage-200 w-fit">
-                            Baca Rangkuman Lengkap <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-
-                    <!-- Item 4: Motivasi Belajar -->
-                    <div class="modul-card bg-sage-50/50 p-6 rounded-2xl border border-sage-100 flex flex-col justify-between" data-category="teori">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="bg-sage-200 text-sage-800 text-xs font-bold px-3 py-1 rounded-full">Motivasi & Belajar</span>
-                                <span class="text-xs text-sage-600"><i class="fa-regular fa-clock mr-1"></i> 4 Min Baca</span>
-                            </div>
-                            <h3 class="font-bold text-sage-800 text-lg mb-2">Hierarki Kebutuhan Maslow & Motivasi Belajar</h3>
-                            <p class="text-xs sm:text-sm text-sage-600 leading-relaxed mb-4">
-                                Menurut Abraham Maslow, manusia digerakkan oleh hierarki kebutuhan dari tingkat dasar (fisiologis & rasa aman) hingga aktualisasi diri. Motivasi intrinsik dan ekstrinsik berperan besar dalam mengarahkan tindakan belajar siswa.
-                            </p>
-                        </div>
-                        <button onclick="openModulModal('Motivasi & Hierarki Maslow', `Motivasi adalah daya penggerak yang membangkitkan aktivitas belajar siswa.<br><br><b>Hierarki Kebutuhan Maslow:</b><br>1. Fisiologis (Makan, Istirahat)<br>2. Rasa Aman<br>3. Sosial & Keterikatan<br>4. Penghargaan<br>5. Aktualisasi Diri`)" class="text-xs font-semibold text-sage-700 hover:text-sage-800 flex items-center bg-white px-4 py-2.5 rounded-xl border border-sage-200 w-fit">
-                            Baca Rangkuman Lengkap <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: KUIS / DIAGNOSIS KEBUTUHAN & MINAT SISWA -->
-        <section id="tab-kuis" class="tab-content hidden fade-in max-w-3xl mx-auto space-y-6">
-            <div class="bg-white p-6 sm:p-10 rounded-3xl border border-sage-100 shadow-sm">
-                <div class="text-center max-w-xl mx-auto mb-8">
-                    <span class="bg-sage-100 text-sage-700 text-xs font-semibold px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-                        <i class="fa-solid fa-stethoscope mr-1.5"></i>Asesmen Mandiri Siswa
-                    </span>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-sage-800 mt-3">Kuis Diagnosis Kebutuhan Konseling & Faktor Minat</h2>
-                    <p class="text-xs sm:text-sm text-sage-600 mt-2">
-                        Jawablah 5 pertanyaan berikut secara jujur untuk mendiagnosis fokus layanan konseling yang paling Anda butuhkan saat ini beserta analisis kecenderungan minat Anda.
-                    </p>
-                </div>
-
-                <!-- Quiz Form Container -->
-                <div id="quiz-container" class="space-y-6">
-                    <!-- Question 1 -->
-                    <div class="quiz-item bg-sage-50/60 p-6 rounded-2xl border border-sage-100 space-y-3" data-q="1">
-                        <span class="text-xs font-bold text-sage-600 uppercase">Pertanyaan 1 dari 5 (Fokus Layanan Utama)</span>
-                        <h4 class="font-bold text-sage-800 text-base">Manakah tantangan atau topik utama yang paling sering Anda rasakan akhir-akhir ini?</h4>
-                        <div class="space-y-2 pt-2">
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q1" value="karir" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Bingung menentukan arah studi lanjut, jurusan kuliah, atau pilihan karir masa depan.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q1" value="mental" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Sering merasa stres, cemas berlebihan, atau kelelahan mental (burnout) dalam belajar.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q1" value="motivasi" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Kurang motivasi, sering menunda-nunda tugas (prokrastinasi), dan sulit konsentrasi.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q1" value="pribadi" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Kendala komunikasi sosial, pertemanan, atau masalah pengembangan kepribadian pribadi.</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Question 2 (Faktor Internal - Perhatian & Keingintahuan) -->
-                    <div class="quiz-item bg-sage-50/60 p-6 rounded-2xl border border-sage-100 space-y-3" data-q="2">
-                        <span class="text-xs font-bold text-sage-600 uppercase">Pertanyaan 2 dari 5 (Faktor Internal Minat)</span>
-                        <h4 class="font-bold text-sage-800 text-base">Bagaimana tingkat perhatian dan rasa ingin tahu Anda terhadap kegiatan atau pelajaran yang Anda minati?</h4>
-                        <div class="space-y-2 pt-2">
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q2" value="tinggi" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Sangat tinggi; saya fokus, aktif bertanya, dan mencari tahu informasi lebih dalam secara mandiri.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q2" value="sedang" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Cukup; saya memperhatikan saat guru menjelaskan, namun jarang menggali informasi di luar kelas.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q2" value="rendah" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Rendah; saya sering merasa cepat bosan dan kurang bersemangat dalam mendalami suatu hal.</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Question 3 (Faktor Eksternal - Dukungan & Lingkungan) -->
-                    <div class="quiz-item bg-sage-50/60 p-6 rounded-2xl border border-sage-100 space-y-3" data-q="3">
-                        <span class="text-xs font-bold text-sage-600 uppercase">Pertanyaan 3 dari 5 (Faktor Eksternal Minat)</span>
-                        <h4 class="font-bold text-sage-800 text-base">Seberapa besar dukungan orang tua, guru, dan lingkungan sekitar terhadap hobi atau minat positif Anda?</h4>
-                        <div class="space-y-2 pt-2">
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q3" value="kuat" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Sangat mendukung; mereka memberikan fasilitas, arahan, dan motivasi penuh.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q3" value="cukup" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Cukup mendukung, namun terkadang ada perbedaan pendapat mengenai pilihan saya.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q3" value="kurang" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Kurang mendapatkan fasilitas atau dorongan yang memadai dari lingkungan sekitar.</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Question 4 -->
-                    <div class="quiz-item bg-sage-50/60 p-6 rounded-2xl border border-sage-100 space-y-3" data-q="4">
-                        <span class="text-xs font-bold text-sage-600 uppercase">Pertanyaan 4 dari 5 (Gaya Belajar & Kebutuhan)</span>
-                        <h4 class="font-bold text-sage-800 text-base">Bagaimana Anda biasanya mengatasi masalah atau hambatan saat belajar atau merencanakan masa depan?</h4>
-                        <div class="space-y-2 pt-2">
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q4" value="mandiri" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Mencari referensi sendiri, membaca buku, atau merenungkan solusi secara mandiri.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q4" value="teman" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Berdiskusi dan meminta saran kepada teman sebaya atau sahabat terdekat.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q4" value="guru" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Membutuhkan bimbingan langsung dari Guru BK atau mentor ahli.</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Question 5 -->
-                    <div class="quiz-item bg-sage-50/60 p-6 rounded-2xl border border-sage-100 space-y-3" data-q="5">
-                        <span class="text-xs font-bold text-sage-600 uppercase">Pertanyaan 5 dari 5 (Kesiapan Konsultasi)</span>
-                        <h4 class="font-bold text-sage-800 text-base">Seberapa siap Anda mengikuti sesi konseling atau bimbingan tatap muka bersama Guru BK?</h4>
-                        <div class="space-y-2 pt-2">
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q5" value="sangat_siap" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Sangat siap; saya ingin segera menjadwalkan sesi konsultasi minggu ini.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q5" value="pertimbangkan" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Masih mempertimbangkan dan ingin mencoba konsultasi online/pesan dulu.</span>
-                            </label>
-                            <label class="flex items-center space-x-3 p-3 bg-white rounded-xl border border-sage-100 cursor-pointer hover:border-sage-300 transition-all">
-                                <input type="radio" name="q5" value="cukup_mandiri" class="text-sage-600 focus:ring-sage-500">
-                                <span class="text-xs sm:text-sm text-sage-700 font-medium">Cukup mandiri untuk saat ini, cukup ikuti jurnal refleksi dan modul saja.</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button onclick="submitQuiz()" class="w-full bg-sage-700 hover:bg-sage-800 text-white font-semibold py-4 rounded-2xl transition-all shadow-md flex items-center justify-center space-x-2">
-                        <span>Lihat Hasil Diagnosis & Rekomendasi</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-
-                <!-- Quiz Result Container (Hidden by default) -->
-                <div id="quiz-result" class="hidden space-y-6 fade-in">
-                    <div class="bg-sage-50 p-8 rounded-3xl border border-sage-200 text-center space-y-4">
-                        <div class="w-16 h-16 rounded-2xl bg-sage-500 text-white flex items-center justify-center text-2xl mx-auto shadow-sm">
-                            <i class="fa-solid fa-clipboard-check"></i>
-                        </div>
-                        <div>
-                            <span class="text-xs font-bold text-sage-600 uppercase tracking-wider">Hasil Diagnosis Mandiri</span>
-                            <h3 id="result-title" class="text-2xl font-bold text-sage-800 mt-1">Rekomendasi Layanan: Layanan Karir & Motivasi</h3>
-                        </div>
-                        <p id="result-desc" class="text-xs sm:text-sm text-sage-600 max-w-lg mx-auto leading-relaxed">
-                            Berdasarkan jawaban Anda, Anda memiliki potensi minat yang baik namun memerlukan arahan tambahan dalam merencanakan masa depan dan menjaga konsistensi belajar.
-                        </p>
-                        <div class="pt-2 flex flex-wrap justify-center gap-3">
-                            <button onclick="switchTab('konsultasi')" class="bg-sage-700 hover:bg-sage-800 text-white px-6 py-3 rounded-xl font-semibold text-xs transition-all shadow-sm">
-                                <i class="fa-solid fa-calendar-plus mr-2"></i>Jadwalkan Konseling Sekarang
-                            </button>
-                            <button onclick="resetQuiz()" class="bg-white text-sage-700 border border-sage-300 hover:bg-sage-50 px-6 py-3 rounded-xl font-semibold text-xs transition-all">
-                                <i class="fa-solid fa-rotate-right mr-2"></i>Ulangi Kuis
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: LEMBAR KERJA REFLEKSI / JURNAL HARIAN -->
-        <section id="tab-jurnal" class="tab-content hidden fade-in max-w-4xl mx-auto space-y-6">
-            <div class="bg-white p-6 sm:p-10 rounded-3xl border border-sage-100 shadow-sm">
-                <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-sage-100 pb-6 mb-6">
-                    <div>
-                        <span class="text-xs font-semibold text-sage-600 uppercase tracking-wider">Refleksi Diri Siswa</span>
-                        <h2 class="text-2xl font-bold text-sage-800 mt-1">Jurnal Harian & Refleksi Emosi</h2>
-                        <p class="text-xs sm:text-sm text-sage-600 mt-1">Catat perasaan, target belajar, dan evaluasi harian Anda. Data tersimpan secara lokal di browser Anda.</p>
-                    </div>
-                    <div class="mt-4 md:mt-0">
-                        <button onclick="openJournalModal()" class="bg-sage-700 hover:bg-sage-800 text-white px-5 py-3 rounded-2xl font-semibold text-xs transition-all shadow-sm flex items-center">
-                            <i class="fa-solid fa-plus mr-2"></i>Tulis Jurnal Baru
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Jurnal List Container -->
-                <div id="journal-list" class="space-y-4">
-                    <!-- Dynamic Journal Items will be injected here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 5: KOTAK PESAN & JADWAL KELOMPOK / KONSULTASI MOCKUP -->
-        <section id="tab-konsultasi" class="tab-content hidden fade-in max-w-5xl mx-auto space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Left Column: Schedule Booking Form -->
-                <div class="bg-white p-6 rounded-3xl border border-sage-100 shadow-sm space-y-5 lg:col-span-1">
-                    <div>
-                        <span class="text-xs font-semibold text-sage-600 uppercase tracking-wider">Booking Sesi</span>
-                        <h3 class="text-xl font-bold text-sage-800 mt-1">Buat Jadwal Konseling</h3>
-                        <p class="text-xs text-sage-600 mt-1">Pilih waktu dan topik untuk sesi tatap muka atau online bersama Guru BK.</p>
-                    </div>
-
-                    <form id="booking-form" onsubmit="handleBooking(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-sage-700 mb-1.5">Nama Lengkap & Kelas</label>
-                            <input type="text" id="book-name" required placeholder="Contoh: Rina Putri (XI IPA 2)" class="w-full px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-sage-700 mb-1.5">Pilih Guru Konselor</label>
-                            <select id="book-counselor" class="w-full px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none bg-white">
-                                <option value="Ibu Dra. Hj. Siti Aminah, M.Pd">Ibu Dra. Hj. Siti Aminah, M.Pd (Karir & Pribadi)</option>
-                                <option value="Bapak Ahmad Fauzi, S.Psi">Bapak Ahmad Fauzi, S.Psi (Kesehatan Mental)</option>
-                                <option value="Ibu Riska Melati, S.Pd">Ibu Riska Melati, S.Pd (Motivasi & Belajar)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-sage-700 mb-1.5">Tanggal & Jam Pertemuan</label>
-                            <input type="datetime-local" id="book-date" required class="w-full px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-sage-700 mb-1.5">Topik / Catatan Singkat</label>
-                            <textarea id="book-topic" rows="3" required placeholder="Tuliskan gambaran masalah atau topik yang ingin dikonsultasikan..." class="w-full px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-sage-700 hover:bg-sage-800 text-white font-semibold py-3.5 rounded-xl text-xs transition-all shadow-sm flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-calendar-check mr-1.5"></i>
-                            <span>Kirim Permintaan Jadwal</span>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Right Column: Mockup Live Chat / Pesan Konseling -->
-                <div class="bg-white p-6 rounded-3xl border border-sage-100 shadow-sm flex flex-col justify-between lg:col-span-2 h-[580px]">
-                    <!-- Chat Header -->
-                    <div class="flex items-center justify-between border-b border-sage-100 pb-4 mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="relative">
-                                <div class="w-11 h-11 rounded-full bg-sage-200 flex items-center justify-center text-sage-800 font-bold text-sm">
-                                    <i class="fa-solid fa-user-tie"></i>
-                                </div>
-                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-sage-800 text-sm">Ruang Konsultasi Online (Mockup)</h4>
-                                <p class="text-xs text-emerald-600 font-medium">Konselor Aktif • Balas cepat</p>
-                            </div>
-                        </div>
-                        <span class="bg-sage-50 text-sage-700 text-xs font-semibold px-3 py-1 rounded-full border border-sage-100">
-                            <i class="fa-solid fa-lock text-sage-500 mr-1"></i> Rahasia & Aman
-                        </span>
-                    </div>
-
-                    <!-- Chat Messages Area -->
-                    <div id="chat-messages" class="flex-grow overflow-y-auto space-y-4 pr-2 mb-4">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-8 h-8 rounded-full bg-sage-200 flex-shrink-0 flex items-center justify-center text-sage-800 text-xs font-bold">
-                                BK
-                            </div>
-                            <div class="bg-sage-50 p-4 rounded-2xl rounded-tl-none border border-sage-100 max-w-md">
-                                <p class="text-xs sm:text-sm text-sage-800 leading-relaxed">
-                                    Halo! Selamat datang di Layanan Konseling Online. Ada hal atau kendala terkait studi, karir, atau perasaan yang ingin kamu diskusikan hari ini? Kami siap mendengarkan.
-                                </p>
-                                <span class="text-[10px] text-sage-600 mt-1 block">08:00 • Guru BK</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Chat Input Area -->
-                    <form onsubmit="handleChatSend(event)" class="flex items-center space-x-2 pt-2 border-t border-sage-100">
-                        <input type="text" id="chat-input" required placeholder="Tulis pesan atau pertanyaan konsultasi di sini..." class="flex-grow px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none">
-                        <button type="submit" class="bg-sage-700 hover:bg-sage-800 text-white px-5 py-3 rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center">
-                            <i class="fa-solid fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-sage-100 mt-12 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-sage-600 space-y-4 sm:space-y-0">
-            <div class="flex items-center space-x-2">
-                <div class="w-6 h-6 rounded-lg bg-sage-500 flex items-center justify-center text-white font-bold text-xs">
-                    <i class="fa-solid fa-seedling"></i>
-                </div>
-                <span class="font-bold text-sage-800">Aplikasi Presentasi BK Interaktif</span>
-            </div>
-            <p>Didesain dengan standar Swiss Minimalist untuk Bimbingan Konseling Sekolah Modern.</p>
-            <p>&copy; 2026 Layanan BK Sekolah. Semua hak dilindungi.</p>
-        </div>
-    </footer>
-
-    <!-- MODAL POPUP FOR MODUL DETAILS -->
-    <div id="modul-modal" class="fixed inset-0 z-50 bg-sage-800/40 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 relative shadow-2xl fade-in">
-            <button onclick="closeModulModal()" class="absolute top-5 right-5 text-sage-400 hover:text-sage-700 w-8 h-8 rounded-full bg-sage-50 flex items-center justify-center">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <span id="modal-tag" class="bg-sage-100 text-sage-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Modul Pustaka</span>
-            <h3 id="modal-title" class="text-xl font-bold text-sage-800">Judul Modul</h3>
-            <div id="modal-content" class="text-xs sm:text-sm text-sage-600 leading-relaxed space-y-3 pt-2">
-                <!-- Content injected via JS -->
-            </div>
-            <div class="pt-4 flex justify-end">
-                <button onclick="closeModulModal()" class="bg-sage-700 text-white px-5 py-2.5 rounded-xl text-xs font-semibold hover:bg-sage-800 transition-all">
-                    Tutup
-                </button>
-            </div>
-        </div>
+<!-- BANNED -->
+<div id="page-banned" class="auth-page hidden">
+  <div class="auth-box">
+    <div class="logo" style="background:linear-gradient(135deg,#e53935,#b71c1c)">🚫</div>
+    <h1 style="color:#b71c1c">Akun Diblokir</h1>
+    <p class="sub">Akunmu diblokir sementara karena terdeteksi spam.</p>
+    <div class="banned-box" id="bannedInfoBox">
+      <h3>📋 Detail Blokir</h3>
+      <p id="bannedReason">-</p>
+      <p id="bannedTime">-</p>
     </div>
-
-    <!-- MODAL POPUP FOR ADDING JOURNAL -->
-    <div id="journal-modal" class="fixed inset-0 z-50 bg-sage-800/40 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 relative shadow-2xl fade-in">
-            <button onclick="closeJournalModal()" class="absolute top-5 right-5 text-sage-400 hover:text-sage-700 w-8 h-8 rounded-full bg-sage-50 flex items-center justify-center">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h3 class="text-xl font-bold text-sage-800">Tulis Jurnal Refleksi Harian</h3>
-            <form onsubmit="handleJournalSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-sage-700 mb-1.5">Kondisi / Suasana Hati Hari Ini</label>
-                    <select id="j-mood" class="w-full px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none bg-white">
-                        <option value="😊 Semangat & Positif">😊 Semangat & Positif</option>
-                        <option value="😌 Tenang & Stabil">😌 Tenang & Stabil</option>
-                        <option value="🤔 Sedang Banyak Pikiran / Cemas">🤔 Sedang Banyak Pikiran / Cemas</option>
-                        <option value="🌧️ Lelah / Butuh Istirahat">🌧️ Lelah / Butuh Istirahat</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-sage-700 mb-1.5">Hal Baik / Pelajaran Hari Ini</label>
-                    <input type="text" id="j-title" required placeholder="Contoh: Berhasil memahami materi matematika & diskusi kelompok" class="w-full px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-sage-700 mb-1.5">Catatan Refleksi & Target Besok</label>
-                    <textarea id="j-desc" rows="3" required placeholder="Tuliskan catatan refleksi diri dan apa yang ingin dicapai besok..." class="w-full px-4 py-3 rounded-xl border border-sage-200 text-xs focus:ring-2 focus:ring-sage-500 focus:outline-none"></textarea>
-                </div>
-                <div class="pt-2 flex justify-end space-x-2">
-                    <button type="button" onclick="closeJournalModal()" class="bg-sage-100 text-sage-700 px-5 py-2.5 rounded-xl text-xs font-semibold hover:bg-sage-200 transition-all">Batal</button>
-                    <button type="submit" class="bg-sage-700 hover:bg-sage-800 text-white px-5 py-2.5 rounded-xl text-xs font-semibold transition-all shadow-sm">Simpan Jurnal</button>
-                </div>
-            </form>
-        </div>
+    <div id="appealSection"></div>
+    <div id="appealForm" class="hidden" style="margin-top:16px;text-align:left">
+      <label style="font-size:13px;color:#667781;font-weight:600;display:block;margin-bottom:6px">Alasan kamu</label>
+      <textarea id="appealText" placeholder="Jelaskan kenapa kamu tidak seharusnya diblokir..." style="width:100%;padding:12px;border:1.5px solid #ccc;border-radius:10px;font-family:inherit;min-height:100px;font-size:14px;resize:vertical"></textarea>
+      <button onclick="submitAppeal()" style="margin-top:10px;width:100%;padding:14px;background:linear-gradient(135deg,#ff9800,#e65100);color:white;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer">Kirim Permohonan</button>
+      <button class="link-btn" onclick="hideAppealForm()" style="width:100%;padding:8px;margin-top:6px">Batal</button>
     </div>
+    <p id="bannedMsg" class="msg"></p>
+    <button class="link-btn" onclick="doLogout(true)" style="margin-top:20px">← Kembali ke Login</button>
+  </div>
+</div>
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        // State Management
-        let currentTab = 'dashboard';
-        let journals = JSON.parse(localStorage.getItem('bk_journals')) || [
-            { id: 1, date: '28 Oktober 2026', mood: '😊 Semangat & Positif', title: 'Eksplorasi Minat Karir Vokasi', desc: 'Hari ini saya mengikuti sesi bimbingan karir dan merasa lebih paham mengenai pilihan studi lanjut yang sesuai dengan hobi desain.' },
-            { id: 2, date: '26 Oktober 2026', mood: '😌 Tenang & Stabil', title: 'Latihan Relaksasi & Manajemen Stres', desc: 'Mempelajari teknik pernapasan untuk mengatasi kecemasan menghadapi ujian sekolah minggu depan.' }
-        ];
+<!-- CHAT LIST -->
+<div id="page-chat" class="page hidden">
+  <header class="app-header">
+    <h1>WhatsApp</h1>
+    <div class="header-actions">
+      <button onclick="showPage('profile')">👤</button>
+      <button onclick="doLogout()">🚪</button>
+    </div>
+  </header>
+  <div class="search-bar">
+    <input id="searchChat" type="text" placeholder="🔍 Cari chat...">
+  </div>
+  <div id="chatList" class="chat-list"></div>
+  <div class="fab" onclick="openCreateGroup()">👥+</div>
+  <nav class="bottom-nav">
+    <a onclick="showPage('chat')" class="active" data-tab="chat"><span class="nav-icon">💬</span>Chat</a>
+    <a onclick="showPage('status')" data-tab="status"><span class="nav-icon">⭕</span>Status</a>
+    <a onclick="showPage('contacts')" data-tab="contacts"><span class="nav-icon">👥</span>Kontak</a>
+    <a onclick="showPage('profile')" data-tab="profile"><span class="nav-icon">👤</span>Profil</a>
+  </nav>
+</div>
 
-        // Tab Switching Logic
-        function switchTab(tabId) {
-            currentTab = tabId;
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.add('hidden');
-            });
-            document.getElementById('tab-' + tabId).classList.remove('hidden');
+<!-- STATUS -->
+<div id="page-status" class="page hidden">
+  <header class="app-header">
+    <h1>Status</h1>
+    <div class="header-actions"><button onclick="openStatusCreator()">📷</button></div>
+  </header>
+  <div id="statusPage" class="chat-list"></div>
+  <nav class="bottom-nav">
+    <a onclick="showPage('chat')" data-tab="chat"><span class="nav-icon">💬</span>Chat</a>
+    <a onclick="showPage('status')" class="active" data-tab="status"><span class="nav-icon">⭕</span>Status</a>
+    <a onclick="showPage('contacts')" data-tab="contacts"><span class="nav-icon">👥</span>Kontak</a>
+    <a onclick="showPage('profile')" data-tab="profile"><span class="nav-icon">👤</span>Profil</a>
+  </nav>
+</div>
 
-            // Update Desktop Nav styles
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-sage-700', 'bg-white', 'shadow-xs');
-                btn.classList.add('text-sage-600');
-            });
-            const activeBtn = document.getElementById('nav-' + tabId);
-            if(activeBtn) {
-                activeBtn.classList.remove('text-sage-600');
-                activeBtn.classList.add('text-sage-700', 'bg-white', 'shadow-xs');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+<!-- CONTACTS -->
+<div id="page-contacts" class="page hidden">
+  <header class="app-header"><h1>Kontak</h1></header>
+  <div id="contactsList" class="chat-list"></div>
+  <nav class="bottom-nav">
+    <a onclick="showPage('chat')" data-tab="chat"><span class="nav-icon">💬</span>Chat</a>
+    <a onclick="showPage('status')" data-tab="status"><span class="nav-icon">⭕</span>Status</a>
+    <a onclick="showPage('contacts')" class="active" data-tab="contacts"><span class="nav-icon">👥</span>Kontak</a>
+    <a onclick="showPage('profile')" data-tab="profile"><span class="nav-icon">👤</span>Profil</a>
+  </nav>
+</div>
+
+<!-- ROOM (CHAT DETAIL) -->
+<div id="page-room" class="page hidden">
+  <header class="app-header">
+    <button onclick="showPage('chat')">←</button>
+    <h1 id="roomTitle" onclick="openGroupInfo()">...</h1>
+    <span id="roomStatus" class="status"></span>
+    <div id="callButtons">
+      <button onclick="startVoiceCall()" title="Voice Call">📞</button>
+      <button onclick="startVideoCall()" title="Video Call">📹</button>
+    </div>
+  </header>
+  <div id="messages" class="messages"></div>
+  <div id="replyBar" class="reply-bar">
+    <span id="replyName">Membalas...</span>
+    <div id="replyText" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+    <span class="close-reply" onclick="cancelReply()">✕</span>
+  </div>
+  <div class="input-area">
+    <button class="icon-btn" onclick="document.getElementById('imgInput').click()">📎</button>
+    <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="sendImage(this)">
+    <input id="msgInput" type="text" placeholder="Ketik pesan...">
+    <button class="send-btn" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="page-profile" class="page hidden">
+  <header class="app-header">
+    <button onclick="showPage('chat')">←</button>
+    <h1>Profil</h1>
+  </header>
+  <div class="profile-page">
+    <div class="profile-avatar" id="profileAvatar">?</div>
+    <div class="profile-name" id="profileName">...</div>
+    <div class="profile-phone" id="profilePhone">...</div>
+    <div class="profile-form">
+      <label>Nama</label>
+      <input id="editName" type="text">
+      <label>Status / About</label>
+      <input id="editAbout" type="text">
+      <button onclick="saveProfile()">Simpan</button>
+      <p id="profileMsg" class="msg"></p>
+    </div>
+    <div style="margin-top: 30px; padding: 0 24px;">
+      <button onclick="toggleTheme()" style="width:100%; padding:14px; background:#2a3942; color:#e9edef; border:none; border-radius:10px; font-size:15px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px;">
+        <span id="themeIcon">🌙</span> <span id="themeText">Mode Gelap</span>
+      </button>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <a onclick="showPage('chat')" data-tab="chat"><span class="nav-icon">💬</span>Chat</a>
+    <a onclick="showPage('status')" data-tab="status"><span class="nav-icon">⭕</span>Status</a>
+    <a onclick="showPage('contacts')" data-tab="contacts"><span class="nav-icon">👥</span>Kontak</a>
+    <a onclick="showPage('profile')" class="active" data-tab="profile"><span class="nav-icon">👤</span>Profil</a>
+  </nav>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page hidden">
+  <header class="app-header">
+    <button onclick="showPage('login')">←</button>
+    <h1>🔑 Panel Admin</h1>
+  </header>
+  <div class="admin-page">
+    <div class="admin-card">
+      <h2>📩 Permohonan Tinjauan (<span id="appealCount">0</span>)</h2>
+      <div id="adminAppealList"></div>
+    </div>
+    <div class="admin-card">
+      <h2>🚫 User Terbanned</h2>
+      <div id="adminBannedList"></div>
+    </div>
+    <div class="admin-card">
+      <h2>👥 Semua User</h2>
+      <div id="adminUserList"></div>
+    </div>
+    <div class="admin-card">
+      <h2>📋 Daftar Nomor</h2>
+      <div id="adminPhoneList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CREATE GROUP -->
+<div id="createGroupModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h2>👥 Buat Grup Baru</h2>
+    <input type="text" id="groupNameInput" placeholder="Nama grup..." maxlength="30">
+    <p style="font-size:12px;color:#8696a0;margin-bottom:8px">Pilih anggota (minimal 1 orang):</p>
+    <div id="groupMemberPicker" class="member-list"></div>
+    <div class="actions">
+      <button class="secondary" onclick="closeCreateGroup()">Batal</button>
+      <button class="primary" onclick="confirmCreateGroup()">Buat Grup</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GROUP INFO -->
+<div id="groupInfoModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h2>ℹ️ Info Grup</h2>
+    <div id="groupInfoContent"></div>
+    <div class="actions" style="margin-top:16px">
+      <button class="secondary" onclick="closeGroupInfo()">Tutup</button>
+      <button class="primary" id="btnEditGroup" onclick="openEditGroup()" style="background:#ff9800">Edit</button>
+      <button class="primary" id="btnLeaveGroup" onclick="leaveGroup()" style="background:#e53935">Keluar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT GRUP -->
+<div id="editGroupModal" class="modal-overlay hidden" style="z-index: 2000;">
+  <div class="modal-box">
+    <h2>✏️ Edit Grup</h2>
+    <input type="text" id="editGroupName" placeholder="Nama grup baru..." maxlength="30">
+    <div class="actions">
+      <button class="secondary" onclick="document.getElementById('editGroupModal').classList.add('hidden')">Batal</button>
+      <button class="primary" onclick="saveEditGroup()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HAPUS/EDIT PESAN -->
+<div id="msgActionModal" class="modal-overlay hidden" style="z-index: 2500;">
+  <div class="modal-box" style="text-align:center;">
+    <h2>Aksi Pesan</h2>
+    <div class="actions" style="flex-direction:column; gap:10px;">
+      <button class="secondary" onclick="startReply()" style="padding:15px;">↩️ Balas Pesan</button>
+      <button class="secondary" onclick="deleteMessage()" style="padding:15px; color:#e53935;">🗑️ Hapus Pesan</button>
+      <button class="secondary" onclick="closeMsgAction()" style="padding:15px;">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PERSETUJUAN OTP (KEAMANAN) -->
+<div id="otpApprovalModal" class="modal-overlay hidden" style="z-index: 9998;">
+  <div class="modal-box" style="text-align:center;">
+    <div style="font-size:40px; margin-bottom:10px;">🛡️</div>
+    <h2 style="color:#e9edef; margin-bottom:10px;">Peringatan Keamanan</h2>
+    <p style="color:#8696a0; font-size:14px; margin-bottom:15px; line-height:1.5;">
+      Seseorang mencoba login menggunakan nomor HP kamu dari perangkat lain.
+    </p>
+    <div style="background:#2a3942; padding:15px; border-radius:10px; margin-bottom:15px;">
+      <p style="color:#aebac1; font-size:12px; margin-bottom:5px;">Kode OTP untuk perangkat tersebut:</p>
+      <div id="approvalOtpCode" style="font-size:28px; font-weight:800; color:#25d366; letter-spacing:4px;">------</div>
+    </div>
+    <div class="actions">
+      <button class="secondary" onclick="rejectLoginAttempt()" style="background:#e53935; color:white;">Blokir</button>
+      <button class="primary" onclick="closeApprovalModal()">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading" class="loading-overlay hidden">
+  <div class="spinner"></div>
+  <p>Memuat...</p>
+</div>
+
+<!-- OTP NOTIF -->
+<div id="otpNotif" class="otp-notif">
+  <div class="icon">📩</div>
+  <div class="content">
+    <b id="notifTitle">Pesan Baru</b>
+    <p id="notifText">-</p>
+    <div class="code" id="notifCode">------</div>
+  </div>
+  <button class="close" onclick="closeOtpNotif()">✕</button>
+</div>
+
+<!-- INCOMING CALL OVERLAY -->
+<div id="incomingCall" class="incoming-call-overlay hidden">
+  <div class="incoming-call-box">
+    <div class="avatar-lg" id="incomingAvatar">?</div>
+    <h2 id="incomingName">...</h2>
+    <p id="incomingType">Panggilan masuk...</p>
+    <div class="incoming-call-actions">
+      <button class="call-btn end" onclick="rejectCall()">✕</button>
+      <button class="call-btn accept" onclick="acceptCall()">📞</button>
+    </div>
+  </div>
+</div>
+
+<!-- CALL SCREEN -->
+<div id="callScreen" class="call-screen hidden">
+  <div class="call-header" id="callHeader">
+    <div class="avatar-lg" id="callAvatar">?</div>
+    <div class="call-name" id="callName">...</div>
+    <div class="call-status" id="callStatus">Memanggil...</div>
+    <div class="call-timer hidden" id="callTimer">00:00</div>
+    <div class="ringing-indicator" id="ringingIndicator">🔊 Memanggil...</div>
+  </div>
+  <div class="call-videos hidden" id="callVideos">
+    <video id="remoteVideo" class="remote-video" autoplay playsinline></video>
+    <video id="localVideo" class="local-video" autoplay playsinline muted></video>
+  </div>
+  <div class="call-actions" id="callActions">
+    <button class="call-btn mute" id="btnMute" onclick="toggleMute()">🎤</button>
+    <button class="call-btn end" onclick="endCall()">📞</button>
+    <button class="call-btn switch hidden" id="btnSwitch" onclick="switchCamera()">🔄</button>
+  </div>
+</div>
+
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+// ==========================================================
+// KONFIGURASI
+// ==========================================================
+const SPAM_LIMIT = 5;
+const SPAM_WINDOW_MS = 60 * 1000;
+const STATUS_LIFETIME_MS = 24 * 60 * 60 * 1000;
+const OTP_LIFETIME_MS = 5 * 60 * 1000;
+const OTP_COOLDOWN_MS = 30 * 1000;
+const BAN_COOLDOWN_MS = 60 * 1000;
+const SESSION_KEY = 'wa_session_v1';
+const ICE_SERVERS = {
+  iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' }
+  ]
+};
+
+// ==========================================================
+// FIREBASE
+// ==========================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyB4UOjzro4ZSc0LOxiih2zRaFCBUcAPjZE",
+  authDomain: "whatsapp-clone-ade-8dd44.firebaseapp.com",
+  projectId: "whatsapp-clone-ade-8dd44",
+  storageBucket: "whatsapp-clone-ade-8dd44.firebasestorage.app",
+  messagingSenderId: "54756787004",
+  appId: "1:54756787004:web:d39d6db5af17e14e0c9439"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+const FieldValue = firebase.firestore.FieldValue;
+
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+
+// ==========================================================
+// STATE
+// ==========================================================
+let me = null;
+let currentRoom = null; 
+let chatUnsub = null, chatsUnsub = null, contactsUnsub = null;
+let statusUnsub = null, adminAppealUnsub = null, adminBannedUnsub = null;
+let adminUsersUnsub = null, adminPhonesUnsub = null;
+let allChats = [], allStatuses = [], myStatuses = [];
+let messageTimes = [];
+let lastMessageFromOther = false;
+let bannedData = null;
+let lastOtpRequest = 0;
+let adminUnlocked = false;
+let selectedColor = '#075e54';
+let myPhoneUnsub = null; 
+const ADMIN_PASS = "admin123";
+
+let currentGroupMembers = [];
+let selectedGroupMembers = [];
+let replyToMessage = null;
+let selectedMessageForAction = null;
+
+// ==========================================================
+// NAVIGASI & UTILS
+// ==========================================================
+function showPage(name) {
+  // --- CEK SESSION WAJAH (DARI SCAN-WAJAH.HTML) ---
+  if (name === 'login') {
+    if (!localStorage.getItem('wa_session_v1')) {
+      window.location.href = 'scan-wajah.html';
+      return;
+    }
+  }
+
+  document.querySelectorAll('.page, .auth-page').forEach(el => el.classList.add('hidden'));
+  const splash = document.getElementById('splash');
+  if (splash) splash.classList.add('hidden');
+  const el = document.getElementById('page-' + name);
+  if (el) el.classList.remove('hidden');
+  document.querySelectorAll('.bottom-nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.tab === name);
+  });
+  if (name === 'chat') loadChatList();
+  if (name === 'contacts') loadContacts();
+  if (name === 'profile') loadProfile();
+  if (name === 'status') loadStatuses();
+  if (name === 'admin') startAdmin();
+}
+window.showPage = showPage;
+function showLoading(s) { document.getElementById('loading').classList.toggle('hidden', !s); }
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ==========================================================
+// LIGHT MODE
+// ==========================================================
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  localStorage.setItem('wa_theme', isLight ? 'light' : 'dark');
+  document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
+  document.getElementById('themeText').textContent = isLight ? 'Mode Terang' : 'Mode Gelap';
+}
+window.toggleTheme = toggleTheme;
+
+if (localStorage.getItem('wa_theme') === 'light') {
+  document.body.classList.add('light-mode');
+  document.getElementById('themeIcon').textContent = '☀️';
+  document.getElementById('themeText').textContent = 'Mode Terang';
+}
+
+// ==========================================================
+// OTP NOTIF
+// ==========================================================
+function showOtpNotif(code, phone) {
+  const notif = document.getElementById('otpNotif');
+  document.getElementById('notifTitle').textContent = 'WhatsApp Clone';
+  document.getElementById('notifText').textContent = `Kode verifikasi untuk ${phone}:`;
+  document.getElementById('notifCode').textContent = code;
+  notif.classList.add('show');
+  setTimeout(() => closeOtpNotif(), 30000);
+}
+window.showOtpNotif = showOtpNotif;
+function closeOtpNotif() { document.getElementById('otpNotif').classList.remove('show'); }
+window.closeOtpNotif = closeOtpNotif;
+
+function generateOtp() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// ==========================================================
+// LOGIN & OTP (DENGAN KEAMANAN MUTLAK)
+// ==========================================================
+async function requestOtp() {
+  const code = document.getElementById('countryCode').value;
+  const num = document.getElementById('phone').value.trim().replace(/^0+/, '');
+  const msg = document.getElementById('loginMsg');
+  const btn = document.getElementById('btnSendOtp');
+  
+  if (num.length < 8) { msg.textContent = '❌ Nomor terlalu pendek'; return; }
+  const fullPhone = code + num;
+  
+  const now = Date.now();
+  if (now - lastOtpRequest < OTP_COOLDOWN_MS) {
+    const sisa = Math.ceil((OTP_COOLDOWN_MS - (now - lastOtpRequest)) / 1000);
+    msg.textContent = `⏳ Tunggu ${sisa} detik lagi`;
+    return;
+  }
+  
+  btn.disabled = true; btn.textContent = 'Memeriksa...'; msg.textContent = '';
+  
+  try {
+    const snap = await db.collection('phones').doc(fullPhone).get();
+    
+    if (!snap.exists) {
+      const otp = generateOtp();
+      await db.collection('phones').doc(fullPhone).set({
+        phone: fullPhone,
+        name: 'User ' + fullPhone.slice(-4),
+        otp: otp,
+        otpExpires: new Date(Date.now() + OTP_LIFETIME_MS),
+        otpRequestedAt: FieldValue.serverTimestamp(),
+        banned: false, permanentBan: false, appealStatus: null,
+        autoRegistered: true,
+        createdAt: FieldValue.serverTimestamp()
+      });
+      sessionStorage.setItem('pendingPhone', fullPhone);
+      document.getElementById('otpPhone').textContent = fullPhone;
+      document.getElementById('otpInput').value = '';
+      document.getElementById('otpMsg').textContent = '';
+      lastOtpRequest = now;
+      showOtpNotif(otp, fullPhone); 
+      showPage('otp');
+      btn.disabled = false; btn.textContent = 'Kirim Kode';
+      return;
+    }
+    
+    const data = snap.data();
+    
+    if (data.banned === true) {
+      const bannedAt = data.bannedAt?.toMillis() || 0;
+      if (Date.now() - bannedAt < BAN_COOLDOWN_MS) {
+        const sisa = Math.ceil((BAN_COOLDOWN_MS - (Date.now() - bannedAt)) / 1000);
+        msg.textContent = `⏳ Tunggu ${sisa} detik`;
+        btn.disabled = false; btn.textContent = 'Kirim Kode';
+        return;
+      }
+      bannedData = {
+        phone: fullPhone, reason: data.banReason || 'Terdeteksi spam',
+        bannedAt: data.bannedAt, permanent: data.permanentBan || false,
+        appealStatus: data.appealStatus || null
+      };
+      showBannedPage();
+      btn.disabled = false; btn.textContent = 'Kirim Kode';
+      return;
+    }
+    
+    const otp = generateOtp();
+    await db.collection('phones').doc(fullPhone).set({
+      otp: otp, 
+      otpExpires: new Date(Date.now() + OTP_LIFETIME_MS),
+      otpRequestedAt: FieldValue.serverTimestamp()
+    }, { merge: true });
+    
+    sessionStorage.setItem('pendingPhone', fullPhone);
+    document.getElementById('otpPhone').textContent = fullPhone;
+    document.getElementById('otpInput').value = '';
+    lastOtpRequest = now;
+
+    document.getElementById('otpMsg').textContent = '🔒 Kode verifikasi telah dikirim ke perangkat yang sedang login dengan nomor ini. Silakan cek HP utamamu.';
+    document.getElementById('otpMsg').style.color = '#ff9800';
+    
+    showPage('otp');
+    
+  } catch (e) {
+    msg.textContent = '❌ ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Kirim Kode';
+  }
+}
+window.requestOtp = requestOtp;
+
+async function verifyOtp() {
+  const input = document.getElementById('otpInput').value.trim();
+  const msg = document.getElementById('otpMsg');
+  const btn = document.getElementById('btnVerify');
+  const phone = sessionStorage.getItem('pendingPhone');
+  
+  if (!phone) { showPage('login'); return; }
+  if (input.length !== 6) { msg.textContent = '❌ Kode harus 6 digit'; return; }
+  
+  btn.disabled = true; btn.textContent = 'Memverifikasi...'; msg.textContent = '';
+  
+  try {
+    const snap = await db.collection('phones').doc(phone).get();
+    const data = snap.data();
+    
+    if (data.banned === true) {
+      bannedData = {
+        phone, reason: data.banReason || 'Terdeteksi spam',
+        bannedAt: data.bannedAt, permanent: data.permanentBan || false,
+        appealStatus: data.appealStatus || null
+      };
+      showBannedPage();
+      btn.disabled = false; btn.textContent = 'Verifikasi';
+      return;
+    }
+    
+    if (!data || data.otp !== input) {
+      msg.textContent = '❌ Kode OTP salah';
+      btn.disabled = false; btn.textContent = 'Verifikasi';
+      return;
+    }
+    
+    if (data.otpExpires && data.otpExpires.toMillis && data.otpExpires.toMillis() < Date.now()) {
+      msg.textContent = '❌ OTP kadaluarsa. Minta kode baru.';
+      btn.disabled = false; btn.textContent = 'Verifikasi';
+      return;
+    }
+    
+    const cred = await auth.signInAnonymously();
+    const uid = cred.user.uid;
+    
+    await db.collection('users').doc(uid).set({
+      phone, uid,
+      name: data.name || 'User ' + phone.slice(-4),
+      about: 'Hey! Saya pakai Chat',
+      createdAt: FieldValue.serverTimestamp(),
+      lastSeen: FieldValue.serverTimestamp(),
+      online: true
+    }, { merge: true });
+    
+    await db.collection('phones').doc(phone).set({ otp: null, otpExpires: null }, { merge: true });
+    
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ uid, phone, savedAt: Date.now() }));
+    sessionStorage.setItem('uid', uid);
+    sessionStorage.setItem('phone', phone);
+    messageTimes = [];
+    closeOtpNotif();
+    showPage('chat');
+    
+  } catch (e) {
+    msg.textContent = '❌ ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Verifikasi';
+  }
+}
+window.verifyOtp = verifyOtp;
+
+document.addEventListener('keypress', (e) => {
+  if (e.key !== 'Enter') return;
+  if (!document.getElementById('page-login').classList.contains('hidden')) requestOtp();
+  else if (!document.getElementById('page-otp').classList.contains('hidden')) verifyOtp();
+  else if (!document.getElementById('page-room').classList.contains('hidden')) sendMessage();
+});
+
+document.getElementById('otpInput').addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/\D/g, '');
+  if (e.target.value.length === 6) verifyOtp();
+});
+
+// ==========================================================
+// KEAMANAN & MODAL PERSETUJUAN
+// ==========================================================
+function closeApprovalModal() {
+  document.getElementById('otpApprovalModal').classList.add('hidden');
+}
+window.closeApprovalModal = closeApprovalModal;
+
+async function rejectLoginAttempt() {
+  if (!confirm('Blokir percobaan login ini?')) return;
+  try {
+    await db.collection('phones').doc(me.phone).set({ otp: null, otpExpires: null }, { merge: true });
+    document.getElementById('otpApprovalModal').classList.add('hidden');
+    alert('✅ Percobaan login diblokir.');
+  } catch (e) {
+    alert('❌ Gagal memblokir: ' + e.message);
+  }
+}
+window.rejectLoginAttempt = rejectLoginAttempt;
+
+// ==========================================================
+// BANNED PAGE
+// ==========================================================
+function showBannedPage() {
+  try { auth.signOut(); } catch(e) {}
+  sessionStorage.clear();
+  localStorage.removeItem(SESSION_KEY);
+
+  document.getElementById('splash').classList.add('hidden');
+  const reason = document.getElementById('bannedReason');
+  const time = document.getElementById('bannedTime');
+  const appealSec = document.getElementById('appealSection');
+  const msg = document.getElementById('bannedMsg');
+  document.getElementById('appealForm').classList.add('hidden');
+  msg.textContent = ''; msg.className = 'msg';
+  reason.innerHTML = '<b>Alasan:</b> ' + (bannedData.reason || 'Terdeteksi spam');
+  time.innerHTML = bannedData.bannedAt
+    ? '<b>Waktu:</b> ' + new Date(bannedData.bannedAt.toMillis()).toLocaleString('id-ID') : '';
+  
+  if (bannedData.permanent) {
+    appealSec.innerHTML = '<p style="color:#b71c1c;font-weight:600;text-align:center;padding:12px;background:#ffebee;border-radius:10px">🔒 Kamu diblokir PERMANEN.</p>';
+    showPage('banned');
+    return;
+  }
+  if (bannedData.appealStatus === 'pending') {
+    appealSec.innerHTML = '<p style="color:#e65100;font-weight:600;text-align:center;padding:12px;background:#fff3e0;border-radius:10px">⏳ Permohonan sedang ditinjau admin.</p>';
+  } else if (bannedData.appealStatus === 'rejected') {
+    appealSec.innerHTML = '<p style="color:#b71c1c;font-weight:600;text-align:center;padding:12px;background:#ffebee;border-radius:10px;margin-bottom:10px">❌ Permohonan ditolak. Bisa ajukan lagi.</p><button onclick="showAppealForm()" style="width:100%;padding:14px;background:linear-gradient(135deg,#ff9800,#e65100);color:white;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer">📩 Ajukan Lagi</button>';
+  } else {
+    appealSec.innerHTML = '<button onclick="showAppealForm()" style="width:100%;padding:14px;background:linear-gradient(135deg,#ff9800,#e65100);color:white;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer">📩 Ajukan Tinjauan</button>';
+  }
+  showPage('banned');
+}
+window.showBannedPage = showBannedPage;
+
+function showAppealForm() {
+  document.getElementById('appealForm').classList.remove('hidden');
+  document.getElementById('appealSection').classList.add('hidden');
+}
+window.showAppealForm = showAppealForm;
+function hideAppealForm() {
+  document.getElementById('appealForm').classList.add('hidden');
+  document.getElementById('appealSection').classList.remove('hidden');
+}
+window.hideAppealForm = hideAppealForm;
+
+async function submitAppeal() {
+  const text = document.getElementById('appealText').value.trim();
+  const msg = document.getElementById('bannedMsg');
+  if (text.length < 10) { msg.textContent = '❌ Alasan terlalu pendek'; return; }
+  if (!bannedData) return;
+  try {
+    await db.collection('phones').doc(bannedData.phone).set({
+      appealStatus: 'pending', appealText: text,
+      appealAt: FieldValue.serverTimestamp()
+    }, { merge: true });
+    msg.className = 'msg success';
+    msg.textContent = '✅ Permohonan terkirim!';
+    bannedData.appealStatus = 'pending';
+    setTimeout(() => showBannedPage(), 1500);
+  } catch (e) { msg.textContent = '❌ ' + e.message; }
+}
+window.submitAppeal = submitAppeal;
+
+// ==========================================================
+// AUTH STATE (AUTO-LOGIN & LISTENER KEAMANAN)
+// ==========================================================
+auth.onAuthStateChanged(async (user) => {
+  if (!user) {
+    me = null;
+    
+    // --- FIX: AUTO LOGIN DARI SCAN WAJAH ---
+    // Jika tidak ada user Firebase, tapi scan-wajah.html sudah menyimpan tiket (wa_session_v1)
+    if (localStorage.getItem('wa_session_v1')) {
+      try {
+        // Login anonymous secara diam-diam agar Firebase punya sesi
+        await auth.signInAnonymously(); 
+        return; // Berhenti di sini, biarkan Firebase memicu ulang fungsi ini
+      } catch (e) { 
+        console.error("Gagal auto-login:", e); 
+      }
+    }
+    // ---------------------------------------
+
+    setTimeout(() => showPage('login'), 500);
+    return;
+  }
+  
+  try {
+    const snap = await db.collection('users').doc(user.uid).get();
+    if (!snap.exists) { 
+      // Kalau user anonymous tapi belum ada data di 'users', buatkan datanya
+      const phone = JSON.parse(localStorage.getItem('wa_session_v1'))?.phone || 'Unknown';
+      await db.collection('users').doc(user.uid).set({
+        phone: phone, uid: user.uid, name: 'User ' + phone.slice(-4), 
+        about: 'Hey! Saya pakai Chat', createdAt: FieldValue.serverTimestamp(),
+        lastSeen: FieldValue.serverTimestamp(), online: true
+      });
+      me = { uid: user.uid, phone: phone, name: 'User ' + phone.slice(-4) };
+    } else {
+      me = { uid: user.uid, ...snap.data() };
+    }
+
+    const phoneSnap = await db.collection('phones').doc(me.phone).get();
+    if (phoneSnap.exists && phoneSnap.data().banned === true) {
+      bannedData = {
+        phone: me.phone, reason: phoneSnap.data().banReason || 'Terdeteksi spam',
+        bannedAt: phoneSnap.data().bannedAt,
+        permanent: phoneSnap.data().permanentBan || false,
+        appealStatus: phoneSnap.data().appealStatus || null
+      };
+      showBannedPage();
+      return;
+    }
+    
+    await db.collection('users').doc(user.uid).update({
+      online: true, lastSeen: FieldValue.serverTimestamp()
+    });
+
+    if (myPhoneUnsub) myPhoneUnsub();
+    myPhoneUnsub = db.collection('phones').doc(me.phone).onSnapshot((doc) => {
+      const data = doc.data();
+      if (!data) return;
+      if (data.otp && data.otpRequestedAt) {
+        const reqTime = data.otpRequestedAt.toMillis();
+        if (Date.now() - reqTime < 120000) {
+          document.getElementById('approvalOtpCode').textContent = data.otp;
+          document.getElementById('otpApprovalModal').classList.remove('hidden');
         }
+      }
+    });
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+    initCallListener();
+    showPage('chat');
+  } catch (e) { console.error(e); showPage('login'); }
+});
+
+// ==========================================================
+// CHAT LIST
+// ==========================================================
+function loadChatList() {
+  if (!me) return;
+  if (chatsUnsub) chatsUnsub();
+  chatsUnsub = db.collection('chats')
+    .where('members', 'array-contains', me.uid)
+    .onSnapshot(async (snap) => {
+      const items = [];
+      for (const d of snap.docs) {
+        const data = d.data();
+        if (data.type === 'group') {
+          items.push({ id: d.id, ...data });
+        } else {
+          const otherUid = data.members.find(u => u !== me.uid);
+          const oSnap = await db.collection('users').doc(otherUid).get();
+          if (!oSnap.exists) continue;
+          items.push({ id: d.id, ...data, other: { uid: otherUid, ...oSnap.data() } });
         }
+      }
+      items.sort((a, b) => (b.lastMessageAt?.toMillis() || 0) - (a.lastMessageAt?.toMillis() || 0));
+      allChats = items;
+      renderChats(items);
+    });
+}
 
-        // Toast Notification Function
-        function showToast(message, icon = 'fa-circle-check') {
-            const toast = document.getElementById('toast');
-            const msgEl = document.getElementById('toast-message');
-            const iconEl = document.getElementById('toast-icon');
+function renderChats(items) {
+  const box = document.getElementById('chatList');
+  if (items.length === 0) {
+    box.innerHTML = '<p class="empty">Belum ada chat.<br>Mulai dari tab Kontak 👥 atau buat grup dengan tombol 👥+</p>';
+    return;
+  }
+  box.innerHTML = items.map(c => {
+    if (c.type === 'group') {
+      return `
+        <div class="chat-item" onclick="openGroupRoom('${c.id}')">
+          <div class="avatar group-avatar">${(c.name || '?')[0].toUpperCase()}</div>
+          <div class="chat-info">
+            <div class="chat-top">
+              <b>${escapeHtml(c.name || '')}</b>
+              <span class="time">${c.lastMessageAt ? new Date(c.lastMessageAt.toMillis()).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : ''}</span>
+            </div>
+            <div class="chat-preview"><span style="color:#25d366">Grup:</span> ${escapeHtml(c.lastMessage || 'Mulai percakapan')}</div>
+          </div>
+        </div>
+      `;
+    } else {
+      return `
+        <div class="chat-item" onclick="openPrivateRoom('${c.other.uid}')">
+          <div class="avatar ${c.other.online ? 'online' : ''}">${(c.other.name || '?')[0].toUpperCase()}</div>
+          <div class="chat-info">
+            <div class="chat-top">
+              <b>${escapeHtml(c.other.name || '')}</b>
+              <span class="time">${c.lastMessageAt ? new Date(c.lastMessageAt.toMillis()).toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) : ''}</span>
+            </div>
+            <div class="chat-preview">${escapeHtml(c.lastMessage || 'Mulai percakapan')}</div>
+          </div>
+        </div>
+      `;
+    }
+  }).join('');
+}
+
+document.getElementById('searchChat').addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase();
+  renderChats(allChats.filter(c => {
+    const name = c.type === 'group' ? c.name : c.other.name;
+    const phone = c.type === 'group' ? '' : c.other.phone;
+    return (name || '').toLowerCase().includes(term) || (phone || '').includes(term);
+  }));
+});
+
+// ==========================================================
+// CONTACTS
+// ==========================================================
+function loadContacts() {
+  if (!me) return;
+  if (contactsUnsub) contactsUnsub();
+  contactsUnsub = db.collection('users').onSnapshot((snap) => {
+    const users = snap.docs.map(d => ({ uid: d.id, ...d.data() })).filter(u => u.uid !== me.uid);
+    const box = document.getElementById('contactsList');
+    if (users.length === 0) { box.innerHTML = '<p class="empty">Belum ada user lain</p>'; return; }
+    box.innerHTML = users.map(u => `
+      <div class="chat-item" onclick="openPrivateRoom('${u.uid}')">
+        <div class="avatar ${u.online ? 'online' : ''}">${(u.name || '?')[0].toUpperCase()}</div>
+        <div class="chat-info">
+          <div class="chat-top"><b>${escapeHtml(u.name || '')}</b></div>
+          <div class="chat-preview">${u.phone || ''} · ${u.online ? '🟢 online' : 'offline'}</div>
+        </div>
+      </div>
+    `).join('');
+  });
+}
+
+// ==========================================================
+// CREATE GROUP MODAL
+// ==========================================================
+async function openCreateGroup() {
+  if (!me) return;
+  document.getElementById('groupNameInput').value = '';
+  selectedGroupMembers = [];
+  document.getElementById('createGroupModal').classList.remove('hidden');
+  const picker = document.getElementById('groupMemberPicker');
+  picker.innerHTML = '<p class="empty" style="padding:10px">Memuat kontak...</p>';
+  const snap = await db.collection('users').get();
+  const users = snap.docs.map(d => ({ uid: d.id, ...d.data() })).filter(u => u.uid !== me.uid);
+  if (users.length === 0) {
+    picker.innerHTML = '<p class="empty" style="padding:10px">Belum ada user lain</p>';
+    return;
+  }
+  picker.innerHTML = users.map(u => `
+    <div class="member-item" id="picker-${u.uid}" onclick="toggleGroupMember('${u.uid}')">
+      <div class="avatar">${(u.name || '?')[0].toUpperCase()}</div>
+      <div class="info">
+        <b>${escapeHtml(u.name || '')}</b>
+        <small>${u.phone}</small>
+      </div>
+      <div class="check" id="check-${u.uid}"></div>
+    </div>
+  `).join('');
+}
+window.openCreateGroup = openCreateGroup;
+
+function toggleGroupMember(uid) {
+  const idx = selectedGroupMembers.indexOf(uid);
+  const el = document.getElementById('picker-' + uid);
+  const check = document.getElementById('check-' + uid);
+  if (idx === -1) {
+    selectedGroupMembers.push(uid);
+    el.classList.add('selected');
+    check.innerHTML = '✓';
+  } else {
+    selectedGroupMembers.splice(idx, 1);
+    el.classList.remove('selected');
+    check.innerHTML = '';
+  }
+}
+window.toggleGroupMember = toggleGroupMember;
+
+function closeCreateGroup() {
+  document.getElementById('createGroupModal').classList.add('hidden');
+}
+window.closeCreateGroup = closeCreateGroup;
+
+async function confirmCreateGroup() {
+  const name = document.getElementById('groupNameInput').value.trim();
+  if (!name) { alert('Isi nama grup dulu!'); return; }
+  if (selectedGroupMembers.length === 0) { alert('Pilih minimal 1 anggota!'); return; }
+  try {
+    const members = [me.uid, ...selectedGroupMembers];
+    const groupRef = await db.collection('chats').add({
+      type: 'group',
+      name: name,
+      members: members,
+      admins: [me.uid],
+      createdBy: me.uid,
+      createdAt: FieldValue.serverTimestamp(),
+      lastMessage: 'Grup dibuat',
+      lastMessageAt: FieldValue.serverTimestamp()
+    });
+    await db.collection('chats').doc(groupRef.id).collection('messages').add({
+      senderId: 'system',
+      senderName: 'System',
+      text: `${me.name} membuat grup "${name}"`,
+      isSystem: true,
+      createdAt: FieldValue.serverTimestamp()
+    });
+    closeCreateGroup();
+    loadChatList();
+    openGroupRoom(groupRef.id);
+  } catch (e) {
+    alert('❌ Gagal buat grup: ' + e.message);
+  }
+}
+window.confirmCreateGroup = confirmCreateGroup;
+
+// ==========================================================
+// ROOM LOGIC
+// ==========================================================
+window.openPrivateRoom = async function(otherUid) {
+  if (!me) return;
+  showLoading(true);
+  try {
+    const oSnap = await db.collection('users').doc(otherUid).get();
+    if (!oSnap.exists) { alert('User tidak ditemukan'); return; }
+    const other = { uid: otherUid, ...oSnap.data() };
+    const chatId = [me.uid, otherUid].sort().join('_');
+    currentRoom = { chatId, type: 'private', other };
+    lastMessageFromOther = false;
+    document.getElementById('roomTitle').textContent = other.name;
+    document.getElementById('roomStatus').textContent = other.online ? 'online' : 'offline';
+    document.getElementById('callButtons').style.display = 'flex';
+    document.getElementById('messages').innerHTML = '';
+    document.getElementById('msgInput').value = '';
+    cancelReply();
+    await db.collection('chats').doc(chatId).set({ 
+      type: 'private',
+      members: [me.uid, otherUid] 
+    }, { merge: true });
+    const r = {}; r['read_' + me.uid] = FieldValue.serverTimestamp();
+    await db.collection('chats').doc(chatId).set(r, { merge: true });
+    showPage('room');
+    loadMessages(chatId);
+  } finally { showLoading(false); }
+};
+
+window.openGroupRoom = async function(groupId) {
+  if (!me) return;
+  showLoading(true);
+  try {
+    const gSnap = await db.collection('chats').doc(groupId).get();
+    if (!gSnap.exists) { alert('Grup tidak ditemukan'); return; }
+    const group = gSnap.data();
+    currentRoom = { chatId: groupId, type: 'group', group };
+    lastMessageFromOther = false;
+    document.getElementById('roomTitle').textContent = group.name;
+    document.getElementById('roomStatus').textContent = group.members.length + ' anggota';
+    document.getElementById('callButtons').style.display = 'none'; 
+    document.getElementById('messages').innerHTML = '';
+    document.getElementById('msgInput').value = '';
+    cancelReply();
+    const r = {}; r['read_' + me.uid] = FieldValue.serverTimestamp();
+    await db.collection('chats').doc(groupId).set(r, { merge: true });
+    showPage('room');
+    loadMessages(groupId);
+  } finally { showLoading(false); }
+};
+
+function loadMessages(chatId) {
+  if (chatUnsub) chatUnsub();
+  chatUnsub = db.collection('chats').doc(chatId).collection('messages')
+    .orderBy('createdAt').onSnapshot(async (snap) => {
+      const box = document.getElementById('messages');
+      box.innerHTML = '';
+      let lastText = '', lastAt = null;
+      for (const d of snap.docs) {
+        const m = d.data();
+        const isMe = m.senderId === me.uid;
+        const isSystem = m.isSystem === true;
+        const t = m.createdAt?.toDate().toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'}) || '';
+        
+        if (!isSystem && !m.deleted) {
+          lastText = m.text || (m.image ? '📷 Foto' : '');
+          lastAt = m.createdAt;
+        }
+        
+        if (!isMe && !m.readAt && !isSystem) {
+          db.collection('chats').doc(chatId).collection('messages').doc(d.id)
+            .update({ readAt: FieldValue.serverTimestamp() });
+        }
+        if (!isMe && !isSystem) {
+          lastMessageFromOther = true;
+          messageTimes = []; 
+        }
+        
+        const div = document.createElement('div');
+        if (isSystem) {
+          div.style.textAlign = 'center';
+          div.style.fontSize = '12px';
+          div.style.color = '#8696a0';
+          div.style.margin = '8px 0';
+          div.style.width = '100%';
+          div.innerHTML = `<span style="background:#182229; padding:4px 8px; border-radius:6px;">${escapeHtml(m.text)}</span>`;
+        } else {
+          div.className = 'bubble ' + (isMe ? 'me' : 'other');
+          if (m.deleted) div.classList.add('deleted');
+          
+          let content = '';
+          
+          if (m.replyTo) {
+            content += `<div class="reply-preview"><b>${escapeHtml(m.replyTo.name)}</b><br>${escapeHtml(m.replyTo.text)}</div>`;
+          }
+          
+          if (currentRoom.type === 'group' && !isMe) {
+            content += `<div class="sender-name">${escapeHtml(m.senderName)}</div>`;
+          }
+          
+          if (m.deleted) {
+            content += `<div class="text" style="color:#8696a0;">🚫 Pesan ini telah dihapus</div>`;
+          } else {
+            if (m.image) content += `<img src="${m.image}">`;
+            if (m.text) content += `<div class="text">${escapeHtml(m.text)}</div>`;
+          }
+          
+          const check = isMe ? (m.readAt ? '✓✓' : '✓') : '';
+          const metaRight = (currentRoom.type === 'private' && !m.deleted) 
+            ? `${t} <span class="check">${check}</span>` 
+            : t;
             
-            msgEl.textContent = message;
-            iconEl.className = `fa-solid ${icon} text-sage-200`;
-            
-            toast.classList.remove('translate-y-[-200%]');
-            toast.classList.add('translate-y-0');
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0');
-                toast.classList.add('translate-y-[-200%]');
-            }, 3000);
+          div.innerHTML = `${content}<div class="meta">${metaRight}</div>`;
+          
+          if (!m.deleted) {
+            let pressTimer;
+            div.onmousedown = () => { pressTimer = setTimeout(() => showMsgAction(d.id, m), 500); };
+            div.onmouseup = () => clearTimeout(pressTimer);
+            div.onmouseleave = () => clearTimeout(pressTimer);
+            div.ontouchstart = () => { pressTimer = setTimeout(() => showMsgAction(d.id, m), 500); };
+            div.ontouchend = () => clearTimeout(pressTimer);
+          }
         }
+        box.appendChild(div);
+      }
+      box.scrollTop = box.scrollHeight;
+      if (lastAt) {
+        await db.collection('chats').doc(chatId).update({
+          lastMessage: lastText, 
+          lastMessageAt: lastAt
+        });
+      }
+    });
+}
 
-        // Modul Filter & Modal Functions
-        function filterModul(category) {
-            const cards = document.querySelectorAll('.modul-card');
-            const btnAll = document.getElementById('btn-filter-all');
-            const btnTeori = document.getElementById('btn-filter-teori');
-            const btnLayanan = document.getElementById('btn-filter-layanan');
+// ==========================================================
+// REPLY & HAPUS PESAN
+// ==========================================================
+function showMsgAction(msgId, msgData) {
+  selectedMessageForAction = { id: msgId, data: msgData };
+  document.getElementById('msgActionModal').classList.remove('hidden');
+}
+window.showMsgAction = showMsgAction;
 
-            // Reset buttons
-            [btnAll, btnTeori, btnLayanan].forEach(b => {
-                b.className = 'px-4 py-2 rounded-xl text-xs font-semibold bg-sage-100 text-sage-700 hover:bg-sage-200 transition-all';
-            });
+function closeMsgAction() {
+  document.getElementById('msgActionModal').classList.add('hidden');
+  selectedMessageForAction = null;
+}
+window.closeMsgAction = closeMsgAction;
 
-            if(category === 'all') {
-                btnAll.className = 'px-4 py-2 rounded-xl text-xs font-semibold bg-sage-800 text-white transition-all';
-                cards.forEach(c => c.style.display = 'flex');
-            } else if(category === 'teori') {
-                btnTeori.className = 'px-4 py-2 rounded-xl text-xs font-semibold bg-sage-800 text-white transition-all';
-                cards.forEach(c => {
-                    if(c.dataset.category === 'teori') c.style.display = 'flex';
-                    else c.style.display = 'none';
-                });
-            } else if(category === 'layanan') {
-                btnLayanan.className = 'px-4 py-2 rounded-xl text-xs font-semibold bg-sage-800 text-white transition-all';
-                cards.forEach(c => {
-                    if(c.dataset.category === 'layanan') c.style.display = 'flex';
-                    else c.style.display = 'none';
-                });
-            }
-        }
+function startReply() {
+  if (!selectedMessageForAction) return;
+  replyToMessage = selectedMessageForAction.data;
+  
+  document.getElementById('replyName').textContent = replyToMessage.senderId === me.uid ? 'Kamu' : replyToMessage.senderName;
+  document.getElementById('replyText').textContent = replyToMessage.text || '📷 Foto';
+  document.getElementById('replyBar').style.display = 'block';
+  
+  closeMsgAction();
+  document.getElementById('msgInput').focus();
+}
+window.startReply = startReply;
 
-        const modulDetailsData = [
-            {
-                title: "Layanan Karir & Eksplorasi Vokasi",
-                tag: "Bimbingan Karir",
-                content: "Layanan karir membantu siswa mengenali potensi diri, mencocokkan minat dengan jenis pekerjaan atau studi lanjut, serta memahami dunia kerja masa depan. Melalui pendekatan psikologi pendidikan, siswa didorong untuk menyusun perencanaan karir yang matang sejak di bangku sekolah."
-            },
-            {
-                title: "Kesehatan Mental & Manajemen Stres Remaja",
-                tag: "Kesehatan Mental",
-                content: "Kesehatan mental merupakan aspek krusial dalam perkembangan siswa. Modul ini mengajarkan cara mengenali tanda-tanda stres akademik, teknik relaksasi emosi, serta pentingnya komunikasi terbuka dengan konselor sekolah ketika menghadapi tekanan emosional."
-            },
-            {
-                title: "Motivasi Belajar & Teori Hierarki Maslow",
-                tag: "Motivasi Belajar",
-                content: "Motivasi adalah penggerak utama tercapainya tujuan belajar. Berdasarkan teori Abraham Maslow dan para ahli psikologi, pemenuhan kebutuhan dasar, rasa aman, dan harga diri akan membangkitkan motivasi intrinsik siswa untuk berprestasi secara maksimal."
-            },
-            {
-                title: "Konsultasi Pribadi & Karakter Sosial",
-                tag: "Konsultasi Pribadi",
-                content: "Layanan konseling pribadi membantu siswa mengatasi hambatan psikologis personal, konflik pertemanan, serta membangun kepercayaan diri yang kokoh dalam berinteraksi sosial di lingkungan sekolah maupun masyarakat."
-            }
-        ];
+function cancelReply() {
+  replyToMessage = null;
+  document.getElementById('replyBar').style.display = 'none';
+}
+window.cancelReply = cancelReply;
 
-        function openModulDetail(index) {
-            const data = modulDetailsData[index];
-            document.getElementById('modal-title').textContent = data.title;
-            document.getElementById('modal-tag').textContent = data.tag;
-            document.getElementById('modal-content').innerHTML = data.content;
-            document.getElementById('modul-modal').classList.remove('hidden');
-            document.getElementById('modul-modal').classList.add('flex');
-        }
+async function deleteMessage() {
+  if (!selectedMessageForAction) return;
+  if (!confirm('Hapus pesan ini untuk semua orang?')) return;
+  
+  try {
+    await db.collection('chats').doc(currentRoom.chatId).collection('messages').doc(selectedMessageForAction.id).update({
+      deleted: true,
+      text: null,
+      image: null,
+      replyTo: null
+    });
+    closeMsgAction();
+  } catch (e) {
+    alert('Gagal menghapus: ' + e.message);
+  }
+}
+window.deleteMessage = deleteMessage;
 
-        function openModulModal(title, content) {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-tag').textContent = "Pustaka Teori";
-            document.getElementById('modal-content').innerHTML = content;
-            document.getElementById('modul-modal').classList.remove('hidden');
-            document.getElementById('modul-modal').classList.add('flex');
-        }
+// ==========================================================
+// ANTI-SPAM & SEND MESSAGE
+// ==========================================================
+function checkSpam() {
+  const now = Date.now();
+  messageTimes = messageTimes.filter(t => now - t < SPAM_WINDOW_MS);
+  return messageTimes.length < SPAM_LIMIT;
+}
 
-        function closeModulModal() {
-            document.getElementById('modul-modal').classList.remove('flex');
-            document.getElementById('modul-modal').classList.add('hidden');
-        }
+async function triggerBan(reason) {
+  try {
+    await db.collection('phones').doc(me.phone).set({
+      banned: true, banReason: reason,
+      bannedAt: FieldValue.serverTimestamp(),
+      permanentBan: false, appealStatus: null
+    }, { merge: true });
+    await db.collection('users').doc(me.uid).update({
+      banned: true, banReason: reason,
+      bannedAt: FieldValue.serverTimestamp()
+    });
+    bannedData = {
+      phone: me.phone, reason,
+      bannedAt: { toMillis: () => Date.now() },
+      permanent: false, appealStatus: null
+    };
+    if (chatUnsub) chatUnsub();
+    if (chatsUnsub) chatsUnsub();
+    if (contactsUnsub) contactsUnsub();
+    if (statusUnsub) statusUnsub();
+    if (incomingCallUnsub) incomingCallUnsub();
+    if (myPhoneUnsub) myPhoneUnsub();
+    await auth.signOut();
+    localStorage.removeItem(SESSION_KEY);
+    sessionStorage.clear();
+    messageTimes = [];
+    me = null; currentRoom = null;
+    showBannedPage();
+  } catch (e) { alert('Error: ' + e.message); }
+}
 
-        // Quiz Logic
-        function submitQuiz() {
-            const q1 = document.querySelector('input[name="q1"]:checked');
-            const q2 = document.querySelector('input[name="q2"]:checked');
-            const q3 = document.querySelector('input[name="q3"]:checked');
+async function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text || !currentRoom || !me) return;
+  if (!checkSpam()) {
+    await triggerBan(`Spam: lebih dari ${SPAM_LIMIT} pesan beruntun tanpa dibalas`);
+    return;
+  }
+  messageTimes.push(Date.now());
+  input.value = '';
+  
+  const msgData = {
+    senderId: me.uid, 
+    senderName: me.name, 
+    text,
+    createdAt: FieldValue.serverTimestamp(), 
+    readAt: null,
+    deleted: false
+  };
 
-            if(!q1 || !q2 || !q3) {
-                showToast('Mohon jawab setidaknya pertanyaan utama dan faktor minat!', 'fa-triangle-exclamation');
-                return;
-            }
+  if (replyToMessage) {
+    msgData.replyTo = {
+      id: replyToMessage.id || null,
+      name: replyToMessage.senderId === me.uid ? 'Kamu' : replyToMessage.senderName,
+      text: replyToMessage.text || '📷 Foto'
+    };
+    cancelReply();
+  }
 
-            let diagnosis = "Rekomendasi Layanan: Bimbingan Karir & Motivasi Belajar";
-            let desc = "Berdasarkan analisis jawaban Anda, Anda memiliki potensi minat yang baik namun memerlukan strategi dalam perencanaan masa depan serta dorongan konsistensi belajar. Sangat disarankan untuk menjadwalkan sesi konsultasi dengan konselor.";
+  await db.collection('chats').doc(currentRoom.chatId).collection('messages').add(msgData);
+}
+window.sendMessage = sendMessage;
 
-            if(q1.value === 'mental') {
-                diagnosis = "Rekomendasi Layanan: Kesehatan Mental & Regulasi Emosi";
-                desc = "Jawaban Anda menunjukkan adanya indikasi stres atau kelelahan mental. Fokus utama layanan untuk Anda adalah teknik manajemen stres, relaksasi, dan konseling privat.";
-            } else if(q1.value === 'karir') {
-                diagnosis = "Rekomendasi Layanan: Eksplorasi Karir & Studi Lanjut";
-                desc = "Anda memerlukan asesmen minat bakat lanjutan untuk mencocokkan keterampilan Anda dengan pilihan jurusan dan dunia kerja yang tepat.";
-            }
-
-            document.getElementById('result-title').textContent = diagnosis;
-            document.getElementById('result-desc').textContent = desc;
-
-            document.getElementById('quiz-container').classList.add('hidden');
-            document.getElementById('quiz-result').classList.remove('hidden');
-            showToast('Diagnosis berhasil diselesaikan!');
-        }
-
-        function resetQuiz() {
-            document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
-            document.getElementById('quiz-result').classList.add('hidden');
-            document.getElementById('quiz-container').classList.remove('hidden');
-        }
-
-        // Journal Functions
-        function renderJournals() {
-            const container = document.getElementById('journal-list');
-            container.innerHTML = '';
-
-            if(journals.length === 0) {
-                container.innerHTML = `<div class="text-center py-12 text-sage-400 text-xs">Belum ada jurnal tersimpan. Klik tombol 'Tulis Jurnal Baru' di atas.</div>`;
-                return;
-            }
-
-            journals.forEach((j) => {
-                const card = document.createElement('div');
-                card.className = 'bg-sage-50/60 p-6 rounded-2xl border border-sage-100 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0';
-                card.innerHTML = `
-                    <div class="space-y-1.5 max-w-2xl">
-                        <div class="flex items-center space-x-2">
-                            <span class="bg-white px-3 py-0.5 rounded-full text-xs font-bold text-sage-700 border border-sage-200">${j.mood}</span>
-                            <span class="text-xs text-sage-600"><i class="fa-regular fa-calendar mr-1"></i> ${j.date}</span>
-                        </div>
-                        <h4 class="font-bold text-sage-800 text-base">${j.title}</h4>
-                        <p class="text-xs sm:text-sm text-sage-600 leading-relaxed">${j.desc}</p>
-                    </div>
-                    <button onclick="deleteJournal(${j.id})" class="text-sage-400 hover:text-red-500 p-2 rounded-xl transition-all" title="Hapus Jurnal">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function openJournalModal() {
-            document.getElementById('journal-modal').classList.remove('hidden');
-            document.getElementById('journal-modal').classList.add('flex');
-        }
-
-        function closeJournalModal() {
-            document.getElementById('journal-modal').classList.remove('flex');
-            document.getElementById('journal-modal').classList.add('hidden');
-        }
-
-        function handleJournalSubmit(event) {
-            event.preventDefault();
-            const mood = document.getElementById('j-mood').value;
-            const title = document.getElementById('j-title').value;
-            const desc = document.getElementById('j-desc').value;
-
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            const dateStr = new Date().toLocaleDateString('id-ID', options);
-
-            const newEntry = {
-                id: Date.now(),
-                date: dateStr,
-                mood: mood,
-                title: title,
-                desc: desc
-            };
-
-            journals.unshift(newEntry);
-            localStorage.setItem('bk_journals', JSON.stringify(journals));
-            renderJournals();
-            closeJournalModal();
-
-            // Reset form
-            document.getElementById('j-title').value = '';
-            document.getElementById('j-desc').value = '';
-            showToast('Jurnal refleksi berhasil disimpan!');
-        }
-
-        function deleteJournal(id) {
-            journals = journals.filter(j => j.id !== id);
-            localStorage.setItem('bk_journals', JSON.stringify(journals));
-            renderJournals();
-            showToast('Jurnal berhasil dihapus.', 'fa-circle-info');
-        }
-
-        // Booking & Chat Mockup Functions
-        function handleBooking(event) {
-            event.preventDefault();
-            const name = document.getElementById('book-name').value;
-            const counselor = document.getElementById('book-counselor').value;
-            const date = document.getElementById('book-date').value;
-            const topic = document.getElementById('book-topic').value;
-
-            showToast(`Permintaan jadwal konseling dengan ${counselor} berhasil dikirim!`);
-            document.getElementById('booking-form').reset();
-        }
-
-        function handleChatSend(event) {
-            event.preventDefault();
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            if(!message) return;
-
-            const chatContainer = document.getElementById('chat-messages');
-
-            // Append Student Message
-            const userBubble = document.createElement('div');
-            userBubble.className = 'flex items-start justify-end space-x-3';
-            userBubble.innerHTML = `
-                <div class="bg-sage-700 text-white p-4 rounded-2xl rounded-tr-none max-w-md shadow-xs">
-                    <p class="text-xs sm:text-sm leading-relaxed">${message}</p>
-                    <span class="text-[10px] text-sage-200 mt-1 block text-right">Baru saja • Anda</span>
-                </div>
-                <div class="w-8 h-8 rounded-full bg-sage-500 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">
-                    S
-                </div>
-            `;
-            chatContainer.appendChild(userBubble);
-            input.value = '';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            // Simulate Counselor Reply
-            setTimeout(() => {
-                const replyBubble = document.createElement('div');
-                replyBubble.className = 'flex items-start space-x-3 fade-in';
-                replyBubble.innerHTML = `
-                    <div class="w-8 h-8 rounded-full bg-sage-200 flex-shrink-0 flex items-center justify-center text-sage-800 text-xs font-bold">
-                        BK
-                    </div>
-                    <div class="bg-sage-50 p-4 rounded-2xl rounded-tl-none border border-sage-100 max-w-md">
-                        <p class="text-xs sm:text-sm text-sage-800 leading-relaxed">
-                            Terima kasih telah berbagi. Pesan Anda telah kami terima dengan baik dan bersifat rahasia. Apakah Anda ingin kita jadwalkan sesi tatap muka untuk membahas hal ini lebih lanjut?
-                        </p>
-                        <span class="text-[10px] text-sage-600 mt-1 block">Baru saja • Guru BK</span>
-                    </div>
-                `;
-                chatContainer.appendChild(replyBubble);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 1000);
-        }
-
-        // Initialize on load
-        window.onload = function() {
-            renderJournals();
+async function sendImage(input) {
+  const file = input.files[0];
+  if (!file || !currentRoom || !me) return;
+  if (file.size > 500 * 1024) { alert('❌ Max 500KB'); input.value = ''; return; }
+  if (!checkSpam()) {
+    await triggerBan(`Spam: lebih dari ${SPAM_LIMIT} pesan beruntun`);
+    input.value = ''; return;
+  }
+  messageTimes.push(Date.now());
+  
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const msgData = {
+        senderId: me.uid, 
+        senderName: me.name, 
+        text: '', 
+        image: e.target.result,
+        createdAt: FieldValue.serverTimestamp(), 
+        readAt: null,
+        deleted: false
+      };
+      
+      if (replyToMessage) {
+        msgData.replyTo = {
+          id: replyToMessage.id || null,
+          name: replyToMessage.senderId === me.uid ? 'Kamu' : replyToMessage.senderName,
+          text: replyToMessage.text || '📷 Foto'
         };
-    </script>
+        cancelReply();
+      }
+
+      await db.collection('chats').doc(currentRoom.chatId).collection('messages').add(msgData);
+    } catch (err) { alert('❌ ' + err.message); }
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+window.sendImage = sendImage;
+
+// ==========================================================
+// GROUP INFO & EDIT GRUP
+// ==========================================================
+async function openGroupInfo() {
+  if (!currentRoom || currentRoom.type !== 'group') return;
+  const gSnap = await db.collection('chats').doc(currentRoom.chatId).get();
+  const group = gSnap.data();
+  let membersHtml = '';
+  for (const uid of group.members) {
+    const uSnap = await db.collection('users').doc(uid).get();
+    if (uSnap.exists) {
+      const u = uSnap.data();
+      const isAdmin = group.admins && group.admins.includes(uid);
+      membersHtml += `
+        <div style="padding:10px 0; border-bottom:1px solid #2a3942; display:flex; justify-content:space-between">
+          <span>${escapeHtml(u.name)} ${uid === me.uid ? '(Kamu)' : ''}</span>
+          ${isAdmin ? '<span style="color:#25d366;font-size:12px">Admin</span>' : ''}
+        </div>
+      `;
+    }
+  }
+  document.getElementById('groupInfoContent').innerHTML = `
+    <div style="text-align:center; margin-bottom:20px">
+      <div class="avatar group-avatar" style="width:80px;height:80px;font-size:32px;margin:0 auto 10px">${group.name[0].toUpperCase()}</div>
+      <h3 style="color:#e9edef">${escapeHtml(group.name)}</h3>
+      <p style="color:#8696a0; font-size:13px">Grup · ${group.members.length} anggota</p>
+    </div>
+    <div style="max-height:200px; overflow-y:auto; margin-bottom:10px">
+      <h4 style="color:#25d366; margin-bottom:10px">Anggota:</h4>
+      ${membersHtml}
+    </div>
+  `;
+  
+  if (group.createdBy === me.uid) {
+    document.getElementById('btnEditGroup').style.display = 'block';
+  } else {
+    document.getElementById('btnEditGroup').style.display = 'none';
+  }
+  
+  document.getElementById('btnLeaveGroup').style.display = 'block';
+  document.getElementById('groupInfoModal').classList.remove('hidden');
+}
+window.openGroupInfo = openGroupInfo;
+
+function closeGroupInfo() {
+  document.getElementById('groupInfoModal').classList.add('hidden');
+}
+window.closeGroupInfo = closeGroupInfo;
+
+function openEditGroup() {
+  if (!currentRoom || currentRoom.type !== 'group') return;
+  document.getElementById('editGroupName').value = currentRoom.group.name;
+  document.getElementById('editGroupModal').classList.remove('hidden');
+}
+window.openEditGroup = openEditGroup;
+
+async function saveEditGroup() {
+  const newName = document.getElementById('editGroupName').value.trim();
+  if (!newName) return alert('Nama tidak boleh kosong');
+  
+  try {
+    await db.collection('chats').doc(currentRoom.chatId).update({ name: newName });
+    document.getElementById('editGroupModal').classList.add('hidden');
+    closeGroupInfo();
+    alert('✅ Nama grup berhasil diubah');
+  } catch (e) {
+    alert('❌ Gagal edit grup: ' + e.message);
+  }
+}
+window.saveEditGroup = saveEditGroup;
+
+async function leaveGroup() {
+  if (!confirm('Yakin ingin keluar dari grup ini?')) return;
+  try {
+    const groupRef = db.collection('chats').doc(currentRoom.chatId);
+    const gSnap = await groupRef.get();
+    const group = gSnap.data();
+    const newMembers = group.members.filter(uid => uid !== me.uid);
+    const newAdmins = (group.admins || []).filter(uid => uid !== me.uid);
+    if (newMembers.length === 0) {
+      await groupRef.delete();
+    } else {
+      await groupRef.update({
+        members: newMembers,
+        admins: newAdmins
+      });
+      await groupRef.collection('messages').add({
+        senderId: 'system',
+        senderName: 'System',
+        text: `${me.name} keluar dari grup`,
+        isSystem: true,
+        createdAt: FieldValue.serverTimestamp()
+      });
+    }
+    closeGroupInfo();
+    showPage('chat');
+  } catch (e) {
+    alert('Gagal keluar grup: ' + e.message);
+  }
+}
+window.leaveGroup = leaveGroup;
+
+// ==========================================================
+// PROFILE & LOGOUT
+// ==========================================================
+function loadProfile() {
+  if (!me) return;
+  document.getElementById('profileAvatar').textContent = (me.name || '?')[0].toUpperCase();
+  document.getElementById('profileName').textContent = me.name || '';
+  document.getElementById('profilePhone').textContent = me.phone || '';
+  document.getElementById('editName').value = me.name || '';
+  document.getElementById('editAbout').value = me.about || '';
+}
+
+async function saveProfile() {
+  const name = document.getElementById('editName').value.trim();
+  const about = document.getElementById('editAbout').value.trim();
+  if (!name) return;
+  await db.collection('users').doc(me.uid).update({ name, about });
+  me.name = name; me.about = about;
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileAvatar').textContent = name[0].toUpperCase();
+  document.getElementById('profileMsg').textContent = '✅ Tersimpan';
+  setTimeout(() => document.getElementById('profileMsg').textContent = '', 2000);
+}
+window.saveProfile = saveProfile;
+
+async function doLogout(skipConfirm) {
+  if (!skipConfirm && !confirm('Keluar dari akun?')) return;
+  if (me) {
+    try { await db.collection('users').doc(me.uid).update({ online: false, lastSeen: FieldValue.serverTimestamp() }); } catch(e) {}
+  }
+  if (chatUnsub) chatUnsub();
+  if (chatsUnsub) chatsUnsub();
+  if (contactsUnsub) contactsUnsub();
+  if (statusUnsub) statusUnsub();
+  if (incomingCallUnsub) incomingCallUnsub();
+  if (myPhoneUnsub) myPhoneUnsub();
+  try { await auth.signOut(); } catch(e) {}
+  localStorage.removeItem(SESSION_KEY);
+  sessionStorage.clear();
+  me = null; currentRoom = null; bannedData = null;
+  showPage('login');
+}
+window.doLogout = doLogout;
+// ==========================================================
+// ADMIN PANEL
+// ==========================================================
+async function startAdmin() {
+  if (!adminUnlocked) {
+    const input = prompt('🔒 Password admin:');
+    if (input !== ADMIN_PASS) { alert('❌ Akses ditolak'); showPage('login'); return; }
+    adminUnlocked = true;
+  }
+  loadAdminAppeals(); loadAdminBanned(); loadAdminUsers(); loadAdminPhones();
+}
+
+function loadAdminAppeals() {
+  if (adminAppealUnsub) adminAppealUnsub();
+  adminAppealUnsub = db.collection('phones').where('appealStatus', '==', 'pending')
+    .onSnapshot((snap) => {
+      document.getElementById('appealCount').textContent = snap.size;
+      const box = document.getElementById('adminAppealList');
+      if (snap.empty) { box.innerHTML = '<p class="empty">Tidak ada permohonan</p>'; return; }
+      box.innerHTML = snap.docs.map(d => {
+        const p = d.data();
+        return `<div class="admin-item" style="flex-direction:column;align-items:stretch">
+          <div>
+            <b>${escapeHtml(p.phone)}</b> <span class="badge-pending">Pending</span><br>
+            <small>Nama: ${escapeHtml(p.name || '-')}</small><br>
+            <small>Alasan ban: ${escapeHtml(p.banReason || '-')}</small><br>
+            <small style="color:#ff9800;display:block;margin-top:6px"><b>Banding:</b></small>
+            <small style="color:#e9edef;font-size:13px">${escapeHtml(p.appealText || '')}</small>
+          </div>
+          <div class="btn-group" style="margin-top:10px">
+            <button class="success" onclick="adminApproveAppeal('${d.id}')">✅ Terima</button>
+            <button class="danger" onclick="adminRejectAppeal('${d.id}')">❌ Tolak</button>
+          </div></div>`;
+      }).join('');
+    });
+}
+
+async function adminApproveAppeal(phone) {
+  if (!confirm('Terima? User bisa chat lagi.')) return;
+  try {
+    await db.collection('phones').doc(phone).set({
+      banned: false, banReason: null, bannedAt: null,
+      appealStatus: 'approved', appealResolvedAt: FieldValue.serverTimestamp(),
+      lastSeen: null // Reset agar dianggap tidak aktif, OTP muncul normal
+    }, { merge: true });
+    alert('✅ Unban berhasil');
+  } catch (e) { alert('❌ ' + e.message); }
+}
+window.adminApproveAppeal = adminApproveAppeal;
+
+async function adminRejectAppeal(phone) {
+  const permanent = confirm('Tolak?\nOK = BANNED PERMANEN\nCancel = banned sementara');
+  try {
+    await db.collection('phones').doc(phone).set({
+      banned: true, permanentBan: permanent,
+      appealStatus: 'rejected', appealResolvedAt: FieldValue.serverTimestamp()
+    }, { merge: true });
+    alert(permanent ? '🔒 PERMANEN' : '❌ Ditolak (sementara)');
+  } catch (e) { alert('❌ ' + e.message); }
+}
+window.adminRejectAppeal = adminRejectAppeal;
+
+function loadAdminBanned() {
+  if (adminBannedUnsub) adminBannedUnsub();
+  adminBannedUnsub = db.collection('phones').where('banned', '==', true)
+    .onSnapshot((snap) => {
+      const box = document.getElementById('adminBannedList');
+      if (snap.empty) { box.innerHTML = '<p class="empty">Tidak ada user banned</p>'; return; }
+      box.innerHTML = snap.docs.map(d => {
+        const p = d.data();
+        return `<div class="admin-item"><div>
+          <b>${escapeHtml(p.phone)}</b> <span class="badge-banned">${p.permanentBan ? 'PERMANEN' : 'BANNED'}</span><br>
+          <small>Nama: ${escapeHtml(p.name || '-')}</small><br>
+          <small>Alasan: ${escapeHtml(p.banReason || '-')}</small></div>
+          <div class="btn-group"><button class="warn" onclick="adminForceUnban('${d.id}')">🔓 Buka</button></div>
+        </div>`;
+      }).join('');
+    });
+}
+
+async function adminForceUnban(phone) {
+  if (!confirm('Buka blokir?')) return;
+  try {
+    await db.collection('phones').doc(phone).set({
+      banned: false, banReason: null, permanentBan: false, appealStatus: null,
+      lastSeen: null // Reset agar OTP muncul normal
+    }, { merge: true });
+    alert('✅ Dibuka');
+  } catch (e) { alert('❌ ' + e.message); }
+}
+window.adminForceUnban = adminForceUnban;
+
+function loadAdminPhones() {
+  if (adminPhonesUnsub) adminPhonesUnsub();
+  adminPhonesUnsub = db.collection('phones').onSnapshot((snap) => {
+    const box = document.getElementById('adminPhoneList');
+    if (snap.empty) { box.innerHTML = '<p class="empty">Belum ada nomor</p>'; return; }
+    box.innerHTML = snap.docs.map(d => {
+      const p = d.data();
+      return `<div class="admin-item"><div>
+        <b>${escapeHtml(p.phone)}</b>${p.banned ? ' <span class="badge-banned">BANNED</span>' : ''}<br>
+        <small>${escapeHtml(p.name || '-')}${p.otp ? ' · OTP: ' + p.otp : ''}</small></div>
+        <button class="danger" onclick="adminDelPhone('${d.id}')">Hapus</button>
+      </div>`;
+    }).join('');
+  });
+}
+
+async function adminDelPhone(id) {
+  if (confirm('Hapus ' + id + '?')) await db.collection('phones').doc(id).delete();
+}
+window.adminDelPhone = adminDelPhone;
+
+function loadAdminUsers() {
+  if (adminUsersUnsub) adminUsersUnsub();
+  adminUsersUnsub = db.collection('users').onSnapshot((snap) => {
+    const box = document.getElementById('adminUserList');
+    if (snap.empty) { box.innerHTML = '<p class="empty">Belum ada user</p>'; return; }
+    box.innerHTML = snap.docs.map(d => {
+      const u = d.data();
+      return `<div class="admin-item"><div>
+        <b>${escapeHtml(u.name || '')}</b><br>
+        <small>${escapeHtml(u.phone || '')} · ${u.online ? '🟢 online' : '⚪ offline'}</small></div>
+      </div>`;
+    }).join('');
+  });
+}
+
+// ==========================================================
+// STATUS (STORY)
+// ==========================================================
+function loadStatuses() {
+  if (!me) return;
+  if (statusUnsub) statusUnsub();
+  statusUnsub = db.collection('status').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+    const now = Date.now();
+    allStatuses = []; myStatuses = [];
+    snap.forEach(d => {
+      const s = { id: d.id, ...d.data() };
+      if (!s.createdAt) return;
+      if (now - s.createdAt.toMillis() > STATUS_LIFETIME_MS) return;
+      if (s.uid === me.uid) myStatuses.push(s); else allStatuses.push(s);
+    });
+    const mySec = `<div class="status-my" onclick="openMyStatus()">
+      <div class="status-ring"><div class="avatar">${(me.name || '?')[0].toUpperCase()}<div class="add-badge">+</div></div></div>
+      <div class="chat-info"><div class="chat-top"><b>Status saya</b></div>
+      <div class="chat-preview">${myStatuses.length > 0 ? myStatuses.length + ' status' : 'Ketuk untuk tambah status'}</div></div></div>`;
+    const otherSec = allStatuses.length > 0 ? `
+      <div class="status-section-title">Pembaruan terbaru</div>
+      ${allStatuses.map(s => `
+        <div class="status-my" onclick="viewStatus('${s.id}')">
+          <div class="status-ring"><div class="avatar">${(s.userName || '?')[0].toUpperCase()}</div></div>
+          <div class="chat-info"><div class="chat-top"><b>${escapeHtml(s.userName || '')}</b></div>
+          <div class="chat-preview">${timeAgo(s.createdAt?.toMillis())}</div></div>
+        </div>`).join('')}` : '<p class="empty">Belum ada status</p>';
+    document.getElementById('statusPage').innerHTML = mySec + otherSec;
+  });
+}
+
+function timeAgo(ms) {
+  if (!ms) return '';
+  const d = Math.floor((Date.now() - ms) / 60000);
+  if (d < 1) return 'baru saja';
+  if (d < 60) return d + ' menit lalu';
+  if (d < 1440) return Math.floor(d/60) + ' jam lalu';
+  return Math.floor(d/1440) + ' hari lalu';
+}
+
+function openStatusCreator() {
+  const colors = ['#075e54','#128c7e','#25d366','#1f8ef1','#9c27b0','#e91e63','#ff9800','#e53935'];
+  const ex = document.getElementById('statusModal'); if (ex) ex.remove();
+  const modal = document.createElement('div');
+  modal.id = 'statusModal'; modal.className = 'modal-overlay';
+  modal.innerHTML = `<div class="modal-box">
+    <h2>Buat Status</h2>
+    <div class="status-colors">${colors.map((c,i) => `<div class="status-color ${i===0?'selected':''}" data-color="${c}" style="background:${c}" onclick="pickColor(this)"></div>`).join('')}</div>
+    <textarea id="statusText" placeholder="Ketik status..." maxlength="200"></textarea>
+    <div class="actions">
+      <button class="secondary" onclick="closeModal()">Batal</button>
+      <button class="primary" onclick="postStatus()">Posting</button>
+    </div></div>`;
+  document.body.appendChild(modal);
+}
+window.openStatusCreator = openStatusCreator;
+
+function pickColor(el) {
+  document.querySelectorAll('.status-color').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected'); selectedColor = el.dataset.color;
+}
+window.pickColor = pickColor;
+
+function closeModal() { const m = document.getElementById('statusModal'); if (m) m.remove(); }
+window.closeModal = closeModal;
+
+async function postStatus() {
+  const text = document.getElementById('statusText').value.trim();
+  if (!text) return alert('Isi status dulu!');
+  try {
+    await db.collection('status').add({
+      uid: me.uid, userName: me.name, text, color: selectedColor,
+      createdAt: FieldValue.serverTimestamp(),
+      expiresAt: new Date(Date.now() + STATUS_LIFETIME_MS)
+    });
+    closeModal();
+  } catch (e) { alert('❌ ' + e.message); }
+}
+window.postStatus = postStatus;
+
+function openMyStatus() {
+  if (myStatuses.length === 0) return openStatusCreator();
+  showStatusViewer(myStatuses[0]);
+}
+window.openMyStatus = openMyStatus;
+
+function viewStatus(id) {
+  const s = allStatuses.find(x => x.id === id);
+  if (s) showStatusViewer(s);
+}
+window.viewStatus = viewStatus;
+
+function showStatusViewer(s) {
+  const ex = document.getElementById('statusViewer'); if (ex) ex.remove();
+  const v = document.createElement('div');
+  v.id = 'statusViewer'; v.className = 'status-viewer';
+  v.innerHTML = `<div class="status-progress"><div class="bar done"></div></div>
+    <div class="status-viewer-header">
+      <div class="avatar">${(s.userName || '?')[0].toUpperCase()}</div>
+      <div class="info"><b>${escapeHtml(s.userName || '')}</b><small>${timeAgo(s.createdAt?.toMillis())}</small></div>
+      <button onclick="closeStatusViewer()" style="background:transparent;border:none;color:#fff;font-size:24px;cursor:pointer">✕</button>
+    </div>
+    <div class="status-viewer-content">
+      <div class="status-text" style="background:${s.color || '#075e54'};color:white">${escapeHtml(s.text)}</div>
+    </div>
+    <div class="status-viewer-footer">Ketuk untuk menutup</div>`;
+  v.onclick = closeStatusViewer;
+  document.body.appendChild(v);
+}
+window.showStatusViewer = showStatusViewer;
+
+function closeStatusViewer() { const v = document.getElementById('statusViewer'); if (v) v.remove(); }
+window.closeStatusViewer = closeStatusViewer;
+
+// ==========================================================
+// CALL SYSTEM (WebRTC)
+// ==========================================================
+let callDoc = null;
+let callUnsub = null;
+let incomingCallUnsub = null;
+let peerConnection = null;
+let localStream = null;
+let remoteStream = null;
+let currentCallId = null;
+let currentCallType = null;
+let currentCallOther = null;
+let isCaller = false;
+let callTimerInterval = null;
+let callStartTime = null;
+let isMuted = false;
+let currentFacingMode = 'user';
+let iceCandidateQueue = [];
+
+function initCallListener() {
+  if (!me) return;
+  if (incomingCallUnsub) incomingCallUnsub();
+  incomingCallUnsub = db.collection('calls')
+    .where('to', '==', me.uid)
+    .where('status', '==', 'ringing')
+    .onSnapshot((snap) => {
+      snap.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          const callData = change.doc.data();
+          if (!currentCallId) {
+            showIncomingCall(change.doc.id, callData);
+          }
+        }
+        if (change.type === 'modified') {
+          const callData = change.doc.data();
+          if (callData.status === 'ended' && currentCallId === change.doc.id) {
+            endCallUI();
+          }
+        }
+      });
+    });
+}
+window.initCallListener = initCallListener;
+
+let pendingIncoming = null;
+function showIncomingCall(callId, data) {
+  pendingIncoming = { callId, data };
+  document.getElementById('incomingAvatar').textContent = (data.fromName || '?')[0].toUpperCase();
+  document.getElementById('incomingName').textContent = data.fromName || 'Seseorang';
+  document.getElementById('incomingType').textContent = data.type === 'video' ? '📹 Panggilan video masuk...' : '📞 Panggilan suara masuk...';
+  document.getElementById('incomingCall').classList.remove('hidden');
+  playRingtone();
+}
+
+let audioContext = null;
+let ringtoneOsc = null;
+let ringtoneInterval = null;
+
+function playRingtone() {
+  try {
+    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioContext.state === 'suspended') audioContext.resume();
+    
+    ringtoneInterval = setInterval(() => {
+      if (ringtoneOsc) return;
+      ringtoneOsc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      ringtoneOsc.connect(gain);
+      gain.connect(audioContext.destination);
+      ringtoneOsc.frequency.value = 600;
+      gain.gain.value = 0.1;
+      ringtoneOsc.start();
+      
+      setTimeout(() => {
+        if (ringtoneOsc) {
+          ringtoneOsc.stop();
+          ringtoneOsc = null;
+        }
+      }, 1000);
+    }, 2000);
+
+    if (navigator.vibrate) navigator.vibrate([500, 500, 500, 500, 500]);
+  } catch (e) {}
+}
+
+function stopRingtone() {
+  try {
+    if (ringtoneInterval) { clearInterval(ringtoneInterval); ringtoneInterval = null; }
+    if (ringtoneOsc) { ringtoneOsc.stop(); ringtoneOsc = null; }
+    if (navigator.vibrate) navigator.vibrate(0);
+  } catch (e) {}
+}
+
+async function acceptCall() {
+  if (!pendingIncoming) return;
+  const { callId, data } = pendingIncoming;
+  stopRingtone();
+  document.getElementById('incomingCall').classList.add('hidden');
+
+  currentCallId = callId;
+  currentCallType = data.type;
+  isCaller = false;
+
+  const oSnap = await db.collection('users').doc(data.from).get();
+  currentCallOther = { uid: data.from, ...oSnap.data() };
+
+  showCallScreen('Menghubungkan...', currentCallOther.name);
+  await db.collection('calls').doc(callId).update({ status: 'accepted' });
+
+  await setupPeerConnection(callId, false);
+  await getLocalMedia(data.type);
+
+  const callSnap = await db.collection('calls').doc(callId).get();
+  const offer = callSnap.data().offer;
+  
+  if (offer) {
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    for (const c of iceCandidateQueue) {
+      try { await peerConnection.addIceCandidate(new RTCIceCandidate(c)); } catch (e) {}
+    }
+    iceCandidateQueue = [];
+    
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
+    await db.collection('calls').doc(callId).update({
+      answer: { type: answer.type, sdp: answer.sdp }
+    });
+  }
+
+  pendingIncoming = null;
+}
+window.acceptCall = acceptCall;
+
+async function rejectCall() {
+  if (!pendingIncoming) return;
+  stopRingtone();
+  document.getElementById('incomingCall').classList.add('hidden');
+  try {
+    await db.collection('calls').doc(pendingIncoming.callId).update({ status: 'rejected' });
+  } catch (e) {}
+  pendingIncoming = null;
+}
+window.rejectCall = rejectCall;
+
+async function startVoiceCall() {
+  if (!currentRoom || !me) return;
+  if (currentRoom.type === 'group') return alert('Panggilan grup belum didukung');
+  await startCall('audio');
+}
+window.startVoiceCall = startVoiceCall;
+
+async function startVideoCall() {
+  if (!currentRoom || !me) return;
+  if (currentRoom.type === 'group') return alert('Panggilan grup belum didukung');
+  await startCall('video');
+}
+window.startVideoCall = startVideoCall;
+
+async function startCall(type) {
+  if (currentCallId) { alert('Sedang ada panggilan aktif'); return; }
+  if (!currentRoom || currentRoom.type === 'group') return;
+
+  currentCallType = type;
+  currentCallOther = currentRoom.other;
+  isCaller = true;
+
+  showCallScreen('Memanggil...', currentCallOther.name);
+  playRingtone();
+
+  const callRef = db.collection('calls').doc();
+  currentCallId = callRef.id;
+
+  await callRef.set({
+    from: me.uid,
+    fromName: me.name,
+    to: currentCallOther.uid,
+    type: type,
+    status: 'ringing',
+    createdAt: FieldValue.serverTimestamp(),
+    offer: null,
+    answer: null,
+    callerCandidates: [],
+    calleeCandidates: []
+  });
+
+  await setupPeerConnection(currentCallId, true);
+  await getLocalMedia(type);
+
+  const offer = await peerConnection.createOffer();
+  await peerConnection.setLocalDescription(offer);
+  await callRef.update({
+    offer: { type: offer.type, sdp: offer.sdp }
+  });
+
+  callUnsub = callRef.onSnapshot(async (snap) => {
+    const data = snap.data();
+    if (!data) return;
+
+    if (data.answer && peerConnection && !peerConnection.currentRemoteDescription) {
+      stopRingtone();
+      await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+      for (const c of iceCandidateQueue) {
+        try { await peerConnection.addIceCandidate(new RTCIceCandidate(c)); } catch (e) {}
+      }
+      iceCandidateQueue = [];
+    }
+
+    if (data.status === 'rejected') {
+      stopRingtone();
+      alert('Panggilan ditolak');
+      endCallUI();
+    }
+
+    if (data.status === 'ended') {
+      endCallUI();
+    }
+
+    if (data.calleeCandidates && data.calleeCandidates.length > 0 && peerConnection) {
+      for (const c of data.calleeCandidates) {
+        if (!peerConnection.remoteDescription) {
+          iceCandidateQueue.push(c);
+        } else {
+          try { await peerConnection.addIceCandidate(new RTCIceCandidate(c)); } catch (e) {}
+        }
+      }
+    }
+  });
+}
+
+async function setupPeerConnection(callId, asCaller) {
+  peerConnection = new RTCPeerConnection(ICE_SERVERS);
+  remoteStream = new MediaStream();
+  document.getElementById('remoteVideo').srcObject = remoteStream;
+
+  peerConnection.ontrack = (event) => {
+    event.streams[0].getTracks().forEach(track => {
+      remoteStream.addTrack(track);
+    });
+    if (currentCallType === 'video') {
+      document.getElementById('callHeader').classList.add('hidden');
+      document.getElementById('callVideos').classList.remove('hidden');
+      document.getElementById('btnSwitch').classList.remove('hidden');
+      document.getElementById('callScreen').classList.add('video-mode');
+    }
+  };
+
+  peerConnection.onicecandidate = async (event) => {
+    if (event.candidate && callId) {
+      const field = asCaller ? 'callerCandidates' : 'calleeCandidates';
+      try {
+        await db.collection('calls').doc(callId).update({
+          [field]: FieldValue.arrayUnion(event.candidate.toJSON())
+        });
+      } catch (e) {}
+    }
+  };
+
+  peerConnection.onconnectionstatechange = () => {
+    if (peerConnection.connectionState === 'connected') {
+      stopRingtone();
+      startCallTimer();
+      document.getElementById('callStatus').textContent = 'Terhubung';
+    }
+    if (peerConnection.connectionState === 'failed' || peerConnection.connectionState === 'disconnected') {
+      endCallUI();
+    }
+  };
+}
+
+async function getLocalMedia(type) {
+  try {
+    const constraints = {
+      audio: true,
+      video: type === 'video' ? { facingMode: currentFacingMode } : false
+    };
+    localStream = await navigator.mediaDevices.getUserMedia(constraints);
+    document.getElementById('localVideo').srcObject = localStream;
+
+    localStream.getTracks().forEach(track => {
+      peerConnection.addTrack(track, localStream);
+    });
+  } catch (e) {
+    alert('❌ Tidak bisa akses mic/kamera: ' + e.message);
+    endCallUI();
+  }
+}
+
+function showCallScreen(status, name) {
+  document.getElementById('callAvatar').textContent = (name || '?')[0].toUpperCase();
+  document.getElementById('callName').textContent = name || '...';
+  document.getElementById('callStatus').textContent = status;
+  document.getElementById('callScreen').classList.remove('hidden');
+  document.getElementById('callScreen').classList.remove('video-mode');
+  document.getElementById('callHeader').classList.remove('hidden');
+  document.getElementById('callVideos').classList.add('hidden');
+  document.getElementById('callTimer').classList.add('hidden');
+  document.getElementById('btnSwitch').classList.add('hidden');
+  document.getElementById('btnMute').classList.remove('active');
+  isMuted = false;
+}
+
+function startCallTimer() {
+  if (callTimerInterval) return;
+  callStartTime = Date.now();
+  document.getElementById('callTimer').classList.remove('hidden');
+  document.getElementById('ringingIndicator').style.display = 'none';
+  callTimerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - callStartTime) / 1000);
+    const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
+    const s = (elapsed % 60).toString().padStart(2, '0');
+    document.getElementById('callTimer').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+function toggleMute() {
+  if (!localStream) return;
+  const audioTrack = localStream.getAudioTracks()[0];
+  if (!audioTrack) return;
+  isMuted = !isMuted;
+  audioTrack.enabled = !isMuted;
+  document.getElementById('btnMute').classList.toggle('active', isMuted);
+  document.getElementById('btnMute').textContent = isMuted ? '🔇' : '🎤';
+}
+window.toggleMute = toggleMute;
+
+async function switchCamera() {
+  if (!peerConnection || !localStream) return;
+  currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+
+  try {
+    const newStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: { facingMode: currentFacingMode }
+    });
+    const newVideoTrack = newStream.getVideoTracks()[0];
+
+    const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+    if (sender) await sender.replaceTrack(newVideoTrack);
+
+    localStream.getVideoTracks().forEach(t => t.stop());
+    localStream.removeTrack(localStream.getVideoTracks()[0]);
+    localStream.addTrack(newVideoTrack);
+    document.getElementById('localVideo').srcObject = localStream;
+  } catch (e) { alert('Gagal switch kamera: ' + e.message); }
+}
+window.switchCamera = switchCamera;
+
+async function endCall() {
+  if (currentCallId) {
+    try {
+      await db.collection('calls').doc(currentCallId).update({ status: 'ended', endedAt: FieldValue.serverTimestamp() });
+    } catch (e) {}
+  }
+  endCallUI();
+}
+window.endCall = endCall;
+
+function endCallUI() {
+  stopRingtone();
+  if (callUnsub) { callUnsub(); callUnsub = null; }
+  if (peerConnection) { peerConnection.close(); peerConnection = null; }
+  if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
+  if (remoteStream) { remoteStream = null; }
+  if (callTimerInterval) { clearInterval(callTimerInterval); callTimerInterval = null; }
+  
+  document.getElementById('callScreen').classList.add('hidden');
+  document.getElementById('incomingCall').classList.add('hidden');
+  document.getElementById('localVideo').srcObject = null;
+  document.getElementById('remoteVideo').srcObject = null;
+  
+  currentCallId = null;
+  currentCallType = null;
+  currentCallOther = null;
+  isCaller = false;
+  pendingIncoming = null;
+  iceCandidateQueue = [];
+}
+
+window.addEventListener('beforeunload', () => {
+  if (currentCallId) {
+    db.collection('calls').doc(currentCallId).update({ status: 'ended' }).catch(() => {});
+  }
+});
+
+// ==========================================================
+// INIT APP
+// ==========================================================
+console.log('✅ WhatsApp Clone with Groups & Advanced Features loaded');
+</script>
 </body>
 </html>
