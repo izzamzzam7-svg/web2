@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#075e54">
+<title>Login Wajah - WA Clone</title>
+<style>
+  :root { --bg: #0b141a; --panel: #111b21; --accent: #25d366; --text: #e9edef; --text2: #8696a0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, 'Segoe UI', sans-serif; }
+  body { background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+  .container { width: 100%; max-width: 400px; padding: 20px; text-align: center; }
+  .logo { font-size: 60px; margin-bottom: 10px; }
+  h1 { font-size: 22px; margin-bottom: 8px; color: var(--accent); }
+  p.sub { font-size: 14px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+  .phone-box { display: flex; gap: 8px; margin-bottom: 20px; }
+  .phone-box select { padding: 12px; background: #202c33; border: 1px solid #2a3942; color: white; border-radius: 10px; font-weight: bold; }
+  .phone-box input { flex: 1; padding: 14px; background: #202c33; border: 1px solid #2a3942; color: white; border-radius: 10px; font-size: 16px; }
+  .phone-box input:focus { outline: 2px solid var(--accent); }
+  button { width: 100%; padding: 16px; border: none; border-radius: 12px; background: var(--accent); color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.secondary { background: #2a3942; color: var(--text); }
+  #camera-section { display: none; }
+  .video-wrapper { position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 20px; overflow: hidden; background: #000; border: 3px solid var(--accent); margin-bottom: 15px; }
+  video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+  #status { font-size: 14px; color: #ff9800; margin-bottom: 10px; min-height: 20px; }
+  #otp-section { display: none; }
+  .otp-input { width: 100%; padding: 16px; font-size: 28px; letter-spacing: 10px; text-align: center; background: #202c33; border: 1px solid #2a3942; color: white; border-radius: 12px; margin-bottom: 15px; font-weight: bold; }
+  .hidden { display: none !important; }
+  .success-text { color: var(--accent); font-size: 14px; margin-top: 10px; }
+  .error-text { color: #e53935; font-size: 14px; margin-top: 10px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="logo">🛡️</div>
+  <h1>Login Wajah</h1>
+  <p class="sub">Verifikasi identitas kamu untuk melanjutkan</p>
+
+  <div id="step-phone">
+    <div class="phone-box">
+      <select id="countryCode"><option value="+62">🇮🇩 +62</option><option value="+60">🇲🇾 +60</option></select>
+      <input id="phone" type="tel" placeholder="81234567890" maxlength="15">
+    </div>
+    <button onclick="cekNomor()">Lanjutkan</button>
+    <p id="msg-phone" class="error-text" style="margin-top:15px"></p>
+  </div>
+
+  <div id="camera-section">
+    <div class="video-wrapper"><video id="video" autoplay playsinline muted></video></div>
+    <p id="status">Memuat AI... Mohon tunggu.</p>
+    <button id="btn-scan" onclick="scanWajah()" disabled>Scan Wajah</button>
+    <button class="secondary" onclick="resetSemua()" style="margin-top:15px">← Ganti Nomor</button>
+  </div>
+
+  <div id="otp-section">
+    <p class="sub" id="otp-msg">Masukkan kode OTP</p>
+    <input id="otpInput" type="tel" inputmode="numeric" placeholder="••••••" maxlength="6" class="otp-input">
+    <button onclick="verifikasiOtp()">Verifikasi</button>
+    <p id="msg-otp" class="error-text"></p>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB4UOjzro4ZSc0LOxiih2zRaFCBUcAPjZE",
+  authDomain: "whatsapp-clone-ade-8dd44.firebaseapp.com",
+  projectId: "whatsapp-clone-ade-8dd44",
+  storageBucket: "whatsapp-clone-ade-8dd44.firebasestorage.app",
+  messagingSenderId: "54756787004",
+  appId: "1:54756787004:web:d39d6db5af17e14e0c9439"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const FieldValue = firebase.firestore.FieldValue;
+
+let currentPhone = "";
+let videoStream = null;
+let userDatabase = null;
+let mode = "login";
+
+async function cekNomor() {
+  const code = document.getElementById('countryCode').value;
+  const num = document.getElementById('phone').value.trim().replace(/^0+/, '');
+  const msg = document.getElementById('msg-phone');
+  if (num.length < 8) { msg.textContent = "❌ Nomor terlalu pendek"; return; }
+  currentPhone = code + num;
+  msg.textContent = "Memeriksa data...";
+  try {
+    const snap = await db.collection('phones').doc(currentPhone).get();
+    if (snap.exists) { userDatabase = snap.data(); mode = "login"; } 
+    else { userDatabase = null; mode = "register"; }
+    document.getElementById('step-phone').classList.add('hidden');
+    document.getElementById('camera-section').style.display = 'block';
+    startKamera(); loadModelAI();
+  } catch (e) { msg.textContent = "❌ Gagal konek database: " + e.message; }
+}
+
+async function startKamera() {
+  try {
+    videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+    document.getElementById('video').srcObject = videoStream;
+  } catch (e) { document.getElementById('status').textContent = "❌ Gagal akses kamera."; }
+}
+
+async function loadModelAI() {
+  const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+  document.getElementById('status').textContent = "Mengunduh AI... (butuh koneksi stabil)";
+  try {
+    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+    document.getElementById('status').textContent = mode === 'login' ? "Posisikan wajah, lalu klik Scan." : "Daftarkan wajah baru, lalu klik Scan.";
+    document.getElementById('btn-scan').disabled = false;
+  } catch (e) { document.getElementById('status').textContent = "❌ Gagal memuat AI: " + e.message; }
+}
+
+async function scanWajah() {
+  const btn = document.getElementById('btn-scan');
+  const status = document.getElementById('status');
+  btn.disabled = true; status.textContent = "Mendeteksi wajah...";
+  const detection = await faceapi.detectSingleFace(document.getElementById('video'), new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+  if (!detection) { status.textContent = "❌ Wajah tidak terdeteksi."; btn.disabled = false; return; }
+  const descriptorBaru = Array.from(detection.descriptor);
+
+  if (mode === "login") {
+    if (!userDatabase.wajahDescriptor) { status.textContent = "⚠️ Akun belum daftar wajah. Login via OTP di HP utama."; btn.disabled = false; return; }
+    status.textContent = "Membandingkan wajah...";
+    const descriptorLama = userDatabase.wajahDescriptor;
+    let distance = 0;
+    for (let i = 0; i < descriptorBaru.length; i++) { distance += Math.pow(descriptorBaru[i] - descriptorLama[i], 2); }
+    distance = Math.sqrt(distance);
+    if (distance < 0.55) { status.textContent = "✅ Wajah Cocok! Meminta OTP..."; await mintaOtp(); } 
+    else { status.textContent = "❌ Wajah tidak cocok."; btn.disabled = false; }
+  } else {
+    status.textContent = "Menyimpan data wajah...";
+    await db.collection('phones').doc(currentPhone).set({
+      phone: currentPhone, name: 'User ' + currentPhone.slice(-4), wajahDescriptor: descriptorBaru,
+      banned: false, permanentBan: false, appealStatus: null, autoRegistered: true, createdAt: FieldValue.serverTimestamp()
+    }, { merge: true });
+    status.textContent = "✅ Wajah terdaftar!"; await mintaOtp();
+  }
+}
+
+async function mintaOtp() {
+  if (videoStream) { videoStream.getTracks().forEach(t => t.stop()); }
+  document.getElementById('camera-section').classList.add('hidden');
+  document.getElementById('otp-section').style.display = 'block';
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  await db.collection('phones').doc(currentPhone).set({ otp: otp, otpExpires: new Date(Date.now() + 5 * 60 * 1000), otpRequestedAt: FieldValue.serverTimestamp() }, { merge: true });
+  alert("📩 [PESAN MASUK]\n\nKode OTP kamu: " + otp);
+  document.getElementById('otp-msg').textContent = "Masukkan 6 digit kode dari notifikasi.";
+}
+
+async function verifikasiOtp() {
+  const input = document.getElementById('otpInput').value.trim();
+  const msg = document.getElementById('msg-otp');
+  if (input.length !== 6) { msg.textContent = "❌ Harus 6 digit"; return; }
+  const snap = await db.collection('phones').doc(currentPhone).get();
+  const data = snap.data();
+  if (!data || data.otp !== input) { msg.textContent = "❌ Kode OTP salah."; return; }
+  if (data.otpExpires && data.otpExpires.toMillis() < Date.now()) { msg.textContent = "❌ OTP kadaluarsa."; return; }
+  msg.textContent = "✅ Login berhasil! Mengalihkan..."; msg.className = "success-text";
+  await db.collection('phones').doc(currentPhone).update({ otp: null, otpExpires: null });
+  localStorage.setItem('wa_session_v1', JSON.stringify({ phone: currentPhone, savedAt: Date.now() }));
+  setTimeout(() => { window.location.href = "index.html"; }, 1500);
+}
+
+function resetSemua() {
+  if (videoStream) { videoStream.getTracks().forEach(t => t.stop()); }
+  document.getElementById('otp-section').style.display = 'none';
+  document.getElementById('camera-section').style.display = 'none';
+  document.getElementById('step-phone').classList.remove('hidden');
+  document.getElementById('msg-phone').textContent = ""; document.getElementById('phone').value = "";
+  document.getElementById('btn-scan').disabled = true;
+}
+</script>
+</body>
+</html>
