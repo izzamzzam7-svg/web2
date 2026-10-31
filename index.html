@@ -1,310 +1,79 @@
-```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BelajarKoding - Tutorial & Live Editor HTML</title>
-    <!-- Tailwind CSS untuk Layout & Styling Modern -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome untuk Ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .code-font {
-            font-family: 'Fira Code', monospace;
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4b5563;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6b7280;
-        }
-    </style>
-</head>
-<body class="bg-gray-900 text-gray-100 flex flex-col h-screen overflow-hidden">
-
-    <!-- Header Navigation -->
-    <header class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex justify-between items-center shrink-0">
-        <div class="flex items-center space-x-3">
-            <div class="bg-orange-600 text-white p-2 rounded-lg font-bold flex items-center justify-center w-9 h-9">
-                <i class="fa-brands fa-html5 text-xl"></i>
-            </div>
-            <div>
-                <h1 class="font-bold text-lg leading-none text-white">BelajarHTML<span class="text-orange-500">.id</span></h1>
-                <p class="text-xs text-gray-400">Platform Belajar & Playgound HTML Pemula</p>
-            </div>
-        </div>
-        <div class="flex items-center space-x-3">
-            <button id="resetCodeBtn" class="bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-1.5 rounded-md text-sm transition flex items-center space-x-2">
-                <i class="fa-solid fa-rotate-left text-xs"></i>
-                <span>Reset Kode</span>
-            </button>
-            <button id="runCodeBtn" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-1.5 rounded-md text-sm font-semibold transition flex items-center space-x-2 shadow-lg shadow-orange-600/30">
-                <i class="fa-solid fa-play text-xs"></i>
-                <span>Jalankan</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Workspace Container -->
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
-        
-        <!-- Sidebar Navigation & Tutorial Material -->
-        <aside class="w-full md:w-80 bg-gray-800 border-r border-gray-700 flex flex-col shrink-0 h-1/3 md:h-full">
-            <div class="p-4 border-b border-gray-700 font-semibold text-gray-300 flex justify-between items-center">
-                <span><i class="fa-solid fa-book-open text-orange-500 mr-2"></i> Materi Pembelajaran</span>
-                <span id="lessonCounter" class="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded-full">1/5</span>
-            </div>
-            
-            <!-- List Materi Scrollable -->
-            <div id="lessonList" class="overflow-y-auto flex-1 p-2 space-y-1">
-                <!-- Dynamically Rendered by JS -->
-            </div>
-
-            <!-- Quiz Footer Section -->
-            <div class="p-4 bg-gray-850 border-t border-gray-700">
-                <div id="materialDetails" class="bg-gray-900/60 p-3 rounded-lg border border-gray-700/50">
-                    <h3 id="lessonTitle" class="font-bold text-orange-400 text-sm mb-1">Judul Materi</h3>
-                    <p id="lessonDesc" class="text-xs text-gray-300 mb-3 leading-relaxed">Penjelasan materi akan tampil di sini.</p>
-                    <button id="loadSnippetBtn" class="w-full bg-gray-700 hover:bg-gray-600 text-xs text-gray-200 py-1.5 rounded font-medium transition">
-                        Muat Contoh Kode ke Editor
-                    </button>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Right Side: Editor & Preview Split -->
-        <main class="flex-1 flex flex-col md:flex-row h-2/3 md:h-full overflow-hidden">
-            
-            <!-- Left Panel: Code Editor -->
-            <div class="w-full md:w-1/2 flex flex-col h-1/2 md:h-full border-b md:border-b-0 md:border-r border-gray-700">
-                <div class="bg-gray-800/80 px-4 py-2 border-b border-gray-700 flex justify-between items-center">
-                    <span class="text-xs font-semibold text-gray-400 flex items-center">
-                        <i class="fa-solid fa-code text-blue-400 mr-2"></i> HTML EDITOR
-                    </span>
-                    <span class="text-xs text-gray-500">Ketik kode kamu di sini</span>
-                </div>
-                <div class="flex-1 relative">
-                    <textarea id="codeEditor" class="w-full h-full bg-gray-900 text-gray-100 p-4 code-font text-sm leading-relaxed outline-none resize-none focus:ring-1 focus:ring-orange-500/50" spellcheck="false" placeholder="Tulis kode HTML kamu di sini..."></textarea>
-                </div>
-            </div>
-
-            <!-- Right Panel: Live Preview -->
-            <div class="w-full md:w-1/2 flex flex-col h-1/2 md:h-full bg-white">
-                <div class="bg-gray-800 px-4 py-2 border-b border-gray-700 flex justify-between items-center">
-                    <span class="text-xs font-semibold text-gray-400 flex items-center">
-                        <i class="fa-solid fa-desktop text-green-400 mr-2"></i> LIVE PREVIEW
-                    </span>
-                    <span class="text-xs text-gray-400">Hasil Tampilan Real-Time</span>
-                </div>
-                <div class="flex-1 relative bg-white">
-                    <iframe id="previewFrame" class="w-full h-full border-none"></iframe>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-orange-600 text-white px-4 py-2.5 rounded-lg shadow-xl text-sm font-medium transition-all transform translate-y-20 opacity-0 flex items-center space-x-2">
-        <i class="fa-solid fa-circle-check"></i>
-        <span id="toastMsg">Notifikasi</span>
-    </div>
-
-    <script>
-        // Data Materi Pelajaran HTML
-        const lessons = [
-            {
-                id: 1,
-                title: "1. Struktur Dasar HTML",
-                desc: "Setiap dokumen HTML memiliki struktur dasar wajib: <!DOCTYPE html>, <html>, <head>, dan <body>.",
-                code: `<!DOCTYPE html>
-<html>
-<head>
-    <title>Halaman Pertamaku</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07152d">
+  <title>XYLER DIGITAL STORE</title>
+  <link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
-    <h1>Halo Dunia!</h1>
-    <p>Selamat datang di pembelajaran HTML interaktif.</p>
-</body>
-</html>`
-            },
-            {
-                id: 2,
-                title: "2. Judul & Paragraf",
-                desc: "Gunakan tag <h1> sampai <h6> untuk membuat judul/heading, dan tag <p> untuk membuat paragraf teks.",
-                code: `<h1>Judul Utama (H1)</h1>
-<h2>Sub Judul (H2)</h2>
-<h3>Sub Sub Judul (H3)</h3>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="XYLER DIGITAL STORE"><span class="brand-mark">X</span><span>XYLER <b>DIGITAL STORE</b></span></a>
+    <div class="top-actions"><span class="server-pill"><i></i> Sistem siap</span><button class="btn btn-light" id="loginBtn">Masuk</button></div>
+  </header>
 
-<p>Ini adalah paragraf pertama. HTML sangat mudah untuk dipelajari!</p>
-<p>Ini paragraf kedua dengan teks <b>tebal</b> dan <i>miring</i>.</p>`
-            },
-            {
-                id: 3,
-                title: "3. Link (Tautan) & Gambar",
-                desc: "Tag <a> digunakan untuk membuat link (pindah halaman), dan <img> untuk menampilkan gambar.",
-                code: `<!-- Tag Link -->
-<a href="https://www.google.com" target="_blank">Buka Google</a>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">DIGITAL PRODUCTS • PPOB</p>
+        <h1>Semua kebutuhan digital,<br><span>dalam satu tempat.</span></h1>
+        <p class="muted">Top up game, pulsa, paket data, dan layanan digital lainnya.</p>
+        <a class="btn btn-primary" href="#produk">Jelajahi produk <span>→</span></a>
+      </div>
+      <div class="hero-art" aria-label="Ilustrasi digital store">
+        <div class="orb orb-one"></div><div class="orb orb-two"></div>
+        <div class="hero-card"><span class="hero-card-icon">✦</span><small>XYLER DIGITAL</small><strong>FAST<br> & SECURE</strong><span class="hero-card-line"></span><small>YOUR DIGITAL PARTNER</small></div>
+      </div>
+    </section>
 
-<br><br>
+    <section class="status-row">
+      <div><span class="status-dot"></span><div><b>Status sistem</b><small>Informasi status akan terhubung ke backend</small></div></div>
+      <div class="status-tag">MODE DEMO</div>
+    </section>
 
-<!-- Tag Gambar -->
-<img src="https://placehold.co/400x200/ff6600/white?text=Belajar+HTML" alt="Contoh Gambar">`
-            },
-            {
-                id: 4,
-                title: "4. Membuat List (Daftar)",
-                desc: "Gunakan <ul> untuk daftar berbutir (unordered list) atau <ol> untuk daftar bernomor (ordered list).",
-                code: `<h3>Daftar Belanjaan (Unordered List):</h3>
-<ul>
-    <li>Beli Kopi</li>
-    <li>Beli Buku Catatan</li>
-    <li>Beli Camilan</li>
-</ul>
+    <section class="section" id="produk">
+      <div class="section-heading"><div><p class="eyebrow">KATALOG</p><h2>Produk pilihan</h2></div><span class="muted small">Contoh produk · belum terhubung supplier</span></div>
+      <div class="category-chips"><button class="chip active" data-filter="Semua">Semua</button><button class="chip" data-filter="Pulsa">Pulsa</button><button class="chip" data-filter="Data">Paket Data</button><button class="chip" data-filter="Game">Top Up Game</button><button class="chip" data-filter="PLN">PLN</button></div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
 
-<h3>Langkah Belajar Web (Ordered List):</h3>
-<ol>
-    <li>Belajar HTML dasar</li>
-    <li>Belajar CSS styling</li>
-    <li>Belajar JavaScript interaktif</li>
-</ol>`
-            },
-            {
-                id: 5,
-                title: "5. Form & Tombol Input",
-                desc: "Form (<form>) digunakan untuk menerima masukan dari pengguna seperti teks, email, dan tombol submit.",
-                code: `<form style="font-family: sans-serif; padding: 10px;">
-    <label for="nama">Nama Lengkap:</label><br>
-    <input type="text" id="nama" placeholder="Masukkan nama..." style="padding: 5px; margin-bottom: 10px;"><br>
-    
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" placeholder="nama@email.com" style="padding: 5px; margin-bottom: 10px;"><br>
+    <section class="section feature-strip">
+      <div><span class="feature-icon">⌁</span><b>Proses terpantau</b><small>Status pesanan dirancang tampil di riwayat akun.</small></div>
+      <div><span class="feature-icon">◇</span><b>Pembayaran fleksibel</b><small>QRIS, transfer bank, dan e-wallet melalui gateway.</small></div>
+      <div><span class="feature-icon">◎</span><b>Bantuan pelanggan</b><small>Hubungi support jika membutuhkan bantuan.</small></div>
+    </section>
 
-    <button type="button" onclick="alert('Form berhasil dikirim!')" style="padding: 6px 12px; background: orange; border: none; color: white; border-radius: 4px; cursor: pointer;">Kirim Data</button>
-</form>`
-            }
-        ];
+    <section class="section support-box" id="support">
+      <div><p class="eyebrow">BUTUH BANTUAN?</p><h2>Contact Support</h2><p class="muted">Kontak resmi akan ditambahkan melalui pengaturan admin.</p></div>
+      <button class="btn btn-outline" id="supportBtn">Lihat kontak</button>
+    </section>
+  </main>
 
-        let activeLessonId = 1;
+  <nav class="bottom-nav" aria-label="Navigasi utama">
+    <a class="nav-item selected" href="#"><span>⌂</span>Home</a>
+    <a class="nav-item" href="#produk"><span>▦</span>Produk</a>
+    <button class="nav-item" id="accountNav"><span>◉</span>Akun</button>
+    <a class="nav-item" href="#support"><span>♧</span>Support</a>
+  </nav>
 
-        // Element Selectors
-        const lessonListEl = document.getElementById('lessonList');
-        const lessonTitleEl = document.getElementById('lessonTitle');
-        const lessonDescEl = document.getElementById('lessonDesc');
-        const lessonCounterEl = document.getElementById('lessonCounter');
-        const codeEditorEl = document.getElementById('codeEditor');
-        const previewFrameEl = document.getElementById('previewFrame');
-        const runCodeBtn = document.getElementById('runCodeBtn');
-        const resetCodeBtn = document.getElementById('resetCodeBtn');
-        const loadSnippetBtn = document.getElementById('loadSnippetBtn');
+  <dialog id="loginDialog" class="dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="dialog-close" aria-label="Tutup">×</button>
+      <p class="eyebrow">AKUN XYLER</p><h2>Masuk atau daftar</h2>
+      <p class="muted small">Autentikasi belum diaktifkan. Sambungkan Supabase dan Google OAuth sebelum menerima akun sungguhan.</p>
+      <label>Email<input type="email" placeholder="nama@email.com" disabled></label>
+      <label>Password<input type="password" placeholder="••••••••" disabled></label>
+      <button class="btn btn-primary full" type="button" disabled>Masuk (belum aktif)</button>
+      <button class="btn btn-outline full" type="button" disabled>Masuk dengan Google (belum aktif)</button>
+    </form>
+  </dialog>
 
-        // Initial Load
-        function initApp() {
-            renderLessonList();
-            selectLesson(activeLessonId);
-            
-            // Auto Update Preview on Type (with debounce)
-            let timeout;
-            codeEditorEl.addEventListener('input', () => {
-                clearTimeout(timeout);
-                timeout = setTimeout(updatePreview, 400);
-            });
-        }
+  <dialog id="infoDialog" class="dialog">
+    <form method="dialog" class="dialog-card"><button class="dialog-close" aria-label="Tutup">×</button><p class="eyebrow">INFORMASI</p><h2 id="infoTitle">Informasi</h2><p id="infoText" class="muted"></p><button class="btn btn-primary full">Mengerti</button></form>
+  </dialog>
 
-        // Render List Materi
-        function renderLessonList() {
-            lessonListEl.innerHTML = '';
-            lessons.forEach(lesson => {
-                const item = document.createElement('div');
-                item.className = `p-3 rounded-lg cursor-pointer transition flex items-center justify-between text-sm ${
-                    lesson.id === activeLessonId 
-                        ? 'bg-orange-600/20 border border-orange-500/50 text-orange-400 font-medium' 
-                        : 'hover:bg-gray-700/50 text-gray-300'
-                }`;
-                item.onclick = () => selectLesson(lesson.id);
-                item.innerHTML = `
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-regular fa-file-code text-xs"></i>
-                        <span>${lesson.title}</span>
-                    </div>
-                    ${lesson.id === activeLessonId ? '<i class="fa-solid fa-chevron-right text-xs"></i>' : ''}
-                `;
-                lessonListEl.appendChild(item);
-            });
-        }
-
-        // Select Lesson
-        function selectLesson(id) {
-            activeLessonId = id;
-            const lesson = lessons.find(l => l.id === id);
-            
-            lessonTitleEl.innerText = lesson.title;
-            lessonDescEl.innerText = lesson.desc;
-            lessonCounterEl.innerText = `${id}/${lessons.length}`;
-            codeEditorEl.value = lesson.code;
-
-            renderLessonList();
-            updatePreview();
-        }
-
-        // Update Frame Live Preview
-        function updatePreview() {
-            const code = codeEditorEl.value;
-            const iframeDoc = previewFrameEl.contentDocument || previewFrameEl.contentWindow.document;
-            iframeDoc.open();
-            iframeDoc.write(code);
-            iframeDoc.close();
-        }
-
-        // Show Notification Toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            toastMsg.innerText = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 2500);
-        }
-
-        // Event Listeners
-        runCodeBtn.addEventListener('click', () => {
-            updatePreview();
-            showToast('Kode berhasil dijalankan!');
-        });
-
-        resetCodeBtn.addEventListener('click', () => {
-            const lesson = lessons.find(l => l.id === activeLessonId);
-            codeEditorEl.value = lesson.code;
-            updatePreview();
-            showToast('Kode direset ke posisi awal!');
-        });
-
-        loadSnippetBtn.addEventListener('click', () => {
-            const lesson = lessons.find(l => l.id === activeLessonId);
-            codeEditorEl.value = lesson.code;
-            updatePreview();
-            showToast('Contoh kode dimuat ke editor!');
-        });
-
-        // Start App
-        window.onload = initApp;
-    </script>
+  <footer>© <span id="year"></span> XYLER DIGITAL STORE · Starter project</footer>
+  <script src="/assets/app.js"></script>
 </body>
 </html>
-```
