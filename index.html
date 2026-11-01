@@ -1,79 +1,124 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07152d">
-  <title>XYLER DIGITAL STORE</title>
-  <link rel="stylesheet" href="/assets/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07162d">
+<meta name="description" content="Rico host Region Pemalang — QRIS pembayaran">
+<title>Rico host Region Pemalang | QRIS</title>
+<style>
+:root{--cyan:#4deaff;--gold:#ffd76a;--bg:#061329;--panel:rgba(10,27,53,.82)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 50% 0%,#163d68 0,#081a34 45%,#030914 100%);color:#f4f8ff;font-family:Inter,system-ui,Arial,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(77,234,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(77,234,255,.07) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+.wrap{width:min(920px,92vw);margin:auto}
+.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:54px 0 36px;position:relative}
+.hero-inner{text-align:center;width:min(760px,100%)}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border:1px solid #3adcf477;border-radius:999px;background:#0a2745aa;color:#9af4ff;font-size:.75rem;letter-spacing:.19em;text-transform:uppercase}
+.dot{width:7px;height:7px;border-radius:50%;background:#45f2c4;box-shadow:0 0 12px #45f2c4}
+h1{font-size:clamp(2.1rem,7vw,4.9rem);line-height:.98;letter-spacing:-.055em;margin:24px 0 16px;text-shadow:0 5px 35px #27cfff55}
+h1 span{color:var(--gold)}
+.lead{color:#c4d3e8;max-width:590px;margin:0 auto;font-size:clamp(.95rem,2.5vw,1.1rem);line-height:1.8}
+.scroll-cue{margin:42px auto 0;display:flex;flex-direction:column;align-items:center;gap:10px;color:#91a9c7;font-size:.76rem;letter-spacing:.15em;text-transform:uppercase}
+.mouse{width:24px;height:38px;border:1px solid #65eaff;border-radius:20px;position:relative}
+.mouse:after{content:"";position:absolute;top:7px;left:10px;width:3px;height:7px;border-radius:4px;background:#65eaff;animation:wheel 1.5s infinite}
+@keyframes wheel{to{transform:translateY(11px);opacity:0}}
+.section{padding:65px 0}
+.glass{background:var(--panel);border:1px solid #66dff344;border-radius:25px;box-shadow:0 20px 70px #0008,inset 0 1px #ffffff13;backdrop-filter:blur(16px)}
+.intro-card{padding:clamp(22px,5vw,42px);text-align:center}
+.kicker{color:var(--cyan);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase}
+h2{font-size:clamp(1.5rem,4vw,2.4rem);margin:12px 0;color:#fff}
+.copy{max-width:650px;margin:0 auto;color:#b9cbe1;line-height:1.8}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.feature{padding:17px 12px;border-radius:17px;background:#ffffff08;border:1px solid #ffffff12}
+.feature b{display:block;color:#fff;margin-bottom:6px;font-size:.93rem}
+.feature small{color:#9eb2cc;line-height:1.5}
+.scan-area{padding:45px 20px;text-align:center;margin-top:20px}
+.fingerprint{width:112px;height:112px;margin:22px auto;display:grid;place-items:center;border-radius:50%;border:1px solid #56eaff88;background:radial-gradient(circle,#164c6d,#08182f 70%);box-shadow:0 0 0 10px #36dff00c,0 0 45px #1bdcff33;position:relative}
+.fingerprint svg{width:61px;height:61px;stroke:#8ff5ff;fill:none;stroke-width:1.8;stroke-linecap:round}
+.fingerprint:after{content:"";position:absolute;inset:-8px;border:1px solid #5eeeff55;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{50%{transform:scale(1.12);opacity:.25}}
+.scan-btn{border:0;border-radius:999px;padding:15px 28px;background:linear-gradient(100deg,#087cc4,#19c9e6);color:white;font-size:1rem;font-weight:800;letter-spacing:.04em;box-shadow:0 9px 30px #0bbbe955;cursor:pointer;transition:.2s}
+.scan-btn:active{transform:scale(.97)}
+.hint{font-size:.8rem;color:#91a9c7;margin-top:14px}
+.qr-section{display:none;padding:35px 0 70px;animation:reveal .65s ease}
+.qr-section.show{display:block}
+@keyframes reveal{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.poster-frame{padding:clamp(8px,2vw,16px);background:linear-gradient(135deg,#f7c65c,#35eaff,#a54bff,#f7c65c);border-radius:22px;box-shadow:0 0 55px #1bdcff35}
+.poster-frame img{display:block;width:100%;height:auto;border-radius:12px}
+.qr-caption{text-align:center;color:#a9bed8;margin:20px auto 0;line-height:1.7;font-size:.9rem}
+footer{text-align:center;color:#6f86a5;padding:22px 10px 35px;font-size:.75rem}
+@media(max-width:600px){.features{grid-template-columns:1fr}.feature{display:flex;align-items:center;justify-content:center;gap:10px}.feature b{margin:0}.hero{min-height:92svh}.section{padding:38px 0}}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" aria-label="XYLER DIGITAL STORE"><span class="brand-mark">X</span><span>XYLER <b>DIGITAL STORE</b></span></a>
-    <div class="top-actions"><span class="server-pill"><i></i> Sistem siap</span><button class="btn btn-light" id="loginBtn">Masuk</button></div>
-  </header>
+<header class="hero">
+ <div class="wrap hero-inner">
+  <div class="eyebrow"><i class="dot"></i> Secure QRIS experience</div>
+  <h1>RICO HOST<br><span>REGION PEMALANG</span></h1>
+  <p class="lead">Selamat datang di halaman pembayaran resmi. Gulir ke bawah untuk mengenal informasi QRIS, lalu lanjutkan melalui animasi pemindaian sidik jari.</p>
+  <div class="scroll-cue"><span>Scroll untuk melanjutkan</span><i class="mouse"></i><span>↓</span></div>
+ </div>
+</header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="eyebrow">DIGITAL PRODUCTS • PPOB</p>
-        <h1>Semua kebutuhan digital,<br><span>dalam satu tempat.</span></h1>
-        <p class="muted">Top up game, pulsa, paket data, dan layanan digital lainnya.</p>
-        <a class="btn btn-primary" href="#produk">Jelajahi produk <span>→</span></a>
-      </div>
-      <div class="hero-art" aria-label="Ilustrasi digital store">
-        <div class="orb orb-one"></div><div class="orb orb-two"></div>
-        <div class="hero-card"><span class="hero-card-icon">✦</span><small>XYLER DIGITAL</small><strong>FAST<br> & SECURE</strong><span class="hero-card-line"></span><small>YOUR DIGITAL PARTNER</small></div>
-      </div>
-    </section>
+<main class="wrap">
+ <section class="section">
+  <div class="glass intro-card">
+   <div class="kicker">Digital payment • QRIS</div>
+   <h2>Pembayaran praktis dalam satu scan.</h2>
+   <p class="copy">Gunakan aplikasi pembayaran yang mendukung QRIS untuk memindai kode pada halaman berikutnya. Pastikan nama merchant dan detail transaksi sudah sesuai sebelum mengonfirmasi pembayaran.</p>
+   <div class="features">
+    <div class="feature"><b>QRIS</b><small>Standar pembayaran nasional</small></div>
+    <div class="feature"><b>Merchant</b><small>Rico host Region Pemalang</small></div>
+    <div class="feature"><b>Praktis</b><small>Pindai melalui aplikasi pembayaran</small></div>
+   </div>
+  </div>
 
-    <section class="status-row">
-      <div><span class="status-dot"></span><div><b>Status sistem</b><small>Informasi status akan terhubung ke backend</small></div></div>
-      <div class="status-tag">MODE DEMO</div>
-    </section>
+  <div class="glass scan-area">
+   <div class="kicker">Access verification</div>
+   <h2>Verifikasi untuk masuk</h2>
+   <p class="copy">Tekan tombol di bawah untuk menjalankan animasi pemindaian sidik jari dan membuka QRIS.</p>
+   <div class="fingerprint" aria-hidden="true">
+    <svg viewBox="0 0 64 64">
+     <path d="M32 8c-13 0-23 10-23 23M32 15c-9 0-16 7-16 16 0 8-1 14-4 20M32 22c-5 0-9 4-9 9 0 10-1 17-4 23M32 8c13 0 23 10 23 23 0 8-1 15-4 22M32 15c9 0 16 7 16 16 0 11-1 18-4 24M32 29c-1 0-2 1-2 2 0 12-1 19-4 25M36 32c0 11-1 18-2 24"/>
+    </svg>
+   </div>
+   <button class="scan-btn" id="scanBtn">SCAN FINGERPRINT</button>
+   <div class="hint" id="status">Simulasi visual — bukan autentikasi biometrik perangkat.</div>
+  </div>
+ </section>
 
-    <section class="section" id="produk">
-      <div class="section-heading"><div><p class="eyebrow">KATALOG</p><h2>Produk pilihan</h2></div><span class="muted small">Contoh produk · belum terhubung supplier</span></div>
-      <div class="category-chips"><button class="chip active" data-filter="Semua">Semua</button><button class="chip" data-filter="Pulsa">Pulsa</button><button class="chip" data-filter="Data">Paket Data</button><button class="chip" data-filter="Game">Top Up Game</button><button class="chip" data-filter="PLN">PLN</button></div>
-      <div class="product-grid" id="productGrid"></div>
-    </section>
+ <section class="qr-section" id="qrSection">
+  <div class="poster-frame">
+   <img src="assets/poster-qris.png" alt="Poster QRIS Rico host Region Pemalang">
+  </div>
+  <p class="qr-caption">Pindai QRIS menggunakan aplikasi pembayaran. Periksa nama merchant dan nominal sebelum menyelesaikan transaksi.</p>
+ </section>
+</main>
 
-    <section class="section feature-strip">
-      <div><span class="feature-icon">⌁</span><b>Proses terpantau</b><small>Status pesanan dirancang tampil di riwayat akun.</small></div>
-      <div><span class="feature-icon">◇</span><b>Pembayaran fleksibel</b><small>QRIS, transfer bank, dan e-wallet melalui gateway.</small></div>
-      <div><span class="feature-icon">◎</span><b>Bantuan pelanggan</b><small>Hubungi support jika membutuhkan bantuan.</small></div>
-    </section>
+<footer>RICO HOST REGION PEMALANG • QRIS PAYMENT</footer>
 
-    <section class="section support-box" id="support">
-      <div><p class="eyebrow">BUTUH BANTUAN?</p><h2>Contact Support</h2><p class="muted">Kontak resmi akan ditambahkan melalui pengaturan admin.</p></div>
-      <button class="btn btn-outline" id="supportBtn">Lihat kontak</button>
-    </section>
-  </main>
-
-  <nav class="bottom-nav" aria-label="Navigasi utama">
-    <a class="nav-item selected" href="#"><span>⌂</span>Home</a>
-    <a class="nav-item" href="#produk"><span>▦</span>Produk</a>
-    <button class="nav-item" id="accountNav"><span>◉</span>Akun</button>
-    <a class="nav-item" href="#support"><span>♧</span>Support</a>
-  </nav>
-
-  <dialog id="loginDialog" class="dialog">
-    <form method="dialog" class="dialog-card">
-      <button class="dialog-close" aria-label="Tutup">×</button>
-      <p class="eyebrow">AKUN XYLER</p><h2>Masuk atau daftar</h2>
-      <p class="muted small">Autentikasi belum diaktifkan. Sambungkan Supabase dan Google OAuth sebelum menerima akun sungguhan.</p>
-      <label>Email<input type="email" placeholder="nama@email.com" disabled></label>
-      <label>Password<input type="password" placeholder="••••••••" disabled></label>
-      <button class="btn btn-primary full" type="button" disabled>Masuk (belum aktif)</button>
-      <button class="btn btn-outline full" type="button" disabled>Masuk dengan Google (belum aktif)</button>
-    </form>
-  </dialog>
-
-  <dialog id="infoDialog" class="dialog">
-    <form method="dialog" class="dialog-card"><button class="dialog-close" aria-label="Tutup">×</button><p class="eyebrow">INFORMASI</p><h2 id="infoTitle">Informasi</h2><p id="infoText" class="muted"></p><button class="btn btn-primary full">Mengerti</button></form>
-  </dialog>
-
-  <footer>© <span id="year"></span> XYLER DIGITAL STORE · Starter project</footer>
-  <script src="/assets/app.js"></script>
+<audio id="bgMusic" preload="none" loop>
+ <source src="assets/lagu.mp3" type="audio/mpeg">
+</audio>
+<script>
+const btn=document.getElementById('scanBtn');
+const statusText=document.getElementById('status');
+const qr=document.getElementById('qrSection');
+const music=document.getElementById('bgMusic');
+btn.addEventListener('click',async()=>{
+ btn.disabled=true;
+ btn.textContent='MEMINDAI...';
+ statusText.textContent='Memproses animasi verifikasi...';
+ document.querySelector('.fingerprint').style.filter='drop-shadow(0 0 18px #53f2ff)';
+ await new Promise(resolve=>setTimeout(resolve,1500));
+ qr.classList.add('show');
+ btn.textContent='AKSES DIBUKA';
+ statusText.textContent='QRIS berhasil ditampilkan. Selamat datang!';
+ try{await music.play();}catch(e){statusText.textContent='QRIS terbuka. Ketuk layar sekali lagi jika ingin memutar musik.';}
+ qr.scrollIntoView({behavior:'smooth',block:'start'});
+});
+</script>
 </body>
 </html>
