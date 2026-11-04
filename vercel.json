@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/chat",
+      "destination": "http://api.nexadev.my.id/ai/deepsek"
+    }
+  ]
+}
