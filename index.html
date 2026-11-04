@@ -2,356 +2,480 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Lock Screen</title>
 <style>
-  :root {
-    --bg: #ffffff;
-    --fg: #1a1a1a;
-    --muted: #6b6b6b;
-    --border: #d8d8d8;
-    --panel: #f5f5f5;
-    --accent: #1a1a1a;
-    --accent-fg: #ffffff;
-    --error: #b00020;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #161616;
-      --fg: #ececec;
-      --muted: #9a9a9a;
-      --border: #333333;
-      --panel: #1f1f1f;
-      --accent: #ececec;
-      --accent-fg: #161616;
-      --error: #ff6b6b;
-    }
-  }
-
-  * { box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   html, body {
-    margin: 0;
     height: 100%;
-    overflow: hidden; /* Mencegah scroll di body */
+    overflow: hidden;
+    font-family: 'Space Grotesk', sans-serif;
+    user-select: none;
   }
 
   body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  .app {
-    max-width: 720px;
-    height: 100dvh;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    padding: 0 16px;
-  }
-
-  .app-header {
+    background: #0a0a0f;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
+    justify-content: center;
   }
 
-  .app-header h1 {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
+  /* ==== BACKGROUND ==== */
+  .bg {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124, 58, 237, 0.35), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 85% 90%, rgba(6, 182, 212, 0.30), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 50% 50%, rgba(236, 72, 153, 0.12), transparent 70%),
+      #0a0a0f;
+    z-index: 0;
   }
 
-  .app-header button {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    cursor: pointer;
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
   }
 
-  .app-header button:active {
-    color: var(--fg);
-    border-color: var(--fg);
-  }
+  /* grain overlay pakai svg turbulence biar ga flat */
 
-  .messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px 0;
+  /* ==== FRAME HP ==== */
+  .phone {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 100dvh;
+    max-height: 860px;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    padding: 0 24px;
+    overflow: hidden;
   }
 
-  .msg {
-    max-width: 85%;
-    padding: 10px 14px;
-    border-radius: 10px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+  @media (min-width: 500px) {
+    .phone {
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 8px #12121a, 0 40px 80px -20px rgba(0,0,0,0.9);
+      height: 90dvh;
+    }
   }
 
-  .msg.user {
-    align-self: flex-end;
-    background: var(--accent);
-    color: var(--accent-fg);
-  }
-
-  .msg.bot {
-    align-self: flex-start;
-    background: var(--panel);
-    color: var(--fg);
-  }
-
-  .msg.bot code {
-    font-family: ui-monospace, "SF Mono", Menlo, monospace;
-    font-size: 13px;
-    background: rgba(127, 127, 127, 0.15);
-    padding: 1px 4px;
-    border-radius: 3px;
-  }
-
-  .msg.bot pre {
-    background: rgba(127, 127, 127, 0.15);
-    padding: 10px 12px;
-    border-radius: 6px;
-    overflow-x: auto;
-    margin: 8px 0;
-    white-space: pre;
-  }
-
-  .msg.bot pre code {
-    background: none;
-    padding: 0;
-  }
-
-  .msg.error {
-    align-self: center;
-    color: var(--error);
-    font-size: 13px;
-    background: none;
-    padding: 4px;
-    text-align: center;
-  }
-
-  .composer {
+  /* ==== STATUS BAR ==== */
+  .statusbar {
     display: flex;
-    gap: 8px;
-    padding: 12px 0 16px;
-    border-top: 1px solid var(--border);
-    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 8px 0;
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
   }
 
-  .composer textarea {
+  .statusbar .right { display: flex; gap: 6px; align-items: center; }
+  .statusbar svg { width: 15px; height: 15px; fill: rgba(255,255,255,0.85); }
+
+  /* ==== CLOCK ==== */
+  .clock-area {
     flex: 1;
-    resize: none;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font: inherit;
-    color: var(--fg);
-    background: var(--bg);
-    max-height: 120px;
-    min-height: 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding-top: 40px;
   }
 
-  .composer textarea:focus {
-    outline: none;
-    border-color: var(--fg);
+  .time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(56px, 18vw, 76px);
+    font-weight: 600;
+    letter-spacing: -3px;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(124, 58, 237, 0.6);
+    font-variant-numeric: tabular-nums;
   }
 
-  .composer button {
-    background: var(--accent);
-    color: var(--accent-fg);
-    border: none;
-    border-radius: 8px;
-    padding: 0 20px;
-    font: inherit;
-    font-weight: 500;
-    cursor: pointer;
+  .time .colon {
+    animation: blink 1s steps(1) infinite;
+    color: #a78bfa;
   }
 
-  .composer button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+  @keyframes blink { 50% { opacity: 0.25; } }
+
+  .date {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
   }
 
-  .status {
-    margin: 0 0 8px;
-    font-size: 12px;
-    color: var(--muted);
-    min-height: 16px;
-    text-align: center;
+  /* ==== NOTIF CARD ==== */
+  .notif {
+    margin: 0 4px 8px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    animation: floatUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .notif .icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
+    font-size: 16px;
   }
 
-  .status.error {
-    color: var(--error);
+  .notif .body { flex: 1; min-width: 0; }
+  .notif .app {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #a78bfa;
+    font-weight: 600;
+    margin-bottom: 2px;
   }
+  .notif .msg {
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .notif .timeago {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  @keyframes floatUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ==== UNLOCK AREA ==== */
+  .unlock-area {
+    padding-bottom: 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .swipe-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .swipe-hint .line {
+    width: 90px;
+    height: 3px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .swipe-hint .line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 30%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, transparent, #a78bfa, transparent);
+    animation: slide 1.8s ease-in-out infinite;
+  }
+  @keyframes slide {
+    from { transform: translateX(-150%); }
+    to { transform: translateX(450%); }
+  }
+
+  .pin-dots {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 4px;
+  }
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: all 0.2s ease;
+  }
+  .dot.filled {
+    background: #a78bfa;
+    border-color: #a78bfa;
+    box-shadow: 0 0 12px rgba(167,139,250,0.7);
+    transform: scale(1.15);
+  }
+
+  /* ==== NUMPAD ==== */
+  .numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 20px;
+    width: 100%;
+    max-width: 280px;
+    margin-bottom: 16px;
+  }
+
+  .key {
+    height: 56px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .key:active {
+    transform: scale(0.92);
+    background: rgba(167,139,250,0.25);
+  }
+  .key.blank { background: none; border: none; pointer-events: none; }
+
+  .key.action {
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-family: 'Space Grotesk', sans-serif;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ==== ERROR SHAKE ==== */
+  .shake { animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+  @keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-5px); }
+    40%, 60% { transform: translateX(5px); }
+  }
+
+  /* ==== UNLOCKED STATE ==== */
+  .unlocked-msg {
+    position: absolute;
+    inset: 0;
+    background: #0a0a0f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    border-radius: inherit;
+  }
+  .unlocked-msg.show { opacity: 1; pointer-events: auto; }
+  .unlocked-msg .check {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #06b6d4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 0 60px rgba(124,58,237,0.7);
+  }
+  .unlocked-msg h2 { color: #fff; font-size: 20px; font-weight: 600; }
+  .unlocked-msg p { color: rgba(255,255,255,0.4); font-size: 12px; }
 </style>
 </head>
 <body>
-<main class="app">
-  <header class="app-header">
-    <h1>Chat</h1>
-    <button id="clearBtn" type="button">Bersihkan</button>
-  </header>
 
-  <section id="messages" class="messages" aria-live="polite"></section>
+<div class="bg"></div>
 
-  <form id="chatForm" class="composer">
-    <textarea
-      id="input"
-      rows="1"
-      placeholder="Tulis pesan..."
-      autocomplete="off"
-      required
-    ></textarea>
-    <button id="sendBtn" type="submit">Kirim</button>
-  </form>
+<div class="phone" id="phone">
 
-  <p id="status" class="status" role="status"></p>
-</main>
+  <!-- STATUS BAR -->
+  <div class="statusbar">
+    <span id="statusTime">09:41</span>
+    <div class="right">
+      <svg viewBox="0 0 24 24"><path d="M12 21l-8-8c2.5-2.5 6-2.5 8 0 2-2.5 5.5-2.5 8 0l-8 8z" opacity="0"/><path d="M2 22h20V2L2 22z" opacity=".0"/><path d="M15.5 14.5l-3.5-3.5-1.5 1.5 5 5 8-8-1.5-1.5-7 7z" opacity="0"/><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+    </div>
+  </div>
+
+  <!-- CLOCK -->
+  <div class="clock-area">
+    <div class="time" id="clock">09<span class="colon">:</span>41</div>
+    <div class="date" id="date">SENIN, 21 OKTOBER</div>
+  </div>
+
+  <!-- NOTIFICATION -->
+  <div class="notif">
+    <div class="icon">💬</div>
+    <div class="body">
+      <div class="app">Pesan</div>
+      <div class="msg">Ada yang mau ngasih sesuatu nih 👀</div>
+    </div>
+    <div class="timeago">now</div>
+  </div>
+
+  <!-- UNLOCK / PIN AREA -->
+  <div class="unlock-area">
+    <div class="pin-dots" id="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <div class="numpad" id="numpad">
+      <div class="key" data-k="1">1</div>
+      <div class="key" data-k="2">2</div>
+      <div class="key" data-k="3">3</div>
+      <div class="key" data-k="4">4</div>
+      <div class="key" data-k="5">5</div>
+      <div class="key" data-k="6">6</div>
+      <div class="key" data-k="7">7</div>
+      <div class="key" data-k="8">8</div>
+      <div class="key" data-k="9">9</div>
+      <div class="key blank"></div>
+      <div class="key" data-k="0">0</div>
+      <div class="key action" data-k="del">DEL</div>
+    </div>
+
+    <div class="swipe-hint">
+      <div class="line"></div>
+      <span>geser atau masukkan PIN</span>
+    </div>
+  </div>
+
+  <!-- UNLOCKED OVERLAY -->
+  <div class="unlocked-msg" id="unlockedMsg">
+    <div class="check">✓</div>
+    <h2>Terbuka 🔓</h2>
+    <p>Selamat datang kembali</p>
+  </div>
+
+</div>
 
 <script>
-// Menggunakan proxy Vercel agar tidak kena blokir Mixed Content
-const API_BASE = "/api/proxy";
+  const CORRECT_PIN = "1234"; // ganti sesuai keinginan
+  let input = "";
 
-const messagesEl = document.getElementById("messages");
-const formEl = document.getElementById("chatForm");
-const inputEl = document.getElementById("input");
-const sendBtn = document.getElementById("sendBtn");
-const clearBtn = document.getElementById("clearBtn");
-const statusEl = document.getElementById("status");
+  const clockEl = document.getElementById('clock');
+  const dateEl = document.getElementById('date');
+  const statusTimeEl = document.getElementById('statusTime');
+  const dots = document.querySelectorAll('.dot');
+  const numpad = document.getElementById('numpad');
+  const phone = document.getElementById('phone');
+  const unlockedMsg = document.getElementById('unlockedMsg');
 
-let busy = false;
+  // ==== Jam realtime ====
+  function updateClock() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    clockEl.innerHTML = `${hh}<span class="colon">:</span>${mm}`;
+    statusTimeEl.textContent = `${hh}:${mm}`;
 
-function setStatus(text, isError = false) {
-  statusEl.textContent = text || "";
-  statusEl.classList.toggle("error", Boolean(isError));
-}
+    const days = ['MINGGU','SENIN','SELASA','RABU','KAMIS','JUMAT','SABTU'];
+    const months = ['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
+    dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
 
-function scrollToBottom() {
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
+  // ==== Render dots ====
+  function renderDots() {
+    dots.forEach((d, i) => d.classList.toggle('filled', i < input.length));
+  }
 
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
+  // ==== Handle numpad ====
+  numpad.addEventListener('click', (e) => {
+    const key = e.target.closest('.key');
+    if (!key || key.classList.contains('blank')) return;
+    const val = key.dataset.k;
 
-function renderBotText(text) {
-  const parts = text.split(/```/);
-  let html = "";
-  parts.forEach((part, i) => {
-    if (i % 2 === 1) {
-      const code = part.replace(/^[a-zA-Z0-9]*\n/, "").trimEnd();
-      html += `<pre><code>${escapeHtml(code)}</code></pre>`;
-    } else {
-      html += escapeHtml(part);
+    if (val === 'del') {
+      input = input.slice(0, -1);
+      renderDots();
+      return;
+    }
+
+    if (input.length >= 4) return;
+    input += val;
+    renderDots();
+
+    if (input.length === 4) {
+      setTimeout(checkPin, 150);
     }
   });
-  return html;
-}
 
-function addMessage(role, content) {
-  const div = document.createElement("div");
-  div.className = `msg ${role}`;
-  if (role === "bot") {
-    div.innerHTML = renderBotText(content);
-  } else {
-    div.textContent = content;
-  }
-  messagesEl.appendChild(div);
-  scrollToBottom();
-  return div;
-}
-
-function addError(text) {
-  const div = document.createElement("div");
-  div.className = "msg error";
-  div.textContent = text;
-  messagesEl.appendChild(div);
-  scrollToBottom();
-}
-
-async function sendMessage(text) {
-  if (busy) return;
-  busy = true;
-  sendBtn.disabled = true;
-  setStatus("Menunggu balasan...");
-
-  addMessage("user", text);
-
-  try {
-    // Memanggil proxy, bukan langsung ke api.nexadev
-    const url = `${API_BASE}?text=${encodeURIComponent(text)}`;
-    const res = await fetch(url);
-    
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+  // ==== Cek PIN ====
+  function checkPin() {
+    if (input === CORRECT_PIN) {
+      unlockedMsg.classList.add('show');
+      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    } else {
+      phone.classList.add('shake');
+      if (navigator.vibrate) navigator.vibrate(200);
+      setTimeout(() => {
+        phone.classList.remove('shake');
+        input = "";
+        renderDots();
+      }, 400);
     }
-    
-    const data = await res.json();
-    
-    if (!data.status || typeof data.result !== "string") {
-      throw new Error("Respons tidak valid dari server");
+  }
+
+  // ==== Swipe up untuk unlock (simulasi) ====
+  let startY = null;
+  phone.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.numpad')) return;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  phone.addEventListener('touchend', (e) => {
+    if (startY === null) return;
+    const endY = e.changedTouches[0].clientY;
+    if (startY - endY > 120) {
+      // swipe up terdeteksi -> langsung unlock
+      unlockedMsg.classList.add('show');
+      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
     }
-    
-    addMessage("bot", data.result);
-    setStatus("");
-  } catch (err) {
-    addError("Gagal menghubungi server: " + err.message);
-    setStatus("Terjadi kesalahan", true);
-  } finally {
-    busy = false;
-    sendBtn.disabled = false;
-    inputEl.focus();
-  }
-}
+    startY = null;
+  }, { passive: true });
 
-formEl.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const text = inputEl.value.trim();
-  if (!text) return;
-  inputEl.value = "";
-  inputEl.style.height = "auto";
-  sendMessage(text);
-});
-
-inputEl.addEventListener("input", () => {
-  inputEl.style.height = "auto";
-  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + "px";
-});
-
-// Support enter untuk kirim (kecuali shift+enter)
-inputEl.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    formEl.requestSubmit();
-  }
-});
-
-clearBtn.addEventListener("click", () => {
-  messagesEl.innerHTML = "";
-  setStatus("");
-  inputEl.focus();
-});
-
-// Fokus otomatis saat halaman dibuka
-inputEl.focus();
+  // ==== Keyboard support (buat testing di laptop) ====
+  document.addEventListener('keydown', (e) => {
+    if (e.key >= '0' && e.key <= '9') {
+      if (input.length < 4) { input += e.key; renderDots(); if (input.length === 4) setTimeout(checkPin, 150); }
+    } else if (e.key === 'Backspace') {
+      input = input.slice(0, -1); renderDots();
+    }
+  });
 </script>
+
 </body>
 </html>
