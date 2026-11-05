@@ -2,480 +2,150 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Lock Screen</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#080b14">
+<title>NEON MUSIC — DEV OZiiSKAL</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    font-family: 'Space Grotesk', sans-serif;
-    user-select: none;
-  }
-
-  body {
-    background: #0a0a0f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* ==== BACKGROUND ==== */
-  .bg {
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124, 58, 237, 0.35), transparent 60%),
-      radial-gradient(ellipse 70% 50% at 85% 90%, rgba(6, 182, 212, 0.30), transparent 60%),
-      radial-gradient(ellipse 60% 40% at 50% 50%, rgba(236, 72, 153, 0.12), transparent 70%),
-      #0a0a0f;
-    z-index: 0;
-  }
-
-  .bg::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  /* grain overlay pakai svg turbulence biar ga flat */
-
-  /* ==== FRAME HP ==== */
-  .phone {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    height: 100dvh;
-    max-height: 860px;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 0 24px;
-    overflow: hidden;
-  }
-
-  @media (min-width: 500px) {
-    .phone {
-      border-radius: 40px;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 0 0 8px #12121a, 0 40px 80px -20px rgba(0,0,0,0.9);
-      height: 90dvh;
-    }
-  }
-
-  /* ==== STATUS BAR ==== */
-  .statusbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 8px 0;
-    color: rgba(255,255,255,0.85);
-    font-size: 13px;
-    font-weight: 600;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.5px;
-  }
-
-  .statusbar .right { display: flex; gap: 6px; align-items: center; }
-  .statusbar svg { width: 15px; height: 15px; fill: rgba(255,255,255,0.85); }
-
-  /* ==== CLOCK ==== */
-  .clock-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    padding-top: 40px;
-  }
-
-  .time {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: clamp(56px, 18vw, 76px);
-    font-weight: 600;
-    letter-spacing: -3px;
-    line-height: 1;
-    color: #fff;
-    text-shadow: 0 0 40px rgba(124, 58, 237, 0.6);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .time .colon {
-    animation: blink 1s steps(1) infinite;
-    color: #a78bfa;
-  }
-
-  @keyframes blink { 50% { opacity: 0.25; } }
-
-  .date {
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-weight: 400;
-  }
-
-  /* ==== NOTIF CARD ==== */
-  .notif {
-    margin: 0 4px 8px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: rgba(255,255,255,0.06);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.08);
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    animation: floatUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-
-  .notif .icon {
-    width: 34px; height: 34px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #7c3aed, #ec4899);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-size: 16px;
-  }
-
-  .notif .body { flex: 1; min-width: 0; }
-  .notif .app {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #a78bfa;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  .notif .msg {
-    font-size: 13px;
-    color: rgba(255,255,255,0.9);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .notif .timeago {
-    font-size: 10px;
-    color: rgba(255,255,255,0.35);
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  @keyframes floatUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ==== UNLOCK AREA ==== */
-  .unlock-area {
-    padding-bottom: 34px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .swipe-hint {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    color: rgba(255,255,255,0.35);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .swipe-hint .line {
-    width: 90px;
-    height: 3px;
-    border-radius: 99px;
-    background: rgba(255,255,255,0.15);
-    position: relative;
-    overflow: hidden;
-  }
-  .swipe-hint .line::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    width: 30%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, transparent, #a78bfa, transparent);
-    animation: slide 1.8s ease-in-out infinite;
-  }
-  @keyframes slide {
-    from { transform: translateX(-150%); }
-    to { transform: translateX(450%); }
-  }
-
-  .pin-dots {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 4px;
-  }
-  .dot {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.3);
-    transition: all 0.2s ease;
-  }
-  .dot.filled {
-    background: #a78bfa;
-    border-color: #a78bfa;
-    box-shadow: 0 0 12px rgba(167,139,250,0.7);
-    transform: scale(1.15);
-  }
-
-  /* ==== NUMPAD ==== */
-  .numpad {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px 20px;
-    width: 100%;
-    max-width: 280px;
-    margin-bottom: 16px;
-  }
-
-  .key {
-    height: 56px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 22px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    transition: transform 0.1s, background 0.15s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .key:active {
-    transform: scale(0.92);
-    background: rgba(167,139,250,0.25);
-  }
-  .key.blank { background: none; border: none; pointer-events: none; }
-
-  .key.action {
-    font-size: 13px;
-    letter-spacing: 1px;
-    font-family: 'Space Grotesk', sans-serif;
-    color: rgba(255,255,255,0.5);
-  }
-
-  /* ==== ERROR SHAKE ==== */
-  .shake { animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
-  @keyframes shake {
-    10%, 90% { transform: translateX(-2px); }
-    20%, 80% { transform: translateX(3px); }
-    30%, 50%, 70% { transform: translateX(-5px); }
-    40%, 60% { transform: translateX(5px); }
-  }
-
-  /* ==== UNLOCKED STATE ==== */
-  .unlocked-msg {
-    position: absolute;
-    inset: 0;
-    background: #0a0a0f;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    z-index: 10;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-    border-radius: inherit;
-  }
-  .unlocked-msg.show { opacity: 1; pointer-events: auto; }
-  .unlocked-msg .check {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px;
-    box-shadow: 0 0 60px rgba(124,58,237,0.7);
-  }
-  .unlocked-msg h2 { color: #fff; font-size: 20px; font-weight: 600; }
-  .unlocked-msg p { color: rgba(255,255,255,0.4); font-size: 12px; }
+:root{--accent:#00e5ff;--bg:#080b14;--panel:rgba(20,27,44,.82);--muted:#8b96ad}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#15334b 0,transparent 48%),linear-gradient(145deg,#070a12,#0b1020 60%,#080b14);color:#f5f8ff;font-family:Inter,system-ui,Arial,sans-serif;display:flex;justify-content:center;padding:22px 14px;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:34px 34px}
+#stormCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;opacity:0}
+#lightningFlash{position:fixed;inset:0;pointer-events:none;z-index:4;background:#dff8ff;opacity:0}
+#lightningFlash.flash{animation:lightning .22s ease-out}
+@keyframes lightning{0%{opacity:0}12%{opacity:.48}25%{opacity:.05}42%{opacity:.28}100%{opacity:0}}
+.app{width:min(100%,470px);position:relative;z-index:6}
+body.stormy{animation:windShake 7s ease-in-out infinite}
+@keyframes windShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-1px)}45%{transform:translateX(1.5px)}70%{transform:translateX(-1px)}}.top{display:flex;justify-content:space-between;align-items:center;margin:5px 2px 24px}.brand{font-weight:900;letter-spacing:2px;font-size:15px}.brand span{color:var(--accent)}.live{font-size:10px;color:var(--accent);border:1px solid #00e5ff55;padding:7px 11px;border-radius:30px;letter-spacing:1.5px}
+.card{background:var(--panel);border:1px solid #ffffff12;border-radius:25px;box-shadow:0 25px 80px #0008;backdrop-filter:blur(18px);padding:22px}
+.art{height:265px;border-radius:20px;position:relative;overflow:hidden;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,#14516b,#10243e 45%,#11172b 75%);border:1px solid #ffffff12}
+.art:before,.art:after{content:"";position:absolute;border:1px solid #00e5ff44;border-radius:50%;width:230px;height:230px;animation:spin 18s linear infinite}.art:after{width:190px;height:190px;border-color:#a855f755;animation-direction:reverse;animation-duration:13s}
+.disc{width:142px;height:142px;border-radius:50%;background:repeating-radial-gradient(circle,#111827 0 3px,#26354b 4px 5px);border:8px solid #0c1424;box-shadow:0 0 35px #00d9ff66;display:grid;place-items:center;z-index:1;animation:spin 9s linear infinite;animation-play-state:paused}
+.disc.playing{animation-play-state:running}.disc-core{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);box-shadow:0 0 25px var(--accent);display:grid;place-items:center;font-size:19px}
+@keyframes spin{to{transform:rotate(360deg)}}.track-info{text-align:center;padding:23px 5px 15px}.track-info small{color:var(--accent);letter-spacing:2px;font-size:10px;font-weight:800}.track-info h1{font-size:23px;margin:8px 0 5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track-info p{margin:0;color:var(--muted);font-size:13px}
+.visual{height:45px;display:flex;align-items:center;justify-content:center;gap:4px;margin:7px 0 15px}.visual i{width:4px;height:8px;border-radius:5px;background:var(--accent);opacity:.8;box-shadow:0 0 10px var(--accent)}.visual.active i{animation:bars .7s ease-in-out infinite alternate}.visual i:nth-child(3n){animation-delay:.2s}.visual i:nth-child(4n){animation-delay:.4s}.visual i:nth-child(5n){animation-delay:.1s}@keyframes bars{to{height:38px;opacity:1}}
+.progress{width:100%;height:5px;border-radius:9px;background:#ffffff19;appearance:none;cursor:pointer;accent-color:var(--accent)}.times{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin:7px 0 18px}
+.controls{display:flex;align-items:center;justify-content:center;gap:27px}.controls button{border:0;color:#dce6f6;background:none;font-size:22px;cursor:pointer}.controls .main{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#3478ff);color:#06101b;font-size:25px;box-shadow:0 0 28px color-mix(in srgb,var(--accent),transparent 55%)}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.tool{border:1px solid #ffffff17;border-radius:14px;padding:12px;background:#ffffff08;color:#eaf2ff;font-size:12px;cursor:pointer}.tool strong{display:block;color:var(--accent);font-size:11px;margin-bottom:4px}.section{margin-top:16px}.section-title{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;margin:0 2px 10px}.section-title span{font-size:10px;color:var(--muted);font-weight:500}.upload{display:block;text-align:center;border:1px dashed #00e5ff66;background:#00e5ff08;border-radius:15px;padding:15px;color:var(--accent);font-size:12px;cursor:pointer}.upload input{display:none}.playlist{margin-top:10px;display:grid;gap:8px}.song{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff0c;cursor:pointer}.song.selected{border-color:var(--accent);background:#00e5ff10}.song-icon{width:34px;height:34px;border-radius:9px;background:#17283d;display:grid;place-items:center;color:var(--accent)}.song-meta{min-width:0;flex:1}.song-meta b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.song-meta small{color:var(--muted);font-size:10px}.song em{font-style:normal;color:var(--muted);font-size:11px}
+.settings{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.swatch{width:25px;height:25px;border-radius:50%;border:2px solid #ffffff44;cursor:pointer}.swatch.active{outline:2px solid white;outline-offset:3px}.footer{text-align:center;color:#65718a;font-size:10px;letter-spacing:2px;margin:22px 0 8px}.footer b{color:var(--accent)}
+@media(max-width:380px){.card{padding:15px}.art{height:225px}.controls{gap:20px}}
 </style>
 </head>
 <body>
-
-<div class="bg"></div>
-
-<div class="phone" id="phone">
-
-  <!-- STATUS BAR -->
-  <div class="statusbar">
-    <span id="statusTime">09:41</span>
-    <div class="right">
-      <svg viewBox="0 0 24 24"><path d="M12 21l-8-8c2.5-2.5 6-2.5 8 0 2-2.5 5.5-2.5 8 0l-8 8z" opacity="0"/><path d="M2 22h20V2L2 22z" opacity=".0"/><path d="M15.5 14.5l-3.5-3.5-1.5 1.5 5 5 8-8-1.5-1.5-7 7z" opacity="0"/><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-      <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
-    </div>
+<canvas id="stormCanvas" aria-hidden="true"></canvas><div id="lightningFlash" aria-hidden="true"></div>
+<main class="app">
+ <header class="top"><div class="brand">NEON<span>WAVE</span> / PLAYER</div><div class="live">● MUSIC SYSTEM</div></header>
+ <section class="card">
+  <div class="art"><div class="disc" id="disc"><div class="disc-core">♫</div></div></div>
+  <div class="track-info"><small>NOW PLAYING</small><h1 id="title">Belum Ada Lagu</h1><p id="artist">Pilih file musik untuk memulai</p></div>
+  <div class="visual" id="visual"></div>
+  <audio id="audio"></audio>
+  <input class="progress" id="seek" type="range" min="0" max="100" value="0">
+  <div class="times"><span id="current">00:00</span><span id="duration">00:00</span></div>
+  <div class="controls">
+   <button id="shuffle" aria-label="Acak">⤨</button><button id="prev" aria-label="Sebelumnya">⏮</button>
+   <button class="main" id="play" aria-label="Putar">▶</button><button id="next" aria-label="Berikutnya">⏭</button><button id="repeat" aria-label="Ulangi">↻</button>
   </div>
-
-  <!-- CLOCK -->
-  <div class="clock-area">
-    <div class="time" id="clock">09<span class="colon">:</span>41</div>
-    <div class="date" id="date">SENIN, 21 OKTOBER</div>
+  <div class="tools">
+   <button class="tool" id="stormToggle"><strong>⛈ STORM EFFECT</strong>Hujan, petir & angin: OFF</button>
+   <button class="tool" onclick="document.getElementById('files').click()"><strong>＋ ADD MUSIC</strong>Tambahkan lagu MP3</button>
+   <button class="tool" id="mute"><strong>♫ AUDIO</strong>Suara aktif</button>
   </div>
-
-  <!-- NOTIFICATION -->
-  <div class="notif">
-    <div class="icon">💬</div>
-    <div class="body">
-      <div class="app">Pesan</div>
-      <div class="msg">Ada yang mau ngasih sesuatu nih 👀</div>
-    </div>
-    <div class="timeago">now</div>
+ </section>
+ <section class="section">
+  <div class="section-title">YOUR LIBRARY <span id="count">0 TRACKS</span></div>
+  <label class="upload">＋ Pilih lagu dari perangkat (MP3, WAV, OGG)<input id="files" type="file" accept="audio/*" multiple></label>
+  <div class="playlist" id="playlist"><div class="song"><div class="song-icon">♫</div><div class="song-meta"><b>Playlist masih kosong</b><small>Tambahkan file musik dari HP kamu</small></div></div></div>
+ </section>
+ <section class="section card" id="youtubeSection">
+  <div class="section-title">YOUTUBE MUSIC <span>PLAY ONLINE</span></div>
+  <p style="color:var(--muted);font-size:11px;line-height:1.6;margin:0 0 12px">Putar lagu langsung dari YouTube tanpa mengunduh MP3. Tempel tautan video atau playlist YouTube di bawah.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <input id="ytUrl" type="url" placeholder="Tempel link YouTube di sini..." style="flex:1;min-width:0;background:#0b1220;border:1px solid #ffffff22;border-radius:12px;padding:12px;color:#fff;outline:none">
+   <button id="ytLoad" class="tool" style="flex:0 0 auto">PUTAR</button>
   </div>
-
-  <!-- UNLOCK / PIN AREA -->
-  <div class="unlock-area">
-    <div class="pin-dots" id="dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-
-    <div class="numpad" id="numpad">
-      <div class="key" data-k="1">1</div>
-      <div class="key" data-k="2">2</div>
-      <div class="key" data-k="3">3</div>
-      <div class="key" data-k="4">4</div>
-      <div class="key" data-k="5">5</div>
-      <div class="key" data-k="6">6</div>
-      <div class="key" data-k="7">7</div>
-      <div class="key" data-k="8">8</div>
-      <div class="key" data-k="9">9</div>
-      <div class="key blank"></div>
-      <div class="key" data-k="0">0</div>
-      <div class="key action" data-k="del">DEL</div>
-    </div>
-
-    <div class="swipe-hint">
-      <div class="line"></div>
-      <span>geser atau masukkan PIN</span>
-    </div>
+  <div id="ytStatus" style="font-size:11px;color:var(--muted);margin:9px 2px">Contoh: https://www.youtube.com/watch?v=...</div>
+  <div id="ytPlayerWrap" style="display:none;margin-top:12px;overflow:hidden;border-radius:14px;background:#000;aspect-ratio:16/9">
+   <iframe id="ytPlayer" title="YouTube music player" width="100%" height="100%" style="border:0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   </div>
-
-  <!-- UNLOCKED OVERLAY -->
-  <div class="unlocked-msg" id="unlockedMsg">
-    <div class="check">✓</div>
-    <h2>Terbuka 🔓</h2>
-    <p>Selamat datang kembali</p>
+ </section>
+ <section class="section card">
+  <div class="section-title">CUSTOMIZE PLAYER <span>PERSONAL THEME</span></div>
+  <div class="settings">
+   <span class="swatch active" data-color="#00e5ff" style="background:#00e5ff"></span>
+   <span class="swatch" data-color="#a855f7" style="background:#a855f7"></span>
+   <span class="swatch" data-color="#ff3d81" style="background:#ff3d81"></span>
+   <span class="swatch" data-color="#a3e635" style="background:#a3e635"></span>
+   <span class="swatch" data-color="#f59e0b" style="background:#f59e0b"></span>
   </div>
-
-</div>
-
+ </section>
+ <footer class="footer">DESIGNED & DEVELOPED BY <b>DEV OZiiSKAL</b></footer>
+</main>
 <script>
-  const CORRECT_PIN = "1234"; // ganti sesuai keinginan
-  let input = "";
+const audio=document.getElementById('audio'),files=document.getElementById('files'),playlist=document.getElementById('playlist');
 
-  const clockEl = document.getElementById('clock');
-  const dateEl = document.getElementById('date');
-  const statusTimeEl = document.getElementById('statusTime');
-  const dots = document.querySelectorAll('.dot');
-  const numpad = document.getElementById('numpad');
-  const phone = document.getElementById('phone');
-  const unlockedMsg = document.getElementById('unlockedMsg');
+const stormCanvas=document.getElementById('stormCanvas'),stormCtx=stormCanvas.getContext('2d');
+const stormToggle=document.getElementById('stormToggle'),flashLayer=document.getElementById('lightningFlash');
+let stormOn=false,rainDrops=[],lastFlash=0;
+function resizeStorm(){stormCanvas.width=innerWidth*devicePixelRatio;stormCanvas.height=innerHeight*devicePixelRatio;stormCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);rainDrops=Array.from({length:Math.min(280,Math.floor(innerWidth/2.5))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,len:14+Math.random()*25,speed:12+Math.random()*13,side:2+Math.random()*3}))}
+addEventListener('resize',resizeStorm);resizeStorm();
+function stormFrame(now){
+ stormCtx.clearRect(0,0,innerWidth,innerHeight);
+ if(stormOn){
+  const wind=Math.sin(now/700)*3+2;
+  stormCtx.strokeStyle='rgba(180,220,255,.55)';stormCtx.lineWidth=1.2;stormCtx.beginPath();
+  for(const d of rainDrops){stormCtx.moveTo(d.x,d.y);stormCtx.lineTo(d.x+wind*d.side,d.y+d.len);d.x+=wind*d.side;d.y+=d.speed;if(d.y>innerHeight+30){d.y=-30;d.x=Math.random()*innerWidth}if(d.x>innerWidth+30)d.x=-30;if(d.x<-30)d.x=innerWidth+30}
+  stormCtx.stroke();
+  if(now-lastFlash>4500+Math.random()*6000){lastFlash=now;flashLayer.classList.remove('flash');void flashLayer.offsetWidth;flashLayer.classList.add('flash')}
+ }
+ requestAnimationFrame(stormFrame)
+}
+requestAnimationFrame(stormFrame);
+stormToggle.onclick=()=>{stormOn=!stormOn;document.body.classList.toggle('stormy',stormOn);stormCanvas.style.opacity=stormOn?'.9':'0';stormToggle.innerHTML=stormOn?'<strong>⛈ STORM EFFECT</strong>Hujan, petir & angin: ON':'<strong>⛈ STORM EFFECT</strong>Hujan, petir & angin: OFF';stormToggle.style.borderColor=stormOn?'var(--accent)':''};
 
-  // ==== Jam realtime ====
-  function updateClock() {
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, '0');
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    clockEl.innerHTML = `${hh}<span class="colon">:</span>${mm}`;
-    statusTimeEl.textContent = `${hh}:${mm}`;
+const title=document.getElementById('title'),artist=document.getElementById('artist'),play=document.getElementById('play'),seek=document.getElementById('seek');
+const disc=document.getElementById('disc'),visual=document.getElementById('visual');
+let tracks=[],index=0,repeat=false,shuffle=false;
+for(let i=0;i<32;i++){let bar=document.createElement('i');visual.appendChild(bar)}
+function time(s){if(!isFinite(s))return'00:00';return Math.floor(s/60).toString().padStart(2,'0')+':'+Math.floor(s%60).toString().padStart(2,'0')}
+function load(i){if(!tracks.length)return;index=(i+tracks.length)%tracks.length;audio.src=tracks[index].url;title.textContent=tracks[index].name;artist.textContent='LOCAL AUDIO • TRACK '+(index+1);document.querySelectorAll('.song').forEach((x,j)=>x.classList.toggle('selected',j===index));audio.load()}
+function toggle(){if(!tracks.length){files.click();return}if(audio.paused)audio.play();else audio.pause()}
+play.onclick=toggle;
+audio.onplay=()=>{play.textContent='Ⅱ';disc.classList.add('playing');visual.classList.add('active')};
+audio.onpause=()=>{play.textContent='▶';disc.classList.remove('playing');visual.classList.remove('active')};
+audio.ontimeupdate=()=>{if(audio.duration){seek.value=audio.currentTime/audio.duration*100;document.getElementById('current').textContent=time(audio.currentTime);document.getElementById('duration').textContent=time(audio.duration)}};
+seek.oninput=()=>{if(audio.duration)audio.currentTime=seek.value/100*audio.duration};
+document.getElementById('prev').onclick=()=>load(index-1),document.getElementById('next').onclick=()=>{if(shuffle&&tracks.length>1){let n;do{n=Math.floor(Math.random()*tracks.length)}while(n===index);load(n)}else load(index+1);audio.play()};
+audio.onended=()=>{if(repeat){audio.currentTime=0;audio.play()}else if(index<tracks.length-1||shuffle){document.getElementById('next').click()}else audio.pause()};
+document.getElementById('repeat').onclick=e=>{repeat=!repeat;e.currentTarget.style.color=repeat?'var(--accent)':''};
+document.getElementById('shuffle').onclick=e=>{shuffle=!shuffle;e.currentTarget.style.color=shuffle?'var(--accent)':''};
+document.getElementById('mute').onclick=e=>{audio.muted=!audio.muted;e.currentTarget.innerHTML=audio.muted?'<strong>♫ AUDIO</strong>Suara dimatikan':'<strong>♫ AUDIO</strong>Suara aktif'};
+files.onchange=()=>{[...files.files].filter(f=>f.type.startsWith('audio/')).forEach(f=>tracks.push({name:f.name.replace(/\.[^/.]+$/,''),url:URL.createObjectURL(f)}));render();if(tracks.length&&!audio.src){load(0)}files.value=''};
+function render(){document.getElementById('count').textContent=tracks.length+' TRACKS';playlist.innerHTML='';tracks.forEach((t,i)=>{let el=document.createElement('div');el.className='song'+(i===index?' selected':'');el.innerHTML='<div class="song-icon">♫</div><div class="song-meta"><b></b><small>LOCAL MUSIC FILE</small></div><em>▶</em>';el.querySelector('b').textContent=t.name;el.onclick=()=>{load(i);audio.play()};playlist.appendChild(el)})}
 
-    const days = ['MINGGU','SENIN','SELASA','RABU','KAMIS','JUMAT','SABTU'];
-    const months = ['JANUARI','FEBRUARI','MARET','APRIL','MEI','JUNI','JULI','AGUSTUS','SEPTEMBER','OKTOBER','NOVEMBER','DESEMBER'];
-    dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
+const ytInput=document.getElementById('ytUrl'),ytLoad=document.getElementById('ytLoad'),ytFrame=document.getElementById('ytPlayer'),ytWrap=document.getElementById('ytPlayerWrap'),ytStatus=document.getElementById('ytStatus');
+function playYouTubeLink(){
+ const raw=ytInput.value.trim();
+ if(!raw){ytStatus.textContent='Masukkan link video atau playlist YouTube terlebih dahulu.';return}
+ let u;try{u=new URL(raw)}catch(e){ytStatus.textContent='Link tidak valid. Salin tautan dari YouTube.';return}
+ const host=u.hostname.replace(/^www\./,'').toLowerCase();
+ if(!['youtube.com','m.youtube.com','music.youtube.com','youtu.be'].includes(host)){ytStatus.textContent='Gunakan tautan dari youtube.com atau youtu.be.';return}
+ let videoId='',listId=u.searchParams.get('list');
+ if(host==='youtu.be')videoId=u.pathname.split('/').filter(Boolean)[0]||'';
+ else if(u.pathname==='/watch')videoId=u.searchParams.get('v')||'';
+ else if(u.pathname.startsWith('/shorts/'))videoId=u.pathname.split('/')[2]||'';
+ else if(u.pathname.startsWith('/embed/'))videoId=u.pathname.split('/')[2]||'';
+ if(videoId&&!/^[A-Za-z0-9_-]{11}$/.test(videoId)){ytStatus.textContent='ID video YouTube tidak dikenali.';return}
+ if(!videoId&&!listId){ytStatus.textContent='Tautan tidak berisi video atau playlist YouTube.';return}
+ const params=new URLSearchParams({playsinline:'1',rel:'0'});
+ if(videoId)params.set('v',videoId);
+ if(listId)params.set('list',listId);
+ ytFrame.src='https://www.youtube-nocookie.com/embed/'+(videoId||'videoseries')+'?'+params.toString();
+ ytWrap.style.display='block';
+ ytStatus.textContent=listId?'Playlist YouTube dimuat. Pilih lagu dari daftar di pemutar.':'Video YouTube dimuat. Tekan Play di pemutar.';
+}
+ytLoad.onclick=playYouTubeLink;
+ytInput.addEventListener('keydown',e=>{if(e.key==='Enter')playYouTubeLink()});
 
-  // ==== Render dots ====
-  function renderDots() {
-    dots.forEach((d, i) => d.classList.toggle('filled', i < input.length));
-  }
-
-  // ==== Handle numpad ====
-  numpad.addEventListener('click', (e) => {
-    const key = e.target.closest('.key');
-    if (!key || key.classList.contains('blank')) return;
-    const val = key.dataset.k;
-
-    if (val === 'del') {
-      input = input.slice(0, -1);
-      renderDots();
-      return;
-    }
-
-    if (input.length >= 4) return;
-    input += val;
-    renderDots();
-
-    if (input.length === 4) {
-      setTimeout(checkPin, 150);
-    }
-  });
-
-  // ==== Cek PIN ====
-  function checkPin() {
-    if (input === CORRECT_PIN) {
-      unlockedMsg.classList.add('show');
-      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
-    } else {
-      phone.classList.add('shake');
-      if (navigator.vibrate) navigator.vibrate(200);
-      setTimeout(() => {
-        phone.classList.remove('shake');
-        input = "";
-        renderDots();
-      }, 400);
-    }
-  }
-
-  // ==== Swipe up untuk unlock (simulasi) ====
-  let startY = null;
-  phone.addEventListener('touchstart', (e) => {
-    if (e.target.closest('.numpad')) return;
-    startY = e.touches[0].clientY;
-  }, { passive: true });
-
-  phone.addEventListener('touchend', (e) => {
-    if (startY === null) return;
-    const endY = e.changedTouches[0].clientY;
-    if (startY - endY > 120) {
-      // swipe up terdeteksi -> langsung unlock
-      unlockedMsg.classList.add('show');
-      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
-    }
-    startY = null;
-  }, { passive: true });
-
-  // ==== Keyboard support (buat testing di laptop) ====
-  document.addEventListener('keydown', (e) => {
-    if (e.key >= '0' && e.key <= '9') {
-      if (input.length < 4) { input += e.key; renderDots(); if (input.length === 4) setTimeout(checkPin, 150); }
-    } else if (e.key === 'Backspace') {
-      input = input.slice(0, -1); renderDots();
-    }
-  });
+document.querySelectorAll('.swatch').forEach(s=>s.onclick=()=>{document.documentElement.style.setProperty('--accent',s.dataset.color);document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));s.classList.add('active')});
 </script>
-
-</body>
-</html>
+</body></html>
