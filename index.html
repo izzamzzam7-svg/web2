@@ -3,216 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tabungan Craft</title>
+<title>Data Diri - Daim</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Press Start 2P',monospace,sans-serif;image-rendering:pixelated}
-body{margin:0;color:#fff;font-size:11px;line-height:1.6;
- background-color:#6b4a2b;
- background-image:
-  linear-gradient(45deg,#5e4125 25%,transparent 25%,transparent 75%,#5e4125 75%),
-  linear-gradient(45deg,#5e4125 25%,transparent 25%,transparent 75%,#5e4125 75%);
- background-size:32px 32px;background-position:0 0,16px 16px}
-.wrap{max-width:480px;margin:auto;padding:0 14px 110px}
-.top{background:#5db03a;border-bottom:8px solid #3b7a22;box-shadow:0 8px 0 #4a2f18;margin:0 -14px 22px;padding:22px 14px 16px;text-align:center;
- background-image:linear-gradient(90deg,#4f9c2f 50%,transparent 50%);background-size:24px 24px}
-h1{font-size:15px;margin:0;text-shadow:3px 3px 0 #1d4a0e}
-h2{font-size:13px;text-shadow:2px 2px 0 #000;margin:6px 0 12px}
-h3{font-size:11px;text-shadow:2px 2px 0 #000}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.box{background:#8b8b8b;border:4px solid #000;padding:12px;cursor:pointer;
- box-shadow:inset -4px -4px 0 #555,inset 4px 4px 0 #c6c6c6,4px 4px 0 #0008;color:#222}
-.box:active{transform:translate(2px,2px)}
-.box b{display:block;margin-bottom:8px;color:#000;font-size:10px;word-break:break-word}
-.stat{cursor:default}
-.stat:active{transform:none}
-.big{font-size:15px;color:#1a6b00;margin:6px 0}
-.bar{display:flex;gap:2px;background:#000;padding:3px;margin:8px 0}
-.bar i{flex:1;height:12px;background:#3a3a3a}
-.bar i.on{background:#7fe24a;box-shadow:inset 0 -3px 0 #3f9a1c,inset 0 3px 0 #b6ff8a}
-.bar.gold i.on{background:#ffd53d;box-shadow:inset 0 -3px 0 #c59a00,inset 0 3px 0 #fff0a0}
-.small{font-size:8px;color:#333;line-height:1.8}
-.dim{font-size:8px;color:#ddd;text-shadow:1px 1px 0 #000}
-.add{background:#5db03a;border:4px solid #000;color:#fff;font-size:34px;min-height:120px;cursor:pointer;
- box-shadow:inset -4px -4px 0 #3b7a22,inset 4px 4px 0 #8ee060,4px 4px 0 #0008;text-shadow:3px 3px 0 #1d4a0e}
-.add:active{transform:translate(2px,2px)}
-.btn{display:block;width:100%;padding:14px;border:4px solid #000;margin-top:12px;color:#fff;font-size:10px;cursor:pointer;
- background:#5db03a;box-shadow:inset -4px -4px 0 #3b7a22,inset 4px 4px 0 #8ee060;text-shadow:2px 2px 0 #1d4a0e}
+*{box-sizing:border-box;font-family:'Press Start 2P',monospace;image-rendering:pixelated}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:linear-gradient(#0a0f2c 0%,#1b2a5e 55%,#3a5a9e 100%);color:#fff;font-size:10px;line-height:1.9}
+.star{position:absolute;width:4px;height:4px;background:#fff;animation:tw 2s infinite steps(2)}
+@keyframes tw{50%{opacity:.2}}
+.moon{position:absolute;top:30px;right:30px;width:48px;height:48px;background:#f4f1c9;box-shadow:inset -8px -8px 0 #d8d3a0,0 0 0 4px #0003}
+.cloud{position:absolute;height:24px;background:#fff;opacity:.85;box-shadow:24px -16px 0 #fff,48px 0 0 #fff;animation:mv linear infinite}
+@keyframes mv{from{left:-140px}to{left:110%}}
+.ground{position:absolute;left:0;right:0;bottom:0;height:22%;
+ background:
+  linear-gradient(#5db03a 0 24px,transparent 24px),
+  linear-gradient(90deg,#6b4a2b 50%,#5e4125 50%);
+ background-size:100% 100%,32px 32px;border-top:6px solid #3b7a22}
+.ground:before{content:"";position:absolute;top:0;left:0;right:0;height:24px;
+ background:linear-gradient(90deg,#4f9c2f 50%,#5db03a 50%);background-size:32px 24px}
+.wrap{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:18px}
+.title{font-size:16px;text-shadow:4px 4px 0 #000;text-align:center;color:#ffd53d}
+.card{width:100%;max-width:460px;background:#8b8b8b;border:4px solid #000;padding:18px;color:#111;
+ box-shadow:inset -5px -5px 0 #555,inset 5px 5px 0 #c6c6c6,6px 6px 0 #0008}
+.head{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.avatar{width:64px;height:64px;flex:none;border:4px solid #000;
+ background:
+  linear-gradient(#000 0 0) 14px 26px/12px 10px no-repeat,
+  linear-gradient(#000 0 0) 38px 26px/12px 10px no-repeat,
+  linear-gradient(#5a3a1a 0 0) 0 0/100% 18px no-repeat,
+  #c68e5b}
+.nama{font-size:15px;color:#000}
+.tag{display:inline-block;background:#c0392b;color:#fff;border:3px solid #000;padding:2px 6px;font-size:8px;margin-top:6px}
+.row{font-size:9px;margin:4px 0;color:#222}
+.row b{color:#000}
+.dialog{background:#000;border:4px solid #fff;color:#fff;padding:14px;min-height:150px;font-size:10px;line-height:2;text-shadow:2px 2px 0 #333;
+ box-shadow:6px 6px 0 #0008;width:100%;max-width:460px;position:relative}
+.dialog:after{content:"▼";position:absolute;right:10px;bottom:6px;color:#ffd53d;animation:bl .8s infinite steps(2)}
+@keyframes bl{50%{opacity:0}}
+.hl{color:#ff5555}.gr{color:#7fe24a}.gd{color:#ffd53d}
+.btn{background:#5db03a;border:4px solid #000;color:#fff;font-size:10px;padding:12px 16px;cursor:pointer;
+ box-shadow:inset -4px -4px 0 #3b7a22,inset 4px 4px 0 #8ee060;text-shadow:2px 2px 0 #1d4a0e}
 .btn:active{transform:translate(2px,2px)}
-.btn.gray{background:#7a7a7a;box-shadow:inset -4px -4px 0 #4a4a4a,inset 4px 4px 0 #b0b0b0;text-shadow:2px 2px 0 #222}
-.btn.red{background:#c0392b;box-shadow:inset -4px -4px 0 #7a1f15,inset 4px 4px 0 #ef7b6e;text-shadow:2px 2px 0 #4a0e08}
-.btn.gold{background:#e6b800;box-shadow:inset -4px -4px 0 #9a7a00,inset 4px 4px 0 #ffe66b;text-shadow:2px 2px 0 #6a5000}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-input{width:100%;padding:12px;border:4px solid #000;background:#2b2b2b;color:#fff;font-size:11px;margin-top:10px;
- box-shadow:inset 3px 3px 0 #000;outline:none}
-input:focus{border-color:#7fe24a}
-.prev{margin-top:8px;color:#ffd53d;font-size:9px;text-shadow:1px 1px 0 #000;min-height:14px}
-.back{background:#7a7a7a;border:4px solid #000;color:#fff;font-size:9px;padding:8px 10px;margin-bottom:14px;cursor:pointer;
- box-shadow:inset -3px -3px 0 #4a4a4a,inset 3px 3px 0 #b0b0b0}
-.row{background:#8b8b8b;border:4px solid #000;padding:10px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;color:#000;
- box-shadow:inset -3px -3px 0 #555,inset 3px 3px 0 #c6c6c6}
-.row b{color:#1a6b00;font-size:10px}
-.fab{position:fixed;right:18px;bottom:18px;width:68px;height:68px;border:4px solid #000;background:#5db03a;color:#fff;font-size:34px;cursor:pointer;
- box-shadow:inset -4px -4px 0 #3b7a22,inset 4px 4px 0 #8ee060,4px 4px 0 #0008;text-shadow:3px 3px 0 #1d4a0e}
-.fab:active{transform:translate(2px,2px)}
-.modal{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;justify-content:center}
-.modal.show{display:flex}
-.sheet{background:#8b8b8b;border:4px solid #000;border-bottom:0;width:100%;max-width:480px;padding:18px;
- box-shadow:inset 4px 4px 0 #c6c6c6,inset -4px 0 0 #555}
-.sheet h3{color:#000;text-shadow:none}
-.sheet .small{color:#222}
-.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#000;border:4px solid #ffd53d;color:#ffd53d;padding:10px 14px;font-size:9px;display:none;z-index:9;text-align:center}
 </style>
 </head>
 <body>
-<div class="toast" id="toast"></div>
+<div class="moon"></div>
+<div class="cloud" style="top:90px;width:24px;animation-duration:40s"></div>
+<div class="cloud" style="top:160px;width:24px;animation-duration:60s;animation-delay:-20s"></div>
+<div class="ground"></div>
+
 <div class="wrap">
-  <div class="top"><h1>⛏️ TABUNGAN CRAFT</h1></div>
-  <div id="app"></div>
+  <div class="title">⛏️ DATA DIRI</div>
+
+  <div class="card">
+    <div class="head">
+      <div class="avatar"></div>
+      <div>
+        <div class="nama">DAIM</div>
+        <span class="tag">HACKER</span>
+      </div>
+    </div>
+    <div class="row"><b>Grup:</b> TNS (Pemilik)</div>
+    <div class="row"><b>Bidang:</b> Peretasan</div>
+    <div class="row"><b>Level:</b> Hacker Kelas Kakap Internasional</div>
+  </div>
+
+  <div class="dialog" id="dlg"></div>
+  <button class="btn" onclick="ulang()">▶ ULANGI</button>
 </div>
-<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 
 <script>
-const rp = n => "Rp " + Number(n).toLocaleString("id-ID");
-const tgl = d => new Date(d).toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
-let goals = [];
-try { goals = JSON.parse(localStorage.getItem("tabungan")) || []; } catch(e){}
-let aktif = null;
+// bintang acak
+for(let i=0;i<40;i++){
+  const s=document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*100+"%";
+  s.style.top=Math.random()*55+"%";
+  s.style.animationDelay=Math.random()*2+"s";
+  document.body.prepend(s);
+}
 
-const simpan = () => { try { localStorage.setItem("tabungan", JSON.stringify(goals)); } catch(e){} };
-const total = g => g.setoran.reduce((a,b)=>a+b.jumlah,0);
-const hariKe = (g,d) => Math.floor((new Date(d)-new Date(g.mulai))/864e5)+1;
+const teks = [
+  "Siap itu <span class='gd'>Daim</span>.",
+  "Daim adalah kelompok <span class='hl'>Hacker berbahaya</span>, ahli peretasan.",
+  "Pemilik Group <span class='gd'>TNS</span>.",
+  "Dia sering di-bully...",
+  "Tapi dia <span class='gr'>BANGKIT</span>.",
+  "Menjadi <span class='gd'>Hacker kelas kakap Internasional</span>."
+];
 
-/* Baca angka: 500000 | 500.000 | 500,000 | 500k | 500rb | 1jt | 1,5jt */
-function parseUang(s){
-  s = String(s).toLowerCase().replace(/\s|rp/g,"");
-  const m = s.match(/^([\d.,]+)(k|rb|ribu|jt|juta)?$/);
-  if(!m) return 0;
-  if(m[2]){
-    const n = parseFloat(m[1].replace(",","."));
-    if(isNaN(n)) return 0;
-    const mult = (m[2]==="jt"||m[2]==="juta") ? 1e6 : 1e3;
-    return Math.round(n*mult);
+let timer;
+function ulang(){
+  clearInterval(timer);
+  const d = document.getElementById("dlg");
+  d.innerHTML = "";
+  let baris = 0;
+  function tulis(){
+    if(baris >= teks.length) return;
+    const p = document.createElement("div");
+    d.appendChild(p);
+    const plain = teks[baris].replace(/<[^>]+>/g,"").length;
+    const html = teks[baris];
+    let n = 0;
+    timer = setInterval(()=>{
+      n++;
+      p.innerHTML = potong(html, n);
+      if(n >= plain){
+        clearInterval(timer);
+        baris++;
+        setTimeout(tulis, 350);
+      }
+    }, 40);
   }
-  return Number(m[1].replace(/[.,]/g,"")) || 0;
+  tulis();
 }
 
-function bar(p, emas){
-  let h = '<div class="bar'+(emas?' gold':'')+'">';
-  const on = Math.floor(p/5);
-  for(let i=0;i<20;i++) h += '<i class="'+(i<on?'on':'')+'"></i>';
-  return h+'</div>';
-}
-
-function toast(t){
-  const e = document.getElementById("toast");
-  e.textContent = t; e.style.display = "block";
-  setTimeout(()=>e.style.display="none", 2200);
-}
-
-function home(){
-  aktif = null;
-  document.getElementById("app").innerHTML = `
-    <h2>🎒 Inventory Tabungan</h2>
-    <div class="grid">
-      ${goals.map((g,i)=>{
-        const t = total(g), p = Math.min(100, t/g.target*100), ok = t>=g.target;
-        return `<div class="box" onclick="detail(${i})">
-          <b>${ok?"💎":"🧱"} ${g.nama}</b>
-          ${bar(p,ok)}
-          <div class="small">${rp(t)}<br>/ ${rp(g.target)}</div>
-          ${ok?'<div class="small" style="color:#1a6b00">QUEST SELESAI!</div>':''}
-        </div>`;
-      }).join("")}
-      <button class="add" onclick="formBaru()">+</button>
-    </div>
-    ${goals.length?"":'<p class="dim" style="margin-top:18px">Belum ada quest. Tekan + untuk mulai!</p>'}`;
-}
-
-function formBaru(){
-  buka(`
-    <h3>⚒️ Quest Baru</h3>
-    <input id="nama" placeholder="Nama (cth: Beli HP)">
-    <input id="target" placeholder="Target (500k / 500.000 / 1jt)" oninput="prevTarget()">
-    <div class="prev" id="prev"></div>
-    <button class="btn" onclick="buatTujuan()">BUAT</button>
-    <button class="btn gray" onclick="tutup()">BATAL</button>`);
-}
-
-function prevTarget(){
-  const n = parseUang(document.getElementById("target").value);
-  document.getElementById("prev").textContent = n ? "= " + rp(n) : "";
-}
-
-function buatTujuan(){
-  const nama = document.getElementById("nama").value.trim() || "Tabungan";
-  const target = parseUang(document.getElementById("target").value);
-  if(!target) return toast("Isi target dulu ya!");
-  goals.push({nama, target, mulai:new Date().toISOString(), setoran:[]});
-  simpan(); tutup(); home();
-}
-
-function detail(i){
-  aktif = i;
-  const g = goals[i], t = total(g), p = Math.min(100, t/g.target*100);
-  const ok = t >= g.target;
-  document.getElementById("app").innerHTML = `
-    <button class="back" onclick="home()">◀ KEMBALI</button>
-    <h2>${ok?"💎":"🧱"} ${g.nama}</h2>
-    <div class="box stat">
-      <div class="small">TERKUMPUL</div>
-      <div class="big">${rp(t)}</div>
-      ${bar(p,ok)}
-      <div class="small">Target: ${rp(g.target)}<br>Sisa: ${rp(Math.max(0,g.target-t))}<br>Mulai: ${tgl(g.mulai)}</div>
-    </div>
-    <button class="btn ${ok?'gold':'gray'}" ${ok?"":"disabled"} onclick="cairkan(${i})">
-      ${ok?"💎 CAIRKAN / KELUAR":"🔒 BELUM TERCAPAI"}
-    </button>
-    <h3 style="margin-top:22px">📜 Riwayat</h3>
-    ${g.setoran.length? g.setoran.slice().reverse().map(s=>`
-      <div class="row">
-        <span>HARI KE-${s.hari}<br><span class="small">${tgl(s.tanggal)}</span></span>
-        <b>+${rp(s.jumlah)}</b>
-      </div>`).join("") : '<p class="dim">Belum ada setoran.</p>'}
-    <button class="fab" onclick="formSetor()">+</button>`;
-}
-
-function formSetor(){
-  const g = goals[aktif];
-  buka(`
-    <h3>💰 Nyicil</h3>
-    <input id="jml" placeholder="Jumlah (6000 / 6k / 6rb)" oninput="prevSetor()">
-    <div class="prev" id="prev"></div>
-    <div class="small" style="margin-top:8px">${tgl(new Date())}<br>HARI KE-${hariKe(g,new Date())}</div>
-    <button class="btn" onclick="konfirmasi()">KONFIRMASI</button>
-    <button class="btn gray" onclick="tutup()">BATAL</button>`);
-}
-
-function prevSetor(){
-  const n = parseUang(document.getElementById("jml").value);
-  document.getElementById("prev").textContent = n ? "= " + rp(n) : "";
-}
-
-function konfirmasi(){
-  const jumlah = parseUang(document.getElementById("jml").value);
-  if(!jumlah) return toast("Isi jumlahnya dulu ya!");
-  const g = goals[aktif], now = new Date();
-  const sebelum = total(g);
-  g.setoran.push({jumlah, tanggal:now.toISOString(), hari:hariKe(g,now)});
-  simpan(); tutup(); detail(aktif);
-  if(sebelum < g.target && total(g) >= g.target) toast("💎 TARGET TERCAPAI!");
-}
-
-function cairkan(i){
-  if(confirm("Cairkan tabungan ini? Quest akan dihapus dari daftar.")){
-    goals.splice(i,1); simpan(); home();
+// potong HTML berdasarkan jumlah karakter terlihat
+function potong(html, n){
+  let out = "", vis = 0, tag = false, buka = [];
+  for(const c of html){
+    if(c==="<") tag = true;
+    if(tag){
+      out += c;
+      if(c===">") tag = false;
+      continue;
+    }
+    if(vis >= n) break;
+    out += c; vis++;
   }
+  return out + (out.includes("<span")&&!out.endsWith("</span>")?"</span>":"");
 }
 
-function buka(html){ document.getElementById("sheet").innerHTML = html; document.getElementById("modal").classList.add("show"); }
-function tutup(){ document.getElementById("modal").classList.remove("show"); }
-
-home();
+ulang();
 </script>
 </body>
 </html>
