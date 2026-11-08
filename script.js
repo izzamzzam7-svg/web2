@@ -1,66 +1,252 @@
-const $=s=>document.querySelector(s);
-const pages={login:$("#loginPage"),intro:$("#introPage"),main:$("#mainPage")};
-function showPage(name){Object.values(pages).forEach(p=>p.classList.remove("active"));pages[name].classList.add("active")}
-const typeText="WELCOME APK XETRYMIN PROJECT\nDEVELOPER TANZZURA";
-let ti=0; const typing=$("#typingLogin");
-(function type(){if(ti<typeText.length){typing.innerHTML+=typeText[ti]==="\n"?"<br>":typeText[ti];ti++;setTimeout(type,65)}else setTimeout(()=>{typing.innerHTML="";ti=0;type()},1600)})();
+(() => {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-$("#confirmBtn").onclick=()=>{showPage("intro"); const v=$("#introVideo");v.currentTime=0;v.play().catch(()=>{}); setTimeout(finishIntro,24000)};
-$("#skipBtn").onclick=finishIntro;
-let introDone=false;
-function finishIntro(){if(introDone)return;introDone=true;$("#introVideo").pause();showPage("main");renderHome();$("#verifiedOverlay").classList.add("show")}
-$("#introVideo").onended=finishIntro;
-$("#closeVerify").onclick=$("#goHome").onclick=()=>{$("#verifiedOverlay").classList.remove("show")};
+  /* ---------- helper: bikin elemen aman (tanpa innerHTML dari data) ---------- */
+  const el = (tag, cls, text) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const icon = (cls) => { const i = el("i", cls); i.setAttribute("aria-hidden", "true"); return i; };
+  const safeUrl = (u) => (/^https?:\/\//i.test(u) ? u : "#");
 
-function toast(){const t=$("#toast");t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
-function marquee(text){return `<div class="marquee"><span>${text}</span></div>`}
-function deviceInfo(){
- const ua=navigator.userAgent;
- let phone="Android";
- if(/Android/.test(ua)){let m=ua.match(/Android[^;]*;[^;]*;\s*([^)]+)/); if(m) phone=m[1].trim()}
- const ram=navigator.deviceMemory?navigator.deviceMemory+" GB":"Tidak tersedia";
- return {phone,ram}
-}
-function renderHome(){
- document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active-nav",b.dataset.tab==="home"));
- const d=deviceInfo();
- $("#content").innerHTML=`
- ${marquee("WELCOME XETRYMIN PROJECT • DEVELOPER TANZZURA •")}
- <img class="home-image" src="xetrymin.jpg">
- <div class="info-card">
- <div class="clock" id="clock">00:00:00</div><div class="date" id="date"></div>
- <div class="status-grid">
- <div class="status-item"><b>BATERAI LIVE</b><span id="battery">Memuat...</span></div>
- <div class="status-item"><b>STATUS</b><span>ONLINE</span></div>
- <div class="status-item"><b>HANDPHONE</b>${d.phone}</div>
- <div class="status-item"><b>RAM</b>${d.ram}</div>
- </div></div>`;
- updateClock(); getBattery();
-}
-function updateClock(){const c=$("#clock"),d=$("#date");if(!c)return;const n=new Date();c.textContent=n.toLocaleTimeString("id-ID");d.textContent=n.toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});setTimeout(updateClock,1000)}
-async function getBattery(){try{if(navigator.getBattery){const b=await navigator.getBattery();const u=()=>{const el=$("#battery");if(el)el.textContent=Math.round(b.level*100)+"% "+(b.charging?"⚡":"");};u();b.addEventListener("levelchange",u);b.addEventListener("chargingchange",u)}else $("#battery").textContent="Tidak didukung perangkat"}catch(e){}}
+  const buildLink = (c) => {
+    const v = String(c.value || "").trim().replace(/^@/, "");
+    switch (c.type) {
+      case "whatsapp":  return "https://wa.me/" + v.replace(/\D/g, "");
+      case "telegram":  return "https://t.me/" + encodeURIComponent(v);
+      case "tiktok":    return "https://www.tiktok.com/@" + encodeURIComponent(v);
+      case "instagram": return "https://www.instagram.com/" + encodeURIComponent(v);
+      case "github":    return "https://github.com/" + encodeURIComponent(v);
+      default:          return safeUrl(c.value);
+    }
+  };
 
-function renderTools(){
- document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active-nav",b.dataset.tab==="tools"));
- const items=["PLAT NOMER OSINT","IPHONE QUOTE","FF LOBY","TOOLS ISLAMI"];
- $("#content").innerHTML=`${marquee("WELCOME TOOLS • TERIMAKASIH SUDAH MENCOBA •")}<div class="section-title">TOOLS</div><div class="tool-list">${items.map((x,i)=>`<div class="item tool-item"><div class="num">${i+1}</div><div><h3>${x}</h3><p>Tekan untuk membuka</p></div></div>`).join("")}</div>`;
- document.querySelectorAll(".tool-item").forEach(x=>x.onclick=toast);
-}
-function renderGame(){
- document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active-nav",b.dataset.tab==="game"));
- $("#content").innerHTML=`${marquee("GAME XETRYMIN PROJECT • PILIH GAME •")}<div class="section-title">GAME</div>
- <div class="game-list">
- <div class="item game-item" data-game="chess"><div class="num">1</div><div><h3>GAME CATUR</h3><p>Main catur sederhana</p></div></div>
- <div class="item game-item" data-game="snake"><div class="num">2</div><div><h3>ULAR CACING</h3><p>Remote control layar</p></div></div>
- <div class="item game-item" data-game="block"><div class="num">3</div><div><h3>BLOCK BLAST</h3><p>Game blok sederhana</p></div></div></div>`;
- document.querySelectorAll(".game-item").forEach(x=>x.onclick=()=>openGame(x.dataset.game));
-}
-document.querySelectorAll(".nav-btn").forEach(b=>b.onclick=()=>{if(b.dataset.tab==="home")renderHome();if(b.dataset.tab==="tools")renderTools();if(b.dataset.tab==="game")renderGame()});
+  /* ---------- LOADER ---------- */
+  const loader = $("#loader"), bar = $("#loaderBar"), pct = $("#loaderPct");
+  let progress = 0, dataReady = false, pageReady = document.readyState === "complete", done = false;
+  const nameBox = $("#loaderName");
+  [..."Loading"].forEach((ch, i) => {
+    const s = el("span", "", ch); s.style.animationDelay = i * 0.1 + "s"; nameBox.appendChild(s);
+  });
+  nameBox.firstChild && nameBox.removeChild(nameBox.firstChild); // hapus teks awal "Loading" (text node)
+  addEventListener("load", () => { pageReady = true; });
 
-function openGame(g){if(g==="chess")chess();else if(g==="snake")snake();else blockBlast()}
-function chess(){const pieces=["♜","♞","♝","♛","♚","♝","♞","♜","♟","♟","♟","♟","♟","♟","♟","♟","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","♙","♙","♙","♙","♙","♙","♙","♙","♖","♘","♗","♕","♔","♗","♘","♖"];$("#content").innerHTML=`${marquee("GAME CATUR • XETRYMIN PROJECT")}<h2 style="text-align:center">CATUR</h2><div class="chess">${pieces.map(p=>`<div class="sq">${p}</div>`).join("")}</div><p style="text-align:center;color:#aaa">Versi sederhana — pilih permainan untuk bersenang-senang.</p>`}
-function snake(){let html=`${marquee("ULAR CACING • XETRYMIN PROJECT")}<div class="canvas-wrap"><canvas id="cv" class="gamecanvas" width="320" height="320"></canvas></div><div class="game-controls"><button id="up">↑</button><button id="left">←</button><button id="down">↓</button><button id="right">→</button></div>`;$("#content").innerHTML=html;const c=$("#cv"),ctx=c.getContext("2d"),s=16;let snake=[[10,10],[9,10],[8,10]],food=[4,4],dir=[1,0],running=true;
- const move=(x,y)=>{if(x!==-dir[0]||y!==-dir[1])dir=[x,y]};$("#up").onclick=()=>move(0,-1);$("#down").onclick=()=>move(0,1);$("#left").onclick=()=>move(-1,0);$("#right").onclick=()=>move(1,0);
- document.onkeydown=e=>({ArrowUp:()=>move(0,-1),ArrowDown:()=>move(0,1),ArrowLeft:()=>move(-1,0),ArrowRight:()=>move(1,0)}[e.key]||(()=>{}))();
- const loop=()=>{if(!running||!$("#cv"))return;let h=[snake[0][0]+dir[0],snake[0][1]+dir[1]];if(h[0]<0||h[1]<0||h[0]>=20||h[1]>=20||snake.some((p,i)=>i&&p[0]===h[0]&&p[1]===h[1])){snake=[[10,10],[9,10],[8,10]];dir=[1,0]}snake.unshift(h);if(h[0]===food[0]&&h[1]===food[1])food=[Math.floor(Math.random()*20),Math.floor(Math.random()*20)];else snake.pop();ctx.clearRect(0,0,320,320);ctx.fillStyle="#fff";ctx.fillRect(food[0]*s,food[1]*s,s,s);ctx.fillStyle="#788cff";snake.forEach(p=>ctx.fillRect(p[0]*s,p[1]*s,s-2,s-2));setTimeout(loop,120)};loop()}
-function blockBlast(){const cells=Array(64).fill(0);$("#content").innerHTML=`${marquee("BLOCK BLAST • XETRYMIN PROJECT")}<h2 style="text-align:center">BLOCK BLAST</h2><div id="blocks" style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;max-width:430px;margin:auto"></div><p style="text-align:center;color:#aaa">Tekan kotak untuk mengisi blok.</p>`;const b=$("#blocks");cells.forEach((_,i)=>{let x=document.createElement("div");x.style.cssText="aspect-ratio:1;background:#17203c;border-radius:7px;border:1px solid #ffffff18";x.onclick=()=>{x.style.background="#7b8cff"};b.appendChild(x)})}
+  const tick = setInterval(() => {
+    const target = dataReady && pageReady ? 100 : 88;
+    progress = Math.min(target, progress + Math.max(1, (target - progress) * 0.08));
+    bar.style.width = progress + "%";
+    pct.textContent = Math.round(progress) + "%";
+    if (progress >= 99.5 && !done) finish();
+  }, 40);
+  // pengaman: loader tidak akan nyangkut lebih dari 8 detik
+  setTimeout(() => { if (!done) finish(); }, 8000);
+
+  function finish() {
+    done = true; clearInterval(tick);
+    bar.style.width = "100%"; pct.textContent = "100%";
+    setTimeout(() => {
+      loader.classList.add("hide");
+      document.body.classList.remove("is-loading");
+      startReveal();
+      startTyping();
+      setTimeout(() => loader.remove(), 900);
+    }, 350);
+  }
+
+  /* ---------- LOAD DATA ---------- */
+  let aboutText = "";
+  fetch("data.json", { cache: "no-cache" })
+    .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then((d) => { render(d); dataReady = true; })
+    .catch((err) => {
+      console.error("Gagal load data.json:", err);
+      dataReady = true;
+      document.body.insertAdjacentElement("afterbegin",
+        Object.assign(el("p", "", "Gagal memuat data.json. Jalankan lewat Live Server / hosting (Vercel), jangan buka file langsung."),
+        { style: "position:relative;z-index:5;padding:90px 20px 0;text-align:center;color:#f472b6" }));
+    });
+
+  function render(d) {
+    const { site = {}, profile = {}, about = [], skills = [], partners = [], contacts = [], map = {} } = d;
+
+    document.title = site.title || profile.name || "Portfolio";
+    $("#brand").textContent = site.brand || profile.name || "";
+    $("#brandSub").textContent = site.brandSub || "PORTFOLIO";
+    $("#loaderLetter").textContent = (site.brand || profile.name || "Y").charAt(0).toUpperCase();
+
+    // profile
+    $("#name").textContent = profile.name || "";
+    $("#username").textContent = profile.username ? "@" + profile.username.replace(/^@/, "") : "";
+    $("#role").textContent = profile.role || "";
+    $("#status").textContent = profile.status || "";
+    $("#location").textContent = profile.location || "";
+    const img = $("#avatar"), fb = $("#avatarFallback");
+    fb.textContent = (profile.name || "?").charAt(0).toUpperCase();
+    img.onerror = () => { img.hidden = true; fb.hidden = false; };
+    img.src = profile.avatar || "";
+    if (!profile.avatar) img.onerror();
+
+    aboutText = about.join("\n\n");
+
+    // skills
+    const sl = $("#skillList");
+    skills.forEach((s, i) => {
+      const row = el("div", "item skill reveal");
+      row.style.setProperty("--d", i * 0.07 + "s");
+      const ic = icon("ic " + (s.icon || "fa-solid fa-code")); ic.style.color = s.color || "#f472b6";
+      const bw = el("div", "bar"); const fill = el("i");
+      fill.style.background = `linear-gradient(90deg,${s.from || "#a855f7"},${s.to || "#ec4899"})`;
+      fill.dataset.w = Math.max(0, Math.min(100, Number(s.level) || 0));
+      bw.appendChild(fill);
+      row.append(ic, el("span", "nm", s.name), bw, el("span", "pct", (Number(s.level) || 0) + "%"));
+      sl.appendChild(row);
+    });
+
+    // partners
+    const pl = $("#partnerList");
+    partners.forEach((p, i) => {
+      const a = el("a", "item partner reveal"); a.href = safeUrl(p.url); a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.style.setProperty("--d", i * 0.08 + "s");
+      const logo = el("div", "logo"); logo.style.setProperty("--c", p.color || "#a855f7");
+      const fallback = () => { logo.textContent = ""; logo.appendChild(icon(p.icon || "fa-solid fa-robot")); };
+      if (p.logo) {
+        const im = el("img"); im.alt = p.name || ""; im.loading = "lazy"; im.onerror = fallback; im.src = p.logo; logo.appendChild(im);
+      } else fallback();
+      const info = el("div", "pinfo");
+      info.append(el("small", "", p.company), el("h3", "", p.name), el("p", "", p.desc));
+      a.append(logo, info, icon("fa-solid fa-arrow-up-right-from-square ext"));
+      pl.appendChild(a);
+    });
+
+    // contacts
+    const cl = $("#contactList");
+    contacts.forEach((c, i) => {
+      const a = el("a", "item contact reveal"); a.href = buildLink(c); a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.style.setProperty("--d", i * 0.07 + "s");
+      const ci = el("div", "cic"); ci.style.background = c.bg || "#333"; ci.appendChild(icon(c.icon || "fa-solid fa-link"));
+      a.append(ci, el("span", "t", c.name), icon("fa-solid fa-arrow-up-right-from-square ext"));
+      cl.appendChild(a);
+    });
+
+    $("#mapLabel").textContent = map.label || "";
+    $("#footerText").textContent = d.footer || "";
+    initMap(map);
+    initNav();
+    // elemen yang dibuat setelah load awal ikut di-observe
+    if (revealReady) observeAll();
+  }
+
+  /* ---------- MAP ---------- */
+  function initMap(m) {
+    const box = $("#map");
+    if (typeof L === "undefined" || m.lat == null || m.lng == null) { box.style.display = "none"; return; }
+    const map = L.map(box, { scrollWheelZoom: false, tap: false }).setView([m.lat, m.lng], m.zoom || 9);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18, attribution: "© OpenStreetMap contributors"
+    }).addTo(map);
+    L.marker([m.lat, m.lng]).addTo(map);
+    setTimeout(() => map.invalidateSize(), 400);
+    addEventListener("resize", () => map.invalidateSize());
+  }
+
+  /* ---------- NAV / DRAWER ---------- */
+  function initNav() {
+    const burger = $("#burger"), drawer = $("#drawer"), overlay = $("#overlay");
+    const toggle = (open) => {
+      burger.setAttribute("aria-expanded", String(open));
+      drawer.setAttribute("aria-hidden", String(!open));
+      drawer.classList.toggle("open", open);
+      overlay.classList.toggle("show", open);
+      document.body.classList.toggle("menu-open", open);
+      (open ? $("#drawerClose") : burger).focus({ preventScroll: true });
+    };
+    burger.onclick = () => toggle(!drawer.classList.contains("open"));
+    $("#drawerClose").onclick = () => toggle(false);
+    overlay.onclick = () => toggle(false);
+    addEventListener("keydown", (e) => { if (e.key === "Escape" && drawer.classList.contains("open")) toggle(false); });
+    $("#drawerLinks").addEventListener("click", (e) => { if (e.target.closest("a")) toggle(false); });
+
+    // scroll spy
+    const links = [...document.querySelectorAll("#drawerLinks a")];
+    const secs = links.map((a) => $(a.getAttribute("href"))).filter(Boolean);
+    const spy = new IntersectionObserver((es) => {
+      es.forEach((en) => {
+        if (en.isIntersecting) links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id));
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    secs.forEach((s) => spy.observe(s));
+  }
+
+  /* ---------- REVEAL ---------- */
+  let revealReady = false, io;
+  function startReveal() {
+    revealReady = true;
+    io = new IntersectionObserver((es) => {
+      es.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const t = en.target; t.classList.add("in");
+        t.querySelectorAll(".bar i").forEach((f) => (f.style.width = f.dataset.w + "%"));
+        if (t.classList.contains("skill")) { const f = $(".bar i", t); if (f) f.style.width = f.dataset.w + "%"; }
+        io.unobserve(t);
+      });
+    }, { threshold: 0.15 });
+    observeAll();
+  }
+  function observeAll() {
+    document.querySelectorAll(".reveal:not(.in), .title:not(.in)").forEach((n) => io.observe(n));
+  }
+
+  /* ---------- TYPING (About) ---------- */
+  function startTyping() {
+    const out = $("#aboutText"), card = $(".about-card");
+    if (!aboutText) return;
+    if (reduce) { out.textContent = aboutText; return; }
+    let started = false;
+    const go = () => {
+      if (started) return; started = true;
+      let i = 0;
+      const step = () => {
+        i += 2; out.textContent = aboutText.slice(0, i);
+        if (i < aboutText.length) setTimeout(step, 22); else out.textContent = aboutText;
+      };
+      step();
+    };
+    const o = new IntersectionObserver((es) => { if (es[0].isIntersecting) { go(); o.disconnect(); } }, { threshold: 0.2 });
+    o.observe(card);
+  }
+
+  /* ---------- SPARKLES (partikel kecil) ---------- */
+  (function sparks() {
+    const cv = $("#sparks"); if (!cv || reduce) return;
+    const ctx = cv.getContext("2d"); let w, h, dots = [];
+    const colors = ["#facc15", "#38bdf8", "#f472b6", "#a78bfa"];
+    const size = () => {
+      const r = devicePixelRatio || 1; w = innerWidth; h = innerHeight;
+      cv.width = w * r; cv.height = h * r; ctx.setTransform(r, 0, 0, r, 0, 0);
+    };
+    size(); addEventListener("resize", size);
+    const n = innerWidth < 600 ? 28 : 50;
+    for (let i = 0; i < n; i++) dots.push({
+      x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.8 + .6,
+      vy: -(Math.random() * .25 + .08), vx: (Math.random() - .5) * .15,
+      c: colors[(Math.random() * colors.length) | 0], p: Math.random() * 6.28
+    });
+    (function loop(t) {
+      if (!document.hidden) {
+        ctx.clearRect(0, 0, w, h);
+        dots.forEach((d) => {
+          d.x += d.vx; d.y += d.vy;
+          if (d.y < -5) { d.y = h + 5; d.x = Math.random() * w; }
+          ctx.globalAlpha = .35 + .35 * Math.sin(t / 700 + d.p);
+          ctx.fillStyle = d.c; ctx.shadowColor = d.c; ctx.shadowBlur = 8;
+          ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 6.28); ctx.fill();
+        });
+      }
+      requestAnimationFrame(loop);
+    })(0);
+  })();
+})();
