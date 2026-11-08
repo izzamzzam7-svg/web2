@@ -1,0 +1,47 @@
+{
+  "site": {
+    "title": "Joo/Yamzz",
+    "brand": "Yamzz",
+    "brandSub": "PORTFOLIO"
+  },
+  "profile": {
+    "name": "Yamzzdev",
+    "username": "yamzzdev",
+    "avatar": "assets/avatar.jpg",
+    "status": "Available for work",
+    "role": "Web Developer & Vibe Coder",
+    "location": "Jawa,Indonesia, "
+  },
+  "about": [
+    "Halo! Saya Yamzzdev, seorang developer muda yang berasal dari Bali, Indonesia. Saya memiliki minat besar dalam pengembangan web modern dan senang membangun berbagai proyek menggunakan pendekatan vibe coding—menggabungkan kreativitas, eksperimen, dan teknologi untuk menghasilkan solusi yang menarik.",
+    "Teknologi yang saya gunakan sehari-hari meliputi HTML, CSS, JavaScript, React.js, Vite, dan Next.js. Saya terus belajar, mengembangkan kemampuan, serta mengeksplorasi teknologi baru untuk menciptakan aplikasi web yang modern, responsif, dan mudah digunakan."
+  ],
+  "skills": [
+    { "name": "HTML",        "icon": "fa-brands fa-html5",   "color": "#ff6b2c", "level": 85,  "from": "#ff7a18", "to": "#ec4899" },
+    { "name": "CSS",         "icon": "fa-brands fa-css3-alt","color": "#38bdf8", "level": 75,  "from": "#38bdf8", "to": "#c084fc" },
+    { "name": "JavaScript",  "icon": "fa-brands fa-js",      "color": "#facc15", "level": 89,  "from": "#facc15", "to": "#ec4899" },
+    { "name": "React.js",    "icon": "fa-brands fa-react",   "color": "#a78bfa", "level": 70,  "from": "#a855f7", "to": "#ec4899" },
+    { "name": "Next.js",     "icon": "fa-solid fa-n",        "color": "#ec4899", "level": 80,  "from": "#ec4899", "to": "#f472b6" },
+    { "name": "Vibe Coding", "icon": "fa-solid fa-wand-magic-sparkles", "color": "#f472b6", "level": 100, "from": "#f472b6", "to": "#ec4899" }
+  ],
+  "partners": [
+    { "company": "Anthropic", "name": "Claude AI", "desc": "AI partner utama gw buat coding & problem solving", "url": "https://claude.ai",          "logo": "assets/claude.png",   "icon": "fa-solid fa-asterisk", "color": "#f97316" },
+    { "company": "OpenAI",    "name": "ChatGPT",   "desc": "AI populer buat brainstorming & nulis konten",     "url": "https://chatgpt.com",        "logo": "assets/chatgpt.png",  "icon": "fa-solid fa-comment-dots", "color": "#14b8a6" },
+    { "company": "Google",    "name": "Gemini",    "desc": "AI dari Google buat research & analisis",          "url": "https://gemini.google.com",  "logo": "assets/gemini.png",   "icon": "fa-solid fa-star", "color": "#8b5cf6" },
+    { "company": "DeepSeek",  "name": "DeepSeek",  "desc": "AI open source buat coding & reasoning",           "url": "https://chat.deepseek.com",  "logo": "assets/deepseek.png", "icon": "fa-solid fa-fish", "color": "#3b82f6" }
+  ],
+  "contacts": [
+    { "name": "GitHub",    "type": "github",    "value": "yamzzdev",       "icon": "fa-brands fa-github",    "bg": "#2d2d33" },
+    { "name": "Telegram",  "type": "telegram",  "value": "Joo4k",       "icon": "fa-brands fa-telegram",  "bg": "#0ea5e9" },
+    { "name": "Instagram", "type": "instagram", "value": "gaada insta",       "icon": "fa-brands fa-instagram", "bg": "linear-gradient(45deg,#f59e0b,#ec4899,#8b5cf6)" },
+    { "name": "TikTok",    "type": "tiktok",    "value": "Ytta",       "icon": "fa-brands fa-tiktok",    "bg": "#111111" },
+    { "name": "WhatsApp",  "type": "whatsapp",  "value": "6283178746154",  "icon": "fa-brands fa-whatsapp",  "bg": "#22c55e" }
+  ],
+  "map": {
+    "label": "Based in Jawa timur, Indonesia",
+    "lat": -7.15',
+    "lng": 112.45,
+    "zoom": 9
+  },
+  "footer": "by Joo and Claude © 2026"
+}
