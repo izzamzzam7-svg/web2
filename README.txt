@@ -1,15 +1,6 @@
-RICO HOST REGION PEMALANG — WEBSITE QRIS
-
-CARA DEPLOY
-1. Ekstrak ZIP ini.
-2. Upload seluruh isi folder (index.html dan folder assets) ke hosting static seperti Netlify, Vercel, atau GitHub Pages.
-3. Untuk musik, masukkan file audio MP3 yang kamu miliki/berhak gunakan ke folder assets dengan nama: lagu.mp3
-4. Pastikan struktur tetap:
-   index.html
-   assets/poster-qris.png
-   assets/lagu.mp3
-
-CATATAN PENTING
-- Browser umumnya memblokir autoplay audio sebelum ada interaksi pengguna. Karena itu musik mulai dicoba setelah tombol SCAN FINGERPRINT ditekan.
-- Pemindaian sidik jari pada halaman ini hanya animasi visual, bukan pembacaan biometrik asli atau sistem keamanan.
-- QR pada poster adalah gambar yang kamu unggah. Untuk pembayaran sungguhan, tes QR asli dengan aplikasi pembayaran dan jangan mengandalkan QR yang telah diproses AI.
+CARA PAKAI
+1. Edit data.json  -> nama, username, WhatsApp (format 628xxx tanpa + / spasi), Telegram, TikTok, Instagram, GitHub, skill, partner, lokasi map.
+2. Taruh foto profil di assets/avatar.jpg (opsional: logo partner assets/claude.png, chatgpt.png, gemini.png, deepseek.png).
+   Kalau file tidak ada, otomatis diganti ikon/inisial (tidak error).
+3. Jalankan pakai Live Server (VS Code) atau upload ke Vercel/Netlify.
+   JANGAN klik 2x index.html langsung, karena browser memblokir fetch data.json dari file://
