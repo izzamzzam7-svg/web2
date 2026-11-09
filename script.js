@@ -1,3 +1,33 @@
+/* =====================================================================
+   PENGATURAN BACKGROUND & LOAD SCREEN  (tinggal ganti isinya di sini)
+   - Link gambar/video boleh dari catbox: https://files.catbox.moe/xxxxx.jpg
+   - Kosongkan "" kalau nggak mau dipakai
+   ===================================================================== */
+const THEME = {
+
+  /* ---------- BACKGROUND HALAMAN ---------- */
+  background: {
+    type: "video",               // "gradient" | "image" | "video"
+    url: "https://files.catbox.moe/xkb510.mp4",                     // link gambar (.jpg/.png/.gif/.webp) atau video (.mp4/.webm)
+    overlay: 0.55,               // 0 - 1  (makin besar makin gelap, biar teks kebaca)
+    blur: 3,                     // 0 - 30 (blur gambar)
+    colors: ["#0a0614", "#0c0618", "#12071f"],   // warna gradasi (atas ke bawah)
+    orbColors: ["#7c3aed", "#db2777", "#0ea5e9"], // warna 3 bola cahaya
+    showOrbs: true,              // bola cahaya blur: true / false
+    showSparks: true             // partikel kecil melayang: true / false
+  },
+
+  /* ---------- LOAD SCREEN ---------- */
+  loader: {
+    text: "Loading..",             // tulisan di load screen
+    letter: "Z",                  // huruf di tengah ring (kosong = huruf depan nama brand)
+    image: "https://files.catbox.moe/6h8rr3.jpg",                   // link logo / gif di tengah
+    style: "ring",               // "ring" = gambar bulat dalam ring | "free" = gambar apa adanya
+    background: "https://files.catbox.moe/3f4pcd.jpg",              // link gambar full layar di belakang load screen
+    overlay: 0.6                 // 0 - 1 gelapnya background load screen
+  }
+};
+
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
@@ -16,10 +46,10 @@
   const buildLink = (c) => {
     const v = String(c.value || "").trim().replace(/^@/, "");
     switch (c.type) {
-      case "whatsapp":  return "https://wa.me/" + v.replace(/\D/g, "");
+      case "whatsapp":  return "https://wa.me/6285810870937" + v.replace(/\D/g, "");
       case "telegram":  return "https://t.me/" + encodeURIComponent(v);
-      case "tiktok":    return "https://www.tiktok.com/@" + encodeURIComponent(v);
-      case "instagram": return "https://www.instagram.com/" + encodeURIComponent(v);
+      case "tiktok":    return "https://www.tiktok.com/@stf.zxyrix.klovanov" + encodeURIComponent(v);
+      case "instagram": return "https://www.instagram.com/stf.zxyrix.klovanov" + encodeURIComponent(v);
       case "github":    return "https://github.com/" + encodeURIComponent(v);
       default:          return safeUrl(c.value);
     }
@@ -29,10 +59,13 @@
   const loader = $("#loader"), bar = $("#loaderBar"), pct = $("#loaderPct");
   let progress = 0, dataReady = false, pageReady = document.readyState === "complete", done = false;
   const nameBox = $("#loaderName");
-  [..."Loading"].forEach((ch, i) => {
-    const s = el("span", "", ch); s.style.animationDelay = i * 0.1 + "s"; nameBox.appendChild(s);
-  });
-  nameBox.firstChild && nameBox.removeChild(nameBox.firstChild); // hapus teks awal "Loading" (text node)
+  const buildLoaderText = (text) => {
+    nameBox.textContent = "";
+    [...String(text)].forEach((ch, i) => {
+      const s = el("span", "", ch === " " ? "\u00A0" : ch); s.style.animationDelay = i * 0.1 + "s"; nameBox.appendChild(s);
+    });
+  };
+  buildLoaderText("Loading");
   addEventListener("load", () => { pageReady = true; });
 
   const tick = setInterval(() => {
@@ -57,6 +90,74 @@
     }, 350);
   }
 
+  /* ---------- THEME (background + loader custom, URL catbox dll) ---------- */
+  const safeSrc = (u) => {
+    const s = String(u == null ? "" : u).trim();
+    if (!s) return "";
+    try { const x = new URL(s, location.href); return /^https?:$/.test(x.protocol) ? x.href : ""; } catch { return ""; }
+  };
+  const isHex = (c) => typeof c === "string" && /^#[0-9a-f]{3,8}$/i.test(c.trim());
+  const isVideo = (u) => /\.(mp4|webm|ogv)(\?.*)?$/i.test(u);
+  const clamp = (n, a, b, d) => { n = Number(n); return Number.isFinite(n) ? Math.min(b, Math.max(a, n)) : d; };
+
+  function applyTheme(t) {
+    t = t && typeof t === "object" ? t : {};
+    const bg = t.background || {}, ld = t.loader || {};
+
+    /* loader */
+    buildLoaderText(ld.text != null && String(ld.text).trim() ? ld.text : "Loading");
+    const limg = safeSrc(ld.image);
+    if (limg) {
+      const im = $("#loaderImg");
+      im.onload = () => loader.classList.add(ld.style === "free" ? "img-free" : "img-ring");
+      im.onerror = () => { im.removeAttribute("src"); console.warn("Gambar loader gagal dimuat:", limg); };
+      im.src = limg;
+    }
+    const lbg = safeSrc(ld.background);
+    if (lbg) {
+      const box = $("#loaderBg"), im = new Image();
+      im.referrerPolicy = "no-referrer"; im.alt = "";
+      box.style.setProperty("--ov", clamp(ld.overlay, 0, 1, 0.6));
+      im.onload = () => { box.appendChild(im); requestAnimationFrame(() => box.classList.add("on")); };
+      im.onerror = () => console.warn("Background loader gagal dimuat:", lbg);
+      im.src = lbg;
+    }
+
+    /* background halaman */
+    const bgBox = $("#bg"), media = $("#bgMedia"), ov = $("#bgOverlay");
+    const cols = Array.isArray(bg.colors) ? bg.colors.filter(isHex) : [];
+    if (cols.length >= 2) bgBox.style.background = `linear-gradient(180deg,${cols.join(",")})`;
+    else if (cols.length === 1) bgBox.style.background = cols[0];
+    (Array.isArray(bg.orbColors) ? bg.orbColors : []).slice(0, 3).forEach((c, i) => {
+      if (isHex(c)) bgBox.style.setProperty("--o" + (i + 1), c.trim());
+    });
+    bgBox.classList.toggle("no-orbs", bg.showOrbs === false);
+    const sp = $("#sparks"); if (sp) sp.hidden = bg.showSparks === false;
+
+    const src = safeSrc(bg.url), type = String(bg.type || "gradient").toLowerCase();
+    if (src && (type === "image" || type === "video")) {
+      bgBox.style.setProperty("--ov", clamp(bg.overlay, 0, 1, 0.55));
+      bgBox.style.setProperty("--bgblur", clamp(bg.blur, 0, 30, 0) + "px");
+      const show = (node) => { media.appendChild(node); ov.classList.add("on"); requestAnimationFrame(() => media.classList.add("on")); };
+      if (type === "video" && !reduce) {
+        const v = document.createElement("video");
+        v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "auto";
+        v.onloadeddata = () => { show(v); const p = v.play(); p && p.catch && p.catch(() => {}); };
+        v.onerror = () => console.warn("Video background gagal dimuat:", src);
+        v.src = src;
+      } else if (type === "image" || (type === "video" && reduce && !isVideo(src))) {
+        const im = new Image(); im.alt = ""; im.referrerPolicy = "no-referrer"; im.decoding = "async";
+        im.onload = () => show(im);
+        im.onerror = () => console.warn("Gambar background gagal dimuat:", src);
+        im.src = src;
+      }
+    }
+  }
+
+  try { applyTheme(THEME); } catch (e) { console.error("Theme error:", e); }
+  $("#loaderLetter").textContent = (THEME.loader.letter || "Y").charAt(0).toUpperCase();
+  loader.classList.add("ready");
+
   /* ---------- LOAD DATA ---------- */
   let aboutText = "";
   fetch("data.json", { cache: "no-cache" })
@@ -64,6 +165,7 @@
     .then((d) => { render(d); dataReady = true; })
     .catch((err) => {
       console.error("Gagal load data.json:", err);
+      loader.classList.add("ready");
       dataReady = true;
       document.body.insertAdjacentElement("afterbegin",
         Object.assign(el("p", "", "Gagal memuat data.json. Jalankan lewat Live Server / hosting (Vercel), jangan buka file langsung."),
@@ -73,10 +175,11 @@
   function render(d) {
     const { site = {}, profile = {}, about = [], skills = [], partners = [], contacts = [], map = {} } = d;
 
+    loader.classList.add("ready");
     document.title = site.title || profile.name || "Portfolio";
     $("#brand").textContent = site.brand || profile.name || "";
     $("#brandSub").textContent = site.brandSub || "PORTFOLIO";
-    $("#loaderLetter").textContent = (site.brand || profile.name || "Y").charAt(0).toUpperCase();
+    $("#loaderLetter").textContent = (THEME.loader.letter || site.brand || profile.name || "Y").charAt(0).toUpperCase();
 
     // profile
     $("#name").textContent = profile.name || "";
@@ -236,7 +339,7 @@
       c: colors[(Math.random() * colors.length) | 0], p: Math.random() * 6.28
     });
     (function loop(t) {
-      if (!document.hidden) {
+      if (!document.hidden && !cv.hidden) {
         ctx.clearRect(0, 0, w, h);
         dots.forEach((d) => {
           d.x += d.vx; d.y += d.vy;
