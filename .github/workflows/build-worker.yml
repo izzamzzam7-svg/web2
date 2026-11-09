@@ -1,0 +1,439 @@
+# WORKFLOW_VERSION: 2
+# Kontrak dengan bot (server.js triggerWorkflow): inputs jobId, userId, payload(JSON: mode,url,buildType,perfMode,engine,tag).
+# Artifact APK bernama apk-<jobId>; log gagal bernama build-log-<jobId>.
+name: Build APK (Flutter / Gradle / Web2APK Auto)
+run-name: build-${{ github.event.inputs.jobId }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      jobId:
+        description: 'Job ID from Bot'
+        required: true
+      userId:
+        description: 'User ID'
+        required: true
+      payload:
+        description: 'Build Payload (JSON)'
+        required: true
+      build_type:
+        description: 'release / debug'
+        required: false
+        default: 'release'
+
+concurrency:
+  group: build-${{ github.event.inputs.jobId }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GRADLE_OPTS: >-
+        -Dorg.gradle.daemon=false
+        -Dorg.gradle.parallel=true
+        -Dorg.gradle.caching=true
+        -Dorg.gradle.configureondemand=true
+        -Dorg.gradle.workers.max=4
+        -Dorg.gradle.jvmargs=-Xmx3g
+      TARGET_PLATFORMS: android-arm,android-arm64
+      GRADLE_ABIS: armeabi-v7a,arm64-v8a
+
+    steps:
+      - name: Parse payload
+        run: |
+          set -euo pipefail
+          echo '${{ github.event.inputs.payload }}' > payload.json
+          cat payload.json
+
+          # buildType dari payload (dikirim bot); fallback ke input build_type; default release
+          BT=$(jq -r '.buildType // empty' payload.json)
+          [ -z "$BT" ] && BT="$BUILD_TYPE"
+          echo "BUILD_TYPE=$BT" >> "$GITHUB_ENV"
+
+          # perfMode: fast = arm64 saja (tercepat) | low = arm32+arm64 (HP lama/low-end)
+          PERF=$(jq -r '.perfMode // "fast"' payload.json)
+          if [ "$PERF" = "low" ]; then
+            echo "TARGET_PLATFORMS=android-arm,android-arm64" >> "$GITHUB_ENV"
+            echo "GRADLE_ABIS=armeabi-v7a,arm64-v8a" >> "$GITHUB_ENV"
+          else
+            echo "TARGET_PLATFORMS=android-arm64" >> "$GITHUB_ENV"
+            echo "GRADLE_ABIS=arm64-v8a" >> "$GITHUB_ENV"
+          fi
+          echo "Profil build: $PERF | tipe: $BT"
+
+          MODE=$(jq -r '.mode // empty' payload.json)
+          if [ -z "$MODE" ]; then
+            if jq -e '.appName' payload.json >/dev/null 2>&1; then MODE="url"; else MODE="zip"; fi
+          fi
+          echo "MODE=$MODE" >> "$GITHUB_ENV"
+
+          if [ "$MODE" = "url" ]; then
+            WEB_URL=$(jq -r '.url // empty' payload.json)
+            APP_NAME=$(jq -r '.appName // "WebApp"' payload.json)
+            ICON_URL=$(jq -r '.iconUrl // empty' payload.json)
+            if [ -z "$WEB_URL" ]; then
+              echo "::error::mode=url tapi gak ada 'url' website di payload"
+              exit 1
+            fi
+            echo "WEB_URL=$WEB_URL" >> "$GITHUB_ENV"
+            echo "APP_NAME=$APP_NAME" >> "$GITHUB_ENV"
+            echo "ICON_URL=$ICON_URL" >> "$GITHUB_ENV"
+            echo "✅ Mode: Web2APK -> $WEB_URL ($APP_NAME)"
+          else
+            ZIP_URL=$(jq -r '.zipAssetUrl // .url // empty' payload.json)
+            if [ -z "$ZIP_URL" ]; then
+              echo "::error::Tidak ada zipAssetUrl / url di payload"
+              exit 1
+            fi
+            echo "ZIP_URL=$ZIP_URL" >> "$GITHUB_ENV"
+            echo "✅ Mode: ZIP project -> $ZIP_URL"
+          fi
+
+      - name: Download & extract ZIP
+        if: env.MODE == 'zip'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          rm -rf project_raw project.zip
+          mkdir -p project_raw
+
+          if [[ "$ZIP_URL" == *"api.github.com"* ]]; then
+            curl -fL --retry 3 --retry-delay 5 \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/octet-stream" \
+              -o project.zip "$ZIP_URL"
+          else
+            curl -fL --retry 3 --retry-delay 5 -o project.zip "$ZIP_URL"
+          fi
+
+          ls -lh project.zip
+          unzip -q project.zip -d project_raw
+
+          echo "=== Struktur root project_raw ==="
+          find project_raw -maxdepth 3 -type d | head -50
+          echo ""
+          echo "=== File kunci ==="
+          find project_raw -maxdepth 6 -type f \
+            \( -name "gradlew" -o -name "pubspec.yaml" \
+               -o -name "settings.gradle" -o -name "settings.gradle.kts" \
+               -o -name "build.gradle" -o -name "build.gradle.kts" \) \
+            -not -path "*/build/*" | head -30
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.0'
+          channel: stable
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('project_raw/**/pubspec.lock') }}
+          restore-keys: pub-${{ runner.os }}-
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('project_raw/**/*.gradle*', 'project_raw/**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Detect / Generate project
+        id: detect
+        run: |
+          set -euo pipefail
+
+          if [ "$MODE" = "url" ]; then
+            SAFE_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9_]+/_/g' | sed -E 's/^[0-9]+/a&/')
+            [ -z "$SAFE_NAME" ] && SAFE_NAME="webapp"
+            export APP_NAME WEB_URL
+            DART_APP_NAME=$(python3 -c "import os,sys; s=os.environ['APP_NAME']; s=s.replace(chr(92),chr(92)*2).replace(chr(39),chr(92)+chr(39)); sys.stdout.write(s)")
+            XML_APP_NAME=$(python3 -c "import os,sys; s=os.environ['APP_NAME']; sys.stdout.write(''.join(c for c in s if c not in '&<>'+chr(34)))")
+            WEB_URL_SAFE=$(python3 -c "import os,sys; sys.stdout.write(os.environ['WEB_URL'].replace(chr(39),'%27'))")
+
+            mkdir -p project_raw
+            cd project_raw
+            echo "🛠️  flutter create $SAFE_NAME ..."
+            flutter create --org com.ziperr --project-name "$SAFE_NAME" --platforms=android --no-pub "$SAFE_NAME" >/dev/null
+            cd "$SAFE_NAME"
+
+            echo "📦 Nambah webview_flutter ..."
+            flutter pub add webview_flutter
+
+            HAS_ICON=false
+            if [ -n "$ICON_URL" ]; then
+              mkdir -p assets
+              if curl -fsSL --max-time 20 "$ICON_URL" -o assets/icon.png && [ -s assets/icon.png ]; then
+                HAS_ICON=true
+                echo "🎨 Icon custom terdeteksi, nambah flutter_launcher_icons ..."
+                flutter pub add dev:flutter_launcher_icons
+                printf 'flutter_launcher_icons:\n  android: true\n  ios: false\n  image_path: "assets/icon.png"\n' > flutter_launcher_icons.yaml
+              else
+                echo "::warning::Gagal download icon dari $ICON_URL, pakai icon default Flutter."
+              fi
+            fi
+
+            if [ "$HAS_ICON" = "true" ]; then
+              echo "🎨 Generate launcher icon ..."
+              dart run flutter_launcher_icons || echo "::warning::flutter_launcher_icons gagal, lanjut pakai icon default."
+            fi
+
+            export DART_APP_NAME WEB_URL_SAFE
+            echo 'aW1wb3J0ICdwYWNrYWdlOmZsdXR0ZXIvbWF0ZXJpYWwuZGFydCc7CmltcG9ydCAncGFja2FnZTp3ZWJ2aWV3X2ZsdXR0ZXIvd2Vidmlld19mbHV0dGVyLmRhcnQnOwoKdm9pZCBtYWluKCkgPT4gcnVuQXBwKGNvbnN0IFdlYkFwcCgpKTsKCmNsYXNzIFdlYkFwcCBleHRlbmRzIFN0YXRlbGVzc1dpZGdldCB7CiAgY29uc3QgV2ViQXBwKHtzdXBlci5rZXl9KTsKICBAb3ZlcnJpZGUKICBXaWRnZXQgYnVpbGQoQnVpbGRDb250ZXh0IGNvbnRleHQpIHsKICAgIHJldHVybiBNYXRlcmlhbEFwcCgKICAgICAgdGl0bGU6ICdfX0RBUlRfQVBQX05BTUVfXycsCiAgICAgIGRlYnVnU2hvd0NoZWNrZWRNb2RlQmFubmVyOiBmYWxzZSwKICAgICAgdGhlbWU6IFRoZW1lRGF0YSh1c2VNYXRlcmlhbDM6IHRydWUpLAogICAgICBob21lOiBjb25zdCBXZWJWaWV3UGFnZSgpLAogICAgKTsKICB9Cn0KCmNsYXNzIFdlYlZpZXdQYWdlIGV4dGVuZHMgU3RhdGVmdWxXaWRnZXQgewogIGNvbnN0IFdlYlZpZXdQYWdlKHtzdXBlci5rZXl9KTsKICBAb3ZlcnJpZGUKICBTdGF0ZTxXZWJWaWV3UGFnZT4gY3JlYXRlU3RhdGUoKSA9PiBfV2ViVmlld1BhZ2VTdGF0ZSgpOwp9CgpjbGFzcyBfV2ViVmlld1BhZ2VTdGF0ZSBleHRlbmRzIFN0YXRlPFdlYlZpZXdQYWdlPiB7CiAgbGF0ZSBmaW5hbCBXZWJWaWV3Q29udHJvbGxlciBjb250cm9sbGVyOwoKICBAb3ZlcnJpZGUKICB2b2lkIGluaXRTdGF0ZSgpIHsKICAgIHN1cGVyLmluaXRTdGF0ZSgpOwogICAgY29udHJvbGxlciA9IFdlYlZpZXdDb250cm9sbGVyKCkKICAgICAgLi5zZXRKYXZhU2NyaXB0TW9kZShKYXZhU2NyaXB0TW9kZS51bnJlc3RyaWN0ZWQpCiAgICAgIC4ubG9hZFJlcXVlc3QoVXJpLnBhcnNlKCdfX1dFQl9VUkxfU0FGRV9fJykpOwogIH0KCiAgQG92ZXJyaWRlCiAgV2lkZ2V0IGJ1aWxkKEJ1aWxkQ29udGV4dCBjb250ZXh0KSB7CiAgICByZXR1cm4gU2NhZmZvbGQoCiAgICAgIGJvZHk6IFNhZmVBcmVhKGNoaWxkOiBXZWJWaWV3V2lkZ2V0KGNvbnRyb2xsZXI6IGNvbnRyb2xsZXIpKSwKICAgICk7CiAgfQp9Cg==' | base64 -d > lib/main.dart
+            python3 -c "import os; p='lib/main.dart'; c=open(p).read(); c=c.replace('__DART_APP_NAME__', os.environ['DART_APP_NAME']).replace('__WEB_URL_SAFE__', os.environ['WEB_URL_SAFE']); open(p,'w').write(c)"
+
+            sed -i "s/android:label=\"[^\"]*\"/android:label=\"${XML_APP_NAME}\"/" android/app/src/main/AndroidManifest.xml
+
+            python3 -c "p='android/app/src/main/AndroidManifest.xml'; c=open(p).read(); c=c if 'android.permission.INTERNET' in c else c.replace('<application', '<uses-permission android:name=\"android.permission.INTERNET\"/>\n    <application', 1); c=c if 'usesCleartextTraffic' in c else c.replace('<application', '<application android:usesCleartextTraffic=\"true\"', 1); open(p,'w').write(c)"
+
+            echo "type=flutter" >> "$GITHUB_OUTPUT"
+            echo "dir=project_raw/$SAFE_NAME" >> "$GITHUB_OUTPUT"
+            echo "✅ Web2APK project di-generate -> project_raw/$SAFE_NAME"
+
+          else
+            PUBSPEC=$(find project_raw -type f -name pubspec.yaml \
+                      -not -path "*/build/*" -not -path "*/.dart_tool/*" | head -n 1)
+            GRADLEW=$(find project_raw -type f -name gradlew \
+                      -not -path "*/build/*" | head -n 1)
+            SETTINGS=$(find project_raw -type f \
+                      \( -name "settings.gradle" -o -name "settings.gradle.kts" \) \
+                      -not -path "*/build/*" | head -n 1)
+
+            echo "pubspec : ${PUBSPEC:-<none>}"
+            echo "gradlew : ${GRADLEW:-<none>}"
+            echo "settings: ${SETTINGS:-<none>}"
+
+            if [ -n "$PUBSPEC" ]; then
+              DIR=$(dirname "$PUBSPEC")
+              echo "type=flutter" >> "$GITHUB_OUTPUT"
+              echo "dir=$DIR"     >> "$GITHUB_OUTPUT"
+              echo "✅ Flutter project → $DIR"
+            elif [ -n "$GRADLEW" ]; then
+              DIR=$(dirname "$GRADLEW")
+              echo "type=gradle"  >> "$GITHUB_OUTPUT"
+              echo "dir=$DIR"     >> "$GITHUB_OUTPUT"
+              echo "✅ Native Gradle project → $DIR"
+            elif [ -n "$SETTINGS" ]; then
+              DIR=$(dirname "$SETTINGS")
+              echo "type=gradle"  >> "$GITHUB_OUTPUT"
+              echo "dir=$DIR"     >> "$GITHUB_OUTPUT"
+              echo "✅ Gradle project (no wrapper) → $DIR"
+            else
+              echo "::error::Project tidak dikenali (bukan Flutter / bukan Gradle)."
+              find project_raw -maxdepth 3
+              exit 1
+            fi
+          fi
+
+      - name: Tune gradle.properties
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.detect.outputs.type }}" = "flutter" ]; then
+            GP="${{ steps.detect.outputs.dir }}/android/gradle.properties"
+          else
+            GP="${{ steps.detect.outputs.dir }}/gradle.properties"
+          fi
+          mkdir -p "$(dirname "$GP")"
+          touch "$GP"
+          sed -i '/org.gradle.jvmargs/d;/org.gradle.parallel/d;/org.gradle.caching/d;/org.gradle.daemon/d;/org.gradle.configureondemand/d;/org.gradle.workers.max/d' "$GP" || true
+          {
+            echo ""
+            echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g"
+            echo "org.gradle.parallel=true"
+            echo "org.gradle.caching=true"
+            echo "org.gradle.daemon=false"
+            echo "org.gradle.configureondemand=true"
+            echo "org.gradle.workers.max=4"
+          } >> "$GP"
+
+      - name: Speed up Gradle (skip lintVital)
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.gradle/init.d"
+          echo 'Ly8gSW5pdCBzY3JpcHQgR3JhZGxlOiBtYXRpaW4gbGludFZpdGFsKiAoY2VrIGxpbnQgb3RvbWF0aXMgZGkgYXNzZW1ibGVSZWxlYXNlKS4KLy8gR2FrIG5nYXJ1aCBrZSBpc2kgQVBLLCBjdW1hIG5hbWJhaCB3YWt0dSBidWlsZC4KYWxscHJvamVjdHMgewogICAgdGFza3MuY29uZmlndXJlRWFjaCB7IHRhc2sgLT4KICAgICAgICBpZiAodGFzay5uYW1lLnN0YXJ0c1dpdGgoJ2xpbnRWaXRhbCcpKSB7CiAgICAgICAgICAgIHRhc2suZW5hYmxlZCA9IGZhbHNlCiAgICAgICAgfQogICAgfQp9Cg==' | base64 -d > "$HOME/.gradle/init.d/fastbuild.gradle"
+          echo "✅ init script terpasang:"
+          cat "$HOME/.gradle/init.d/fastbuild.gradle"
+
+      - name: Use preinstalled NDK (skip download)
+        if: env.MODE == 'url'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          set -euo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          NDK_VER=$(ls -1 "$SDK/ndk" 2>/dev/null | sort -V | tail -n 1 || true)
+          if [ -z "$NDK_VER" ]; then
+            echo "ℹ️ Gak ada NDK preinstalled di $SDK/ndk -- biarin Gradle download."
+            exit 0
+          fi
+          for f in android/app/build.gradle.kts android/app/build.gradle; do
+            if [ -f "$f" ] && grep -qE 'ndkVersion[[:space:]]*=?[[:space:]]*flutter\.ndkVersion' "$f"; then
+              sed -i -E 's/ndkVersion[[:space:]]*=?[[:space:]]*flutter\.ndkVersion/ndkVersion = "'"$NDK_VER"'"/' "$f"
+              echo "✅ $f -> ndkVersion = $NDK_VER (preinstalled, gak perlu download)"
+              exit 0
+            fi
+          done
+          echo "ℹ️ Baris 'ndkVersion = flutter.ndkVersion' gak ketemu -- dilewati."
+
+      - name: Build Flutter APK
+        if: steps.detect.outputs.type == 'flutter'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          set -euo pipefail
+          flutter config --no-analytics >/dev/null 2>&1 || true
+          [ "$MODE" != "url" ] && flutter pub get
+          BT="$BUILD_TYPE"
+          flutter build apk --$BT \
+            --target-platform=$TARGET_PLATFORMS \
+            --no-tree-shake-icons \
+            --no-shrink \
+            --no-pub 2>&1 | tee build.log
+
+      - name: Build Native APK
+        if: steps.detect.outputs.type == 'gradle'
+        working-directory: ${{ steps.detect.outputs.dir }}
+        run: |
+          set -euo pipefail
+          BT="$BUILD_TYPE"
+          if [ "$BT" = "debug" ]; then TASK="assembleDebug"; else TASK="assembleRelease"; fi
+
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+            CMD="./gradlew"
+            echo "✅ Pakai gradle wrapper"
+          else
+            echo "⚠️ gradlew tidak ada, generate wrapper dulu"
+            gradle wrapper --gradle-version 8.7 || true
+            if [ -f gradlew ]; then
+              chmod +x gradlew
+              CMD="./gradlew"
+            else
+              CMD="gradle"
+            fi
+          fi
+
+          echo "Running: $CMD $TASK"
+          $CMD "$TASK" \
+            --parallel --build-cache \
+            -Pandroid.injected.build.abi=$GRADLE_ABIS 2>&1 | tee build.log || {
+              echo "::error::Build gagal. Cek log di atas."
+              tail -100 build.log
+              exit 1
+            }
+
+      - name: Debug - scan all APK
+        if: failure()
+        run: |
+          echo "=== SEMUA APK di project_raw ==="
+          find project_raw -type f -name "*.apk" -exec ls -lh {} \; 2>/dev/null || echo "TIDAK ADA APK"
+          echo ""
+          echo "=== Tree project_raw/app/build/outputs ==="
+          find project_raw -type d -name "outputs" -exec find {} -maxdepth 3 -type d \; 2>/dev/null || true
+          echo ""
+          echo "=== File di outputs ==="
+          find project_raw -type d -name "outputs" -exec find {} -type f \; 2>/dev/null || true
+
+      - name: Locate APK
+        id: locate
+        run: |
+          set -euo pipefail
+          APK=""
+
+          if [ "${{ steps.detect.outputs.type }}" = "flutter" ]; then
+            LOG="${{ steps.detect.outputs.dir }}/build.log"
+            if [ -f "$LOG" ]; then
+              REL=$(grep -oE 'Built [^ ]+\.apk' "$LOG" | tail -n1 | sed -E 's/^Built //')
+              if [ -n "$REL" ]; then
+                CAND="${{ steps.detect.outputs.dir }}/$REL"
+                if [ -f "$CAND" ]; then
+                  APK="$CAND"
+                  echo "✅ APK dari build.log (path resmi Flutter): $APK"
+                else
+                  echo "⚠️ build.log nyebut '$REL' tapi file-nya gak ada di $CAND"
+                fi
+              else
+                echo "⚠️ Gak nemu baris 'Built ...apk' di build.log"
+              fi
+            fi
+          fi
+
+          if [ -z "$APK" ]; then
+            echo "↩️ Fallback strategy 1 (exclude intermediates/tmp/kotlin/.gradle)"
+            APK=$(find project_raw -type f -name "*.apk" \
+                  -not -path "*/intermediates/*" \
+                  -not -path "*/tmp/*" \
+                  -not -path "*/kotlin/*" \
+                  -not -path "*/.gradle/*" \
+                  2>/dev/null | head -n 1 || true)
+          fi
+          if [ -z "$APK" ]; then
+            echo "↩️ Fallback strategy 2 (include intermediates)"
+            APK=$(find project_raw -type f -name "*.apk" \
+                  -not -path "*/.gradle/*" \
+                  2>/dev/null | head -n 1 || true)
+          fi
+          if [ -z "$APK" ]; then
+            echo "↩️ Fallback strategy 3 (flutter-build path)"
+            APK=$(find project_raw -type f -name "*.apk" \
+                  -path "*/flutter-build/*" \
+                  2>/dev/null | head -n 1 || true)
+          fi
+
+          if [ -z "$APK" ]; then
+            echo "::error::APK tidak ditemukan setelah semua strategy."
+            echo "=== Isi build.log (100 baris terakhir) ==="
+            tail -100 "${{ steps.detect.outputs.dir }}/build.log" 2>/dev/null || echo "(build.log tidak ada)"
+            echo ""
+            echo "=== Full tree project_raw/app/build ==="
+            find project_raw -type d -name "build" -exec find {} -maxdepth 4 -type d \; 2>/dev/null | head -50 || true
+            echo ""
+            echo "=== Semua file .apk (full scan) ==="
+            find / -type f -name "*.apk" 2>/dev/null | grep -v "/proc/" | head -20 || true
+            exit 1
+          fi
+
+          APK_DIR=$(dirname "$APK")
+          APK_SIZE=$(stat -c%s "$APK" 2>/dev/null || echo "0")
+          echo "✅ APK ditemukan: $APK"
+          echo "📁 Folder: $APK_DIR"
+          echo "📦 Size: $APK_SIZE bytes"
+
+          if [ "$APK_SIZE" -lt 1000 ]; then
+            echo "::error::APK terlalu kecil ($APK_SIZE bytes), kemungkinan corrupt."
+            exit 1
+          fi
+
+          echo "APK_DIR=$APK_DIR" >> "$GITHUB_ENV"
+          echo "APK_PATH=$APK" >> "$GITHUB_ENV"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ github.event.inputs.jobId }}
+          path: ${{ env.APK_PATH }}
+          compression-level: 0
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Upload build log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ github.event.inputs.jobId }}
+          path: |
+            ${{ steps.detect.outputs.dir }}/build.log
+            ${{ steps.detect.outputs.dir }}/android/build.log
+          if-no-files-found: ignore
+          retention-days: 1
