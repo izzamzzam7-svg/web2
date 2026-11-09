@@ -17,7 +17,8 @@ img{max-width:100%;display:block}
 /* ---------- LOADER ---------- */
 #loader{position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#1b0c36,#07030f 70%);transition:opacity .7s ease,visibility .7s ease,transform .7s ease}
 #loader.hide{opacity:0;visibility:hidden;transform:scale(1.06)}
-.loader-box{text-align:center;width:min(78vw,280px)}
+.loader-box{position:relative;z-index:1;text-align:center;width:min(78vw,280px);opacity:0;transition:opacity .4s}
+#loader.ready .loader-box{opacity:1}
 .loader-ring{position:relative;width:110px;height:110px;margin:0 auto 22px;display:grid;place-items:center;border-radius:50%;
   background:conic-gradient(from 0deg,#a855f7,#ec4899,#38bdf8,#a855f7);animation:spin 1.6s linear infinite;box-shadow:0 0 40px rgba(236,72,153,.45)}
 .loader-ring::before{content:"";position:absolute;inset:5px;border-radius:50%;background:#0d0719}
@@ -27,6 +28,17 @@ img{max-width:100%;display:block}
 .loader-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
 .loader-bar i{display:block;height:100%;width:0;border-radius:inherit;background:var(--grad);transition:width .25s ease}
 .loader-pct{margin-top:10px;font:600 .85rem var(--head);color:var(--pink)}
+.loader-bg{position:absolute;inset:0;opacity:0;transition:opacity .6s}
+.loader-bg.on{opacity:1}
+.loader-bg img{width:100%;height:100%;object-fit:cover}
+.loader-bg::after{content:"";position:absolute;inset:0;background:rgba(7,3,15,var(--ov,.6))}
+.loader-img{display:none}
+#loader.img-ring .loader-img{display:block;position:absolute;inset:5px;width:calc(100% - 10px);height:calc(100% - 10px);border-radius:50%;object-fit:cover;animation:spin 1.6s linear infinite reverse}
+#loader.img-ring .loader-ring span{display:none}
+#loader.img-free .loader-ring{width:auto;height:auto;border-radius:0;background:none;box-shadow:none;animation:none}
+#loader.img-free .loader-ring::before,#loader.img-free .loader-ring span{display:none}
+#loader.img-free .loader-img{display:block;max-width:170px;max-height:170px;object-fit:contain;animation:floaty 2.4s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-8px)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{50%{opacity:.55}}
 @keyframes wave{0%,100%{transform:translateY(0);color:var(--muted)}50%{transform:translateY(-6px);color:var(--pink)}}
@@ -34,12 +46,19 @@ img{max-width:100%;display:block}
 /* ---------- BACKGROUND ---------- */
 .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(180deg,#0a0614,#0c0618 50%,#12071f)}
 .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.38;will-change:transform}
-.o1{width:340px;height:340px;background:#7c3aed;top:-80px;left:-90px;animation:float1 16s ease-in-out infinite}
-.o2{width:300px;height:300px;background:#db2777;top:45%;right:-110px;animation:float2 20s ease-in-out infinite}
-.o3{width:280px;height:280px;background:#0ea5e9;bottom:-90px;left:15%;opacity:.25;animation:float1 24s ease-in-out infinite reverse}
+.o1{width:340px;height:340px;background:var(--o1,#7c3aed);top:-80px;left:-90px;animation:float1 16s ease-in-out infinite}
+.o2{width:300px;height:300px;background:var(--o2,#db2777);top:45%;right:-110px;animation:float2 20s ease-in-out infinite}
+.o3{width:280px;height:280px;background:var(--o3,#0ea5e9);bottom:-90px;left:15%;opacity:.25;animation:float1 24s ease-in-out infinite reverse}
 @keyframes float1{50%{transform:translate(60px,70px) scale(1.15)}}
 @keyframes float2{50%{transform:translate(-70px,-60px) scale(1.2)}}
 #sparks{position:absolute;inset:0;width:100%;height:100%}
+#sparks[hidden]{display:none}
+.bg.no-orbs .orb{display:none}
+.bg-media{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity 1.2s}
+.bg-media.on{opacity:1}
+.bg-media img,.bg-media video{width:100%;height:100%;object-fit:cover;transform:scale(1.06);filter:blur(var(--bgblur,0px))}
+.bg-overlay{position:absolute;inset:0;background:rgba(10,6,20,var(--ov,.55));opacity:0;transition:opacity 1.2s}
+.bg-overlay.on{opacity:1}
 
 /* ---------- NAV ---------- */
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;
