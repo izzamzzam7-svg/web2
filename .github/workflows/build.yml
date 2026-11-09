@@ -1,709 +1,152 @@
-name: Universal ZIP to APK (Genetik + Sign)
+name: Build Flutter APK
 
 on:
   workflow_dispatch:
     inputs:
-      release_tag:
-        description: "Tag release GitHub tempat ZIP diupload"
+      zip_url:
+        description: "URL download ZIP project Flutter"
         required: true
-        type: string
-      asset_name:
-        description: "Nama file asset ZIP (bisa lebih dari satu, pisahkan dengan koma atau baris baru)"
+      tag:
+        description: "Tag build"
         required: true
-        type: string
       build_type:
-        description: "Auto mendeteksi jenis project"
+        description: "debug / release"
         required: true
-        type: choice
-        options:
-          - auto
-          - android
-          - flutter
-          - webview
-        default: auto
-
-permissions:
-  contents: read
+        default: "release"
+      only_analyze:
+        description: "Hanya jalankan analyze (true/false)"
+        required: false
+        default: "false"
 
 jobs:
-  prepare:
-    runs-on: ubuntu-24.04
-    outputs:
-      assets: ${{ steps.parse.outputs.assets }}
-    steps:
-      - name: Parse daftar asset ZIP
-        id: parse
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          RAW="${{ inputs.asset_name }}"
-
-          # Pisahkan berdasarkan koma dan/atau baris baru, buang spasi kosong
-          ASSETS_JSON="$(printf '%s' "$RAW" \
-            | tr ',' '\n' \
-            | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
-            | grep -v '^$' \
-            | jq -R -s -c 'split("\n") | map(select(length > 0))')"
-
-          echo "Daftar ZIP yang akan dibuild:"
-          echo "$ASSETS_JSON"
-
-          echo "assets=$ASSETS_JSON" >> "$GITHUB_OUTPUT"
-
   build:
-    needs: prepare
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        asset: ${{ fromJson(needs.prepare.outputs.assets) }}
-
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    
     steps:
-      - name: Bersihkan ruang disk runner
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          echo "Disk sebelum dibersihkan:"
-          df -h /
-
-          sudo rm -rf /usr/share/dotnet || true
-          sudo rm -rf /usr/local/lib/android/sdk/ndk || true
-          sudo rm -rf /opt/ghc || true
-          sudo rm -rf /opt/hostedtoolcache/CodeQL || true
-          sudo rm -rf /usr/local/.ghcup || true
-          sudo rm -rf /usr/local/share/boost || true
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY" || true
-          sudo docker image prune -af || true
-
-          echo "Disk sesudah dibersihkan:"
-          df -h /
-
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Java 17
-        uses: actions/setup-java@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          distribution: temurin
-          java-version: "17"
+          node-version: "24"
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          # FIX: jangan install package "tools" — sudah dihapus Google
-          # (Warning: Failed to find package 'tools' → sdkmanager exit code 1)
-          packages: platform-tools platforms;android-35 platforms;android-34 build-tools;35.0.0 build-tools;34.0.0
-
-      - name: Install Android SDK extras
-        shell: bash
+      - name: Download ZIP project
         run: |
-          set -euo pipefail
-          # Install komponen yang dibutuhkan, toleransi partial failure
-          yes | sdkmanager --licenses >/dev/null 2>&1 || true
-          for pkg in             "platform-tools"             "platforms;android-35"             "platforms;android-34"             "build-tools;35.0.0"             "build-tools;34.0.0"
-          do
-            echo ">> sdkmanager $pkg"
-            sdkmanager --install "$pkg" || echo "::warning::Gagal install $pkg (mungkin sudah ada)"
-          done
-          # NDK opsional — hanya install kalau ada ruang & dibutuhkan native
-          # (skip by default biar lebih cepat & tidak bloat disk runner)
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
-          ls -la "$ANDROID_HOME/build-tools" 2>/dev/null || true
-          ls -la "$ANDROID_HOME/platforms" 2>/dev/null || true
+          echo "=== Downloading ZIP ==="
+          echo "URL: ${{ github.event.inputs.zip_url }}"
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+          curl -L \
+            -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
+            -H "Accept: application/octet-stream" \
+            "${{ github.event.inputs.zip_url }}" \
+            -o project.zip \
+            -w "\n=== HTTP Status: %{http_code} ===\n=== Final URL: %{url_effective} ===\n"
 
-      - name: Sanitize nama asset
-        id: sanitize
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          SAFE="$(printf '%s' "${{ matrix.asset }}" | sed -E 's/\.[Zz][Ii][Pp]$//' | sed -E 's/[^A-Za-z0-9._-]+/-/g')"
-          echo "name=$SAFE" >> "$GITHUB_OUTPUT"
-
-      - name: Download ZIP dari Release
-        id: download
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-
-          TAG="${{ inputs.release_tag }}"
-          ASSET="${{ matrix.asset }}"
-
-          gh release download "$TAG" \
-            --repo "${{ github.repository }}" \
-            --pattern "$ASSET" \
-            --clobber
-
-          if [ ! -f "$ASSET" ]; then
-            echo "::error::Gagal download asset '$ASSET' dari release '$TAG'"
-            exit 1
-          fi
-
-          echo "zip_path=$ASSET" >> "$GITHUB_OUTPUT"
+          echo ""
+          echo "=== File Info ==="
+          ls -lh project.zip
+          echo ""
+          echo "=== File Type ==="
+          file project.zip
+          echo ""
+          echo "=== First Bytes ==="
+          xxd project.zip | head -2
 
       - name: Extract ZIP
-        id: extract
-        shell: bash
         run: |
-          set -euo pipefail
-
-          mkdir -p workspace
-
-          ZIP="${{ steps.download.outputs.zip_path }}"
-
-          if [ ! -f "$ZIP" ]; then
-            echo "::error::ZIP tidak ditemukan: $ZIP"
+          echo "=== Validating ZIP ==="
+          if ! unzip -t project.zip > /dev/null 2>&1; then
+            echo "❌ File bukan ZIP valid!"
+            echo ""
+            echo "=== Isi file ==="
+            cat project.zip
             exit 1
           fi
+          echo "✅ ZIP valid"
 
-          unzip -q "$ZIP" -d workspace
+          echo ""
+          echo "=== Extracting ZIP ==="
+          unzip -q project.zip -d project_raw
 
-          echo "Isi ZIP:"
-          find workspace -maxdepth 4 -type f | sort | head -300
-
-      - name: Detect project
-        id: detect
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          REQUESTED="${{ inputs.build_type }}"
-
-          if [ "$REQUESTED" != "auto" ]; then
-            echo "type=$REQUESTED" >> "$GITHUB_OUTPUT"
-            exit 0
+          echo ""
+          echo "=== Mengunci Project Dir ==="
+          SUB_DIR_COUNT=$(find project_raw -maxdepth 1 -mindepth 1 -type d | wc -l)
+          FILE_COUNT=$(find project_raw -maxdepth 1 -mindepth 1 -type f | wc -l)
+          
+          if [ "$SUB_DIR_COUNT" -eq 1 ] && [ "$FILE_COUNT" -eq 0 ]; then
+            PROJECT_DIR=$(find project_raw -maxdepth 1 -mindepth 1 -type d | head -n 1)
+          else
+            PROJECT_DIR="project_raw"
           fi
+          echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
 
-          # Flutter project
-          if find workspace -type f -name "pubspec.yaml" -print -quit | grep -q .; then
-            echo "type=flutter" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # Native Android project
-          if find workspace -type f -name "gradlew" -print -quit | grep -q .; then
-            echo "type=android" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          if find workspace -type f \
-            \( -name "settings.gradle" -o -name "settings.gradle.kts" \) \
-            -print -quit | grep -q .; then
-            echo "type=android" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # HTML/Web project (index.html eksplisit)
-          if find workspace -type f -name "index.html" -print -quit | grep -q .; then
-            echo "type=webview" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # HTML/Web project (tidak ada index.html, tapi ada file .html lain)
-          if find workspace -type f -name "*.html" -print -quit | grep -q .; then
-            echo "type=webview" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "type=unknown" >> "$GITHUB_OUTPUT"
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
 
       - name: Setup Flutter
-        if: steps.detect.outputs.type == 'flutter'
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@main
         with:
-          channel: stable
+          flutter-version: "3.41.9"
+          channel: "stable"
           cache: true
 
-      - name: Locate Flutter project
-        if: steps.detect.outputs.type == 'flutter'
-        shell: bash
+      - name: Analyze Project Code
+        working-directory: ${{ env.PROJECT_DIR }}
         run: |
-          set -euo pipefail
-
-          ROOT="$(find workspace -type f -name pubspec.yaml -print -quit | xargs -r dirname)"
-
-          if [ -z "$ROOT" ]; then
-            echo "::error::pubspec.yaml tidak ditemukan."
-            exit 1
-          fi
-
-          echo "FLUTTER_PROJECT=$ROOT" >> "$GITHUB_ENV"
-
-      - name: Ensure compatible Gradle version
-        if: steps.detect.outputs.type == 'flutter'
-        working-directory: ${{ env.FLUTTER_PROJECT }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          WRAPPER="android/gradle/wrapper/gradle-wrapper.properties"
-
-          if [ -f "$WRAPPER" ]; then
-            echo "distributionUrl sebelum:"
-            grep distributionUrl "$WRAPPER" || true
-
-            # Flutter versi terbaru butuh Gradle minimal 8.14.0
-            sed -i -E 's#distributionUrl=.*#distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.2-all.zip#' "$WRAPPER"
-
-            echo "distributionUrl sesudah:"
-            grep distributionUrl "$WRAPPER"
+          if [ -f "pubspec.yaml" ]; then
+            flutter analyze > analyze_report.txt 2>&1 || true
+            echo "[RESULT_ANALYZE]"
+            cat analyze_report.txt
+            echo "[END_RESULT_ANALYZE]"
+            rm -f analyze_report.txt
           else
-            echo "gradle-wrapper.properties tidak ditemukan, lewati."
+            echo "[RESULT_ANALYZE]"
+            echo "❌ pubspec.yaml tidak ditemukan."
+            echo "[END_RESULT_ANALYZE]"
           fi
 
-      - name: Ensure compatible AGP version
-        if: steps.detect.outputs.type == 'flutter'
-        working-directory: ${{ env.FLUTTER_PROJECT }}
-        shell: bash
+      - name: Stop if Analyze Only
+        if: ${{ github.event.inputs.only_analyze == 'true' }}
+        run: exit 1
+
+      - name: Get dependencies
+        working-directory: ${{ env.PROJECT_DIR }}
         run: |
-          set -euo pipefail
-
-          # Flutter versi terbaru butuh Android Gradle Plugin minimal 8.11.1
-          MIN_AGP="8.12.1"
-
-          for FILE in android/settings.gradle android/settings.gradle.kts android/build.gradle android/build.gradle.kts; do
-            if [ -f "$FILE" ]; then
-              if grep -q "com\.android\.application" "$FILE"; then
-                echo "AGP sebelum di $FILE:"
-                grep -n "com\.android\.application" "$FILE" || true
-
-                sed -i -E "s#(id\(?[\"']com\.android\.application[\"']\)? version ?[\"'])[0-9.]+([\"'])#\1${MIN_AGP}\2#" "$FILE"
-                sed -i -E "s#(classpath ?[\"']com\.android\.tools\.build:gradle:)[0-9.]+([\"'])#\1${MIN_AGP}\2#" "$FILE"
-
-                echo "AGP sesudah di $FILE:"
-                grep -n "com\.android\.application\|com\.android\.tools\.build:gradle" "$FILE" || true
-              fi
-            fi
-          done
-
-      - name: Ensure compatible Kotlin version
-        if: steps.detect.outputs.type == 'flutter'
-        working-directory: ${{ env.FLUTTER_PROJECT }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          # Flutter versi terbaru butuh Kotlin Gradle Plugin minimal 2.2.20
-          MIN_KOTLIN="2.2.20"
-
-          for FILE in android/settings.gradle android/settings.gradle.kts android/build.gradle android/build.gradle.kts; do
-            if [ -f "$FILE" ]; then
-              if grep -q "org\.jetbrains\.kotlin\.android\|kotlin_version\|kotlin-gradle-plugin" "$FILE"; then
-                echo "Kotlin sebelum di $FILE:"
-                grep -n "org\.jetbrains\.kotlin\.android\|kotlin_version\|kotlin-gradle-plugin" "$FILE" || true
-
-                # plugins block: id("org.jetbrains.kotlin.android") version "x.x.x"
-                sed -i -E "s#(id\(?[\"']org\.jetbrains\.kotlin\.android[\"']\)? version ?[\"'])[0-9.]+([\"'])#\1${MIN_KOTLIN}\2#" "$FILE"
-
-                # ext.kotlin_version = 'x.x.x' (legacy)
-                sed -i -E "s#(ext\.kotlin_version ?= ?[\"'])[0-9.]+([\"'])#\1${MIN_KOTLIN}\2#" "$FILE"
-
-                # classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:x.x.x' (legacy)
-                sed -i -E "s#(classpath ?[\"']org\.jetbrains\.kotlin:kotlin-gradle-plugin:)[0-9.]+([\"'])#\1${MIN_KOTLIN}\2#" "$FILE"
-
-                echo "Kotlin sesudah di $FILE:"
-                grep -n "org\.jetbrains\.kotlin\.android\|kotlin_version\|kotlin-gradle-plugin" "$FILE" || true
-              fi
-            fi
-          done
-
-      - name: Flutter dependencies
-        if: steps.detect.outputs.type == 'flutter'
-        working-directory: ${{ env.FLUTTER_PROJECT }}
-        run: |
-          flutter --version
-          flutter pub get
-
-      - name: Build Flutter APK
-        if: steps.detect.outputs.type == 'flutter'
-        working-directory: ${{ env.FLUTTER_PROJECT }}
-        run: |
-          flutter build apk --release
-
-      - name: Collect Flutter APK
-        if: steps.detect.outputs.type == 'flutter'
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p output
-
-          APK="$(find "$FLUTTER_PROJECT/build/app/outputs/flutter-apk" \
-            -type f -name "*.apk" -print -quit)"
-
-          if [ -z "$APK" ]; then
-            echo "::error::APK Flutter tidak ditemukan."
-            exit 1
+          if [ -f "pubspec.yaml" ]; then
+            timeout 120s flutter pub get || echo "⚠️ Lanjut..."
           fi
 
-          cp "$APK" output/app-release.apk
-
-      - name: Generate app icons
-        if: steps.detect.outputs.type == 'android'
-        shell: bash
+      - name: Build APK
+        working-directory: ${{ env.PROJECT_DIR }}
         run: |
-          set -euo pipefail
-
-          SCRIPT="$(find workspace -maxdepth 2 -type f -name generate_icons.py -print -quit)"
-
-          if [ -n "$SCRIPT" ]; then
-            SCRIPT_DIR="$(dirname "$SCRIPT")"
-            echo "Menjalankan generate_icons.py di $SCRIPT_DIR ..."
-            (cd "$SCRIPT_DIR" && python3 generate_icons.py)
+          if [ -f "pubspec.yaml" ]; then
+            flutter build apk --${{ github.event.inputs.build_type }}
           else
-            echo "generate_icons.py tidak ditemukan, lewati generate icon."
-          fi
-
-      - name: Locate Android project
-        if: steps.detect.outputs.type == 'android'
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          ROOT="$(find workspace -type f -name gradlew -print -quit | xargs -r dirname)"
-
-          if [ -z "$ROOT" ]; then
-            ROOT="$(find workspace -type f \
-              \( -name settings.gradle -o -name settings.gradle.kts \) \
-              -print -quit | xargs -r dirname)"
-          fi
-
-          if [ -z "$ROOT" ]; then
-            echo "::error::Project Android tidak ditemukan."
-            exit 1
-          fi
-
-          echo "ANDROID_PROJECT=$ROOT" >> "$GITHUB_ENV"
-
-      - name: Build native Android APK
-        if: steps.detect.outputs.type == 'android'
-        working-directory: ${{ env.ANDROID_PROJECT }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [ ! -f "./gradlew" ]; then
-            echo "::error::gradlew tidak ditemukan."
-            exit 1
-          fi
-
-          # ZIP kadang tidak menyertakan gradle-wrapper.jar (file biner).
-          # Kalau hilang, regenerate pakai gradle yang sudah tersedia di runner.
-          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
-            echo "gradle-wrapper.jar tidak ditemukan, meregenerasi wrapper..."
-            gradle wrapper --gradle-version 8.10.2
-          fi
-
-          chmod +x ./gradlew
-          ./gradlew assembleRelease --no-daemon --stacktrace
-
-      - name: Collect native Android APK
-        if: steps.detect.outputs.type == 'android'
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p output
-
-          APK="$(find "$ANDROID_PROJECT" \
-            -type f -path "*/build/outputs/apk/*" -name "*.apk" \
-            -print -quit)"
-
-          if [ -z "$APK" ]; then
-            echo "::error::APK Android tidak ditemukan."
-            exit 1
-          fi
-
-          cp "$APK" output/app-release-unsigned.apk
-
-      - name: Locate web project
-        if: steps.detect.outputs.type == 'webview'
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          # Cari entry point dengan prioritas: index.html > splash.html > login.html > dashboard.html > .html pertama
-          INDEX=""
-          for NAME in index.html splash.html login.html dashboard.html; do
-            FOUND="$(find workspace -type f -iname "$NAME" -print -quit)"
-            if [ -n "$FOUND" ]; then
-              INDEX="$FOUND"
-              break
-            fi
-          done
-
-          if [ -z "$INDEX" ]; then
-            INDEX="$(find workspace -type f -name "*.html" -print -quit)"
-          fi
-
-          if [ -z "$INDEX" ]; then
-            echo "::error::Tidak ada file .html yang ditemukan di ZIP."
-            exit 1
-          fi
-
-          WEB_ROOT="$(dirname "$INDEX")"
-          echo "WEB_ROOT=$WEB_ROOT" >> "$GITHUB_ENV"
-
-          # Kalau entry point bukan index.html, buat salinan index.html supaya WebView bisa load
-          if [ "$(basename "$INDEX")" != "index.html" ]; then
-            cp "$INDEX" "$WEB_ROOT/index.html"
-            echo "Membuat index.html dari $(basename "$INDEX") sebagai entry point."
-          fi
-
-      - name: Create WebView Android project
-        if: steps.detect.outputs.type == 'webview'
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p webview/app/src/main/java/com/tirzz/webview
-          mkdir -p webview/app/src/main/res/values
-          mkdir -p webview/app/src/main/assets
-
-          cp -r "$WEB_ROOT"/. webview/app/src/main/assets/
-
-          cat > webview/settings.gradle <<'EOF'
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-
-          rootProject.name = "UniversalWebView"
-          include(":app")
-          EOF
-
-          cat > webview/build.gradle <<'EOF'
-          plugins {
-              id 'com.android.application' version '8.7.3' apply false
-          }
-          EOF
-
-          cat > webview/gradle.properties <<'EOF'
-          android.useAndroidX=true
-          android.enableJetifier=true
-          org.gradle.jvmargs=-Xmx2048m
-          EOF
-
-          cat > webview/app/build.gradle <<'EOF'
-          plugins {
-              id 'com.android.application'
-          }
-
-          android {
-              namespace 'com.tirzz.webview'
-              compileSdk 35
-
-              defaultConfig {
-                  applicationId 'com.tirzz.webview'
-                  minSdk 23
-                  targetSdk 35
-                  versionCode 1
-                  versionName '1.0'
-              }
-          }
-
-          dependencies {
-              implementation 'androidx.webkit:webkit:1.12.1'
-          }
-          EOF
-
-          cat > webview/app/src/main/AndroidManifest.xml <<'EOF'
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application
-                  android:theme="@style/AppTheme"
-                  android:label="Universal Web App">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-
-          cat > webview/app/src/main/res/values/styles.xml <<'EOF'
-          <resources>
-              <style name="AppTheme"
-                  parent="android:style/Theme.Material.Light.NoActionBar">
-                  <item name="android:fontFamily">sans</item>
-              </style>
-          </resources>
-          EOF
-
-          cat > webview/app/src/main/java/com/tirzz/webview/MainActivity.java <<'EOF'
-          package com.tirzz.webview;
-
-          import android.app.Activity;
-          import android.os.Bundle;
-          import android.webkit.WebSettings;
-          import android.webkit.WebView;
-          import android.webkit.WebViewClient;
-
-          public class MainActivity extends Activity {
-              @Override
-              protected void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-
-                  WebView webView = new WebView(this);
-
-                  WebSettings settings = webView.getSettings();
-                  settings.setJavaScriptEnabled(true);
-                  settings.setDomStorageEnabled(true);
-
-                  webView.setWebViewClient(new WebViewClient());
-                  webView.loadUrl("file:///android_asset/index.html");
-
-                  setContentView(webView);
-              }
-          }
-          EOF
-
-          cd webview
-          gradle wrapper --gradle-version 8.10.2
-          chmod +x gradlew
-
-      - name: Build WebView APK
-        if: steps.detect.outputs.type == 'webview'
-        working-directory: webview
-        run: |
-          ./gradlew assembleRelease --no-daemon --stacktrace
-
-      - name: Collect WebView APK
-        if: steps.detect.outputs.type == 'webview'
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p output
-
-          APK="$(find webview/app/build/outputs/apk/release \
-            -type f -name "*.apk" -print -quit)"
-
-          if [ -z "$APK" ]; then
-            echo "::error::APK WebView tidak ditemukan."
-            exit 1
-          fi
-
-          cp "$APK" output/app-release-unsigned.apk
-
-      - name: Unsupported ZIP
-        if: steps.detect.outputs.type == 'unknown'
-        run: |
-          echo "::error::ZIP tidak berisi project Android, Flutter, atau Web."
-          exit 1
-
-      - name: Sign release APK (Android / WebView)
-        if: success() && (steps.detect.outputs.type == 'android' || steps.detect.outputs.type == 'webview')
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [ ! -f output/app-release-unsigned.apk ]; then
-            echo "::error::[SIGN] output/app-release-unsigned.apk tidak ditemukan. Step build sebelumnya gagal?"
-            ls -la output/ 2>/dev/null || true
-            exit 1
-          fi
-
-          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
-          BT=""
-          for cand in 36.0.0 35.0.0 34.0.0 33.0.2 33.0.1 33.0.0 32.0.0; do
-            if [ -x "$SDK_ROOT/build-tools/$cand/zipalign" ]; then
-              BT="$SDK_ROOT/build-tools/$cand"
-              break
-            fi
-          done
-          if [ -z "$BT" ]; then
-            BT="$(ls -d "$SDK_ROOT"/build-tools/*/ 2>/dev/null | sort -V | tail -1 | sed 's:/*$::')"
-          fi
-          if [ -z "$BT" ] || [ ! -x "$BT/zipalign" ] || [ ! -x "$BT/apksigner" ]; then
-            echo "::error::[SIGN] build-tools (zipalign/apksigner) tidak ditemukan di $SDK_ROOT/build-tools"
-            ls -la "$SDK_ROOT/build-tools" 2>/dev/null || true
-            exit 1
-          fi
-          echo "Memakai build-tools: $BT"
-
-          KS_FILE="release.keystore"
-          KS_PASS=""
-          KS_ALIAS=""
-          KEY_PASS=""
-
-          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
-            echo "[SIGN] Memakai keystore dari secret repo..."
-            printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$KS_FILE"
-            if [ ! -s "$KS_FILE" ]; then
-              echo "::error::[SIGN] KEYSTORE_BASE64 tidak valid (hasil decode kosong)."
-              exit 1
-            fi
-            KS_PASS="$KEYSTORE_PASSWORD"
-            KS_ALIAS="$KEY_ALIAS"
-            KEY_PASS="$KEY_PASSWORD"
-          else
-            echo "::warning::[SIGN] Secret keystore belum lengkap — sign dengan DEBUG keystore otomatis."
-            echo "Untuk production, isi secret: KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD"
-            KS_PASS="android"
-            KS_ALIAS="androiddebugkey"
-            KEY_PASS="android"
-            keytool -genkeypair -v \
-              -keystore "$KS_FILE" \
-              -storepass "$KS_PASS" \
-              -alias "$KS_ALIAS" \
-              -keypass "$KEY_PASS" \
-              -keyalg RSA -keysize 2048 -validity 10000 \
-              -dname "CN=Tirzz Debug,OU=Build,O=Tirzz,L=Jakarta,ST=JK,C=ID" \
-              >/tmp/keytool.log 2>&1
-            if [ ! -s "$KS_FILE" ]; then
-              echo "::error::[SIGN] Gagal membuat debug keystore."
-              cat /tmp/keytool.log 2>/dev/null || true
-              exit 1
+            GRADLE_PATH=$(find . -name "gradlew" | head -n 1)
+            GRADLE_DIR=$(dirname "$GRADLE_PATH")
+            cd "$GRADLE_DIR" && chmod +x gradlew
+            if [ "${{ github.event.inputs.build_type }}" = "debug" ]; then
+              ./gradlew assembleDebug
+            else
+              ./gradlew assembleRelease
             fi
           fi
 
-          "$BT/zipalign" -f 4 output/app-release-unsigned.apk output/aligned.apk
-          "$BT/apksigner" sign \
-            --ks "$KS_FILE" \
-            --ks-pass "pass:$KS_PASS" \
-            --ks-key-alias "$KS_ALIAS" \
-            --key-pass "pass:$KEY_PASS" \
-            --out output/app-release.apk output/aligned.apk
-          "$BT/apksigner" verify --verbose output/app-release.apk
-          rm -f "$KS_FILE" output/app-release-unsigned.apk output/aligned.apk
-          echo "Sign berhasil: output/app-release.apk"
-          ls -la output/app-release.apk
+      - name: Check APK Output
+        run: |
+          APK_FOUND=$(find $GITHUB_WORKSPACE -name "*.apk" | head -n 1)
+          APK_PATH=$(echo "$APK_FOUND" | sed "s|$GITHUB_WORKSPACE/||")
+          echo "PROJECT_DIR=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
 
-      - name: Upload APK
-        if: success()
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: apk-${{ steps.sanitize.outputs.name }}
-          path: output/app-release.apk
+          name: flutter-${{ github.event.inputs.build_type }}-${{ github.event.inputs.tag }}
+          path: ${{ env.PROJECT_DIR }}/${{ env.APK_PATH }}
+          retention-days: 1
           if-no-files-found: error
-          retention-days: 30
